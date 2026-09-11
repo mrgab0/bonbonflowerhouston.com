@@ -69,3 +69,8 @@ Thumbs.db
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Archivos de respaldo comprimidos
+*.zip
+*.7z
+*.rar
