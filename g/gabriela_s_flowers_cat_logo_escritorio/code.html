@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nuestra Colección - Gabriela's Flowers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Montserrat:wght@400..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#241a00",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#708eb0",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#877270",
+                        "tertiary-fixed-dim": "#abc9ee",
+                        "surface-bright": "#fff8f7",
+                        "secondary-container": "#ffdc85",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#ffdad7",
+                        "on-primary": "#ffffff",
+                        "background": "#fff8f7",
+                        "primary": "#2a0002",
+                        "tertiary": "#001021",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#2a4968",
+                        "error": "#ba1a1a",
+                        "secondary-fixed-dim": "#e4c36e",
+                        "tertiary-fixed": "#d0e4ff",
+                        "on-background": "#221a19",
+                        "on-error": "#ffffff",
+                        "surface": "#fff8f7",
+                        "surface-container-highest": "#efdfdd",
+                        "surface-container": "#faeae9",
+                        "tertiary-container": "#002643",
+                        "surface-tint": "#954742",
+                        "inverse-surface": "#372e2d",
+                        "on-primary-fixed-variant": "#77302d",
+                        "on-secondary-container": "#795f14",
+                        "on-surface-variant": "#544341",
+                        "inverse-primary": "#ffb3ad",
+                        "outline-variant": "#dac1bf",
+                        "on-tertiary-fixed": "#001d35",
+                        "primary-container": "#4a0e0e",
+                        "secondary-fixed": "#ffdf92",
+                        "primary-fixed-dim": "#ffb3ad",
+                        "inverse-on-surface": "#fdedeb",
+                        "on-primary-fixed": "#3d0506",
+                        "surface-container-high": "#f5e5e3",
+                        "on-primary-container": "#cc726d",
+                        "on-surface": "#221a19",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#efdfdd",
+                        "surface-container-low": "#fff0ef",
+                        "on-secondary-fixed-variant": "#594400",
+                        "surface-dim": "#e6d7d5",
+                        "secondary": "#745b0f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "unit": "8px",
+                        "section-padding": "80px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-caps": ["Montserrat"],
+                        "body-lg": ["Montserrat"],
+                        "display-lg-mobile": ["Playfair Display"],
+                        "headline-md": ["Playfair Display"],
+                        "body-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "display-lg-mobile": ["36px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                        "headline-md": ["32px", { "lineHeight": "1.3", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .butterfly-bg {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="%23dac1bf" fill-opacity="0.1"><path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-3.5 6.5C6 7 2 7 2 7s1 5 4.5 7.5L12 22l5.5-7.5C21 12 22 7 22 7s-4 0-6.5 1.5C14.5 9.5 13 11.5 12 13c-1-1.5-2.5-3.5-3.5-4.5z"/></svg>');
+            background-attachment: fixed;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(42, 0, 2, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md butterfly-bg">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/90 dark:bg-surface/90 backdrop-blur-md border-b border-outline-variant/30 dark:border-outline/20 shadow-sm dark:shadow-none transition-all duration-300 ease-in-out">
+<div class="flex flex-col items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<div class="w-full flex justify-between items-center mb-4">
+<div class="flex-1"></div>
+<div class="font-display-lg text-display-lg text-primary dark:text-primary-fixed italic flex-1 text-center">Gabriela's Flowers</div>
+<div class="flex-1 flex justify-end gap-4 text-primary dark:text-primary-fixed">
+<button class="hover:text-secondary-fixed-dim transition-all duration-300"><span class="material-symbols-outlined">shopping_bag</span></button>
+<button class="hover:text-secondary-fixed-dim transition-all duration-300"><span class="material-symbols-outlined">person</span></button>
+</div>
+</div>
+<ul class="flex gap-8 font-label-caps text-label-caps hidden md:flex">
+<li><a class="text-primary dark:text-primary-fixed border-b-2 border-secondary font-bold pb-1 transition-all duration-300 ease-in-out hover:text-secondary-fixed-dim" href="#">Shop All</a></li>
+<li><a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Boutique</a></li>
+<li><a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Occasions</a></li>
+<li><a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Subscription</a></li>
+<li><a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">About</a></li>
+<li><a class="text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Contact</a></li>
+</ul>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="pt-[160px] pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<header class="text-center mb-16">
+<h1 class="font-headline-md text-headline-md text-primary mb-2">Nuestra Colección</h1>
+<p class="font-label-caps text-label-caps text-secondary">CURATED FLORAL ARRANGEMENTS</p>
+</header>
+<div class="flex flex-col md:flex-row gap-gutter">
+<!-- Sidebar Filters -->
+<aside class="w-full md:w-64 shrink-0 mb-8 md:mb-0">
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-sm border border-outline-variant/30 sticky top-[180px]">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-6 border-b border-outline-variant/50 pb-2">Categories</h3>
+<div class="space-y-6">
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-3">FLOWER TYPE</h4>
+<ul class="space-y-2 font-body-md text-body-md text-on-surface-variant">
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input checked="" class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Roses</label></li>
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Orchids</label></li>
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Peonies</label></li>
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Mixed Bouquets</label></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-3">OCCASIONS</h4>
+<ul class="space-y-2 font-body-md text-body-md text-on-surface-variant">
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Anniversary</label></li>
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Birthday</label></li>
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Sympathy</label></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-caps text-label-caps text-on-surface mb-3">COLLECTIONS</h4>
+<ul class="space-y-2 font-body-md text-body-md text-on-surface-variant">
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Seasonal Fall</label></li>
+<li><label class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"><input class="form-checkbox rounded text-primary focus:ring-primary h-4 w-4 border-outline-variant" type="checkbox"/> Signature Gold</label></li>
+</ul>
+</div>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Product 1 -->
+<article class="bg-surface-container-lowest rounded-[8px] overflow-hidden card-hover transition-all duration-300 border border-outline-variant/20 flex flex-col group">
+<div class="aspect-[4/5] relative overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A lush, romantic bouquet of deep red roses and burgundy peonies in a minimalist glass vase, set against a pristine cream background. Soft, diffused lighting highlights the velvety textures of the petals. The image embodies a luxurious, high-end editorial aesthetic with subtle warm gold accents in the lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdFek2HI-teJ3PCzgJbR3-nKc0dt4mpOZZDOugV4OcK53SoMZXWy4YewEGA3AwQ_apDFh_CYRHrDDN2QSEuxkC9PvYH2eM1BsZ4SfyaXC3pCI1Zg9zc5CgcGRu_HsEhbMPSc5HLmQB5tIhbgETD3-5-uR8MOt1pJAUd6lMa0Zgnk63BM74u53d3sn6qW7VBU-24xYikElBjFVmIzoiSWPoynvMV3GaDkcjgS6Wdw2n1fsOjCCNlGoH"/>
+</div>
+<div class="p-6 flex flex-col flex-1 items-center text-center">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Pasión Roja</h2>
+<p class="font-body-lg text-body-lg text-secondary mb-6">$125.00</p>
+<button class="mt-auto w-full py-3 px-6 bg-primary text-on-primary font-label-caps text-label-caps rounded border border-secondary hover:border-[2px] transition-all flex items-center justify-center gap-2">
+<span>Add to Cart</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">shopping_bag</span>
+</button>
+</div>
+</article>
+<!-- Product 2 -->
+<article class="bg-surface-container-lowest rounded-[8px] overflow-hidden card-hover transition-all duration-300 border border-outline-variant/20 flex flex-col group">
+<div class="aspect-[4/5] relative overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="An elegant, towering arrangement of pure white orchids and delicate white ranunculus in a subtle gold metallic pot, set against a pristine cream background. Soft, diffused lighting creates a serene, angelic mood. The image embodies a sophisticated, minimalist luxury aesthetic with clean lines and pristine details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX5AoKnfq25eEjMxAgQky2rVAWioHmtnxXEGQPqUFa-CtveqC9hez5jIEHYPrVEIXSmezl_SKtqeaIzVZbbYQf-VrDC9joHOvLILwMaygNcC78kf4rNoiKaPsxawK1RELcPvtp60cy4HnXYH_cwhdBMbBKHqTfZD1od059f7MolhCphhDRfH5idezexKcvLAdRB0s8lahKmmWCqMnTIH9sGRPMA3BHXOyLinxwId3PG_KSaRian4Ec"/>
+</div>
+<div class="p-6 flex flex-col flex-1 items-center text-center">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Elegancia Blanca</h2>
+<p class="font-body-lg text-body-lg text-secondary mb-6">$180.00</p>
+<button class="mt-auto w-full py-3 px-6 bg-primary text-on-primary font-label-caps text-label-caps rounded border border-secondary hover:border-[2px] transition-all flex items-center justify-center gap-2">
+<span>Add to Cart</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">shopping_bag</span>
+</button>
+</div>
+</article>
+<!-- Product 3 -->
+<article class="bg-surface-container-lowest rounded-[8px] overflow-hidden card-hover transition-all duration-300 border border-outline-variant/20 flex flex-col group">
+<div class="aspect-[4/5] relative overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A warm, vibrant floral arrangement featuring golden yellow tulips, peach roses, and burgundy foliage in a matte cream ceramic vase, set against a pristine cream background. Soft, diffused lighting enhances the warm, inviting tones. The image embodies a luxurious boutique aesthetic with a rich interplay of gold and deep red accents." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrhx_2iuHnCvO_4INfbDtgkUq5IHkUtHeNWfKsFsPrLBLGAf8xWotQ6B_44PROhIanpmOmVfcON-kt4UmY5-6lktk4ZjiH2JK1cbpT9GiIZ1JGgPRj-FDJH0UoGUcSALVXMitGUos_awL0_2j_xBiFT1g3G1nc3uszD0f9WmPeQqtrGcDWyiolRDng3UnAhUgBHn1nEN6pjc37t5TGN148axYP_zB_uRyK8Ewnxrh9twStb-BrLBBp"/>
+</div>
+<div class="p-6 flex flex-col flex-1 items-center text-center">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Corazón de Oro</h2>
+<p class="font-body-lg text-body-lg text-secondary mb-6">$145.00</p>
+<button class="mt-auto w-full py-3 px-6 bg-primary text-on-primary font-label-caps text-label-caps rounded border border-secondary hover:border-[2px] transition-all flex items-center justify-center gap-2">
+<span>Add to Cart</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">shopping_bag</span>
+</button>
+</div>
+</article>
+<!-- Product 4 -->
+<article class="bg-surface-container-lowest rounded-[8px] overflow-hidden card-hover transition-all duration-300 border border-outline-variant/20 flex flex-col group">
+<div class="aspect-[4/5] relative overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A moody, romantic bouquet of deep burgundy dahlias, dark purple calla lilies, and cascading greenery in an artisanal textured vase, set against a pristine cream background. Soft, dramatic lighting emphasizes the rich, velvety darkness of the blooms. The image embodies a sophisticated, editorial high-end floral aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp8fhPRWy0Gdco7B9kIWZuqdx8Y4tePVTVA1aQyXaqEk83XnsUoSc0qC8BZEXy0Dy6dmGMXFbXozSBGf3uLu35rJHHWLW9g-iahb1Yh1mPrl46HQO75gI0iWIjBCfSGcuk-NOrSJbt-JyAnq2yTsRGjBVeOrSguJwxoTJmt5eBo1h-dCPEPRMIYueCvgWfqBDlXuSc2JPN3ElinHPrf8BB_1ldRPjRWvYI6af1P1r8cmE5rFOVYvLn"/>
+</div>
+<div class="p-6 flex flex-col flex-1 items-center text-center">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-2">Amor Oscuro</h2>
+<p class="font-body-lg text-body-lg text-secondary mb-6">$160.00</p>
+<button class="mt-auto w-full py-3 px-6 border border-secondary text-primary font-label-caps text-label-caps rounded hover:bg-surface-container transition-all flex items-center justify-center gap-2">
+<span>Add to Cart</span>
+<span class="material-symbols-outlined text-[16px] opacity-0 group-hover:opacity-100 transition-opacity">shopping_bag</span>
+</button>
+</div>
+</article>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-padding bg-primary dark:bg-primary-container flat no shadows transition-opacity duration-200">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto text-on-primary dark:text-on-primary-container">
+<div class="md:col-span-2">
+<div class="font-display-lg text-display-lg text-secondary-fixed dark:text-secondary-fixed-dim italic mb-4">Gabriela's Flowers</div>
+<p class="font-body-md text-body-md text-on-primary/80 max-w-sm italic">Flowers For You LLC...</p>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-headline-md text-headline-md text-secondary-fixed mb-2">Explore</h4>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-on-primary hover:text-secondary-fixed transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-on-primary hover:text-secondary-fixed transition-colors duration-200" href="#">Terms of Service</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-on-primary hover:text-secondary-fixed transition-colors duration-200" href="#">Shipping &amp; Returns</a>
+</div>
+<div class="flex flex-col gap-3">
+<h4 class="font-headline-md text-headline-md text-secondary-fixed mb-2">Connect</h4>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-on-primary hover:text-secondary-fixed transition-colors duration-200" href="#">Wholesale</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-on-primary hover:text-secondary-fixed transition-colors duration-200" href="#">Workshops</a>
+</div>
+</div>
+<div class="mt-12 text-center border-t border-on-primary/20 pt-8 px-margin-desktop">
+<p class="font-body-md text-body-md text-on-primary/60">© 2024 Gabriela's Flowers LLC. All Rights Reserved.</p>
+</div>
+</footer>
+</body></html>

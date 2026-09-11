@@ -1,0 +1,20 @@
+ocultar inicio de sesion
+
+subir productos
+
+acomodar precios
+
+boton de chat
+
+acomodar pagina de productos mejor
+
+pandel de admin con sus botones listos
+
+editor de slider
+
+acomodar las imagenes de productos. 
+
+bueno parece que te quedate en loop te salve bro. oye ya quedo. quiero pedirte algo nuevo
+   object-scale-down  los productos se estan cortando la imagen todas son 1:1 asique se nos
+   cortan estan muy cerca vamos ajustando a ver pero si tienes una mejor solucion que
+   object-scale-down me dices tambn

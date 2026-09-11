@@ -1,0 +1,49 @@
+{
+  "name": "flowers-magenta-modern",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "set NODE_OPTIONS=--max-old-space-size=4096 && next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@auth/mongodb-adapter": "^3.11.2",
+    "@imagekit/react": "^5.0.2",
+    "@sentry/nextjs": "^10.72.0",
+    "@simplewebauthn/browser": "^9.0.1",
+    "@simplewebauthn/server": "^9.0.3",
+    "@types/nodemailer": "^8.0.1",
+    "clsx": "^2.1.0",
+    "imagekit": "^6.0.0",
+    "imagekitio-react": "^4.3.0",
+    "lucide-react": "^0.344.0",
+    "mongodb": "^6.21.0",
+    "mongoose": "^8.2.0",
+    "next": "^16.2.9",
+    "next-auth": "^5.0.0-beta.31",
+    "next-intl": "^4.13.2",
+    "next-themes": "^0.4.6",
+    "nodemailer": "^7.0.13",
+    "otplib": "^13.4.1",
+    "qrcode": "^1.5.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "resend": "^6.17.2",
+    "speakeasy": "^2.0.0",
+    "tailwind-merge": "^2.2.1",
+    "tailwindcss-animate": "^1.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^18.2.58",
+    "@types/react-dom": "^18.2.19",
+    "@types/speakeasy": "^2.0.10",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,127 @@
+{
+  "Index": {
+    "title": "Gabriela's Flowers LLC",
+    "description": "We transform the art of gifting into a modern boutique experience. Vibrant designs that breathe sophistication.",
+    "exploreButton": "Explore Collection",
+    "premiumSelection": "Premium Selection",
+    "ourFlowers": "Our Flowers",
+    "viewCatalog": "View full catalog",
+    "noProducts": "No products available at the moment."
+  },
+  "Nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "about": "About Us",
+    "contact": "Contact",
+    "cart": "Cart"
+  },
+  "nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "tracking": "📦 Tracking",
+    "about": "About Us",
+    "contact": "Contact",
+    "cart": "Cart"
+  },
+  "common": {
+    "addToCart": "Add to Cart",
+    "added": "Added!"
+  },
+  "Catalog": {
+    "headerBadge": "🌸 Full Catalog & Addons",
+    "headerTitle": "Explore Our Entire Collection",
+    "headerDesc": "Discover signature floral arrangements and add special details like chocolates, balloons, teddy bears, and butterflies to craft the perfect gift.",
+    "allTab": "🌐 All Items",
+    "flowersTab": "🌹 Flowers",
+    "addonsTab": "✨ Addons",
+    "searchPlaceholder": "Search bouquets, roses, chocolates, balloons...",
+    "sortBy": "Sort by:",
+    "featured": "Featured 🌟",
+    "priceLowHigh": "Price: Low to High ($)",
+    "priceHighLow": "Price: High to Low ($)",
+    "allCategories": "All Categories",
+    "showingItems": "Showing",
+    "itemsInCatalog": "items in catalog",
+    "clearFilters": "Clear Filters",
+    "noResultsTitle": "No results found for that search",
+    "noResultsDesc": "Try changing keywords or selecting \"All\" in categories.",
+    "viewAllBtn": "View Entire Catalog",
+    "addonBadge": "Addon",
+    "addToCart": "Add to Cart",
+    "added": "Added!"
+  },
+  "ProductDetail": {
+    "includesTitle": "What's included in this arrangement?",
+    "addonsTitle": "Complete your Gift (Optional)",
+    "descriptionTitle": "Details & Description",
+    "addToCart": "Add to Cart",
+    "addedToCart": "Added to Cart! ✓",
+    "flowerCount": "Flowers",
+    "bouquetType": "Presentation",
+    "inStock": "In Stock & available for delivery",
+    "backToCatalog": "Back to Catalog",
+    "customMessage": "Optional custom message",
+    "selectOptions": "Select options"
+  },
+  "Cart": {
+    "title": "Your Gift Cart",
+    "emptyTitle": "Your cart is empty",
+    "emptyDesc": "Explore our floral collection and add unique arrangements or special addons.",
+    "exploreBtn": "Explore Collection",
+    "subtotal": "Subtotal",
+    "checkoutBtn": "Proceed to Checkout",
+    "addonsLabel": "Included addons"
+  },
+  "Checkout": {
+    "title": "Complete Your Order",
+    "subtitle": "Enter delivery details and select your preferred payment method.",
+    "deliveryInfo": "Delivery Information",
+    "recipientName": "Recipient Full Name",
+    "recipientPhone": "Contact Phone Number",
+    "address": "Full Delivery Address",
+    "deliveryDate": "Desired Delivery Date",
+    "cardMessage": "Gift Card Custom Message",
+    "paymentMethod": "Payment Method",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "freeShipping": "FREE",
+    "couponCode": "Coupon Code",
+    "applyCoupon": "Apply",
+    "discount": "Coupon Discount",
+    "placeOrder": "Confirm & Place Order",
+    "manualVerificationNote": "Manual payment verification. Upon confirmation, you will see payment instructions on screen & WhatsApp."
+  },
+  "Reviews": {
+    "badge": "100% Verified Reviews",
+    "title": "What Our Houston Customers Say ⭐⭐⭐⭐⭐",
+    "score": "4.9 / 5.0",
+    "countText": "+180 Verified Reviews",
+    "verifiedPurchase": "Verified Purchase",
+    "rev1": "Simply spectacular! The bouquet of red roses arrived flawless in under 45 minutes. My husband was thrilled with the custom printed card.",
+    "rev1Name": "Carolina M.",
+    "rev1Location": "Houston, TX (77087)",
+    "rev1Date": "2 days ago",
+    "rev2": "Same-day delivery service was outstanding. The app autocompleted my address in 1 second using fingerprint. Highly recommended!",
+    "rev2Name": "Alejandro V.",
+    "rev2Location": "Katy / West Houston",
+    "rev2Date": "4 days ago",
+    "rev3": "Top quality fresh flowers and the presentation in the boutique pink box looks super elegant. The best flower delivery service in Houston.",
+    "rev3Name": "Mariana R.",
+    "rev3Location": "The Woodlands, TX",
+    "rev3Date": "1 week ago"
+  },
+  "Footer": {
+    "address1": "4201 Fairmont Pkwy",
+    "address2": "Pasadena, TX 77504",
+    "boutique": "Digital Boutique",
+    "copyright": "© 2026 Gabriela's Flowers LLC. All rights reserved.",
+    "accept": "We accept:",
+    "cards": "Visa • MC • Amex • Discover"
+  },
+  "WhatsApp": {
+    "message": "Hi! I'd like more information.",
+    "vip": "VIP Support",
+    "consultation": "Floral Consultation"
+  }
+}

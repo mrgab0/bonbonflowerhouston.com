@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pasión Roja - Gabriela's Flowers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&amp;family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "inverse-primary": "#ffb3ad",
+                      "surface-dim": "#e6d7d5",
+                      "on-background": "#221a19",
+                      "outline": "#877270",
+                      "error": "#ba1a1a",
+                      "on-tertiary-container": "#708eb0",
+                      "primary-container": "#4a0e0e",
+                      "tertiary-fixed": "#d0e4ff",
+                      "on-primary-container": "#cc726d",
+                      "on-primary-fixed-variant": "#77302d",
+                      "on-secondary-fixed": "#241a00",
+                      "on-tertiary": "#ffffff",
+                      "surface-container": "#faeae9",
+                      "surface-container-low": "#fff0ef",
+                      "surface-container-lowest": "#ffffff",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#fff8f7",
+                      "surface-container-high": "#f5e5e3",
+                      "tertiary": "#001021",
+                      "on-tertiary-fixed-variant": "#2a4968",
+                      "surface-container-highest": "#efdfdd",
+                      "secondary-fixed-dim": "#e4c36e",
+                      "secondary-container": "#ffdc85",
+                      "on-surface": "#221a19",
+                      "background": "#fff8f7",
+                      "on-secondary": "#ffffff",
+                      "inverse-on-surface": "#fdedeb",
+                      "tertiary-container": "#002643",
+                      "primary": "#2a0002",
+                      "primary-fixed": "#ffdad7",
+                      "on-surface-variant": "#544341",
+                      "tertiary-fixed-dim": "#abc9ee",
+                      "secondary": "#745b0f",
+                      "inverse-surface": "#372e2d",
+                      "surface-tint": "#954742",
+                      "outline-variant": "#dac1bf",
+                      "primary-fixed-dim": "#ffb3ad",
+                      "surface-variant": "#efdfdd",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "on-primary-fixed": "#3d0506",
+                      "on-secondary-fixed-variant": "#594400",
+                      "surface": "#fff8f7",
+                      "on-secondary-container": "#795f14",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed": "#001d35",
+                      "secondary-fixed": "#ffdf92"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "gutter": "24px",
+                      "section-padding": "80px",
+                      "margin-desktop": "40px",
+                      "container-max": "1200px",
+                      "unit": "8px"
+              },
+              "fontFamily": {
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "body-md": [
+                              "Montserrat"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "headline-sm": [
+                              "Playfair Display"
+                      ],
+                      "body-lg": [
+                              "Montserrat"
+                      ],
+                      "label-caps": [
+                              "Montserrat"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ]
+              },
+              "fontSize": {
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #FFFBF5; /* Cream base */
+            position: relative;
+        }
+        
+        /* Subtle Butterfly Pattern Background */
+        .butterfly-bg {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            opacity: 0.05;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="%232a0002"><path d="M12 2C8 2 4 5 4 9c0 3 2 5 4 6-2 1-4 3-4 6 0 4 4 7 8 7s8-3 8-7c0-3-2-5-4-6 2-1 4-3 4-6 0-4-4-7-8-7z"/></svg>');
+            background-size: 150px;
+            pointer-events: none;
+            filter: blur(1px);
+        }
+        
+        /* Utility classes to avoid inline styles */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(218, 193, 191, 0.3);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface antialiased min-h-screen flex flex-col">
+<div class="butterfly-bg"></div>
+<!-- Navigation Shell (TopAppBar - JSON) -->
+<header class="bg-background/90 dark:bg-primary/90 backdrop-blur-md shadow-sm fixed top-0 w-full z-50">
+<div class="flex items-center justify-between px-margin-desktop h-20 w-full max-w-container-max mx-auto">
+<button aria-label="Open menu" class="text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-300 cursor-pointer active:scale-95 transition-transform">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+<div class="font-headline-md text-headline-md text-primary dark:text-primary-fixed italic cursor-pointer">
+                Gabriela's Flowers
+            </div>
+<button aria-label="Shopping bag" class="text-on-surface dark:text-on-surface-variant hover:text-secondary transition-colors duration-300 cursor-pointer active:scale-95 transition-transform">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+</div>
+</header>
+<!-- NavigationDrawer (JSON) - Hidden by default for this view, structure kept as requested if needed for mobile -->
+<!-- Suppressed on desktop detail view as per instructions, prioritizing canvas -->
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full">
+<!-- Bento Grid Layout for Product Details -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Main Image Column (Span 7) -->
+<div class="md:col-span-7 flex flex-col gap-unit">
+<div class="glass-panel rounded-xl p-2 relative overflow-hidden group shadow-[0_10px_40px_-15px_rgba(149,71,66,0.15)]">
+<img alt="Pasión Roja Arrangement" class="w-full h-[600px] object-cover rounded-lg transition-transform duration-700 ease-in-out group-hover:scale-105" data-alt="A spectacular arrangement of premium deep red roses presented in a sleek, minimalist black boutique box. The lighting is soft and natural, casting elegant shadows that highlight the velvety texture of the petals. The background is a slightly blurred, high-key cream environment typical of a luxury floral studio. The overall aesthetic is sophisticated, romantic, and editorial, perfectly aligned with a high-end gifting experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMHDMxNLDtGdIMLTjFPWhG8YlYMWAzIrCoubH97KD9MKlfSbFj0Ma4fbvBubNQYuNf3YdjO9ZfZmSQKDl4Rk4Bv5Nur7-6OAJt66M7TsMdyVBLryMW2Jglvi8aZvZ5pOUpYnDiFzK_afTkLwz66j9JXMTJKVhPYYVq1m7Wc1ilT25nc_Z-eboHRSM_vVXJXyZcVCZKGKML6SCzpM0I2NN1O8OOdwTXa7laiuHck5YOq45L4V-zvk4z"/>
+<!-- Decorative Butterfly Overlay (Skeuomorphic Accent) -->
+<div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-80 transition-opacity duration-500 text-secondary">
+<svg fill="currentColor" height="32" viewbox="0 0 24 24" width="32" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8 2 4 5 4 9c0 3 2 5 4 6-2 1-4 3-4 6 0 4 4 7 8 7s8-3 8-7c0-3-2-5-4-6 2-1 4-3 4-6 0-4-4-7-8-7z"></path></svg>
+</div>
+</div>
+<!-- Thumbnail Strip (Optional Bento element) -->
+<div class="grid grid-cols-4 gap-unit h-24 mt-2">
+<div class="rounded-lg overflow-hidden border-2 border-secondary/50 cursor-pointer">
+<img alt="Detail view 1" class="w-full h-full object-cover" data-alt="Close up shot of premium deep red roses showing the velvety texture of the petals. Soft, high-key lighting in a sophisticated cream environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBILh-fBiFdblwlte5Cp6O1RKA6RPulJuMgg0xC4ueTPi_MTR6mKXP2uOFoJSxDSSfyBTgcQNE-O0xpsjWaYUH8NDS4LQBs-5b1ddh3vlg-_IA-Lir78sf7f7B1cNWUEzp-z9s92En-Gc-oaSfehkN335_P_LRWd7FVePXt5vejASSj_UJhWAh034_YHuS4FakSNBLEmfbD0TzW6PKpsnXGlHghcsKN4ceU94Ry9sS_F5qhlqUEpabJ"/>
+</div>
+<div class="rounded-lg overflow-hidden border border-outline-variant/30 opacity-70 hover:opacity-100 cursor-pointer transition-opacity">
+<img alt="Detail view 2" class="w-full h-full object-cover" data-alt="Side profile of a sleek black boutique box filled with premium red roses. Soft, high-key lighting in a sophisticated cream environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-83kUaMPZVFCcsZxuGkA4vwr0M41HQnpn0Z9utY2b8ICgy-LP97dUeWzJULWiAuxn9QWRr_GgYObAiH07Ze4EnQc6Oq5VB-ssnpZeroAFNUyGRMC0276rtQhGWUKCvTNaSTsvB3jHUE3pYovEalrG1i3Drm97przeTWVO_0qPbPrmHG8iBYDfr9ESrda6dbjLIZia25Ryj5qmOY1moOsLKrVzVQgUQXXcKcTmG_4Yi2FGG-RvIsZi"/>
+</div>
+</div>
+</div>
+<!-- Details Column (Span 5) -->
+<div class="md:col-span-5 flex flex-col justify-start space-y-6 pt-4 md:pl-6">
+<!-- Headers -->
+<div>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest block mb-2">Signature Collection</span>
+<h1 class="font-headline-md text-headline-md text-primary mb-2">Pasión Roja</h1>
+<p class="font-body-lg text-body-lg text-secondary font-semibold">$40.00</p>
+</div>
+<!-- Description -->
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    Un espectacular arreglo de rosas rojas premium en nuestra icónica caja negra de boutique. Perfecto para expresar amor y pasión.
+                </p>
+<!-- Actions Container -->
+<div class="flex flex-col gap-4 mt-8">
+<!-- Quantity -->
+<div class="flex items-center space-x-4 border border-outline-variant/50 rounded-lg p-2 w-max bg-surface">
+<button aria-label="Decrease quantity" class="p-2 text-primary hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">remove</span>
+</button>
+<span class="font-body-md text-body-md w-8 text-center font-semibold">1</span>
+<button aria-label="Increase quantity" class="p-2 text-primary hover:text-secondary transition-colors">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+<!-- Buttons -->
+<button class="w-full bg-primary text-on-primary font-body-md text-body-md py-4 px-6 rounded-lg border border-secondary hover:border-[2px] transition-all duration-300 shadow-[0_4px_14px_0_rgba(42,0,2,0.2)]">
+                        Añadir al carrito
+                    </button>
+<button class="w-full bg-transparent text-primary font-body-md text-body-md py-4 px-6 rounded-lg border border-secondary hover:bg-surface-variant/30 transition-all duration-300">
+                        Personalizar
+                    </button>
+</div>
+<!-- Accordions -->
+<div class="mt-8 border-t border-outline-variant/30 pt-4 space-y-2">
+<!-- Detalle -->
+<details class="group bg-surface rounded-lg">
+<summary class="flex justify-between items-center font-headline-sm text-[18px] cursor-pointer list-none p-4 text-primary">
+<span>Detalles del Producto</span>
+<span class="transition group-open:rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="text-on-surface-variant font-body-md text-body-md mt-2 p-4 pt-0">
+                            Incluye 12-15 rosas de tallo largo (dependiendo del tamaño de la flor), caja cilíndrica de cartón rígido negro, tarjeta de mensaje personalizada impresa en papel con textura. Dimensiones aproximadas: 20cm x 25cm.
+                        </div>
+</details>
+<!-- Cuidados -->
+<details class="group bg-surface rounded-lg">
+<summary class="flex justify-between items-center font-headline-sm text-[18px] cursor-pointer list-none p-4 text-primary">
+<span>Instrucciones de Cuidado</span>
+<span class="transition group-open:rotate-180">
+<span class="material-symbols-outlined">expand_more</span>
+</span>
+</summary>
+<div class="text-on-surface-variant font-body-md text-body-md mt-2 p-4 pt-0">
+                            Mantener en un lugar fresco, lejos de la luz solar directa. Añadir media taza de agua fresca al centro del arreglo cada 2 días para mantener la hidratación de la espuma floral.
+                        </div>
+</details>
+</div>
+</div>
+</div>
+<!-- Recommended Products Section -->
+<section class="mt-section-padding">
+<div class="text-center mb-10">
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest block mb-2">También te podría gustar</span>
+<h2 class="font-headline-md text-headline-md text-primary">Complementa tu Regalo</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-gutter">
+<!-- Rec Product 1 -->
+<div class="glass-panel p-3 rounded-xl flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="overflow-hidden rounded-lg mb-4 h-64 relative">
+<img alt="Macarons Artesanales" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A delicate box of premium assorted macarons in pastel pinks and creams, presented on a minimalist white surface. The lighting is soft, emphasizing the artisanal quality of the sweets, suitable for a high-end romantic gift pairing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6kWoca3yuFsYVx9X05iqAXriSBkQBRqS76668sf8SnQWvVKltxq2q5mFnIpF-yb-txWng4UaJn-5LAtQJE0vlxg1E6oHj5YvgCBP3K48I0EHiU5w_ciBqyApoxofVGLtYfYNNvIgrYDyBoshuoS9I6C784E8TxGAYDdkOB4vBkKhzpm5NCzt8R8r8Iz6ln-UCx7LPBkBqEkvzM0-Wwudm9p6ghQGAbbYusliacaGQjMs7Hzu1NFHt"/>
+</div>
+<h3 class="font-headline-sm text-[20px] text-primary mb-1">Caja de Macarons</h3>
+<p class="font-body-md text-body-md text-secondary mt-auto">$15.00</p>
+</div>
+<!-- Rec Product 2 -->
+<div class="glass-panel p-3 rounded-xl flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="overflow-hidden rounded-lg mb-4 h-64 relative">
+<img alt="Vino Espumoso Rosé" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A luxurious, sleek bottle of sparkling rosé wine or champagne, resting on a clean cream background. The lighting catches the gold foil accents on the bottle neck, conveying a sophisticated, celebratory mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9LLFoWohXA0-d7dIvbSGCnlUnOoxZmFS1Nl2P50ufcMtkK5cZcWpUgsodoi_OfyRrxEBO6vC0tYWFVHGMXThLU8V7Nkqx0o0qySpNnWfC9Ho1f24Ko-zmyoTTDvSmW7bcVWP_dC-PqU-KFo-NZpq7tJKOS_wekWBrPoxTL46gtaFAItI1F9h5QVI2j0hl5bN5r1Dsx0E4WqJYZ_c8w5lOs22TJEiQlvWcGGeAuMjM50I1jfzlR-yX"/>
+</div>
+<h3 class="font-headline-sm text-[20px] text-primary mb-1">Espumoso Rosé</h3>
+<p class="font-body-md text-body-md text-secondary mt-auto">$28.00</p>
+</div>
+<!-- Rec Product 3 -->
+<div class="glass-panel p-3 rounded-xl flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="overflow-hidden rounded-lg mb-4 h-64 relative">
+<img alt="Vela Aromática" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A single, elegant soy wax candle in a frosted glass jar with a gold lid, sitting on a soft surface. The lighting is warm and inviting, suggesting a relaxing, romantic atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDttdONrsz9Xe21cDmBQJ1xph2OqAHlLKk-XJuXbqUJy0JiINk1ho3FjnlKQ7j11pl7fk9gRtUesQPU_LbIca5XAFS8DOxAAD6eVQVYQamigw5k5LblI21MSiDfrktup_E-xiuLsc86OopL9RnunMff1PCkALgyjZIQe6r3pWzX1in92qo6i3ZY3SoKyrEslLPADkZ-0jv2MDZt1kgtj8dU-OokMkxmT0SzGVJFFkMI6FX5hVv9JjYi"/>
+</div>
+<h3 class="font-headline-sm text-[20px] text-primary mb-1">Vela Peonía Blanca</h3>
+<p class="font-body-md text-body-md text-secondary mt-auto">$22.00</p>
+</div>
+<!-- Rec Product 4 -->
+<div class="glass-panel p-3 rounded-xl flex flex-col group hover:-translate-y-1 transition-transform duration-300">
+<div class="overflow-hidden rounded-lg mb-4 h-64 relative">
+<img alt="Chocolates Trufa" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A small, elegant box of artisanal dark chocolates tied with a thin gold ribbon, placed in a high-key, minimalist setting. The aesthetic is luxurious and refined." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQJRArQCvGyqv69OGUnQ39DqZSIiEvRHmsEna6S-InswdZiARBXHez2gVZqYcQQY_5SIiDer3Vsz0sEiF4IzcUnNlzuQlb8kGSw9yweAqfH-X8uc-4gu3vmj8XrfyXC2hiO6xKczI-NAipqC6oyztAb336ENG2MOBkXn_pIk7YsBBTu6sC2_iSm1ovFfL8nmrphSaiQObea43wpJv4BLFXdXqBMw8rXDdsGHa6-IURqGmY2g66cVrY"/>
+</div>
+<h3 class="font-headline-sm text-[20px] text-primary mb-1">Trufas de Cacao</h3>
+<p class="font-body-md text-body-md text-secondary mt-auto">$18.00</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (JSON) -->
+<footer class="bg-primary dark:bg-tertiary-container w-full mt-section-padding border-t border-outline-variant/20 flat no shadows w-full py-section-padding px-margin-desktop flex flex-col items-center text-center space-y-gutter">
+<div class="font-headline-sm text-headline-sm text-on-primary">
+            Gabriela's Flowers
+        </div>
+<div class="flex space-x-6">
+<a class="text-surface-variant/80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Instagram</a>
+<a class="text-surface-variant/80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Facebook</a>
+<a class="text-surface-variant/80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Pinterest</a>
+<a class="text-surface-variant/80 hover:text-secondary-fixed transition-colors font-body-md text-body-md" href="#">Terms of Service</a>
+</div>
+<div class="font-body-md text-body-md text-on-primary dark:text-tertiary-fixed mt-4 italic text-sm">
+            © 2024 Gabriela's Flowers. Houston, TX | 555-FLORAL | hello@gabrielas.com
+        </div>
+</footer>
+</body></html>

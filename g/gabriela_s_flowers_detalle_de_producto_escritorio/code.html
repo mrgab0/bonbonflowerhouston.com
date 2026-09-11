@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pasión Roja - Gabriela's Flowers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Montserrat:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#241a00",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-container": "#708eb0",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#877270",
+                      "tertiary-fixed-dim": "#abc9ee",
+                      "surface-bright": "#fff8f7",
+                      "secondary-container": "#ffdc85",
+                      "error-container": "#ffdad6",
+                      "primary-fixed": "#ffdad7",
+                      "on-primary": "#ffffff",
+                      "background": "#fff8f7",
+                      "primary": "#2a0002",
+                      "tertiary": "#001021",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed-variant": "#2a4968",
+                      "error": "#ba1a1a",
+                      "secondary-fixed-dim": "#e4c36e",
+                      "tertiary-fixed": "#d0e4ff",
+                      "on-background": "#221a19",
+                      "on-error": "#ffffff",
+                      "surface": "#fff8f7",
+                      "surface-container-highest": "#efdfdd",
+                      "surface-container": "#faeae9",
+                      "tertiary-container": "#002643",
+                      "surface-tint": "#954742",
+                      "inverse-surface": "#372e2d",
+                      "on-primary-fixed-variant": "#77302d",
+                      "on-secondary-container": "#795f14",
+                      "on-surface-variant": "#544341",
+                      "inverse-primary": "#ffb3ad",
+                      "outline-variant": "#dac1bf",
+                      "on-tertiary-fixed": "#001d35",
+                      "primary-container": "#4a0e0e",
+                      "secondary-fixed": "#ffdf92",
+                      "primary-fixed-dim": "#ffb3ad",
+                      "inverse-on-surface": "#fdedeb",
+                      "on-primary-fixed": "#3d0506",
+                      "surface-container-high": "#f5e5e3",
+                      "on-primary-container": "#cc726d",
+                      "on-surface": "#221a19",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#efdfdd",
+                      "surface-container-low": "#fff0ef",
+                      "on-secondary-fixed-variant": "#594400",
+                      "surface-dim": "#e6d7d5",
+                      "secondary": "#745b0f"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "40px",
+                      "unit": "8px",
+                      "section-padding": "80px",
+                      "container-max": "1200px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Playfair Display"
+                      ],
+                      "display-lg": [
+                              "Playfair Display"
+                      ],
+                      "label-caps": [
+                              "Montserrat"
+                      ],
+                      "body-lg": [
+                              "Montserrat"
+                      ],
+                      "display-lg-mobile": [
+                              "Playfair Display"
+                      ],
+                      "headline-md": [
+                              "Playfair Display"
+                      ],
+                      "body-md": [
+                              "Montserrat"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "36px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .butterfly-bg {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%232a0002" d="M50 50c-5-10-15-20-30-20 0 15 10 25 30 20zM50 50c5-10 15-20 30-20 0 15-10 25-30 20zM50 50c-5 10-15 20-30 20 0-15 10-25 30-20zM50 50c5 10 15 20 30 20 0-15-10-25-30-20z"/></svg>');
+            background-repeat: no-repeat;
+            opacity: 0.05;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.open {
+            max-height: 500px;
+        }
+        
+        .card-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(42, 0, 2, 0.15);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased relative min-h-screen flex flex-col">
+<!-- Decorative Background Elements -->
+<div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+<div class="butterfly-bg absolute w-64 h-64 top-20 -left-10 floating" style="animation-delay: 0s;"></div>
+<div class="butterfly-bg absolute w-96 h-96 top-1/2 right-0 floating" style="animation-delay: 2s; transform: scaleX(-1);"></div>
+<div class="butterfly-bg absolute w-72 h-72 bottom-20 left-1/4 floating" style="animation-delay: 4s;"></div>
+</div>
+<!-- TopNavBar -->
+<nav class="bg-surface/90 dark:bg-surface/90 backdrop-blur-md fixed top-0 w-full z-50 border-b border-outline-variant/30 dark:border-outline/20 shadow-sm dark:shadow-none transition-all duration-300 ease-in-out">
+<div class="flex flex-col items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto">
+<!-- Logo -->
+<a class="font-display-lg text-display-lg text-primary dark:text-primary-fixed italic mb-4" href="#">
+                Gabriela's Flowers
+            </a>
+<div class="w-full flex justify-between items-center relative">
+<!-- Navigation Links (Desktop) -->
+<ul class="hidden md:flex space-x-8 items-center absolute left-1/2 -translate-x-1/2">
+<li><a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Shop All</a></li>
+<li><a class="font-label-caps text-label-caps text-primary dark:text-primary-fixed border-b-2 border-secondary font-bold pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Boutique</a></li>
+<li><a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Occasions</a></li>
+<li><a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Subscription</a></li>
+<li><a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">About</a></li>
+<li><a class="font-label-caps text-label-caps text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors pb-1 hover:text-secondary-fixed-dim transition-all duration-300" href="#">Contact</a></li>
+</ul>
+<!-- Trailing Icons -->
+<div class="flex space-x-6 items-center ml-auto text-primary dark:text-primary-fixed">
+<button aria-label="Shopping Bag" class="hover:text-secondary transition-colors">
+<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
+</button>
+<button aria-label="User Profile" class="hover:text-secondary transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-[160px] pb-section-padding px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto w-full relative z-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Breadcrumbs -->
+<div class="col-span-full mb-8 font-label-caps text-label-caps text-outline flex items-center space-x-2">
+<a class="hover:text-primary transition-colors" href="#">Home</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<a class="hover:text-primary transition-colors" href="#">Boutique</a>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-primary font-bold">Pasión Roja</span>
+</div>
+<!-- Left Column: Image -->
+<div class="col-span-1 md:col-span-7 flex flex-col gap-4">
+<div class="w-full h-[600px] bg-surface-container rounded-lg overflow-hidden relative group">
+<img alt="Pasión Roja Bouquet" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="A stunning, high-end editorial photograph of a large, vibrant red rose bouquet named 'Pasión Roja'. The flowers are arranged tightly in a luxurious presentation style, resting on a minimalist cream-colored surface. The lighting is soft and diffused, highlighting the deep burgundy and bright crimson petals against the sophisticated, light-mode background. The mood is romantic, premium, and artisanal, perfectly suited for a luxury floral boutique's product page." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKYhidd7u_ziTCi9w-uOaHrRUCpPZFAoeQhhjixaX-9piuFBsLql_uztXqfSo8a8dPYBZpkN3U66e1YjAIBcmUSIw7dbLXKB6Q9wZfsX06C_CtZP3zqBbOCpgQIxKv-lz7Arhp1W7mNB2vl0cr06SpnPOGdpaEak2w9zD4PaQp11KFJX7terWcX8GztvRRdc6JoUTcLEgJrfSPJ_cM7LD3Fqsq3wZF-Dcf4aE2a6tNt71_OWCdAJgx"/>
+<!-- Floating Butterfly Detail -->
+<div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-secondary">
+<svg class="w-8 h-8 floating" viewbox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 50c-5-10-15-20-30-20 0 15 10 25 30 20zM50 50c5-10 15-20 30-20 0 15-10 25-30 20zM50 50c-5 10-15 20-30 20 0-15 10-25 30-20zM50 50c5 10 15 20 30 20 0-15-10-25-30-20z" fill="currentColor"></path></svg>
+</div>
+</div>
+<!-- Thumbnail Strip -->
+<div class="flex gap-4 overflow-x-auto pb-2">
+<button class="w-24 h-24 flex-shrink-0 border-2 border-secondary rounded-DEFAULT overflow-hidden">
+<img alt="Thumbnail 1" class="w-full h-full object-cover" data-alt="A close-up, macro shot of a single dark red rose petal from the 'Pasión Roja' bouquet. The texture of the petal is incredibly detailed, showing delicate veins and a velvety surface. The background is a soft, blurred cream color, creating a sophisticated and romantic mood. Lighting is natural and soft." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2T8l6NPqRUAosBJ_hOhn_MhL11pxtw-DTG-XT2l6fC8E9ITp8owa98_99gtzpshQDv6QrdOwmG1LcqPuETtJpu3UjRRwpFmk1PEtuQr41rGVG5Q85KxXuvWGHKwxSLSGOtOx2HynIge_QG10Uwss2iwH72cJx-jyCWkl-dPVIKt4WiyJnZh2xRQKRJRW-e8dp0ZY8hPTDvFH-aZoKZbDzdG4o4DE6AnkCDU3bfTpqVc2zvMuAfPqN"/>
+</button>
+<button class="w-24 h-24 flex-shrink-0 border border-outline-variant rounded-DEFAULT overflow-hidden hover:border-secondary transition-colors opacity-70 hover:opacity-100">
+<img alt="Thumbnail 2" class="w-full h-full object-cover" data-alt="An editorial lifestyle shot showing the 'Pasión Roja' bouquet placed elegantly on an antique wooden table next to a subtly lit candle. The setting feels luxurious and intimate, with a light-mode, creamy ambient glow. The deep red roses stand out vividly as a symbol of sophisticated romance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVMQQBcs5Q95EeDhVvwPfpUiw2-UUXSGlG1-Hv0O3JUIraqMmyFgBI14moF689nkJP4RUOSyOAcCxkqGt6vY1p7xNYeB0zBPoZvfp9sKB2yg05Ld5gWnRmCyHurhPcD7V2fV9ZDht8WwkQnYzRkEUM8Z_tJsCQvlxFU04Zd_9v1QyIkfM2-pHJJthO6bBnpzA2JgwSgndd1SV0UmrJ6dqayGUPiiEaVlMUuMFU55T6scjB-9BVFECZ"/>
+</button>
+<button class="w-24 h-24 flex-shrink-0 border border-outline-variant rounded-DEFAULT overflow-hidden hover:border-secondary transition-colors opacity-70 hover:opacity-100">
+<img alt="Thumbnail 3" class="w-full h-full object-cover" data-alt="A top-down view of the 'Pasión Roja' bouquet, revealing the perfect, symmetrical arrangement of the deep red roses. The bouquet is wrapped in premium, textured kraft paper tied with a delicate silk ribbon. The background is a clean, minimalist off-white surface, emphasizing the artisanal boutique quality of the product." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYwvJ_n0V6G1m0Xu6qAlUPnfV8h-P0eJJF_Fv6lbbJk8ct2jrF6uGho7eU99XDoFr6qtDGE8fXkeNyvmb1HYuqqh9qF-7U227TmC_jy006C1EapKLQBW50xJvg7sgVNhdAs_AAXjeIwBZXQ3GSV3-yu8mKJ8s0CRt-TnaTzjVf1H1G3CqWOnKoiwfMjig_sFaK-1YcnWJLohccvEtlWEN-OgGocsd5wXN15ocgtOwXpgfB93UXu6if"/>
+</button>
+</div>
+</div>
+<!-- Right Column: Product Info -->
+<div class="col-span-1 md:col-span-5 flex flex-col lg:pl-8 mt-8 md:mt-0">
+<!-- Title & Price -->
+<div class="border-b border-outline-variant/50 pb-6 mb-6">
+<span class="font-label-caps text-label-caps text-secondary mb-2 block tracking-widest">Boutique Collection</span>
+<h1 class="font-display-lg text-display-lg text-primary mb-4">Pasión Roja</h1>
+<p class="font-body-lg text-body-lg text-secondary text-2xl mb-4">$40.00</p>
+<p class="text-on-surface-variant text-body-md leading-relaxed">
+                    A breathtaking arrangement of deep, velvety red roses, hand-selected for their profound color and intoxicating fragrance. The <em>Pasión Roja</em> embodies the pure essence of romantic elegance, meticulously crafted to convey deep emotion.
+                </p>
+</div>
+<!-- Options -->
+<div class="mb-8">
+<label class="font-label-caps text-label-caps text-primary block mb-3">Vase Option</label>
+<div class="grid grid-cols-2 gap-4">
+<button class="py-3 px-4 border border-secondary text-primary font-label-caps text-label-caps rounded-DEFAULT bg-surface-bright flex items-center justify-center space-x-2">
+<span>No Vase</span>
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+</button>
+<button class="py-3 px-4 border border-outline-variant text-on-surface-variant font-label-caps text-label-caps rounded-DEFAULT hover:border-secondary hover:text-primary transition-colors flex items-center justify-center space-x-2">
+<span>Glass Cylinder (+$15)</span>
+</button>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col space-y-4 mb-10">
+<button class="w-full bg-primary text-on-primary font-body-lg text-body-lg py-4 border border-secondary rounded-DEFAULT hover:border-opacity-100 hover:border-2 transition-all flex justify-center items-center space-x-2 shadow-sm">
+<span>Add to Cart</span>
+<span class="material-symbols-outlined">shopping_cart_checkout</span>
+</button>
+<button class="w-full bg-transparent text-primary font-body-lg text-body-lg py-4 border border-secondary rounded-DEFAULT hover:bg-surface-container-low transition-colors flex justify-center items-center space-x-2">
+<span>Personalize Ribbon</span>
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+<!-- Accordions -->
+<div class="border-t border-outline-variant/50">
+<!-- Product Details -->
+<div class="border-b border-outline-variant/50">
+<button class="w-full py-4 flex justify-between items-center text-primary font-headline-sm text-headline-sm focus:outline-none" onclick="toggleAccordion('details-content', 'details-icon')">
+<span>Product Details</span>
+<span class="material-symbols-outlined transition-transform duration-300" id="details-icon">add</span>
+</button>
+<div class="accordion-content text-on-surface-variant pb-4" id="details-content">
+<ul class="list-disc pl-5 space-y-2">
+<li>Includes 12 premium long-stem red roses.</li>
+<li>Wrapped in signature artisanal paper.</li>
+<li>Approximate dimensions: 18" H x 12" W.</li>
+<li>Stem ends hydrated for transport.</li>
+</ul>
+</div>
+</div>
+<!-- Care Instructions -->
+<div class="border-b border-outline-variant/50">
+<button class="w-full py-4 flex justify-between items-center text-primary font-headline-sm text-headline-sm focus:outline-none" onclick="toggleAccordion('care-content', 'care-icon')">
+<span>Care Instructions</span>
+<span class="material-symbols-outlined transition-transform duration-300" id="care-icon">add</span>
+</button>
+<div class="accordion-content text-on-surface-variant pb-4" id="care-content">
+<p class="mb-2">To ensure your blooms last as long as possible:</p>
+<ul class="list-disc pl-5 space-y-2">
+<li>Trim stems at a 45-degree angle before placing in water.</li>
+<li>Change water every 2 days.</li>
+<li>Keep away from direct sunlight and drafts.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<!-- Related Products Section -->
+<div class="col-span-full mt-24">
+<div class="text-center mb-12">
+<span class="font-label-caps text-label-caps text-secondary mb-2 block tracking-widest">More to Love</span>
+<h2 class="font-headline-md text-headline-md text-primary">Complementary Blooms</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+<!-- Product Card 1 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 card-lift shadow-sm relative group cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-full aspect-[4/5] bg-surface-container rounded-DEFAULT overflow-hidden mb-4 relative">
+<img alt="Blush Poetry" class="w-full h-full object-cover" data-alt="A lush bouquet of soft pink peonies named 'Blush Poetry'. The image is an elegant, editorial-style photograph set against a warm cream background, embodying a sophisticated romantic aesthetic. The lighting is soft and natural, emphasizing the delicate, ruffled texture of the petals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGhF7WO97XdYtrn72lVK0XGPGyJre6gvkr6DoZbpQgbAqCf7zwCJ7F21K5-qAzug-0KEp_QlDcoBho4gghFYIMjS-R15D7z_EVljySXCvk7v5ko3MlsE224-UENvW4Xv1c5osO2Z-8muG9fp34r60EeqAk2tu4Q73fIGa41F63u4xs9LtFAr8OR8Dp4VWhgG0nwCBgxnPDGPfCvABB_S_yzBr8CC4yN4WDB32E2Qb1-7mLJAUY_57r"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="font-label-caps text-label-caps text-on-primary bg-primary/80 px-4 py-2 rounded-full border border-secondary">View Details</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary text-[20px] mb-1">Blush Poetry</h3>
+<p class="font-body-lg text-body-lg text-secondary text-[16px]">$55.00</p>
+</div>
+<button aria-label="Quick Add" class="text-outline hover:text-secondary transition-colors mt-1">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 card-lift shadow-sm relative group cursor-pointer border border-transparent hover:border-outline-variant/30 mt-0 md:mt-8">
+<div class="w-full aspect-[4/5] bg-surface-container rounded-DEFAULT overflow-hidden mb-4 relative">
+<img alt="Ivory Elegance" class="w-full h-full object-cover" data-alt="A pristine arrangement of white lilies and orchids called 'Ivory Elegance'. The high-quality editorial shot features the flowers arranged minimally, communicating luxury and purity. The background is a bright, minimalist cream, complementing the light-mode UI. Gentle, high-key lighting creates a serene mood." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBArlVijacJnrqvDqj3Qqq2EbIuysVhxumJKRXuw7Tt7f6liY-tJRgrjNgMh9jslZacA8Gqs4X1s0_3R1YwKm-veNgC8lMMDSx4AsALJJq2cHH1dMzDGx757SFMq1bseREU084hu9HfFMiiltrdhazKNo9bAybH9yTEHC0l-V7PIpWU8PU0SmIuSbPCEMTljQoOoUFrVPQg-GHBKIvWIv6prhr-MSU-QcTcC10vdPJybpZ_PE4adN_J"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="font-label-caps text-label-caps text-on-primary bg-primary/80 px-4 py-2 rounded-full border border-secondary">View Details</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary text-[20px] mb-1">Ivory Elegance</h3>
+<p class="font-body-lg text-body-lg text-secondary text-[16px]">$65.00</p>
+</div>
+<button aria-label="Quick Add" class="text-outline hover:text-secondary transition-colors mt-1">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 card-lift shadow-sm relative group cursor-pointer border border-transparent hover:border-outline-variant/30">
+<div class="w-full aspect-[4/5] bg-surface-container rounded-DEFAULT overflow-hidden mb-4 relative">
+<img alt="Midnight Velvet" class="w-full h-full object-cover" data-alt="A modern, asymmetric arrangement featuring deep burgundy ranunculus and dark foliage named 'Midnight Velvet'. The styling is highly editorial and moody, yet set against a soft cream backdrop to maintain the light-mode sophisticated boutique feel. The lighting catches the velvety texture of the petals." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwc2RlkWopfLUM3j46xHKCInMy6QSJFF8rkHr35ztvMyr-LcKSoCq4j-X76CZhwNEDF8xB02kgwyJAoKUQfyrvPxp1bxoaycEpT_aTb31QefYxfkL-ibknIhI04Io7d9pQAvPQm2LeMPL1FEm_P3DaHVsyDgCY0uHl3OykGT6HzoVPx0edL4yMfp5znVXk0ICxBq0PtpKg2b0pgIfgner9CFevZ00NZB-v7z9ft7szlsBB7vUwq46u"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="font-label-caps text-label-caps text-on-primary bg-primary/80 px-4 py-2 rounded-full border border-secondary">View Details</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary text-[20px] mb-1">Midnight Velvet</h3>
+<p class="font-body-lg text-body-lg text-secondary text-[16px]">$48.00</p>
+</div>
+<button aria-label="Quick Add" class="text-outline hover:text-secondary transition-colors mt-1">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-lowest rounded-lg p-4 card-lift shadow-sm relative group cursor-pointer border border-transparent hover:border-outline-variant/30 mt-0 md:mt-8">
+<div class="w-full aspect-[4/5] bg-surface-container rounded-DEFAULT overflow-hidden mb-4 relative">
+<img alt="Golden Hour" class="w-full h-full object-cover" data-alt="A charming, wild-style bouquet of sunflowers, chamomile, and wildflowers named 'Golden Hour'. The photograph is bright, cheerful, and artisanal, fitting a high-end boutique aesthetic. The background is a clean, minimal off-white, allowing the vibrant yellows and greens to pop beautifully in a light-mode setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBE7TjC9hOY2YOcG7vAOguii9PGw6wdhBVD0q3sN0n6P5d6jd41Y_JfHgwo7Ct7xwtvvY8mipQgURXo7x4Sijt5gzINiUlTYN_HluP878YdUcEXqhfLIIJcTFJF23Qq-YDSN1WgzEVaagn-kM3Iy5C5x5ZX4GWgG-rHadYo7idhbx2k3XTRKMYyTryfoLx9kTunSLXccmb4Cnq9lzue6Fwv18s2rF8oi5ck58aWJVUoBAHg04e4rvrD"/>
+<div class="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="font-label-caps text-label-caps text-on-primary bg-primary/80 px-4 py-2 rounded-full border border-secondary">View Details</span>
+</div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary text-[20px] mb-1">Golden Hour</h3>
+<p class="font-body-lg text-body-lg text-secondary text-[16px]">$42.00</p>
+</div>
+<button aria-label="Quick Add" class="text-outline hover:text-secondary transition-colors mt-1">
+<span class="material-symbols-outlined">add_circle</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-primary dark:bg-primary-container text-on-primary dark:text-on-primary-container w-full py-section-padding flat no shadows transition-opacity duration-200 mt-auto relative z-20">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop max-w-container-max mx-auto">
+<div class="col-span-1 md:col-span-1 mb-8 md:mb-0">
+<span class="font-display-lg text-display-lg text-secondary-fixed dark:text-secondary-fixed-dim italic block mb-4">Gabriela's Flowers</span>
+<p class="font-body-md text-body-md text-on-primary/80 italic max-w-xs">Flowers For You LLC, curating emotional connections through artisanal design.</p>
+</div>
+<div class="col-span-1 flex flex-col space-y-4">
+<h4 class="font-headline-md text-headline-md text-[20px] mb-2 text-secondary-fixed">Shop</h4>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Boutique</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Subscription</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Wholesale</a>
+</div>
+<div class="col-span-1 flex flex-col space-y-4">
+<h4 class="font-headline-md text-headline-md text-[20px] mb-2 text-secondary-fixed">Support</h4>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Shipping &amp; Returns</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Privacy Policy</a>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Terms of Service</a>
+</div>
+<div class="col-span-1 flex flex-col space-y-4">
+<h4 class="font-headline-md text-headline-md text-[20px] mb-2 text-secondary-fixed">Connect</h4>
+<a class="font-label-caps text-label-caps text-on-primary/80 hover:text-secondary-fixed transition-colors duration-200" href="#">Workshops</a>
+<div class="flex space-x-4 mt-4 text-secondary-fixed">
+<a class="hover:text-on-primary transition-colors" href="#"><span class="material-symbols-outlined">photo_camera</span></a>
+<a class="hover:text-on-primary transition-colors" href="#"><span class="material-symbols-outlined">mail</span></a>
+</div>
+</div>
+<div class="col-span-full mt-12 pt-8 border-t border-on-primary/20 text-center font-body-md text-body-md text-[14px] text-on-primary/60">
+                © 2024 Gabriela's Flowers LLC. All Rights Reserved.
+            </div>
+</div>
+</footer>
+<script>
+        function toggleAccordion(contentId, iconId) {
+            const content = document.getElementById(contentId);
+            const icon = document.getElementById(iconId);
+            
+            if (content.classList.contains('open')) {
+                content.classList.remove('open');
+                icon.textContent = 'add';
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('open');
+                icon.textContent = 'remove';
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+    </script>
+</body></html>

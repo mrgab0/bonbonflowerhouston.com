@@ -1,0 +1,127 @@
+{
+  "Index": {
+    "title": "Gabriela's Flowers LLC",
+    "description": "Transformamos el arte de regalar en una experiencia de boutique moderna. Diseños vibrantes que respiran sofisticación.",
+    "exploreButton": "Explorar Colección",
+    "premiumSelection": "Selección Premium",
+    "ourFlowers": "Nuestras Flores",
+    "viewCatalog": "Ver catálogo completo",
+    "noProducts": "No hay productos disponibles por el momento."
+  },
+  "Nav": {
+    "home": "Inicio",
+    "catalog": "Catálogo",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "cart": "Carrito"
+  },
+  "nav": {
+    "home": "Inicio",
+    "catalog": "Colección",
+    "tracking": "📦 Rastreo",
+    "about": "Nosotros",
+    "contact": "Contacto",
+    "cart": "Carrito"
+  },
+  "common": {
+    "addToCart": "Añadir al Carrito",
+    "added": "¡Añadido!"
+  },
+  "Catalog": {
+    "headerBadge": "🌸 Catálogo Completo & Adicionales",
+    "headerTitle": "Explora Toda Nuestra Colección",
+    "headerDesc": "Descubre arreglos florales de autor y añade detalles especiales como chocolates, globos, peluches y mariposas para crear el regalo perfecto.",
+    "allTab": "🌐 Todos",
+    "flowersTab": "🌹 Flores",
+    "addonsTab": "✨ Adicionales",
+    "searchPlaceholder": "Buscar ramos, rosas, bombones, globos...",
+    "sortBy": "Ordenar por:",
+    "featured": "Destacados 🌟",
+    "priceLowHigh": "Precio: Menor a Mayor ($)",
+    "priceHighLow": "Precio: Mayor a Menor ($)",
+    "allCategories": "Todas las categorías",
+    "showingItems": "Mostrando",
+    "itemsInCatalog": "items en el catálogo",
+    "clearFilters": "Limpiar Filtros",
+    "noResultsTitle": "No encontramos resultados con esa búsqueda",
+    "noResultsDesc": "Prueba cambiando las palabras clave o seleccionando \"Todos\" en las categorías.",
+    "viewAllBtn": "Ver Todo el Catálogo",
+    "addonBadge": "Adicional",
+    "addToCart": "Añadir al Carrito",
+    "added": "¡Añadido!"
+  },
+  "ProductDetail": {
+    "includesTitle": "¿Qué incluye este arreglo?",
+    "addonsTitle": "Completa tu Regalo (Opcional)",
+    "descriptionTitle": "Detalles y Descripción",
+    "addToCart": "Añadir al Carrito",
+    "addedToCart": "¡Añadido al Carrito! ✓",
+    "flowerCount": "Flores",
+    "bouquetType": "Presentación",
+    "inStock": "En Stock y disponible para entrega",
+    "backToCatalog": "Volver al Catálogo",
+    "customMessage": "Mensaje personalizado opcional",
+    "selectOptions": "Seleccionar opciones"
+  },
+  "Cart": {
+    "title": "Tu Carrito de Regalos",
+    "emptyTitle": "Tu carrito está vacío",
+    "emptyDesc": "Explora nuestra colección floral y añade arreglos únicos o adicionales especiales.",
+    "exploreBtn": "Explorar Colección",
+    "subtotal": "Subtotal",
+    "checkoutBtn": "Proceder al Pago",
+    "addonsLabel": "Adicionales incluidos"
+  },
+  "Checkout": {
+    "title": "Finalizar Pedido",
+    "subtitle": "Ingresa la información de entrega y selecciona tu método de pago preferido.",
+    "deliveryInfo": "Información de Envío",
+    "recipientName": "Nombre del Destinatario",
+    "recipientPhone": "Teléfono de Contacto",
+    "address": "Dirección de Entrega Completa",
+    "deliveryDate": "Fecha de Entrega Deseada",
+    "cardMessage": "Mensaje para la Tarjeta de Regalo",
+    "paymentMethod": "Método de Pago",
+    "orderSummary": "Resumen del Pedido",
+    "subtotal": "Subtotal",
+    "shipping": "Envío",
+    "freeShipping": "GRATIS",
+    "couponCode": "Código de Cupón",
+    "applyCoupon": "Aplicar",
+    "discount": "Descuento de Cupón",
+    "placeOrder": "Confirmar y Realizar Pedido",
+    "manualVerificationNote": "Verificación manual de pago. Al confirmar, recibirás las instrucciones por pantalla y WhatsApp."
+  },
+  "Reviews": {
+    "badge": "Reseñas 100% Verificadas",
+    "title": "Lo que dicen nuestros clientes en Houston ⭐⭐⭐⭐⭐",
+    "score": "4.9 / 5.0",
+    "countText": "+180 Opiniones Verificadas",
+    "verifiedPurchase": "Compra Verificada",
+    "rev1": "¡Simplemente espectacular! El ramo de rosas rojas llegó impecable en menos de 45 minutos. Mi esposo quedó encantado con la tarjeta impresa.",
+    "rev1Name": "Carolina M.",
+    "rev1Location": "Houston, TX (77087)",
+    "rev1Date": "Hace 2 días",
+    "rev2": "Excelente servicio de entrega el mismo día. La app autocompletó mi dirección en 1 segundo con la huella. Totalmente recomendado.",
+    "rev2Name": "Alejandro V.",
+    "rev2Location": "Katy / West Houston",
+    "rev2Date": "Hace 4 días",
+    "rev3": "Flores frescas de altísima calidad y la presentación en la caja rosa de boutique luce súper elegante. El mejor servicio de flores en Houston.",
+    "rev3Name": "Mariana R.",
+    "rev3Location": "The Woodlands, TX",
+    "rev3Date": "Hace 1 semana"
+  },
+  "Footer": {
+    "address1": "4201 Fairmont Pkwy",
+    "address2": "Pasadena, TX 77504",
+    "boutique": "Boutique Digital",
+    "copyright": "© 2026 Gabriela's Flowers LLC. Todos los derechos reservados.",
+    "accept": "Aceptamos:",
+    "cards": "Visa • MC • Amex • Discover"
+  },
+  "WhatsApp": {
+    "message": "¡Hola! Me gustaría más información.",
+    "vip": "Atención VIP",
+    "consultation": "Consulta Floral"
+  }
+}

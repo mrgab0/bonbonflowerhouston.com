@@ -1,0 +1,17 @@
+# Gabriela's Flowers LLC
+> Luxury Floral Boutique with Same-Day Delivery in Houston, Texas
+
+Gabriela's Flowers is an exclusive floral studio based in Houston, Texas, specializing in bespoke flower boxes, premium Ecuadorian long-stem roses, anniversary arrangements, sympathy florals, and celebration bouquets.
+
+## Core Services
+- Same-Day Flower Delivery: Covering Houston metropolitan area, Katy, Sugar Land, The Woodlands, Cypress, Pearland, and surrounding cities.
+- Custom Floral Design: Handcrafted velvet boxes, balloon bouquets, sweet flower sets, and luxury preserved roses.
+- Secure Online Ordering: Multilingual checkout (English & Spanish), real-time order tracking, and local pickup options.
+
+## Key Links & Resources
+- Home: https://gabrielas-flowers.vercel.app/
+- Catalog: https://gabrielas-flowers.vercel.app/productos
+- Order Tracking: https://gabrielas-flowers.vercel.app/rastreo
+- Contact: https://gabrielas-flowers.vercel.app/contacto
+- Instagram: https://instagram.com/gabrielas_flowers
+- WhatsApp Florist: +1 (832) 391-1835
