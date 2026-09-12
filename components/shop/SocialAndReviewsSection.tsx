@@ -223,7 +223,7 @@ export function SocialAndReviewsSection({
                   </span>
                   <span className="text-gray-300 dark:text-gray-700">•</span>
                   <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
-                    {countText || t("verifiedCount")}
+                    {countText || t("countText")}
                   </span>
                 </div>
 
