@@ -4,6 +4,7 @@ import { ProductCard } from "@/components/shop/ProductCard/ProductCard";
 import { HeroSlider } from "@/components/shop/HeroSlider/HeroSlider";
 import { StickyNav } from "@/components/shop/StickyNav";
 import { FeaturedProductsSlider } from "@/components/shop/FeaturedProductsSlider";
+import { BentoEditorialGrid } from "@/components/shop/BentoEditorialGrid";
 import { FlashSaleCollectionsSection } from "@/components/shop/FlashSaleCollectionsSection";
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
@@ -161,6 +162,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <div className="container mx-auto px-4 sm:px-6 -mt-8 sm:-mt-10 relative z-20">
         <HeroSlider initialSlides={initialSlides} />
       </div>
+
+      {/* Bento Grid Editorial estilo Botanical Romance */}
+      <BentoEditorialGrid products={products.slice(0, 5)} />
 
       {/* 2. NUEVO: Slider de Productos Destacados con Pestañas de Filtrado */}
       <FeaturedProductsSlider products={products.slice(0, 8)} />

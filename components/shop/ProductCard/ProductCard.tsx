@@ -52,8 +52,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         onDragStart={(e) => e.preventDefault()}
         className="block relative select-none"
       >
-        {/* Contenedor de Imagen con Zoom suave */}
-        <div className="relative aspect-square overflow-hidden bg-gray-50 dark:bg-gray-900">
+        {/* Contenedor de Imagen con Zoom suave y preservación completa del arreglo floral */}
+        <div className="relative aspect-square overflow-hidden bg-[#FAFAF9] dark:bg-[#15161E] p-2.5 flex items-center justify-center">
           <img
             src={optimizedMainImage}
             alt={name}
@@ -61,7 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             decoding="async"
             draggable={false}
             onDragStart={(e) => e.preventDefault()}
-            className={`w-full h-full object-cover select-none pointer-events-none transform group-hover:scale-105 transition-all duration-700 ease-out ${
+            className={`w-full h-full object-contain select-none pointer-events-none transform group-hover:scale-105 transition-all duration-700 ease-out ${
               optimizedSecondaryImage ? 'group-hover:opacity-0' : ''
             }`}
           />
@@ -73,7 +73,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               decoding="async"
               draggable={false}
               onDragStart={(e) => e.preventDefault()}
-              className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none transform scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-0 group-hover:opacity-100"
+              className="absolute inset-0 w-full h-full object-contain p-2.5 select-none pointer-events-none transform scale-100 group-hover:scale-105 transition-all duration-700 ease-out opacity-0 group-hover:opacity-100"
             />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
