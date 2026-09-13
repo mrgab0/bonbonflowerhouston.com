@@ -46,12 +46,12 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Gabriela's Flowers LLC",
-  description: "Boutique floral de lujo con envíos a domicilio",
+  title: "Bonbon Flowers Houston",
+  description: "Boutique floral de lujo en Houston, TX con envíos a domicilio",
   manifest: "/manifest.json",
   icons: {
-    icon: "/logo.jpg",
-    apple: "/logo.jpg",
+    icon: "https://bonbonflowershouston.com/logo.png",
+    apple: "https://bonbonflowershouston.com/logo.png",
   },
 };
 
@@ -67,7 +67,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="icon" href="/logo.jpg" />
+        <link rel="icon" href="https://bonbonflowershouston.com/logo.png" />
         <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://ik.imagekit.io" />

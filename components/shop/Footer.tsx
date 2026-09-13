@@ -14,24 +14,24 @@ export function Footer({ siteConfig }: FooterProps) {
         <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-b border-[#D4AF37]/30 pb-10 mb-10">
           <div className="flex items-center gap-4 text-center md:text-left">
             <img
-              src="/logo.jpg"
-              alt="Gabriela's Flowers Logo"
+              src={siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png"}
+              alt="Bonbon Flowers Logo"
               className="w-14 h-14 rounded-full object-cover border border-[#D4AF37] shadow-lg hidden sm:block"
             />
             <div>
               <h3 className="text-2xl sm:text-3xl font-serif font-bold !text-white tracking-tight" style={{ color: '#FFFFFF' }}>
-                {siteConfig?.footerTitle || "Gabriela's Flowers LLC"}
+                {siteConfig?.footerTitle || "Bonbon Flowers Houston"}
               </h3>
               <p className="text-xs !text-[#D4AF37] font-serif italic font-medium mt-1" style={{ color: '#D4AF37' }}>
-                {siteConfig?.footerSlogan || "Boutique Digital de Alta Floristería • Pasadena, Texas"}
+                {siteConfig?.footerSlogan || "Boutique Digital de Alta Floristería • Houston, Texas"}
               </p>
             </div>
           </div>
           
           <div className="flex flex-wrap justify-center gap-6 text-xs font-bold tracking-widest !text-gray-200 uppercase" style={{ color: '#E5E7EB' }}>
-            <span style={{ color: '#E5E7EB' }}>4201 Fairmont Pkwy</span>
+            <span style={{ color: '#E5E7EB' }}>Houston, TX</span>
             <span style={{ color: '#E5E7EB' }}>•</span>
-            <span style={{ color: '#E5E7EB' }}>Pasadena, TX 77504</span>
+            <span style={{ color: '#E5E7EB' }}>Envíos a Domicilio</span>
             <span style={{ color: '#E5E7EB' }}>•</span>
             <span style={{ color: '#E5E7EB' }}>Boutique Digital</span>
           </div>
@@ -39,7 +39,7 @@ export function Footer({ siteConfig }: FooterProps) {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
           <p className="!text-gray-300 font-medium text-xs tracking-wider" style={{ color: 'rgba(255, 255, 255, 0.85)' }}>
-            {siteConfig?.footerCopyright || `© ${new Date().getFullYear()} Gabriela's Flowers LLC. Todos los derechos reservados.`}
+            {siteConfig?.footerCopyright || `© ${new Date().getFullYear()} Bonbon Flowers Houston. Todos los derechos reservados.`}
           </p>
 
           {/* Logotipos de Métodos de Pago Aceptados */}

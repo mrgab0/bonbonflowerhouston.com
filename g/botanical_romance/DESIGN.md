@@ -151,7 +151,7 @@ The design system uses **Soft** geometry. Sharp corners are avoided to maintain 
 
 ### Navigation & Footer
 - **Top Bar:** Fixed position, transparent background that transitions to semi-opaque Cream on scroll. The logo is centered; the cart icon and user profile are tucked to the right using the Gold secondary color.
-- **Footer:** Deep Burgundy background with Cream text. The slogan "Flowers For You LLC..." should be centered in `body-md`, styled with italicized Playfair Display for emphasis.
+- **Footer:** Deep Burgundy background with Cream text. The slogan "Bonbon Flowers Houston..." should be centered in `body-md`, styled with italicized Playfair Display for emphasis.
 
 ### Buttons & Inputs
 - **Primary CTA:** Solid Deep Burgundy fill, white Montserrat text, 1px Gold border. On hover, the Gold border thickens slightly.

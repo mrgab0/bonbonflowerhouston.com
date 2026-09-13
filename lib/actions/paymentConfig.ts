@@ -8,8 +8,8 @@ const DEFAULT_PAYMENT_CONFIGS: Record<string, any> = {
   zelle: {
     methodId: "zelle",
     title: "Zelle",
-    holderName: "Gabriela's Flowers LLC",
-    accountDetail: "pagos@gabrielasflowers.com",
+    holderName: "Bonbon Flowers Houston",
+    accountDetail: "pagos@bonbonflowershouston.com",
     qrImage: "",
     instructions: "1. Abre la aplicación de tu banco o Zelle.\n2. Presiona 'Copiar Datos' arriba para copiar nuestro correo o teléfono oficial.\n3. Realiza la transferencia por el monto total de tu pedido.\n4. Ingresa el número de referencia de la transferencia abajo y confirma tu pedido.",
     linkUrl: "",
@@ -18,8 +18,8 @@ const DEFAULT_PAYMENT_CONFIGS: Record<string, any> = {
   cashapp: {
     methodId: "cashapp",
     title: "CashApp",
-    holderName: "Gabriela's Flowers LLC",
-    accountDetail: "$GabrielasFlowers",
+    holderName: "Bonbon Flowers Houston",
+    accountDetail: "$BonbonFlowers",
     qrImage: "",
     instructions: "1. Abre tu aplicación de CashApp.\n2. Presiona 'Copiar Datos' arriba para obtener nuestro $Cashtag oficial.\n3. Realiza el envío del pago por el total del pedido.\n4. Pega el código de confirmación o ID de transacción abajo.",
     linkUrl: "",
@@ -28,11 +28,11 @@ const DEFAULT_PAYMENT_CONFIGS: Record<string, any> = {
   paypal: {
     methodId: "paypal",
     title: "PayPal",
-    holderName: "Gabriela's Flowers LLC",
-    accountDetail: "paypal@flowersforyou.com",
+    holderName: "Bonbon Flowers Houston",
+    accountDetail: "pagos@bonbonflowershouston.com",
     qrImage: "",
     instructions: "1. Copia nuestro correo o haz clic en 'Pagar vía PayPal' para abrir tu app.\n2. Envía el pago por el monto exacto del arreglo.\n3. Ingresa tu número de transacción o correo de PayPal abajo.",
-    linkUrl: "https://paypal.me/flowersforyou",
+    linkUrl: "https://paypal.me/bonbonflowers",
     isActive: true,
   },
   square: {

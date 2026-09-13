@@ -106,7 +106,7 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
       console.error("Error enviando email SMTP: No se encontraron destinatarios válidos en ADMIN_EMAILS ni SMTP_USER.");
     } else {
       const transporter = getTransporter();
-      const sender = process.env.SMTP_USER ? `"Gabriela's Flowers" <${process.env.SMTP_USER}>` : '"Gabriela\'s Flowers"';
+      const sender = process.env.SMTP_USER ? `"Bonbon Flowers" <${process.env.SMTP_USER}>` : '"Bonbon Flowers"';
 
       // Destinatarios: Administradores y opcionalmente el cliente
       const recipients = [...adminEmails];
@@ -125,13 +125,13 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
 
       const itemsSubtotal = (savedOrder.items || []).reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
 
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://flowersforyou.vercel.app";
-      const fallbackLogoUrl = `${siteUrl.replace(/\/$/, "")}/logo.jpg`;
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bonbonflowershouston.com";
+      const fallbackLogoUrl = `${siteUrl.replace(/\/$/, "")}/logo.png`;
 
       // Comprobar archivo del logo en el servidor de forma local para adjuntarlo inline (CID)
-      const logoPath = path.join(process.cwd(), "public", "logo.jpg");
+      const logoPath = path.join(process.cwd(), "public", "logo.png");
       const hasLogoFile = fs.existsSync(logoPath);
-      const logoSrc = hasLogoFile ? "cid:logo_image@flowersforyou" : fallbackLogoUrl;
+      const logoSrc = hasLogoFile ? "cid:logo_image@bonbonflowers" : fallbackLogoUrl;
 
       const emailContent = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 12px; overflow: hidden; background: #ffffff;">
@@ -139,11 +139,11 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
             <table role="presentation" style="margin: 0 auto; border-collapse: collapse;">
               <tr>
                 <td style="vertical-align: middle; padding-right: 14px;">
-                  <img src="${logoSrc}" alt="Gabriela's Flowers Logo" style="width: 46px; height: 46px; border-radius: 50%; border: 2px solid #ffffff; display: block; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
+                  <img src="${logoSrc}" alt="Bonbon Flowers Logo" style="width: 46px; height: 46px; border-radius: 50%; border: 2px solid #ffffff; display: block; object-fit: cover; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
                 </td>
                 <td style="vertical-align: middle; text-align: left;">
-                  <h1 style="color: #ffffff; margin: 0; font-family: Georgia, serif; font-size: 24px; font-weight: bold; line-height: 1.1;">Gabriela's Flowers LLC</h1>
-                  <p style="color: rgba(255,255,255,0.92); margin: 3px 0 0 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-family: Arial, sans-serif; font-weight: bold;">Boutique Digital & Alta Floristería</p>
+                  <h1 style="color: #ffffff; margin: 0; font-family: Georgia, serif; font-size: 24px; font-weight: bold; line-height: 1.1;">Bonbon Flowers Houston</h1>
+                  <p style="color: rgba(255,255,255,0.92); margin: 3px 0 0 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; font-family: Arial, sans-serif; font-weight: bold;">Boutique Digital & Alta Floristería • Houston, TX</p>
                 </td>
               </tr>
             </table>
@@ -253,7 +253,7 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
           </div>
           
           <div style="background-color: #1A1C1C; color: white; padding: 15px; text-align: center; font-size: 12px;">
-            <p style="margin: 0;">Gabriela's Flowers LLC • Boutique Digital</p>
+            <p style="margin: 0;">Bonbon Flowers Houston • Boutique Digital</p>
           </div>
         </div>
       `;
@@ -268,9 +268,9 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
       if (hasLogoFile) {
         mailOptions.attachments = [
           {
-            filename: "logo.jpg",
+            filename: "logo.png",
             path: logoPath,
-            cid: "logo_image@flowersforyou",
+            cid: "logo_image@bonbonflowers",
           },
         ];
       }

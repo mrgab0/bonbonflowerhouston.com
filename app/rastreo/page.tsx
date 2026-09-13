@@ -195,7 +195,7 @@ export default function RastreoPedidoPage() {
                       ) : (
                         <MapPin size={15} className="text-[#FF97A4] flex-shrink-0 mt-0.5" />
                       )}
-                      <span>{isPickup ? "Boutique Gabriela's Flowers LLC • 4201 Fairmont Pkwy, Pasadena, TX 77504" : (order.address || "Dirección registrada")}</span>
+                      <span>{isPickup ? "Boutique Bonbon Flowers Houston • Houston, TX" : (order.address || "Dirección registrada")}</span>
                     </p>
                   </div>
 

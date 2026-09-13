@@ -16,7 +16,7 @@ interface DeliveryMapPickerProps {
   }) => void;
 }
 
-// Coordenadas del punto de partida de la boutique matriz (4201 Fairmont Pkwy, Pasadena, TX 77504)
+// Coordenadas del punto de partida de la boutique matriz (Houston, TX)
 const DEFAULT_STORE_LAT = 29.6521;
 const DEFAULT_STORE_LNG = -95.1706;
 

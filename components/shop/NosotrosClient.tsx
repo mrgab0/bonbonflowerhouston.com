@@ -49,7 +49,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
 
       <main className="nosotros-page-root flex-1">
         
-        {/* HERO EDITORIAL: HISTORIA DE GABRIELA'S FLOWERS */}
+        {/* HERO EDITORIAL: HISTORIA DE BONBON FLOWERS HOUSTON */}
         <section className="relative overflow-hidden py-16 md:py-24 bg-gradient-to-b from-[#fff0ef]/60 via-transparent to-transparent dark:from-[#181922]/60 dark:via-transparent dark:to-transparent border-b border-[#D4AF37]/20">
           <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto text-center space-y-4">
@@ -67,12 +67,12 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
 
               {/* Resumen de Historia */}
               <p className="text-base sm:text-lg text-black dark:text-black leading-relaxed font-medium pt-2">
-                En <strong className="font-bold text-black dark:text-black">Gabriela's Flowers LLC</strong>, nacimos en Pasadena y Houston, Texas con un solo propósito: transformar cada sentimiento en una obra de arte floral inolvidable. Seleccionamos las rosas y flores más frescas de exportación para confeccionar ramos buchones, cajas de lujo y arreglos exclusivos que celebran la vida, el amor y los momentos que perduran.
+                En <strong className="font-bold text-black dark:text-black">Bonbon Flowers Houston</strong>, nacimos en Houston, Texas con un solo propósito: transformar cada sentimiento en una obra de arte floral inolvidable. Seleccionamos las rosas y flores más frescas de exportación para confeccionar ramos buchones, cajas de lujo y arreglos exclusivos que celebran la vida, el amor y los momentos que perduran.
               </p>
 
               <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-black dark:text-black pt-2">
                 <span className="flex items-center gap-1 text-black dark:text-black">
-                  <MapPin size={15} className="text-[#8B0024]" /> Houston & Pasadena, TX
+                  <MapPin size={15} className="text-[#8B0024]" /> Houston, TX
                 </span>
                 <span className="text-black dark:text-black">•</span>
                 <span className="flex items-center gap-1 text-black dark:text-black">
@@ -121,7 +121,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                   Envíos y Puntualidad
                 </h3>
                 <p className="text-xs text-black dark:text-black leading-relaxed font-medium">
-                  Cobertura puntual en Houston, Pasadena, Pearland y zonas vecinas con seguimiento en vivo de tu envío.
+                  Cobertura puntual en Houston, Pearland y zonas metropolitanas con seguimiento en vivo de tu envío.
                 </p>
               </div>
 
@@ -241,7 +241,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
               ¿Deseas Sorprender con un Arreglo Personalizado?
             </h2>
             <p className="text-sm text-black dark:text-black max-w-xl mx-auto font-medium leading-relaxed">
-              Conoce nuestro catálogo con entregas en Houston y Pasadena o comunícate directamente con nuestros floristas para diseñar un ramo a tu medida.
+              Conoce nuestro catálogo con entregas en Houston, TX o comunícate directamente con nuestros floristas para diseñar un ramo a tu medida.
             </p>
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link

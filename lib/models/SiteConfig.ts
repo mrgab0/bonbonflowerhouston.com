@@ -82,19 +82,19 @@ export interface ISiteConfig extends Document {
 
 const SiteConfigSchema: Schema = new Schema({
   key: { type: String, required: true, unique: true, default: "global" },
-  heroTitle: { type: String, default: "Gabriela's Flowers LLC" },
+  heroTitle: { type: String, default: "Bonbon Flowers Houston" },
   heroSlogan: { type: String, default: "Arreglos florales exclusivos y detalles de lujo diseñados para sorprender a quien más amas." },
   heroButtonText: { type: String, default: "Explorar Colección" },
-  footerTitle: { type: String, default: "Gabriela's Flowers LLC" },
-  footerSlogan: { type: String, default: "Boutique Digital de Alta Floristería • Entregas a Domicilio" },
-  footerCopyright: { type: String, default: "© 2026 Gabriela's Flowers LLC. Todos los derechos reservados." },
+  footerTitle: { type: String, default: "Bonbon Flowers Houston" },
+  footerSlogan: { type: String, default: "Boutique Digital de Alta Floristería • Houston, Texas" },
+  footerCopyright: { type: String, default: "© 2026 Bonbon Flowers Houston. Todos los derechos reservados." },
 
   // Personalización del Home & Cuadrícula (Por defecto 3 columnas en escritorio = Preservación 100%)
   productColumnsDesktop: { type: Number, default: 3 },
   productColumnsMobile: { type: Number, default: 2 },
 
   // Identidad de Marca y Menú
-  logoUrl: { type: String, default: "/logo.jpg" },
+  logoUrl: { type: String, default: "https://bonbonflowershouston.com/logo.png" },
   brandSlogan: { type: String, default: "Boutique Floral Digital • Houston, Texas" },
   menuHomeLabel: { type: String, default: "Inicio" },
   menuCatalogLabel: { type: String, default: "Colección" },
@@ -105,14 +105,14 @@ const SiteConfigSchema: Schema = new Schema({
 
   // Redes Sociales en Cabecera
   enableHeaderSocials: { type: Boolean, default: true },
-  facebookUrl: { type: String, default: "https://facebook.com" },
-  instagramUrl: { type: String, default: "https://instagram.com" },
+  facebookUrl: { type: String, default: "https://www.facebook.com/bonbon.flowers.2025" },
+  instagramUrl: { type: String, default: "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==" },
   tiktokUrl: { type: String, default: "https://tiktok.com" },
   whatsappUrl: { type: String, default: "https://wa.me/18323911835" },
 
   // Módulo Social Pre-Footer (Incrustados Instagram/TikTok)
   enableSocialFeed: { type: Boolean, default: true },
-  socialFeedTitle: { type: String, default: "Síguenos en Instagram & TikTok 📸" },
+  socialFeedTitle: { type: String, default: "Síguenos en Instagram @bonbonflowers__ 📸" },
   socialEmbedHtml: { type: String, default: "" },
 
   // Módulo de Reseñas / Opiniones & Trustpilot (Pre-Footer)
@@ -133,7 +133,7 @@ const SiteConfigSchema: Schema = new Schema({
   dialogflowProjectId: { type: String, default: "" },
   dialogflowLocation: { type: String, default: "us-central1" },
   dialogflowLanguageCode: { type: String, default: "es" },
-  dialogflowChatTitle: { type: String, default: "Gabriela's Flowers Virtual Assistant 🌸" },
+  dialogflowChatTitle: { type: String, default: "Bonbon Flowers Virtual Assistant 🌸" },
 
   twoFactorMode: { type: String, default: "none" },
   twoFactorPin: { type: String, default: "" },
@@ -143,17 +143,17 @@ const SiteConfigSchema: Schema = new Schema({
   rescueOtpExpiresAt: { type: Date, default: null },
 
   // Campos SEO por defecto
-  seoTitle: { type: String, default: "Gabriela's Flowers LLC | Boutique Digital de Alta Floristería" },
-  seoDescription: { type: String, default: "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express." },
-  seoKeywords: { type: String, default: "floristeria, flores a domicilio, arreglos florales, rosas, ramos de flores, regalos" },
-  ogImage: { type: String, default: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200" },
+  seoTitle: { type: String, default: "Bonbon Flowers Houston | Boutique Digital de Alta Floristería" },
+  seoDescription: { type: String, default: "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express en Houston, TX." },
+  seoKeywords: { type: String, default: "floristeria, flores a domicilio, arreglos florales, rosas, ramos de flores, regalos, houston tx, bonbon flowers" },
+  ogImage: { type: String, default: "https://bonbonflowershouston.com/logo.png" },
   googleSiteVerification: { type: String, default: "" },
   bingSiteVerification: { type: String, default: "" },
   googleAnalyticsId: { type: String, default: "" },
-  businessName: { type: String, default: "Gabriela's Flowers LLC" },
-  businessPhone: { type: String, default: "+1 (800) 555-3569" },
-  businessAddress: { type: String, default: "4201 Fairmont Pkwy" },
-  businessCity: { type: String, default: "Pasadena, TX 77504" },
+  businessName: { type: String, default: "Bonbon Flowers" },
+  businessPhone: { type: String, default: "+1 (832) 391-1835" },
+  businessAddress: { type: String, default: "Houston, TX" },
+  businessCity: { type: String, default: "Houston, TX" },
 
   updatedAt: { type: Date, default: Date.now }
 });

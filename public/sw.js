@@ -1,8 +1,8 @@
-const CACHE_NAME = "flowersforyou-v1";
+const CACHE_NAME = "bonbonflowers-v1";
 const STATIC_ASSETS = [
   "/",
   "/manifest.json",
-  "/logo.jpg"
+  "/logo.png"
 ];
 
 self.addEventListener("install", (event) => {

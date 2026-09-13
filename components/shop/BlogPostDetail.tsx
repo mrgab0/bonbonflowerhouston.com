@@ -55,7 +55,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
     }
   };
 
-  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(`Mira este artículo de Gabriela's Flowers: ${post.title} ` + (typeof window !== "undefined" ? window.location.href : ""))}`;
+  const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(`Mira este artículo de Bonbon Flowers: ${post.title} ` + (typeof window !== "undefined" ? window.location.href : ""))}`;
 
   // Formatear markdown básico a HTML seguro
   const renderFormattedContent = (content: string) => {
@@ -139,14 +139,14 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             image: post.mainImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200",
             author: {
               "@type": "Organization",
-              name: "Gabriela's Flowers LLC"
+              name: "Bonbon Flowers Houston"
             },
             publisher: {
               "@type": "Organization",
-              name: "Gabriela's Flowers LLC",
+              name: "Bonbon Flowers Houston",
               logo: {
                 "@type": "ImageObject",
-                url: "https://gabrielas-flowers.vercel.app/logo.jpg"
+                url: "https://bonbonflowershouston.com/logo.png"
               }
             },
             datePublished: post.createdAt || new Date().toISOString()
@@ -220,7 +220,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
               <span>•</span>
               <span className="flex items-center gap-1">
                 <MapPin size={14} className="text-emerald-600" />
-                Houston & Pasadena, TX
+                Houston, TX
               </span>
             </div>
           </header>

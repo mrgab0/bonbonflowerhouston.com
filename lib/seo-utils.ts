@@ -3,7 +3,7 @@ import { IProduct as Product } from "@/lib/models/Product";
 /**
  * Genera el script JSON-LD para un producto floral (Google Shopping & Rich Snippets).
  */
-export function getProductSchema(product: Product, siteUrl: string = "https://flowersforyou.com") {
+export function getProductSchema(product: Product, siteUrl: string = "https://bonbonflowershouston.com") {
   const schema = {
     "@context": "https://schema.org/",
     "@type": "Product",
@@ -22,7 +22,7 @@ export function getProductSchema(product: Product, siteUrl: string = "https://fl
         : "https://schema.org/OutOfStock",
       "seller": {
         "@type": "FlowerShop",
-        "name": "Gabriela's Flowers LLC"
+        "name": "Bonbon Flowers Houston"
       }
     }
   };
@@ -33,21 +33,22 @@ export function getProductSchema(product: Product, siteUrl: string = "https://fl
 /**
  * Genera el marcado JSON-LD de Negocio Local / Floristería para Google Maps.
  */
-export function getLocalBusinessSchema(config: any, siteUrl: string = "https://flowersforyou.com") {
+export function getLocalBusinessSchema(config: any, siteUrl: string = "https://bonbonflowershouston.com") {
   const schema = {
     "@context": "https://schema.org",
     "@type": "FlowerShop",
-    "name": config?.businessName || "Gabriela's Flowers LLC",
-    "image": config?.ogImage || `${siteUrl}/logo.jpg`,
+    "name": config?.businessName || "Bonbon Flowers Houston",
+    "image": config?.ogImage || `${siteUrl}/logo.png`,
     "@id": siteUrl,
     "url": siteUrl,
-    "telephone": config?.businessPhone || "+1 (800) 555-3569",
+    "telephone": config?.businessPhone || "+1 (832) 391-1835",
     "priceRange": "$$",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": config?.businessAddress || "Av. Principal Floristería #123",
-      "addressLocality": config?.businessCity || "Ciudad de México",
-      "addressCountry": "MX"
+      "streetAddress": config?.businessAddress || "Houston, TX",
+      "addressLocality": config?.businessCity || "Houston, TX",
+      "addressRegion": "TX",
+      "addressCountry": "US"
     },
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
@@ -100,11 +101,11 @@ export function constructMetadata({
   image?: string;
   slug?: string;
 }) {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://flowersforyou.com";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bonbonflowershouston.com";
   const fullUrl = slug ? `${siteUrl}/${slug}` : siteUrl;
 
   return {
-    title: `${title} | Gabriela's Flowers LLC`,
+    title: `${title} | Bonbon Flowers Houston`,
     description,
     openGraph: {
       title,

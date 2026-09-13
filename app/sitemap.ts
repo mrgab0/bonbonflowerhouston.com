@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 3600; // Recalcular sitemap cada hora
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://flowersforyou.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://bonbonflowershouston.com";
 
   // Rutas estáticas de la tienda
   const staticRoutes: MetadataRoute.Sitemap = [

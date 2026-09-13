@@ -62,11 +62,11 @@ export default function AdminOrdenesPage() {
 
   const createWhatsAppNotifyUrl = (order: any) => {
     const phone = (order.customerPhone || "").replace(/\D/g, "");
-    const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://flowersforyou.vercel.app";
+    const siteUrl = typeof window !== "undefined" ? window.location.origin : "https://bonbonflowershouston.com";
     const trackUrl = `${siteUrl}/rastreo`;
     const statusText = order.status || "En Proceso";
 
-    const msg = `¡Hola ${order.customerName}! 🌹 Te notificamos de Gabriela's Flowers LLC que tu pedido *${order.orderId}* ha sido actualizado a estado: *${statusText}* ✨\n\nPuedes rastrear el avance en tiempo real aquí: ${trackUrl}`;
+    const msg = `¡Hola ${order.customerName}! 🌹 Te notificamos de Bonbon Flowers Houston que tu pedido *${order.orderId}* ha sido actualizado a estado: *${statusText}* ✨\n\nPuedes rastrear el avance en tiempo real aquí: ${trackUrl}`;
 
     return phone ? `https://wa.me/${phone}?text=${encodeURIComponent(msg)}` : `https://wa.me/?text=${encodeURIComponent(msg)}`;
   };
@@ -838,7 +838,7 @@ export default function AdminOrdenesPage() {
               {/* Encabezado Oficial Boutique */}
               <div className="flex justify-between items-start border-b-2 border-pink-200 pb-5">
                 <div>
-                  <h1 className="text-2xl font-serif font-extrabold text-[#1A1C1C] tracking-tight">Gabriela's Flowers LLC</h1>
+                  <h1 className="text-2xl font-serif font-extrabold text-[#1A1C1C] tracking-tight">Bonbon Flowers Houston</h1>
                   <p className="text-[11px] font-bold uppercase tracking-wider text-[#FF97A4]">High Floral Design Boutique</p>
                   <p className="text-gray-500 text-[11px] mt-1">Houston, Texas & Metropolitan Areas</p>
                   <p className="text-gray-500 text-[11px]">Tel / WhatsApp: +1 (832) 391-1835</p>
@@ -963,10 +963,10 @@ export default function AdminOrdenesPage() {
               <div className="border-t pt-4 text-center text-[10px] text-gray-400 space-y-1">
                 <p className="font-bold text-gray-600">
                   {invoiceLang === "es"
-                    ? "¡Gracias por elegir a Gabriela's Flowers LLC para regalar sonrisas!"
-                    : "Thank you for choosing Gabriela's Flowers LLC for your special moments!"}
+                    ? "¡Gracias por elegir a Bonbon Flowers Houston para regalar sonrisas!"
+                    : "Thank you for choosing Bonbon Flowers Houston for your special moments!"}
                 </p>
-                <p>Gabriela's Flowers LLC • Houston, Texas • www.flowersforyou.app</p>
+                <p>Bonbon Flowers Houston • Houston, Texas • bonbonflowershouston.com</p>
               </div>
             </div>
           </div>

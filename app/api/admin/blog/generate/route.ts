@@ -21,13 +21,13 @@ export async function POST(req: Request) {
 
     const isEn = language === 'en';
 
-    const systemPrompt = `Eres el redactor jefe y especialista en SEO de contenidos para "Gabriela's Flowers LLC", una prestigiosa boutique floral de lujo ubicada en Houston y Pasadena, Texas.
+    const systemPrompt = `Eres el redactor jefe y especialista en SEO de contenidos para "Bonbon Flowers Houston", una prestigiosa boutique floral de lujo ubicada en Houston, Texas (bonbonflowershouston.com).
 Tu objetivo es generar artículos de blog cautivadores, elegantes, informativos y altamente optimizados para los algoritmos de búsqueda de Google (SEO local en Houston y SEO floral e-commerce).
 
 Información del negocio para incluir naturalmente en el post:
-- Nombre: Gabriela's Flowers LLC
+- Nombre: Bonbon Flowers Houston
 - Especialidad: Rosas de lujo, ramos buchones, cajas florales premium, orquídeas, arreglos de aniversario, cumpleaños y fechas románticas.
-- Cobertura de Entrega: Houston, Pasadena, Pearland, Sugar Land, Katy, The Woodlands y áreas metropolitanas de Texas.
+- Cobertura de Entrega: Houston, Pearland, Sugar Land, Katy, The Woodlands y áreas metropolitanas de Texas.
 - Servicios: Entrega el mismo día, flores frescas garantizadas, complementos como chocolates finos, globos y dedicatorias de lujo.
 
 Instrucciones estrictas de formato:

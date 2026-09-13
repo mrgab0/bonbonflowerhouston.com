@@ -6,15 +6,15 @@ import { revalidatePath } from "next/cache";
 
 const DEFAULT_SITE_CONFIG = {
   key: "global",
-  heroTitle: "Gabriela's Flowers LLC",
+  heroTitle: "Bonbon Flowers Houston",
   heroSlogan: "Arreglos florales exclusivos y detalles de lujo diseñados para sorprender a quien más amas.",
   heroButtonText: "Explorar Colección",
-  footerTitle: "Gabriela's Flowers LLC",
-  footerSlogan: "Boutique Digital de Alta Floristería • Entregas a Domicilio",
-  footerCopyright: "© 2026 Gabriela's Flowers LLC. Todos los derechos reservados.",
+  footerTitle: "Bonbon Flowers Houston",
+  footerSlogan: "Boutique Digital de Alta Floristería • Houston, Texas",
+  footerCopyright: "© 2026 Bonbon Flowers Houston. Todos los derechos reservados.",
   productColumnsDesktop: 3,
   productColumnsMobile: 2,
-  logoUrl: "/logo.jpg",
+  logoUrl: "https://bonbonflowershouston.com/logo.png",
   brandSlogan: "Boutique Floral Digital • Houston, Texas",
   menuHomeLabel: "Inicio",
   menuCatalogLabel: "Colección",
@@ -23,12 +23,12 @@ const DEFAULT_SITE_CONFIG = {
   menuContactLabel: "Contacto",
   primaryColor: "#FF97A4",
   enableHeaderSocials: true,
-  facebookUrl: "https://facebook.com",
-  instagramUrl: "https://instagram.com",
+  facebookUrl: "https://www.facebook.com/bonbon.flowers.2025",
+  instagramUrl: "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==",
   tiktokUrl: "https://tiktok.com",
   whatsappUrl: "https://wa.me/18323911835",
   enableSocialFeed: true,
-  socialFeedTitle: "Síguenos en Instagram & TikTok 📸",
+  socialFeedTitle: "Síguenos en Instagram @bonbonflowers__ 📸",
   socialEmbedHtml: "",
   enableReviewsSection: true,
   reviewsTitle: "Lo que dicen nuestros clientes en Houston ⭐⭐⭐⭐⭐",
@@ -43,7 +43,7 @@ const DEFAULT_SITE_CONFIG = {
   dialogflowProjectId: "",
   dialogflowLocation: "us-central1",
   dialogflowLanguageCode: "es",
-  dialogflowChatTitle: "Gabriela's Flowers Virtual Assistant 🌸"
+  dialogflowChatTitle: "Bonbon Flowers Virtual Assistant 🌸"
 };
 
 export async function getSiteConfig() {
@@ -96,7 +96,7 @@ export async function updateSiteConfig(formData: FormData) {
       : (prev.productColumnsMobile || 2);
 
     // Identidad y Menú
-    const logoUrl = getValue("logoUrl", "/logo.jpg");
+    const logoUrl = getValue("logoUrl", "https://bonbonflowershouston.com/logo.png");
     const brandSlogan = getValue("brandSlogan", DEFAULT_SITE_CONFIG.brandSlogan);
     const menuHomeLabel = getValue("menuHomeLabel", DEFAULT_SITE_CONFIG.menuHomeLabel);
     const menuCatalogLabel = getValue("menuCatalogLabel", DEFAULT_SITE_CONFIG.menuCatalogLabel);
@@ -135,7 +135,7 @@ export async function updateSiteConfig(formData: FormData) {
     const dialogflowProjectId = getValue("dialogflowProjectId", "");
     const dialogflowLocation = getValue("dialogflowLocation", "us-central1");
     const dialogflowLanguageCode = getValue("dialogflowLanguageCode", "es");
-    const dialogflowChatTitle = getValue("dialogflowChatTitle", "Gabriela's Flowers Virtual Assistant 🌸");
+    const dialogflowChatTitle = getValue("dialogflowChatTitle", "Bonbon Flowers Virtual Assistant 🌸");
 
     await SiteConfig.findOneAndUpdate(
       { key: "global" },

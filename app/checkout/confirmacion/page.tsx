@@ -23,7 +23,7 @@ export default async function ConfirmacionPage({
         </div>
         <h2 className="text-3xl font-bold text-[#1A1C1C] mb-2">¡Compra Finalizada! 🌹</h2>
         <p className="text-gray-500 mb-6">
-          Pronto recibirás tu pedido. Gracias por elegir Gabriela's Flowers LLC.
+          Pronto recibirás tu pedido. Gracias por elegir Bonbon Flowers Houston.
         </p>
         
         <div className="bg-gray-50 p-4 rounded-xl mb-8">

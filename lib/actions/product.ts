@@ -108,7 +108,7 @@ export async function createBulkProducts(
         name,
         price: typeof item.price === 'number' && !isNaN(item.price) ? item.price : 0,
         category: item.category?.trim() || "General",
-        description: item.description?.trim() || `Hermoso arreglo de ${name} elaborado con flores frescas de la más alta calidad en Gabriela's Flowers.`,
+        description: item.description?.trim() || `Hermoso arreglo de ${name} elaborado con flores frescas de la más alta calidad en Bonbon Flowers.`,
         images: item.images && item.images.length > 0 ? item.images : ["https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800"],
         stock: typeof item.stock === 'number' && !isNaN(item.stock) ? item.stock : 10,
         sku,

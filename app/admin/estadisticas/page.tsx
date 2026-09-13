@@ -32,7 +32,7 @@ export default function AdminEstadisticasPage() {
     const productName = cart.productName || (cart.cartItems && cart.cartItems[0] ? cart.cartItems[0].name : "tu arreglo floral");
 
     const message = encodeURIComponent(
-      `¡Hola ${cart.customerName || ""}! 🌹 Notamos que estabas interesado en ${productName} en Gabriela's Flowers LLC.\n\n${itemsText ? `Tus items:\n${itemsText}\n\n` : ""}¿Te gustaría completar tu pedido hoy? Estamos listos para preparar tu entrega especial a domicilio. ✨`
+      `¡Hola ${cart.customerName || ""}! 🌹 Notamos que estabas interesado en ${productName} en Bonbon Flowers Houston.\n\n${itemsText ? `Tus items:\n${itemsText}\n\n` : ""}¿Te gustaría completar tu pedido hoy? Estamos listos para preparar tu entrega especial a domicilio. ✨`
     );
 
     return phone ? `https://wa.me/${phone}?text=${message}` : `https://wa.me/?text=${message}`;

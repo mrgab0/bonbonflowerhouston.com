@@ -34,17 +34,17 @@ export default function AdminSeoPage() {
     const { data } = await getSiteConfig();
     if (data) {
       setConfig(data);
-      setTitle(data.seoTitle || "Gabriela's Flowers LLC | Boutique Digital de Alta Floristería");
-      setDescription(data.seoDescription || "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express.");
-      setKeywords(data.seoKeywords || "floristeria, flores a domicilio, arreglos florales, rosas, ramos de flores, regalos");
-      setOgImage(data.ogImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200");
+      setTitle(data.seoTitle || "Bonbon Flowers Houston | Boutique Digital de Alta Floristería");
+      setDescription(data.seoDescription || "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express en Houston, TX.");
+      setKeywords(data.seoKeywords || "floristeria, flores a domicilio, arreglos florales, rosas, ramos de flores, regalos, houston tx, bonbon flowers");
+      setOgImage(data.ogImage || "https://bonbonflowershouston.com/logo.png");
       setGoogleVerification(data.googleSiteVerification || "");
       setBingVerification(data.bingSiteVerification || "");
       setAnalyticsId(data.googleAnalyticsId || "");
-      setBusinessName(data.businessName || "Gabriela's Flowers LLC");
-      setBusinessPhone(data.businessPhone || "+1 (800) 555-3569");
-      setBusinessAddress(data.businessAddress || "Av. Principal Floristería #123");
-      setBusinessCity(data.businessCity || "Ciudad de México");
+      setBusinessName(data.businessName || "Bonbon Flowers");
+      setBusinessPhone(data.businessPhone || "+1 (832) 391-1835");
+      setBusinessAddress(data.businessAddress || "Houston, TX");
+      setBusinessCity(data.businessCity || "Houston, TX");
     }
     setLoading(false);
   }
@@ -152,7 +152,7 @@ export default function AdminSeoPage() {
                     name="seoTitle"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Ej: Gabriela's Flowers LLC | Boutique Digital de Alta Floristería"
+                    placeholder="Ej: Bonbon Flowers Houston | Boutique Digital de Alta Floristería"
                     className="p-3 border rounded-2xl text-xs font-bold text-[#1A1C1C] dark:text-white dark:bg-gray-900 border-gray-200 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     required
                   />
@@ -286,14 +286,14 @@ export default function AdminSeoPage() {
 
                 <div className="p-4 bg-gray-50 dark:bg-gray-900/80 rounded-2xl border border-gray-200 dark:border-gray-800 space-y-1">
                   <div className="flex items-center gap-2 text-[11px] text-gray-600 dark:text-gray-400">
-                    <span className="w-4 h-4 rounded-full bg-pink-100 text-[#FF97A4] flex items-center justify-center font-bold text-[9px]">F</span>
-                    <span>https://flowersforyou.com</span>
+                    <span className="w-4 h-4 rounded-full bg-pink-100 text-[#FF97A4] flex items-center justify-center font-bold text-[9px]">B</span>
+                    <span>https://bonbonflowershouston.com</span>
                   </div>
                   <h3 className="text-sm font-bold text-blue-700 dark:text-blue-400 hover:underline cursor-pointer leading-snug">
-                    {title || "Gabriela's Flowers LLC | Boutique Digital de Alta Floristería"}
+                    {title || "Bonbon Flowers Houston | Boutique Digital de Alta Floristería"}
                   </h3>
                   <p className="text-xs text-gray-600 dark:text-gray-300 line-clamp-2 leading-relaxed">
-                    {description || "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express."}
+                    {description || "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express en Houston, TX."}
                   </p>
                 </div>
               </div>
@@ -311,7 +311,7 @@ export default function AdminSeoPage() {
                     </div>
                   )}
                   <div className="px-1 space-y-0.5">
-                    <span className="text-[10px] text-emerald-400 font-bold uppercase block">FLOWERSFORYOU.COM</span>
+                    <span className="text-[10px] text-emerald-400 font-bold uppercase block">BONBONFLOWERSHOUSTON.COM</span>
                     <h4 className="text-xs font-bold text-white leading-snug line-clamp-1">{title}</h4>
                     <p className="text-[11px] text-emerald-200/80 line-clamp-2 leading-tight">{description}</p>
                   </div>

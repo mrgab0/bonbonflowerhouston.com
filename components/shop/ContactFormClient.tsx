@@ -75,7 +75,7 @@ export function ContactFormClient() {
               
               <div className="space-y-6">
                 <div>
-                  <span className="text-[#FF97A4] text-[10px] font-black uppercase tracking-widest block mb-1">Gabriela's Flowers LLC</span>
+                  <span className="text-[#FF97A4] text-[10px] font-black uppercase tracking-widest block mb-1">Bonbon Flowers Houston</span>
                   <h2 className="text-2xl font-serif font-bold">Información Boutique</h2>
                 </div>
 
@@ -86,7 +86,7 @@ export function ContactFormClient() {
                     </div>
                     <div>
                       <strong className="block text-white text-xs uppercase tracking-wider font-bold">Dirección Boutique</strong>
-                      <span className="text-gray-300 font-medium">4201 Fairmont Pkwy, Pasadena, TX 77504</span>
+                      <span className="text-gray-300 font-medium">Houston, TX</span>
                     </div>
                   </div>
 
@@ -108,8 +108,8 @@ export function ContactFormClient() {
                     </div>
                     <div>
                       <strong className="block text-white text-xs uppercase tracking-wider font-bold">Correo Electrónico</strong>
-                      <a href="mailto:flowersforyou403@gmail.com" className="text-gray-300 hover:text-[#FF97A4] font-medium transition-colors">
-                        flowersforyou403@gmail.com
+                      <a href="mailto:contacto@bonbonflowershouston.com" className="text-gray-300 hover:text-[#FF97A4] font-medium transition-colors">
+                        contacto@bonbonflowershouston.com
                       </a>
                     </div>
                   </div>
@@ -162,7 +162,7 @@ export function ContactFormClient() {
                   </div>
                   <h2 className="text-2xl font-bold text-[#1A1C1C]">¡Gracias por escribirnos!</h2>
                   <p className="text-gray-500 text-sm font-medium leading-relaxed">
-                    Tu mensaje ha sido enviado a <strong className="text-[#1A1C1C]">flowersforyou403@gmail.com</strong>. Si deseas atención inmediata, puedes chatear directo con nosotros por WhatsApp.
+                    Tu mensaje ha sido enviado exitosamente a nuestro equipo. Si deseas atención inmediata, puedes chatear directo con nosotros por WhatsApp.
                   </p>
                   
                   <div className="pt-4 flex flex-col sm:flex-row gap-3 justify-center">

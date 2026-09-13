@@ -214,7 +214,7 @@ export default function AdminBlogPage() {
             Blogger & Redacción de Artículos
           </h1>
           <p className="text-sm text-gray-600 dark:text-gray-400 max-w-2xl mt-1 font-medium">
-            Crea y administra publicaciones para la sección <span className="font-bold text-[#8B0024] dark:text-pink-300">/nosotros</span>. Estos artículos impulsan el posicionamiento de Gabriela's Flowers en Google.
+            Crea y administra publicaciones para la sección <span className="font-bold text-[#8B0024] dark:text-pink-300">/nosotros</span>. Estos artículos impulsan el posicionamiento de Bonbon Flowers Houston en Google.
           </p>
         </div>
 
@@ -225,7 +225,7 @@ export default function AdminBlogPage() {
             className="flex items-center gap-2 bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:opacity-95 text-white px-4 py-2.5 rounded-xl font-black text-xs shadow-md transition-all active:scale-95"
           >
             <Sparkles size={16} />
-            <span>Asistente IA Gabriela ✨</span>
+            <span>Asistente IA Bonbon ✨</span>
           </button>
 
           <button
@@ -519,7 +519,7 @@ export default function AdminBlogPage() {
         </div>
       )}
 
-      {/* MODAL DEL ASISTENTE IA GABRIELA */}
+      {/* MODAL DEL ASISTENTE IA BONBON */}
       {isAiModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
           <div className="bg-white dark:bg-[#181922] w-full max-w-2xl rounded-3xl border border-purple-200 dark:border-gray-800 shadow-2xl p-6 sm:p-8 space-y-5 max-h-[90vh] overflow-y-auto">
@@ -532,7 +532,7 @@ export default function AdminBlogPage() {
                 </div>
                 <div>
                   <h3 className="font-serif font-black text-lg text-gray-900 dark:!text-white">
-                    Asistente IA Gabriela ✨
+                    Asistente IA Bonbon ✨
                   </h3>
                   <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                     Generador automático de artículos optimizados para SEO floral con Google Gemini
@@ -562,16 +562,16 @@ export default function AdminBlogPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-black uppercase tracking-wider text-gray-700 dark:text-gray-300">
-                    Palabras clave SEO adicionales (Opcional)
+                    Palabras Clave SEO (Opcional)
                   </label>
                   <input
                     type="text"
                     value={aiKeywords}
                     onChange={(e) => setAiKeywords(e.target.value)}
-                    placeholder="ej: rosas de lujo, delivery pasadena tx"
+                    placeholder="ej: rosas de lujo, delivery houston tx"
                     className="w-full p-3 border rounded-xl text-xs font-semibold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                 </div>

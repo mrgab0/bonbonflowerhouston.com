@@ -36,8 +36,8 @@ export function StickyNav({ siteConfig }: StickyNavProps) {
   }, []);
 
   const enableSocials = siteConfig?.enableHeaderSocials !== false;
-  const instagramUrl = siteConfig?.instagramUrl || "https://instagram.com";
-  const facebookUrl = siteConfig?.facebookUrl || "https://facebook.com";
+  const instagramUrl = siteConfig?.instagramUrl || "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==";
+  const facebookUrl = siteConfig?.facebookUrl || "https://www.facebook.com/bonbon.flowers.2025";
   const tiktokUrl = siteConfig?.tiktokUrl || "https://tiktok.com";
   const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/18323911835";
 
@@ -61,18 +61,18 @@ export function StickyNav({ siteConfig }: StickyNavProps) {
       >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 xl:gap-6 relative">
           
-          {/* LADO IZQUIERDO: Logo de Gabriela's Flowers SIEMPRE VISIBLE */}
+          {/* LADO IZQUIERDO: Logo de Bonbon Flowers SIEMPRE VISIBLE */}
           <div className="flex items-center gap-4 py-2 flex-shrink-0 relative z-10">
             <Link href="/" className="flex items-center gap-3 group flex-shrink-0">
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 shadow-md group-hover:scale-105 group-active:scale-95 transition-transform bg-white flex-shrink-0">
                 <img
-                  src="/logo.jpg"
-                  alt="Gabriela's Flowers Logo"
+                  src={siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png"}
+                  alt="Bonbon Flowers Logo"
                   className="w-full h-full object-cover"
                 />
               </div>
               <span className="font-serif font-black text-lg text-[#2B0002] dark:text-white hidden xl:inline tracking-tight flex-shrink-0">
-                Gabriela's <span className="text-[#FF97A4]">Flowers</span>
+                Bonbon <span className="text-[#FF97A4]">Flowers</span>
               </span>
             </Link>
 

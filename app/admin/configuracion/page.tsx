@@ -282,10 +282,10 @@ export default function AdminConfiguracionPage() {
                 <h2 className="font-serif font-black text-lg text-[#1A1C1C] dark:text-white">Imagen del Logo Principal</h2>
               </div>
               <SingleImageUploader
-                currentImage={config.logoUrl || "/logo.jpg"}
-                label="Logo de Gabriela's Flowers (Boutique Floral)"
+                currentImage={config.logoUrl || "https://bonbonflowershouston.com/logo.png"}
+                label="Logo de Bonbon Flowers (Boutique Floral)"
               />
-              <input type="hidden" name="logoUrl" value={config.logoUrl || "/logo.jpg"} />
+              <input type="hidden" name="logoUrl" value={config.logoUrl || "https://bonbonflowershouston.com/logo.png"} />
             </div>
 
             {/* Sección Lemas del Home & Footer */}
@@ -300,7 +300,7 @@ export default function AdminConfiguracionPage() {
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Título Principal en Portada</label>
                   <input
                     name="heroTitle"
-                    defaultValue={config.heroTitle || "Gabriela's Flowers LLC"}
+                    defaultValue={config.heroTitle || "Bonbon Flowers Houston"}
                     className="p-3.5 border rounded-2xl text-sm font-bold dark:bg-gray-900 dark:text-white focus:ring-2 focus:ring-[#FF97A4]"
                     required
                   />
@@ -341,7 +341,7 @@ export default function AdminConfiguracionPage() {
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Nombre en Pie de Página (Footer)</label>
                   <input
                     name="footerTitle"
-                    defaultValue={config.footerTitle || "Gabriela's Flowers LLC"}
+                    defaultValue={config.footerTitle || "Bonbon Flowers Houston"}
                     className="p-3.5 border rounded-2xl text-xs font-bold dark:bg-gray-900 dark:text-white focus:ring-2 focus:ring-[#FF97A4]"
                     required
                   />
@@ -352,7 +352,7 @@ export default function AdminConfiguracionPage() {
                 <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Lema del Footer</label>
                 <input
                   name="footerSlogan"
-                  defaultValue={config.footerSlogan || "Boutique Digital de Alta Floristería • Entregas a Domicilio"}
+                  defaultValue={config.footerSlogan || "Boutique Digital de Alta Floristería • Houston, Texas"}
                   className="p-3.5 border rounded-2xl text-xs font-medium dark:bg-gray-900 dark:text-white focus:ring-2 focus:ring-[#FF97A4]"
                   required
                 />
@@ -362,7 +362,7 @@ export default function AdminConfiguracionPage() {
                 <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Texto de Derechos Reservados (Copyright)</label>
                 <input
                   name="footerCopyright"
-                  defaultValue={config.footerCopyright || "© 2026 Gabriela's Flowers LLC. Todos los derechos reservados."}
+                  defaultValue={config.footerCopyright || "© 2026 Bonbon Flowers Houston. Todos los derechos reservados."}
                   className="p-3.5 border rounded-2xl text-xs font-medium dark:bg-gray-900 dark:text-white focus:ring-2 focus:ring-[#FF97A4]"
                   required
                 />
@@ -543,8 +543,8 @@ export default function AdminConfiguracionPage() {
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">URL de Instagram</label>
                   <input
                     name="instagramUrl"
-                    defaultValue={config.instagramUrl || "https://instagram.com"}
-                    placeholder="https://instagram.com/flowersforyou"
+                    defaultValue={config.instagramUrl || "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ=="}
+                    placeholder="https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ=="
                     className="p-3 border rounded-xl text-xs font-medium dark:bg-gray-900 dark:text-white"
                   />
                 </div>
@@ -553,8 +553,8 @@ export default function AdminConfiguracionPage() {
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">URL de Facebook</label>
                   <input
                     name="facebookUrl"
-                    defaultValue={config.facebookUrl || "https://facebook.com"}
-                    placeholder="https://facebook.com/flowersforyou"
+                    defaultValue={config.facebookUrl || "https://www.facebook.com/bonbon.flowers.2025"}
+                    placeholder="https://www.facebook.com/bonbon.flowers.2025"
                     className="p-3 border rounded-xl text-xs font-medium dark:bg-gray-900 dark:text-white"
                   />
                 </div>
@@ -564,7 +564,7 @@ export default function AdminConfiguracionPage() {
                   <input
                     name="tiktokUrl"
                     defaultValue={config.tiktokUrl || "https://tiktok.com"}
-                    placeholder="https://tiktok.com/@flowersforyou"
+                    placeholder="https://tiktok.com/@bonbonflowers__"
                     className="p-3 border rounded-xl text-xs font-medium dark:bg-gray-900 dark:text-white"
                   />
                 </div>
@@ -754,7 +754,7 @@ export default function AdminConfiguracionPage() {
                 <input
                   name="dialogflowProjectId"
                   defaultValue={config.dialogflowProjectId || ""}
-                  placeholder="ej. gabrielas-flowers-bot-12345"
+                  placeholder="ej. bonbon-flowers-bot-12345"
                   className="p-3.5 border rounded-xl text-xs font-mono dark:bg-gray-900 dark:text-white"
                 />
               </div>
@@ -789,8 +789,8 @@ export default function AdminConfiguracionPage() {
                 </label>
                 <input
                   name="dialogflowChatTitle"
-                  defaultValue={config.dialogflowChatTitle || "Gabriela's Flowers Virtual Assistant 🌸"}
-                  placeholder="Gabriela's Flowers Virtual Assistant 🌸"
+                  defaultValue={config.dialogflowChatTitle || "Bonbon Flowers Virtual Assistant 🌸"}
+                  placeholder="Bonbon Flowers Virtual Assistant 🌸"
                   className="p-3.5 border rounded-xl text-xs font-bold dark:bg-gray-900 dark:text-white"
                 />
               </div>

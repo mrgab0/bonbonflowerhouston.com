@@ -18,7 +18,7 @@ export function DeliveryShowcaseBanners() {
             <div className="absolute inset-0 z-0">
               <img
                 src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=1200&auto=format&fit=crop&q=80"
-                alt="Entrega de Ramos Gabriela's Flowers"
+                alt="Entrega de Ramos Bonbon Flowers Houston"
                 className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
@@ -109,7 +109,7 @@ export function DeliveryShowcaseBanners() {
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <a
-                  href="https://wa.me/18323911835?text=Hola%20Gabriela's%20Flowers,%20deseo%20un%20arreglo%20floral%20personalizado"
+                  href="https://wa.me/18323911835?text=Hola%20Bonbon%20Flowers,%20deseo%20un%20arreglo%20floral%20personalizado"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl active:scale-95"

@@ -15,18 +15,18 @@ export async function generateMetadata({
 
   if (!res.success || !res.data) {
     return {
-      title: "Artículo no encontrado | Gabriela's Flowers LLC",
-      description: "El artículo solicitado no fue encontrado en Gabriela's Flowers."
+      title: "Artículo no encontrado | Bonbon Flowers Houston",
+      description: "El artículo solicitado no fue encontrado en Bonbon Flowers."
     };
   }
 
   const post = res.data;
 
   return {
-    title: `${post.title} | Gabriela's Flowers LLC`,
+    title: `${post.title} | Bonbon Flowers Houston`,
     description: post.excerpt || post.title,
     openGraph: {
-      title: `${post.title} | Gabriela's Flowers`,
+      title: `${post.title} | Bonbon Flowers`,
       description: post.excerpt || post.title,
       type: "article",
       publishedTime: post.createdAt ? new Date(post.createdAt).toISOString() : undefined,

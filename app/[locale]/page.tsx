@@ -95,17 +95,17 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       {/* Header & Sticky Nav Bar con Mega-Menu integrado */}
       <StickyNav siteConfig={siteConfig} />
 
-      {/* Hero Section Editorial (Estilo Botanical Romance & Gabriela's Flowers) */}
+      {/* Hero Section Editorial (Estilo Botanical Romance & Bonbon Flowers) */}
       <section className="relative z-20 min-h-[480px] pt-8 pb-14 flex flex-col items-center justify-center bg-gradient-to-b from-transparent via-[#faeae9]/50 to-transparent dark:from-transparent dark:via-[#181922]/50 dark:to-transparent border-b border-[#D4AF37]/20 transition-colors duration-300">
         
         <div className="container mx-auto px-6 text-center z-20 flex flex-col items-center">
           
-          {/* Logo Oficial de Gabriela's Flowers */}
+          {/* Logo Oficial de Bonbon Flowers */}
           <div className="mb-5 relative group">
             <div className="absolute -inset-1.5 bg-gradient-to-r from-[#D4AF37] via-[#8B0024] to-[#D4AF37] rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
             <img
-              src="/logo.jpg"
-              alt="Gabriela's Flowers Logo"
+              src={siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png"}
+              alt="Bonbon Flowers Logo"
               width={96}
               height={96}
               className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-xl border-2 border-[#D4AF37]/80 transform hover:scale-105 transition-transform duration-300"
@@ -120,7 +120,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
 
           {/* Título Principal en Playfair Display */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif font-bold text-[#2a0002] dark:text-white mb-4 tracking-tight leading-tight">
-            {(!siteConfig?.heroTitle || siteConfig.heroTitle.includes("Flowers For You")) ? "Gabriela's Flowers LLC" : siteConfig.heroTitle}
+            {(!siteConfig?.heroTitle || siteConfig.heroTitle.includes("Flowers For You") || siteConfig.heroTitle.includes("Gabriela")) ? "Bonbon Flowers Houston" : siteConfig.heroTitle}
           </h1>
 
           {/* Eslogan e Información de Ubicación / Servicios */}
@@ -129,7 +129,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
               {locale === 'en' ? t('Index.description') : '"Detalles que enamoran"'}
             </p>
             <div className="flex flex-wrap justify-center items-center gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-semibold pt-1">
-              <span className="flex items-center gap-1"><MapPin size={15} className="text-[#8B0024]" /> Houston & Pasadena, TX</span>
+              <span className="flex items-center gap-1"><MapPin size={15} className="text-[#8B0024]" /> Houston, TX</span>
               <span>•</span>
               <span className="flex items-center gap-1"><Truck size={15} className="text-[#8B0024]" /> Delivery Disponible</span>
               <span>•</span>

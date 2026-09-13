@@ -31,14 +31,14 @@ export const ShopHeader = () => {
           {/* Logo Presionable hacia el Home */}
           <Link href="/" className="flex items-center gap-3 group flex-shrink-0 relative z-10">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 shadow-md group-hover:scale-105 group-active:scale-95 transition-transform bg-white p-0.5 flex-shrink-0">
-              <img src="/logo.jpg" alt="Gabriela's Flowers Logo" className="w-full h-full object-cover rounded-full" />
+              <img src="https://bonbonflowershouston.com/logo.png" alt="Bonbon Flowers Logo" className="w-full h-full object-cover rounded-full" />
             </div>
             <div className="hidden xl:block flex-shrink-0">
               <span className="text-lg font-serif font-black text-[#2B0002] dark:text-white tracking-tight group-hover:text-[#FF97A4] transition-colors block">
-                Gabriela's <span className="text-[#FF97A4]">Flowers</span>
+                Bonbon <span className="text-[#FF97A4]">Flowers</span>
               </span>
               <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold block -mt-0.5">
-                Boutique Floral
+                Boutique Floral • Houston, TX
               </span>
             </div>
           </Link>

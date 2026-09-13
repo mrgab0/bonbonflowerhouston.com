@@ -100,11 +100,11 @@ export function InstallPrompt() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FF97A4] to-[#be185d] p-0.5 shadow-md flex items-center justify-center flex-shrink-0">
-              <img src="/logo.jpg" alt="Gabriela's Flowers App" className="w-full h-full object-cover rounded-[14px]" />
+              <img src="https://bonbonflowershouston.com/logo.png" alt="Bonbon Flowers App" className="w-full h-full object-cover rounded-[14px]" />
             </div>
             <div>
               <h4 className="font-serif font-black text-sm text-[#1A1C1C] dark:text-white leading-snug flex items-center gap-1">
-                Gabriela's Flowers App <Sparkles size={13} className="text-[#FF97A4]" />
+                Bonbon Flowers App <Sparkles size={13} className="text-[#FF97A4]" />
               </h4>
               <p className="text-[11px] text-gray-500 dark:text-gray-400 font-bold">
                 ¡Instala la App oficial en tu celular! 📱

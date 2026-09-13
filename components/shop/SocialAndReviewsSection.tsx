@@ -44,9 +44,9 @@ export function SocialAndReviewsSection({
   countText,
   trustpilotWidgetHtml,
   enableSocialFeed = true,
-  socialTitle = "Instagram @GabrielasFlowers 📸",
+  socialTitle = "Instagram @bonbonflowers__ 📸",
   embedHtml,
-  instagramUrl = "https://instagram.com",
+  instagramUrl = "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==",
 }: SocialAndReviewsSectionProps) {
   const t = useTranslations("Reviews");
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -143,7 +143,7 @@ export function SocialAndReviewsSection({
     {
       id: "post1",
       image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800&auto=format&fit=crop&q=80",
-      caption: "El lujo de regalar rosas frescas rojas seleccionadas a mano. 🌹 #GabrielasFlowers #HoustonTx",
+      caption: "El lujo de regalar rosas frescas rojas seleccionadas a mano. 🌹 #BonbonFlowers #HoustonTx",
       likes: 248,
       comments: 18,
     },
@@ -295,7 +295,7 @@ export function SocialAndReviewsSection({
                         Instagram Live Feed
                         <Sparkles size={12} className="text-[#8B0024] dark:text-[#FF97A4]" />
                       </h4>
-                      <p className="text-[11px] text-gray-600 dark:text-gray-300 font-semibold">@GabrielasFlowers LLC</p>
+                      <p className="text-[11px] text-gray-600 dark:text-gray-300 font-semibold">@bonbonflowers__</p>
                     </div>
                   </div>
 

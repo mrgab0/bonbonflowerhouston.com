@@ -28,8 +28,8 @@ export async function sendContactEmail(formData: {
 }) {
   try {
     const transporter = getTransporter();
-    const sender = process.env.SMTP_FROM || process.env.SMTP_USER || "flowersforyou403@gmail.com";
-    const recipientEmails = (process.env.ADMIN_EMAIL || process.env.SMTP_USER || "flowersforyou403@gmail.com")
+    const sender = process.env.SMTP_FROM || process.env.SMTP_USER || "contacto@bonbonflowershouston.com";
+    const recipientEmails = (process.env.ADMIN_EMAIL || process.env.SMTP_USER || "contacto@bonbonflowershouston.com")
       .split(",")
       .map(e => e.trim())
       .filter(Boolean);
@@ -51,7 +51,7 @@ export async function sendContactEmail(formData: {
           </div>
         </div>
         <div style="background-color: #1A1C1C; color: white; padding: 15px; text-align: center; font-size: 12px;">
-          <p style="margin: 0;">Gabriela's Flowers LLC - Boutique Digital</p>
+          <p style="margin: 0;">Bonbon Flowers Houston - Boutique Digital</p>
         </div>
       </div>
     `;

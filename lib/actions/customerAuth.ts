@@ -9,7 +9,7 @@ import {
   verifyAuthenticationResponse
 } from "@simplewebauthn/server";
 
-const RP_NAME = "Gabriela's Flowers LLC";
+const RP_NAME = "Bonbon Flowers Houston";
 
 function resolveRpID(domainFromClient?: string) {
   if (domainFromClient && domainFromClient.trim()) {

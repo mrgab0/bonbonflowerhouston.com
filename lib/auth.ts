@@ -3,7 +3,7 @@ import NextAuth from "next-auth"
 import { MongoDBAdapter } from "@auth/mongodb-adapter"
 import { authConfig } from "./auth-config"
 
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/gabrielasFlowers"
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/bonbonFlowers"
 const options = {}
 
 let client

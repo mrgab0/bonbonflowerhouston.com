@@ -22,7 +22,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
   const [messages, setMessages] = useState<Array<{ sender: "bot" | "user"; text: string; options?: Array<{ label: string; action: () => void }> }>>([
     {
       sender: "bot",
-      text: "¡Hola! 🌸 Bienvenido a Gabriela's Flowers. Soy tu asistente virtual. ¿Cómo puedo ayudarte hoy?",
+      text: "¡Hola! 🌸 Bienvenido a Bonbon Flowers Houston. Soy tu asistente virtual. ¿Cómo puedo ayudarte hoy?",
       options: [
         { label: "🌹 Ver Ramos Populares", action: () => handleSendOption("Quiero ver los ramos más vendidos") },
         { label: "📦 Rastrear un Pedido", action: () => handleSendOption("¿Cómo puedo rastrear mi pedido?") },
@@ -40,7 +40,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
   const projectId = siteConfig?.dialogflowProjectId;
   const location = siteConfig?.dialogflowLocation || "us-central1";
   const languageCode = siteConfig?.dialogflowLanguageCode || "es";
-  const chatTitle = siteConfig?.dialogflowChatTitle || "Gabriela's Flowers Bot 🌸";
+  const chatTitle = siteConfig?.dialogflowChatTitle || "Bonbon Flowers Bot 🌸";
   const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/18323911835";
 
   const isRealDialogflowConfigured = Boolean(agentId && projectId && agentId.trim() !== "" && projectId.trim() !== "");
@@ -154,11 +154,11 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
               <div className="bg-gradient-to-r from-[#80273B] via-[#982D46] to-[#2B0002] p-4 text-white flex items-center justify-between shadow-md flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full border border-[#D4AF37]/60 overflow-hidden bg-white p-0.5 shadow-sm flex items-center justify-center">
-                    <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover rounded-full" />
+                    <img src="https://bonbonflowershouston.com/logo.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
                   </div>
                   <div>
                     <h4 className="font-serif font-black text-sm leading-tight flex items-center gap-1.5">
-                      <span>Gabriela's Assistant</span>
+                      <span>Bonbon Assistant</span>
                       <Sparkles size={13} className="text-[#D4AF37]" />
                     </h4>
                     <span className="text-[10px] font-bold text-emerald-300 flex items-center gap-1">
@@ -226,7 +226,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                     {msg.sender === "bot" && (
                       <div className="mt-2.5">
                         <a
-                          href={`${whatsappUrl}?text=${encodeURIComponent("¡Hola Gabriela's Flowers! 🌸 Vengo desde el Asistente Virtual y deseo una consulta floral personalizada.")}`}
+                          href={`${whatsappUrl}?text=${encodeURIComponent("¡Hola Bonbon Flowers! 🌸 Vengo desde el Asistente Virtual y deseo una consulta floral personalizada.")}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#20ba5a] text-white px-3.5 py-2 rounded-xl text-[11px] font-black shadow-md hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-300 border border-white/20"
@@ -249,26 +249,19 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Barra de Entrada de Texto */}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  sendMessage(input);
-                }}
-                className="p-3 border-t border-gray-200/80 dark:border-gray-800 bg-gray-50/80 dark:bg-gray-900/80 flex items-center gap-2"
-              >
+              {/* Input y Botón de Envío */}
+              <form onSubmit={(e) => { e.preventDefault(); sendMessage(input); }} className="p-3 border-t border-gray-100 dark:border-gray-800 bg-white/50 dark:bg-[#12131A]/50 flex items-center gap-2">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Escribe tu consulta aquí..."
-                  className="flex-1 bg-white dark:bg-gray-800 text-black dark:text-gray-100 text-xs px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 focus:outline-none focus:border-[#80273B] dark:focus:border-pink-500 font-medium chatbot-input"
+                  placeholder="Escribe un mensaje..."
+                  className="flex-1 bg-gray-100 dark:bg-gray-800/80 text-black dark:text-white px-4 py-2.5 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#80273B]/40 dark:focus:ring-pink-500/40"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim()}
-                  className="p-2.5 bg-[#80273B] text-white rounded-xl hover:bg-[#2B0002] transition-all disabled:opacity-40 active:scale-95 shadow-sm"
-                  aria-label="Enviar Mensaje"
+                  className="w-9 h-9 rounded-full bg-[#80273B] hover:bg-[#982D46] text-white flex items-center justify-center disabled:opacity-40 disabled:hover:bg-[#80273B] transition-all shadow-sm active:scale-95"
                 >
                   <Send size={15} />
                 </button>
@@ -276,27 +269,22 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
             </div>
           )}
 
-          {/* ESTADO MINIFICADO: Mini-Tarjeta Chat Flotante (Tipo Reproductor Mini / Thumbnail) */}
+          {/* Botón Flotante / Mini-Chat Trigger */}
           {!isOpen && (
-            <div
+            <div 
               onClick={() => setIsOpen(true)}
-              className="group w-[280px] sm:w-[310px] bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-xl rounded-3xl border border-[#D4AF37]/40 dark:border-gray-800 shadow-[0_15px_40px_rgba(42,0,2,0.22)] dark:shadow-[0_15px_40px_rgba(0,0,0,0.85)] p-3.5 cursor-pointer hover:scale-[1.03] active:scale-98 transition-all duration-300 origin-bottom-right relative overflow-hidden"
-              role="button"
-              aria-label="Abrir y expandir Asistente Virtual"
+              className="bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-xl p-3 sm:p-3.5 rounded-3xl border border-[#D4AF37]/40 dark:border-gray-800 shadow-[0_12px_40px_rgba(42,0,2,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.8)] cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 max-w-[280px] sm:max-w-[320px] group"
             >
-              {/* Brillo sutil decorativo */}
-              <div className="absolute top-0 right-0 -mr-6 -mt-6 w-24 h-24 bg-gradient-to-br from-pink-500/20 to-transparent rounded-full blur-xl pointer-events-none"></div>
-
               {/* Cabecera del Mini-Chat */}
               <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center gap-2.5">
                   <div className="relative w-8 h-8 rounded-full overflow-hidden border border-[#D4AF37]/60 bg-white p-0.5 shadow-xs flex-shrink-0">
-                    <img src="/logo.jpg" alt="Logo" className="w-full h-full object-cover rounded-full" />
+                    <img src="https://bonbonflowershouston.com/logo.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-white"></span>
                   </div>
                   <div className="leading-tight">
                     <h5 className="font-serif font-black text-xs text-[#2B0002] dark:text-white flex items-center gap-1">
-                      <span>Gabriela's Assistant</span>
+                      <span>Bonbon Assistant</span>
                       <Sparkles size={11} className="text-[#D4AF37]" />
                     </h5>
                     <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400">
