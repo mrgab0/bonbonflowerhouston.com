@@ -27,21 +27,21 @@ const I18N_CONTENT = {
       "🌹 Rosas de lujo y arreglos exclusivos",
       "💬 Consulta precios y disponibilidad aquí"
     ],
-    welcomeMessage: "¡Hola! 🌸 Bienvenido a **Bonbon Flowers Houston**.\n\n¿Para qué ocasión especial estás buscando flores hoy?",
-    resetMessage: "¡Hola de nuevo! 🌸 ¿En qué te puedo ayudar?",
+    welcomeMessage: "¡Hola! 🌸 Soy **Flor**, tu asesora floral en **Bonbon Flowers Houston**.\n\n¿Para qué ocasión especial estás buscando flores hoy?",
+    resetMessage: "¡Hola de nuevo! 🌸 Te saluda Flor, ¿en qué te puedo ayudar hoy?",
     errorMessage: "🌸 Hubo un pequeño inconveniente de conexión. Puedes escribirnos directo a nuestro WhatsApp [+1 832 391-1835](https://wa.me/18323911835) para asistirte de inmediato.",
     defaultErrorResponse: "Disculpa, no pude procesar tu solicitud. Por favor intenta nuevamente.",
-    advisorRole: "BONBON • ASESOR FLORAL",
+    advisorRole: "FLOR • ASESORA FLORAL",
     liveBadge: "EN LÍNEA",
-    headerStatus: "Asesor Floral • En línea 🌸",
-    ariaOpen: "Abrir Asistente Floral Bonbon Flowers",
+    headerStatus: "Asesora Floral • En línea 🌸",
+    ariaOpen: "Abrir chat con Flor - Bonbon Flowers",
     ariaRestart: "Reiniciar chat",
     ariaClose: "Cerrar chat",
     ariaSend: "Enviar mensaje",
     searchingCatalog: "Escribiendo respuesta...",
     popularQuestions: "Consultas populares:",
     inputPlaceholder: "Escribe tu consulta aquí...",
-    poweredBy: "Asistente Floral • Bonbon Flowers",
+    poweredBy: "Flor • Bonbon Flowers",
   },
   en: {
     quickQuestions: [
@@ -56,21 +56,21 @@ const I18N_CONTENT = {
       "🌹 Luxury roses & exclusive arrangements",
       "💬 Check prices & availability here"
     ],
-    welcomeMessage: "Hello! 🌸 Welcome to **Bonbon Flowers Houston**.\n\nWhat special occasion are you looking for flowers for today?",
-    resetMessage: "Hello again! 🌸 How can I help you today?",
+    welcomeMessage: "Hello! 🌸 I'm **Flor**, your floral advisor at **Bonbon Flowers Houston**.\n\nWhat special occasion are you looking for flowers for today?",
+    resetMessage: "Hello again! 🌸 Flor here, how can I help you today?",
     errorMessage: "🌸 There was a brief connection issue. You can message us directly on WhatsApp [+1 832 391-1835](https://wa.me/18323911835) for instant assistance.",
     defaultErrorResponse: "Sorry, I couldn't process your request. Please try again.",
-    advisorRole: "BONBON • FLORAL ADVISOR",
+    advisorRole: "FLOR • FLORAL ADVISOR",
     liveBadge: "ONLINE",
     headerStatus: "Floral Advisor • Online 🌸",
-    ariaOpen: "Open Bonbon Flowers Floral Assistant",
+    ariaOpen: "Chat with Flor - Bonbon Flowers",
     ariaRestart: "Restart chat",
     ariaClose: "Close chat",
     ariaSend: "Send message",
     searchingCatalog: "Typing a response...",
     popularQuestions: "Popular questions:",
     inputPlaceholder: "Type your message here...",
-    poweredBy: "Floral Advisor • Bonbon Flowers",
+    poweredBy: "Flor • Bonbon Flowers",
   }
 };
 
@@ -238,7 +238,7 @@ export const ChatbotModal = () => {
       const data = await res.json();
 
       // Simular delay humano de digitación (1.2s - 1.8s proporcional al texto)
-      // mientras se mantiene visible la animación de "Bonbon está escribiendo..."
+      // mientras se mantiene visible la animación de "Flor está escribiendo..."
       const responseLen = (data.text || "").length || 60;
       const targetDelay = Math.min(2000, Math.max(1200, responseLen * 12));
       const elapsed = Date.now() - startTime;
@@ -347,7 +347,7 @@ export const ChatbotModal = () => {
               <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-[#D4AF37] shadow-sm relative group-hover:scale-105 transition-transform duration-300 bg-[#2a0002]">
                 <img
                   src="https://bonbonflowershouston.com/logo.png"
-                  alt="Bonbon Flowers Asesor IA"
+                  alt="Flor - Asesora Bonbon Flowers"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
@@ -412,7 +412,7 @@ export const ChatbotModal = () => {
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-sm text-white">Bonbon Assistant</span>
+                  <span className="font-bold text-sm text-white">Flor</span>
                   <span className="text-[9px] bg-[#D4AF37]/30 text-[#D4AF37] border border-[#D4AF37]/40 px-1.5 py-0.2 rounded font-black tracking-wider">IA</span>
                 </div>
                 <span className="text-[11px] text-pink-200/90 font-medium flex items-center gap-1">

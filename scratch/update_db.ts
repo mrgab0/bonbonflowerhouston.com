@@ -19,7 +19,7 @@ async function run() {
         facebookUrl: "https://www.facebook.com/bonbon.flowers.2025",
         instagramUrl: "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==",
         socialFeedTitle: "Síguenos en Instagram @bonbonflowers__ 📸",
-        dialogflowChatTitle: "Bonbon Flowers Virtual Assistant 🌸",
+        dialogflowChatTitle: "Flor • Bonbon Flowers 🌸",
         seoTitle: "Bonbon Flowers Houston | Boutique Digital de Alta Floristería",
         seoDescription: "Floristería exclusiva con arreglos florales de lujo, rosas y detalles personalizados a domicilio con entrega express en Houston, TX.",
         seoKeywords: "floristeria, flores a domicilio, arreglos florales, rosas, ramos de flores, regalos, houston tx, bonbon flowers",

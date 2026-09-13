@@ -133,7 +133,7 @@ const SiteConfigSchema: Schema = new Schema({
   dialogflowProjectId: { type: String, default: "" },
   dialogflowLocation: { type: String, default: "us-central1" },
   dialogflowLanguageCode: { type: String, default: "es" },
-  dialogflowChatTitle: { type: String, default: "Bonbon Flowers Virtual Assistant 🌸" },
+  dialogflowChatTitle: { type: String, default: "Flor • Bonbon Flowers 🌸" },
 
   twoFactorMode: { type: String, default: "none" },
   twoFactorPin: { type: String, default: "" },

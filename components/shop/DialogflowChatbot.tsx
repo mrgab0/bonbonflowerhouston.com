@@ -22,7 +22,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
   const [messages, setMessages] = useState<Array<{ sender: "bot" | "user"; text: string; options?: Array<{ label: string; action: () => void }> }>>([
     {
       sender: "bot",
-      text: "¡Hola! 🌸 Bienvenido a Bonbon Flowers Houston. Soy tu asistente virtual. ¿Cómo puedo ayudarte hoy?",
+      text: "¡Hola! 🌸 Bienvenido a Bonbon Flowers Houston. Soy Flor, tu asesora floral. ¿Cómo puedo ayudarte hoy?",
       options: [
         { label: "🌹 Ver Ramos Populares", action: () => handleSendOption("Quiero ver los ramos más vendidos") },
         { label: "📦 Rastrear un Pedido", action: () => handleSendOption("¿Cómo puedo rastrear mi pedido?") },
@@ -40,7 +40,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
   const projectId = siteConfig?.dialogflowProjectId;
   const location = siteConfig?.dialogflowLocation || "us-central1";
   const languageCode = siteConfig?.dialogflowLanguageCode || "es";
-  const chatTitle = siteConfig?.dialogflowChatTitle || "Bonbon Flowers Bot 🌸";
+  const chatTitle = siteConfig?.dialogflowChatTitle || "Flor • Bonbon Flowers 🌸";
   const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/18323911835";
 
   const isRealDialogflowConfigured = Boolean(agentId && projectId && agentId.trim() !== "" && projectId.trim() !== "");
@@ -158,7 +158,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                   </div>
                   <div>
                     <h4 className="font-serif font-black text-sm leading-tight flex items-center gap-1.5">
-                      <span>Bonbon Assistant</span>
+                      <span>Flor</span>
                       <Sparkles size={13} className="text-[#D4AF37]" />
                     </h4>
                     <span className="text-[10px] font-bold text-emerald-300 flex items-center gap-1">
@@ -284,7 +284,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                   </div>
                   <div className="leading-tight">
                     <h5 className="font-serif font-black text-xs text-[#2B0002] dark:text-white flex items-center gap-1">
-                      <span>Bonbon Assistant</span>
+                      <span>Flor</span>
                       <Sparkles size={11} className="text-[#D4AF37]" />
                     </h5>
                     <span className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400">

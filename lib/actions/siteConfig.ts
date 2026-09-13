@@ -43,7 +43,7 @@ const DEFAULT_SITE_CONFIG = {
   dialogflowProjectId: "",
   dialogflowLocation: "us-central1",
   dialogflowLanguageCode: "es",
-  dialogflowChatTitle: "Bonbon Flowers Virtual Assistant 🌸"
+  dialogflowChatTitle: "Flor • Bonbon Flowers 🌸"
 };
 
 export async function getSiteConfig() {
