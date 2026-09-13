@@ -37,7 +37,7 @@ import {
   RefreshCw
 } from "lucide-react";
 
-const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "public_huW/0HuThqhQncgbm14znTZHVpk=";
+const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY || "public_GgPCFA7xTepF28l1+/AnLhlwqec=";
 
 const CATEGORIES = [
   "Rosas de Lujo",
@@ -760,7 +760,7 @@ export default function CargaEnMasaAdmin() {
                     type="url"
                     value={manualUrl}
                     onChange={(e) => setManualUrl(e.target.value)}
-                    placeholder="https://ik.imagekit.io/du7tc3jqd/products/rosas.jpg"
+                    placeholder="https://ik.imagekit.io/4ub2sqhjx/products/rosas.jpg"
                     className="w-full p-3 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#8B0024]"
                   />
                 </div>
