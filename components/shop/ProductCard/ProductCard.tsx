@@ -97,9 +97,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
       </Link>
 
-      <div className="p-5 flex flex-col justify-between flex-grow">
+      <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow">
         <div>
-          <h3 className="font-serif font-bold text-base sm:text-lg text-[#2a0002] dark:text-white group-hover:text-[#8B0024] dark:group-hover:text-pink-400 transition-colors mb-1.5 line-clamp-1">
+          <h3 className="font-serif font-bold text-sm sm:text-base text-[#2a0002] dark:text-white group-hover:text-[#B81845] dark:group-hover:text-[#FF809F] transition-colors mb-1 line-clamp-1">
             <Link
               href={`/productos/${slug}`}
               draggable={false}
@@ -108,23 +108,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               {name}
             </Link>
           </h3>
-          <p className="text-xs text-gray-600 dark:text-gray-300 font-medium line-clamp-1 mb-3">
-            Arreglo Floral Boutique • Houston, TX
-          </p>
+          
+          {/* Calificación de 5 estrellas estilo flor.zip */}
+          <div className="flex items-center text-[11px] text-amber-500 mb-2">
+            <span>★★★★★</span>
+            <span className="text-stone-400 dark:text-gray-400 ml-1.5 text-[10px] font-medium">(5.0)</span>
+          </div>
         </div>
 
-        <div className="flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-800/80">
+        <div className="flex justify-between items-center pt-2.5 border-t border-gray-100 dark:border-gray-800/80 mt-auto">
           <div>
-            <span className="text-xs text-gray-600 dark:text-gray-300 block font-semibold">Precio</span>
-            <span className="text-xl font-extrabold text-[#8B0024] dark:text-pink-400 font-serif">${price.toFixed(2)}</span>
+            <span className="text-[10px] uppercase tracking-wider text-stone-500 dark:text-gray-400 block font-semibold">From</span>
+            <span className="text-base sm:text-lg font-bold text-stone-900 dark:text-white font-serif">${price.toFixed(2)} USD</span>
           </div>
 
           <button 
             onClick={() => addToCart({ id, name, price, image })}
-            className="bg-[#2a0002] hover:bg-[#8B0024] text-white px-4 py-2.5 rounded-xl active:scale-95 transition-all duration-300 font-bold text-xs shadow-md shadow-pink-950/20 border border-[#D4AF37]/40 flex items-center gap-1.5 hover:scale-105"
+            className="bg-[#163422] hover:bg-[#B81845] text-white px-3 sm:px-3.5 py-2 rounded-lg active:scale-95 transition-all duration-300 font-bold text-xs shadow-sm flex items-center gap-1.5 hover:scale-105"
+            title="Añadir al Carrito"
           >
-            <ShoppingBag size={14} />
-            <span>{t('addToCart')}</span>
+            <ShoppingBag size={13} />
+            <span className="hidden sm:inline">{t('addToCart')}</span>
           </button>
         </div>
       </div>

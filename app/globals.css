@@ -284,3 +284,23 @@ html:not(.dark) textarea::placeholder {
   background-color: rgba(24, 25, 34, 0.9) !important;
   border-color: rgba(212, 175, 55, 0.2) !important;
 }
+
+/* Script font and luxury styling from flor.zip */
+.font-script-custom {
+  font-family: var(--font-great-vibes), cursive;
+}
+.font-luxury-serif {
+  font-family: var(--font-playfair), Georgia, serif;
+}
+.letter-spacing-wide {
+  letter-spacing: 0.35em;
+}
+.map-pattern {
+  background-color: #f6f4f0;
+  background-image: 
+    radial-gradient(#dedad4 1.5px, transparent 1.5px),
+    linear-gradient(to right, #dedad4 1px, transparent 1px),
+    linear-gradient(to bottom, #dedad4 1px, #f6f4f0 1px);
+  background-size: 30px 30px, 120px 120px, 120px 120px;
+}
+

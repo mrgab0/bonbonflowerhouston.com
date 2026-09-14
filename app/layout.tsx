@@ -14,7 +14,14 @@ const PedidoFlotante = dynamic(() => import("@/components/shop/PedidoFlotante").
 const ShoppingCartComponent = dynamic(() => import("@/components/shop/Cart/ShoppingCart").then((m) => m.ShoppingCartComponent));
 const ChatbotModal = dynamic(() => import("@/components/shop/Chatbot/ChatbotModal").then((m) => m.ChatbotModal));
 
-import { Playfair_Display, Montserrat, Plus_Jakarta_Sans, Manrope } from "next/font/google";
+import { Playfair_Display, Montserrat, Plus_Jakarta_Sans, Manrope, Great_Vibes } from "next/font/google";
+
+const greatVibes = Great_Vibes({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-great-vibes",
+  display: "swap",
+});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -65,7 +72,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable}`} suppressHydrationWarning>
+    <html lang="es" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable} ${greatVibes.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="https://bonbonflowershouston.com/logo.png" />
         <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="anonymous" />

@@ -1,12 +1,15 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { ProductCard } from "@/components/shop/ProductCard/ProductCard";
 import { HeroSlider } from "@/components/shop/HeroSlider/HeroSlider";
 import { StickyNav } from "@/components/shop/StickyNav";
+import { TrustAnnouncementBar } from "@/components/shop/TrustAnnouncementBar";
+import { LuxuryHeroSection } from "@/components/shop/LuxuryHeroSection";
+import { StoreLocationSection } from "@/components/shop/StoreLocationSection";
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
 import { getSiteConfig } from "@/lib/actions/siteConfig";
 import { getSliders } from "@/lib/actions/slider";
-import { PhoneCall, Sparkles, MapPin, Truck, Globe2 } from "lucide-react";
 
 const SocialAndReviewsSection = dynamic(
   () => import("@/components/shop/SocialAndReviewsSection").then((m) => m.SocialAndReviewsSection),
@@ -39,7 +42,7 @@ export default async function Home() {
     const [productsRaw, siteConfigRes, slidersRes] = await Promise.all([
       Product.find({ isActive: { $ne: false } })
         .sort({ isFeatured: -1, createdAt: -1 })
-        .limit(16)
+        .limit(20)
         .lean(),
       getSiteConfig(),
       getSliders(),
@@ -49,14 +52,6 @@ export default async function Home() {
     initialSlides = slidersRes?.data ? [...slidersRes.data].sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
   } catch (err) {
     console.warn("Aviso: No se pudo conectar a la base de datos durante el pre-renderizado estático de Home. Usando valores seguros.", err);
-  }
-
-  const desktopCols = siteConfig?.productColumnsDesktop || 3;
-  let gridColsClass = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";
-  if (desktopCols === 4) {
-    gridColsClass = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6";
-  } else if (desktopCols === 5) {
-    gridColsClass = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6";
   }
 
   const firstBannerImage = initialSlides.length > 0 && initialSlides[0].type === 'banner' && !initialSlides[0].image?.match(/\.(mp4|webm|ogg)$/i)
@@ -72,7 +67,7 @@ export default async function Home() {
     : null;
 
   return (
-    <main className="min-h-screen bg-[#fff8f7] dark:bg-[#0B0C10] text-[#221a19] dark:text-gray-100 transition-colors duration-300 relative overflow-x-hidden">
+    <main className="min-h-screen bg-white dark:bg-[#0B0C10] text-stone-800 dark:text-gray-100 transition-colors duration-300 relative overflow-x-hidden">
       {preloadBannerUrl && (
         <link
           rel="preload"
@@ -82,93 +77,23 @@ export default async function Home() {
         />
       )}
       
-      {/* Componente de Mariposas Animadas con Aleteo 3D (Ultra ligero 1.5KB) */}
-      <AnimatedButterflies />
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.04] dark:opacity-[0.02]">
-        <div className="absolute top-[12%] left-[4%] animate-pulse">
-          <svg width="140" height="140" viewBox="0 0 24 24" fill="none" stroke="#2a0002" strokeWidth="1">
-            <path d="M12 2c-3.3 0-6 2.7-6 6 0 1.6.6 3.1 1.7 4.2L12 17l4.3-4.8C17.4 11.1 18 9.6 18 8c0-3.3-2.7-6-6-6zm0 0v15" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-        <div className="absolute top-[45%] right-[8%] animate-pulse delay-1000">
-          <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="#8B0024" strokeWidth="1">
-            <path d="M12 2c-3.3 0-6 2.7-6 6 0 1.6.6 3.1 1.7 4.2L12 17l4.3-4.8C17.4 11.1 18 9.6 18 8c0-3.3-2.7-6-6-6zm0 0v15" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-      </div>
+      {/* Barra de anuncio superior (SAME DAY DELIVERY) y barra de confianza estilo flor.zip */}
+      <TrustAnnouncementBar phone="(346) 348-4835" />
 
-      {/* Header & Sticky Nav Bar */}
+      {/* Navegación y Menú Principal */}
       <StickyNav siteConfig={siteConfig} />
 
-      {/* Hero Section Editorial (Estilo Botanical Romance & Bonbon Flowers) */}
-      <section className="relative z-20 min-h-[480px] pt-8 pb-14 flex flex-col items-center justify-center bg-gradient-to-b from-transparent via-[#faeae9]/50 to-transparent dark:from-transparent dark:via-[#181922]/50 dark:to-transparent border-b border-[#D4AF37]/20 transition-colors duration-300">
-        
-        <div className="container mx-auto px-6 text-center z-20 flex flex-col items-center">
-          
-          {/* Logo Oficial de Bonbon Flowers (Tamaño equilibrado 80px) */}
-          <div className="mb-5 relative group">
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-[#D4AF37] via-[#8B0024] to-[#D4AF37] rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500"></div>
-            <img
-              src={siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png"}
-              alt="Bonbon Flowers Logo"
-              width={96}
-              height={96}
-              className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-xl border-2 border-[#D4AF37]/80 transform hover:scale-105 transition-transform duration-300"
-            />
-          </div>
+      {/* Hero Section Editorial de Lujo con tipografía script 'feel loved ♡' y 4 badges */}
+      <LuxuryHeroSection siteConfig={siteConfig} />
 
-          {/* Kicker Editorial */}
-          <div className="inline-flex items-center gap-2 bg-[#fff0ef] dark:bg-pink-950/60 text-[#8B0024] dark:text-pink-300 border border-[#D4AF37]/40 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-[0.15em] mb-4 shadow-sm">
-            <Sparkles size={13} className="text-[#D4AF37]" />
-            <span>Boutique Floral de Lujo</span>
-          </div>
-
-          {/* Título Principal en Playfair Display */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-serif font-bold text-[#2a0002] dark:text-white mb-4 tracking-tight leading-tight">
-            {(!siteConfig?.heroTitle || siteConfig.heroTitle.includes("Flowers For You") || siteConfig.heroTitle.includes("Gabriela")) ? "Bonbon Flowers Houston" : siteConfig.heroTitle}
-          </h1>
-
-          {/* Eslogan e Información de Ubicación / Servicios */}
-          <div className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 max-w-2xl mx-auto mb-8 font-medium leading-relaxed space-y-2">
-            <p className="font-serif italic text-[#8B0024] dark:text-pink-300 text-lg sm:text-xl font-semibold">
-              "Detalles que enamoran"
-            </p>
-            <div className="flex flex-wrap justify-center items-center gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-semibold pt-1">
-              <span className="flex items-center gap-1"><MapPin size={15} className="text-[#8B0024]" /> Houston, TX</span>
-              <span>•</span>
-              <span className="flex items-center gap-1"><Truck size={15} className="text-[#8B0024]" /> Delivery Disponible</span>
-              <span>•</span>
-              <span className="flex items-center gap-1"><Globe2 size={15} className="text-[#8B0024]" /> Hablamos Español</span>
-            </div>
-          </div>
-
-          {/* Botones de Acción (Llamada Directa + Explorar Catálogo) */}
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <a 
-              href="tel:+18323911835"
-              className="w-full sm:w-auto bg-[#2a0002] hover:bg-[#8B0024] text-white px-8 py-3.5 rounded-xl font-bold text-sm transition-all shadow-xl shadow-pink-950/20 border border-[#D4AF37]/60 hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group"
-            >
-              <PhoneCall size={16} className="text-[#D4AF37] group-hover:rotate-12 transition-transform" />
-              <span>Contáctanos: +1 832 391-1835</span>
-            </a>
-
-            <a 
-              href="/productos" 
-              className="w-full sm:w-auto bg-white dark:bg-gray-900 text-[#2a0002] dark:text-white px-8 py-3.5 rounded-xl font-bold text-sm hover:bg-[#fff0ef] transition-all border border-gray-200 dark:border-gray-800 shadow-md hover:scale-105 active:scale-95"
-            >
-              {siteConfig?.heroButtonText || "Explorar Colección"}
-            </a>
-          </div>
-
+      {/* Sliders Dinámicos (si están activos) */}
+      {initialSlides.length > 0 && (
+        <div className="container mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 relative z-20">
+          <HeroSlider initialSlides={initialSlides} />
         </div>
-      </section>
+      )}
 
-      {/* Slider Section */}
-      <div className="container mx-auto px-4 sm:px-6 -mt-8 sm:-mt-10 relative z-20">
-        <HeroSlider initialSlides={initialSlides} />
-      </div>
-
-      {/* Módulo iFrame Personalizado (si está activo en el Editor del Home) */}
+      {/* Módulo iFrame Personalizado (si está activo en el Administrador) */}
       {siteConfig?.enableCustomIframe && (
         <CustomIframeSection
           title={siteConfig.customIframeTitle}
@@ -176,23 +101,21 @@ export default async function Home() {
         />
       )}
 
-      {/* Product Grid con Columnas Dinámicas (3, 4 o 5) */}
-      <section className="container mx-auto px-4 sm:px-6 py-16 sm:py-20 z-20 relative">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 pb-4 border-b border-[#D4AF37]/20 gap-4">
-          <div>
-            <span className="text-[#8B0024] dark:text-pink-400 text-xs font-bold uppercase tracking-[0.2em] block mb-1">
-              Nuestra Colección
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#2a0002] dark:text-white">
-              Arreglos Florales
-            </h2>
-          </div>
-          <a href="/productos" className="text-[#8B0024] dark:text-pink-400 font-bold text-sm border-b-2 border-[#D4AF37] pb-1 hover:text-[#2a0002] transition-all">
-            Ver catálogo completo ↗
-          </a>
+      {/* Vitrina "MOST LOVED" en cuadrícula de 5 columnas (Diseño exacto de flor.zip) */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 z-20 relative select-none" data-purpose="product-collection">
+        
+        {/* Título de Sección con interletreado dorado y estilo de alta floristería */}
+        <div className="text-center mb-12">
+          <h2 className="text-xl md:text-2xl font-serif text-[#C5A059] tracking-[0.35em] uppercase font-semibold">
+            M O S T &nbsp; L O V E D
+          </h2>
+          <p className="text-xs uppercase tracking-widest text-stone-500 dark:text-gray-400 mt-2 font-medium">
+            Handcrafted Luxury Bouquets &amp; Arrangements • Houston, TX
+          </p>
         </div>
 
-        <div className={gridColsClass}>
+        {/* Cuadrícula de 5 columnas en desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-4 gap-y-10">
           {products.length > 0 ? (
             products.map((product: any) => (
               <ProductCard 
@@ -208,12 +131,31 @@ export default async function Home() {
               />
             ))
           ) : (
-            <p className="col-span-full text-center text-gray-500 py-8 font-medium">No hay productos disponibles por el momento.</p>
+            <p className="col-span-full text-center text-gray-500 py-12 font-medium">
+              No hay productos disponibles por el momento.
+            </p>
           )}
+        </div>
+
+        {/* Botón Ver Todo el Catálogo */}
+        <div className="mt-14 text-center">
+          <Link
+            href="/productos"
+            className="inline-block bg-stone-900 hover:bg-black dark:bg-[#C5A059] dark:hover:bg-[#d8b56f] text-white dark:text-stone-950 text-xs font-semibold tracking-widest uppercase px-10 py-3.5 transition-all duration-300 rounded-sm shadow-md hover:shadow-lg hover:scale-105 active:scale-95"
+          >
+            View all collection
+          </Link>
         </div>
       </section>
 
-      {/* Secciones Combinadas en 2 Columnas Paralelas: Reseñas / Trustpilot (Izquierda) + Feed & Carousel de Instagram (Derecha) */}
+      {/* Sección de Ubicación y Cobertura en Houston (Mapa estilizado y tarjeta flotante de flor.zip) */}
+      <StoreLocationSection
+        phone="(346) 348-4835"
+        email="contacto@bonbonflowershouston.com"
+        whatsappUrl="https://wa.me/13463484835?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston."
+      />
+
+      {/* Secciones de Reseñas y Feed de Instagram */}
       <SocialAndReviewsSection
         enableReviews={siteConfig?.enableReviewsSection !== false}
         reviewsTitle={siteConfig?.reviewsTitle}
@@ -223,9 +165,10 @@ export default async function Home() {
         enableSocialFeed={siteConfig?.enableSocialFeed !== false}
         socialTitle={siteConfig?.socialFeedTitle || "Síguenos en Instagram 📸"}
         embedHtml={siteConfig?.socialEmbedHtml}
-        instagramUrl={siteConfig?.instagramUrl || "https://instagram.com"}
+        instagramUrl={siteConfig?.instagramUrl || "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ=="}
       />
 
+      {/* Footer de Lujo */}
       <Footer siteConfig={siteConfig} />
     </main>
   );

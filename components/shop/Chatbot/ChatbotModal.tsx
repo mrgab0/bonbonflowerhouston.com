@@ -74,7 +74,8 @@ const I18N_CONTENT = {
   }
 };
 
-const CHAT_STORAGE_KEY = "gf_chat_history_v1";
+const CHAT_STORAGE_KEY = "bonbon_chat_history_v2";
+const LEGACY_STORAGE_KEYS = ["gf_chat_history_v1", "florist_chat_history", "chat_history"];
 const CHAT_STORAGE_TTL = 24 * 60 * 60 * 1000; // 24 horas
 
 export const ChatbotModal = () => {
@@ -114,15 +115,24 @@ export const ChatbotModal = () => {
     }
   ]);
 
-  // Cargar historial persistido al montar en el navegador
+  // Cargar historial persistido al montar en el navegador y purgar cachés antiguos con "Sofia" o "Flowers For You"
   useEffect(() => {
     try {
+      // Limpiar claves de almacenamiento heredadas
+      LEGACY_STORAGE_KEYS.forEach(k => {
+        try { localStorage.removeItem(k); } catch (e) {}
+      });
+
       const saved = localStorage.getItem(CHAT_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && Array.isArray(parsed.messages) && parsed.messages.length > 0) {
           const isExpired = Date.now() - (parsed.savedAt || 0) > CHAT_STORAGE_TTL;
-          if (!isExpired) {
+          const hasLegacyNames = parsed.messages.some((m: Message) => 
+            /sofia|flowers for you|gabriela/i.test(m.text || "")
+          );
+
+          if (!isExpired && !hasLegacyNames) {
             setMessages(parsed.messages);
           } else {
             localStorage.removeItem(CHAT_STORAGE_KEY);
