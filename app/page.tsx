@@ -30,18 +30,26 @@ const Footer = dynamic(
 export const revalidate = 60;
 
 export default async function Home() {
-  await dbConnect();
-  const [productsRaw, siteConfigRes, slidersRes] = await Promise.all([
-    Product.find({ isActive: { $ne: false } })
-      .sort({ isFeatured: -1, createdAt: -1 })
-      .limit(16)
-      .lean(),
-    getSiteConfig(),
-    getSliders(),
-  ]);
-  const products = JSON.parse(JSON.stringify(productsRaw));
-  const siteConfig = siteConfigRes?.data;
-  const initialSlides = slidersRes?.data ? [...slidersRes.data].sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
+  let products: any[] = [];
+  let siteConfig: any = null;
+  let initialSlides: any[] = [];
+
+  try {
+    await dbConnect();
+    const [productsRaw, siteConfigRes, slidersRes] = await Promise.all([
+      Product.find({ isActive: { $ne: false } })
+        .sort({ isFeatured: -1, createdAt: -1 })
+        .limit(16)
+        .lean(),
+      getSiteConfig(),
+      getSliders(),
+    ]);
+    products = JSON.parse(JSON.stringify(productsRaw || []));
+    siteConfig = siteConfigRes?.data;
+    initialSlides = slidersRes?.data ? [...slidersRes.data].sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
+  } catch (err) {
+    console.warn("Aviso: No se pudo conectar a la base de datos durante el pre-renderizado estático de Home. Usando valores seguros.", err);
+  }
 
   const desktopCols = siteConfig?.productColumnsDesktop || 3;
   let gridColsClass = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8";

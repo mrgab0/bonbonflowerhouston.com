@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI || "";
+const DEFAULT_FALLBACK_URI = "mongodb+srv://gabo:1@cluster0.8uowp6d.mongodb.net/bonbonflower-db?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_FALLBACK_URI;
 
 /**
  * Global is used here to maintain a cached connection across hot reloads in development.
@@ -17,16 +18,15 @@ async function dbConnect() {
     return cached.conn;
   }
 
-  if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
-  }
+  const uri = process.env.MONGODB_URI || DEFAULT_FALLBACK_URI;
 
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+    cached.promise = mongoose.connect(uri, opts).then((mongoose) => {
       return mongoose;
     });
   }
