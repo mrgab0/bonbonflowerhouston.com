@@ -15,19 +15,19 @@ export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
   return (
     <div className="w-full z-40 relative">
       {/* Barra superior de anuncios estilo boutique de flor.zip */}
-      <aside className="bg-[#B81845] text-white text-xs md:text-sm font-medium py-2 px-4 text-center tracking-wide flex justify-center items-center">
+      <aside className="bg-[#163422] text-white text-xs md:text-sm font-medium py-2 px-4 text-center tracking-wide flex justify-center items-center">
         <a
           className="hover:underline flex items-center gap-1.5 transition-opacity hover:opacity-95 font-semibold"
           href={`tel:${cleanPhone || "+13463484835"}`}
         >
-          <Phone size={13} className="inline-block animate-pulse" />
+          <Phone size={13} className="inline-block animate-pulse text-[#E6C98B]" />
           <span>SAME DAY DELIVERY HOUSTON {phone}</span>
-          <span className="inline-block transition-transform group-hover:translate-x-1 font-bold">→</span>
+          <span className="inline-block transition-transform group-hover:translate-x-1 font-bold text-[#E6C98B]">→</span>
         </a>
       </aside>
 
       {/* Barra de 3 compromisos de servicio / Trust Bar */}
-      <section className="bg-[#911035] text-white py-2.5 px-4 text-xs font-semibold tracking-wider border-t border-black/10 shadow-inner">
+      <section className="bg-[#1B2E22] text-white py-2.5 px-4 text-xs font-semibold tracking-wider border-t border-black/10 shadow-inner">
         <div className="max-w-7xl mx-auto flex flex-wrap justify-center sm:justify-around items-center gap-y-2 gap-x-6 uppercase text-[11px] sm:text-xs">
           <div className="flex items-center space-x-2">
             <Truck className="w-4 h-4 text-[#E6C98B] shrink-0" />

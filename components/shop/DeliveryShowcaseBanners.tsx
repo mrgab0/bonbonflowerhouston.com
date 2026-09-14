@@ -53,7 +53,7 @@ export function DeliveryShowcaseBanners() {
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link
                   href="/rastreo"
-                  className="inline-flex items-center gap-2 bg-white text-[#2B0002] hover:bg-[#FF97A4] hover:text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl active:scale-95"
+                  className="inline-flex items-center gap-2 bg-white text-stone-900 hover:bg-[#163422] hover:text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl active:scale-95"
                 >
                   <span>Rastrear Pedido 📦</span>
                   <ArrowRight size={14} />
@@ -83,7 +83,7 @@ export function DeliveryShowcaseBanners() {
 
             {/* Badges Superiores */}
             <div className="relative z-10 flex flex-wrap items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 bg-[#80273B] text-white px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md shadow-md border border-[#D4AF37]/50">
+              <span className="inline-flex items-center gap-1.5 bg-[#163422] text-white px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider backdrop-blur-md shadow-md border border-[#D4AF37]/50">
                 <Sparkles size={13} className="text-[#D4AF37]" />
                 <span>Boutique de Lujo</span>
               </span>

@@ -61,7 +61,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
           <Sparkles size={13} className="text-[#D4AF37]" />
           Nuestra Colección
         </span>
-        <h2 className="text-3xl sm:text-5xl font-serif font-bold text-[#2a0002] dark:text-white tracking-tight">
+        <h2 className="text-3xl sm:text-5xl font-serif font-bold text-stone-900 dark:text-white tracking-tight">
           Arreglos Florales de Autor
         </h2>
         <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-xl mx-auto mt-3 font-medium">
@@ -72,16 +72,16 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
       {/* Bento Grid Editorial */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-6 auto-rows-auto md:auto-rows-[310px]">
         {/* 1. Elemento Principal Grande (8 columnas x 2 filas en escritorio) */}
-        <div className="md:col-span-8 md:row-span-2 relative group overflow-hidden rounded-2xl bg-[#faeae9] dark:bg-[#181922] shadow-[0px_4px_25px_rgba(42,0,2,0.08)] border border-[#D4AF37]/20 min-h-[420px] md:min-h-full">
+        <div className="md:col-span-8 md:row-span-2 relative group overflow-hidden rounded-2xl bg-stone-100 dark:bg-[#181922] shadow-[0px_4px_25px_rgba(0,0,0,0.08)] border border-[#D4AF37]/20 min-h-[420px] md:min-h-full">
           <img
             src={getImg(p0)}
             alt={p0.name}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2a0002]/90 via-[#2a0002]/30 to-transparent transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-300" />
           
           <div className="absolute top-4 left-4">
-            <span className="bg-[#D4AF37] text-[#2a0002] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+            <span className="bg-[#D4AF37] text-stone-900 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
               Colección Estrella
             </span>
           </div>
@@ -95,7 +95,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
             </p>
             <Link
               href={`/productos/${p0.slug}`}
-              className="inline-flex items-center gap-2 bg-white/20 hover:bg-[#D4AF37] hover:text-[#2a0002] backdrop-blur-md border border-white/60 hover:border-[#D4AF37] text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-lg active:scale-95"
+              className="inline-flex items-center gap-2 bg-white/20 hover:bg-[#D4AF37] hover:text-stone-900 backdrop-blur-md border border-white/60 hover:border-[#D4AF37] text-white font-bold text-xs uppercase tracking-wider px-6 py-3 rounded-xl transition-all shadow-lg active:scale-95"
             >
               <span>Ver Detalles</span>
               <ArrowRight size={14} />
@@ -104,7 +104,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
         </div>
 
         {/* 2. Tarjeta Mediana Superior Derecha (4 columnas x 1 fila) */}
-        <div className="md:col-span-4 md:row-span-1 relative group overflow-hidden rounded-2xl bg-[#faeae9] dark:bg-[#181922] shadow-[0px_4px_20px_rgba(42,0,2,0.06)] border border-[#D4AF37]/20 min-h-[280px]">
+        <div className="md:col-span-4 md:row-span-1 relative group overflow-hidden rounded-2xl bg-stone-100 dark:bg-[#181922] shadow-[0px_4px_20px_rgba(0,0,0,0.06)] border border-[#D4AF37]/20 min-h-[280px]">
           <img
             src={getImg(p1)}
             alt={p1.name}
@@ -112,9 +112,9 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
 
-          <div className="absolute bottom-0 left-0 right-0 p-5 bg-[#fff8f7]/95 dark:bg-[#181922]/95 backdrop-blur-md border-t border-[#D4AF37]/20 transform translate-y-0 sm:translate-y-2 group-hover:translate-y-0 transition-transform duration-300 flex justify-between items-center">
+          <div className="absolute bottom-0 left-0 right-0 p-5 bg-white/95 dark:bg-[#181922]/95 backdrop-blur-md border-t border-[#D4AF37]/20 transform translate-y-0 sm:translate-y-2 group-hover:translate-y-0 transition-transform duration-300 flex justify-between items-center">
             <div>
-              <h4 className="font-serif font-bold text-[#2a0002] dark:text-white text-base leading-tight">
+              <h4 className="font-serif font-bold text-stone-900 dark:text-white text-base leading-tight">
                 {p1.name}
               </h4>
               <p className="text-sm font-bold text-[#745b0f] dark:text-[#ffdf92]">
@@ -123,7 +123,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
             </div>
             <Link
               href={`/productos/${p1.slug}`}
-              className="p-2 rounded-lg bg-[#2a0002] text-white hover:bg-[#8B0024] transition-colors"
+              className="p-2 rounded-lg bg-[#163422] text-white hover:bg-[#1B2E22] transition-colors"
               title="Ver producto"
             >
               <ArrowRight size={16} />
@@ -132,7 +132,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
         </div>
 
         {/* 3. Tarjeta Mediana Inferior Derecha (4 columnas x 1 fila) */}
-        <div className="md:col-span-4 md:row-span-1 relative group overflow-hidden rounded-2xl bg-[#faeae9] dark:bg-[#181922] shadow-[0px_4px_20px_rgba(42,0,2,0.06)] border border-[#D4AF37]/20 min-h-[280px]">
+        <div className="md:col-span-4 md:row-span-1 relative group overflow-hidden rounded-2xl bg-stone-100 dark:bg-[#181922] shadow-[0px_4px_20px_rgba(0,0,0,0.06)] border border-[#D4AF37]/20 min-h-[280px]">
           <img
             src={getImg(p2)}
             alt={p2.name}
@@ -140,9 +140,9 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
 
-          <div className="absolute bottom-0 left-0 right-0 p-5 bg-[#fff8f7]/95 dark:bg-[#181922]/95 backdrop-blur-md border-t border-[#D4AF37]/20 transform translate-y-0 sm:translate-y-2 group-hover:translate-y-0 transition-transform duration-300 flex justify-between items-center">
+          <div className="absolute bottom-0 left-0 right-0 p-5 bg-white/95 dark:bg-[#181922]/95 backdrop-blur-md border-t border-[#D4AF37]/20 transform translate-y-0 sm:translate-y-2 group-hover:translate-y-0 transition-transform duration-300 flex justify-between items-center">
             <div>
-              <h4 className="font-serif font-bold text-[#2a0002] dark:text-white text-base leading-tight">
+              <h4 className="font-serif font-bold text-stone-900 dark:text-white text-base leading-tight">
                 {p2.name}
               </h4>
               <p className="text-sm font-bold text-[#745b0f] dark:text-[#ffdf92]">
@@ -151,7 +151,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
             </div>
             <Link
               href={`/productos/${p2.slug}`}
-              className="p-2 rounded-lg bg-[#2a0002] text-white hover:bg-[#8B0024] transition-colors"
+              className="p-2 rounded-lg bg-[#163422] text-white hover:bg-[#1B2E22] transition-colors"
               title="Ver producto"
             >
               <ArrowRight size={16} />
@@ -160,13 +160,13 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
         </div>
 
         {/* 4. Tarjeta Ancha Inferior Izquierda (6 columnas x 1 fila) */}
-        <div className="md:col-span-6 md:row-span-1 relative group overflow-hidden rounded-2xl bg-[#faeae9] dark:bg-[#181922] shadow-[0px_4px_20px_rgba(42,0,2,0.06)] border border-[#D4AF37]/20 min-h-[260px]">
+        <div className="md:col-span-6 md:row-span-1 relative group overflow-hidden rounded-2xl bg-stone-100 dark:bg-[#181922] shadow-[0px_4px_20px_rgba(0,0,0,0.06)] border border-[#D4AF37]/20 min-h-[260px]">
           <img
             src={getImg(p3)}
             alt={p3.name}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#2a0002]/90 via-[#2a0002]/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
           <div className="absolute bottom-0 left-0 right-0 p-6 text-white flex justify-between items-end">
             <div>
@@ -182,7 +182,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
             </div>
             <Link
               href={`/productos/${p3.slug}`}
-              className="px-4 py-2 rounded-xl bg-[#D4AF37] text-[#2a0002] font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-md"
+              className="px-4 py-2 rounded-xl bg-[#D4AF37] text-stone-900 font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-md"
             >
               Ver Arreglo
             </Link>
@@ -190,15 +190,15 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
         </div>
 
         {/* 5. Tarjeta Editorial de Pedidos Especiales (6 columnas x 1 fila) */}
-        <div className="md:col-span-6 md:row-span-1 bg-gradient-to-br from-[#fff0ef] via-[#faeae9] to-[#f5e5e3] dark:from-[#181922] dark:via-[#1c1d27] dark:to-[#12131A] rounded-2xl p-6 sm:p-8 flex flex-col justify-center items-center text-center shadow-[0px_4px_20px_rgba(42,0,2,0.06)] border-2 border-dashed border-[#D4AF37]/50 min-h-[260px] relative overflow-hidden">
+        <div className="md:col-span-6 md:row-span-1 bg-stone-50 dark:from-[#181922] dark:via-[#1c1d27] dark:to-[#12131A] rounded-2xl p-6 sm:p-8 flex flex-col justify-center items-center text-center shadow-[0px_4px_20px_rgba(0,0,0,0.06)] border-2 border-dashed border-[#D4AF37]/50 min-h-[260px] relative overflow-hidden">
           <div className="w-12 h-12 rounded-full bg-[#D4AF37]/15 dark:bg-[#D4AF37]/25 flex items-center justify-center mb-3 text-[#745b0f] dark:text-[#ffdf92] shadow-sm">
             <Sparkles size={24} className="text-[#D4AF37]" />
           </div>
           
-          <h4 className="text-2xl font-serif font-bold text-[#2a0002] dark:text-white mb-2">
+          <h4 className="text-2xl font-serif font-bold text-stone-900 dark:text-white mb-2">
             Pedidos Especiales & Eventos
           </h4>
-          <p className="text-xs sm:text-sm text-[#544341] dark:text-gray-300 max-w-md mb-5 leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-stone-700 dark:text-gray-300 max-w-md mb-5 leading-relaxed font-medium">
             Creamos diseños florales personalizados a tu gusto y presupuesto para bodas, aniversarios y momentos inolvidables.
           </p>
 
@@ -206,7 +206,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
             href="https://wa.me/18323911835?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20un%20arreglo%20floral%20personalizado"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-[#2a0002] hover:bg-[#8B0024] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:scale-105 active:scale-95 border border-[#D4AF37]/60"
+            className="inline-flex items-center gap-2 bg-[#163422] hover:bg-[#1B2E22] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:scale-105 active:scale-95 border border-[#D4AF37]/60"
           >
             <MessageCircle size={15} className="text-[#D4AF37]" />
             <span>Cotizar por WhatsApp</span>

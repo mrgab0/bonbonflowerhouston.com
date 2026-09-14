@@ -32,7 +32,7 @@ export const CookieConsent = () => {
         </p>
         <button
           onClick={acceptCookies}
-          className="relative bg-[#8B0024] hover:bg-[#2a0002] text-white px-8 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap shadow-lg border border-[#D4AF37]/40"
+          className="relative bg-[#163422] hover:bg-[#1B2E22] text-white px-8 py-3 rounded-full font-bold text-sm transition-all whitespace-nowrap shadow-lg border border-[#D4AF37]/40"
         >
           Aceptar Cookies
         </button>

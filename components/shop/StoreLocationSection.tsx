@@ -37,8 +37,8 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
 
       {/* Pin animado en Houston, TX */}
       <div className="absolute left-[50%] md:left-[55%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
-        <div className="text-[#B81845] animate-bounce drop-shadow-lg">
-          <MapPin size={42} fill="#B81845" className="text-white" />
+        <div className="text-[#163422] animate-bounce drop-shadow-lg">
+          <MapPin size={42} fill="#163422" className="text-white" />
         </div>
         <span className="bg-white/95 text-stone-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-stone-300 uppercase tracking-wider -mt-1">
           Bonbon Flowers Houston
@@ -52,8 +52,8 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
       </div>
 
       {/* Tarjeta flotante de lujo con información del estudio y entregas */}
-      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-md p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-200 dark:border-gray-800 text-stone-800 dark:text-gray-100">
-        <div className="inline-flex items-center gap-1.5 bg-pink-50 dark:bg-pink-950/50 text-[#B81845] dark:text-pink-300 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-3">
+      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-md p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-200 dark:border-gray-800 text-stone-900 dark:text-gray-100">
+        <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-gray-800 text-[#163422] dark:text-[#C5A059] text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-3">
           <MapPin size={11} />
           <span>Houston Floral Studio</span>
         </div>
@@ -69,12 +69,12 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
         <div className="space-y-3 pt-3 border-t border-stone-100 dark:border-gray-800">
           <div>
             <h4 className="text-[11px] font-bold text-stone-900 dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
-              <Phone size={12} className="text-[#B81845]" />
+              <Phone size={12} className="text-[#163422]" />
               <span>Teléfono / Pedidos</span>
             </h4>
             <a
               href={`tel:${cleanPhone || "+13463484835"}`}
-              className="text-xs sm:text-sm text-stone-700 dark:text-gray-300 hover:text-[#B81845] transition-colors font-semibold"
+              className="text-xs sm:text-sm text-stone-800 dark:text-gray-300 hover:text-[#163422] transition-colors font-semibold"
             >
               {phone}
             </a>
@@ -82,12 +82,12 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
 
           <div>
             <h4 className="text-[11px] font-bold text-stone-900 dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
-              <Mail size={12} className="text-[#B81845]" />
+              <Mail size={12} className="text-[#163422]" />
               <span>Correo Electrónico</span>
             </h4>
             <a
               href={`mailto:${email}`}
-              className="text-xs sm:text-sm text-stone-700 dark:text-gray-300 hover:text-[#B81845] transition-colors font-medium break-all"
+              className="text-xs sm:text-sm text-stone-800 dark:text-gray-300 hover:text-[#163422] transition-colors font-medium break-all"
             >
               {email}
             </a>

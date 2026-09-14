@@ -45,8 +45,8 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
         {/* Columna 1: Ocasiones */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 border-b border-[#D4AF37]/20 pb-2">
-            <Heart size={16} className="text-[#8B0024] dark:text-[#FF97A4]" />
-            <h4 className="font-serif font-bold text-sm tracking-wider uppercase text-[#2B0002] dark:text-white">
+            <Heart size={16} className="text-[#163422] dark:text-[#C5A059]" />
+            <h4 className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 dark:text-white">
               Por Ocasión
             </h4>
           </div>
@@ -58,14 +58,14 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
                   <Link 
                     href={item.href}
                     onClick={onClose}
-                    className="group flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-gray-300 hover:text-[#8B0024] dark:hover:text-[#FF97A4] p-1.5 rounded-xl hover:bg-[#fff0ef]/60 dark:hover:bg-gray-800/60 transition-all"
+                    className="group flex items-center justify-between text-xs font-semibold text-stone-700 dark:text-gray-300 hover:text-[#163422] dark:hover:text-[#C5A059] p-1.5 rounded-xl hover:bg-stone-100 dark:hover:bg-gray-800/60 transition-all"
                   >
                     <span className="flex items-center gap-2">
-                      <Icon size={14} className="text-[#8B0024]/70 dark:text-pink-400 group-hover:scale-110 transition-transform" />
+                      <Icon size={14} className="text-[#163422]/70 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
                       {item.name}
                     </span>
                     {item.badge && (
-                      <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-950/80 text-[#8B0024] dark:text-pink-300 border border-pink-200 dark:border-pink-800/60">
+                      <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-[#163422] dark:text-emerald-300 border border-stone-200 dark:border-stone-700">
                         {item.badge}
                       </span>
                     )}
@@ -79,8 +79,8 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
         {/* Columna 2: Estilos & Ramos */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 border-b border-[#D4AF37]/20 pb-2">
-            <Gem size={16} className="text-[#8B0024] dark:text-[#FF97A4]" />
-            <h4 className="font-serif font-bold text-sm tracking-wider uppercase text-[#2B0002] dark:text-white">
+            <Gem size={16} className="text-[#163422] dark:text-[#C5A059]" />
+            <h4 className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 dark:text-white">
               Estilo Floral
             </h4>
           </div>
@@ -92,14 +92,14 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
                   <Link 
                     href={item.href}
                     onClick={onClose}
-                    className="group flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-gray-300 hover:text-[#8B0024] dark:hover:text-[#FF97A4] p-1.5 rounded-xl hover:bg-[#fff0ef]/60 dark:hover:bg-gray-800/60 transition-all"
+                    className="group flex items-center justify-between text-xs font-semibold text-stone-700 dark:text-gray-300 hover:text-[#163422] dark:hover:text-[#C5A059] p-1.5 rounded-xl hover:bg-stone-100 dark:hover:bg-gray-800/60 transition-all"
                   >
                     <span className="flex items-center gap-2">
-                      <Icon size={14} className="text-[#8B0024]/70 dark:text-pink-400 group-hover:scale-110 transition-transform" />
+                      <Icon size={14} className="text-[#163422]/70 dark:text-emerald-400 group-hover:scale-110 transition-transform" />
                       {item.name}
                     </span>
                     {item.badge && (
-                      <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${item.badge === "HOT" ? "bg-rose-500 text-white" : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"}`}>
+                      <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full ${item.badge === "HOT" ? "bg-amber-600 text-white" : "bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300"}`}>
                         {item.badge}
                       </span>
                     )}
@@ -113,8 +113,8 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
         {/* Columna 3: Adicionales & Extras */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 border-b border-[#D4AF37]/20 pb-2">
-            <Gift size={16} className="text-[#8B0024] dark:text-[#FF97A4]" />
-            <h4 className="font-serif font-bold text-sm tracking-wider uppercase text-[#2B0002] dark:text-white">
+            <Gift size={16} className="text-[#163422] dark:text-[#C5A059]" />
+            <h4 className="font-serif font-bold text-sm tracking-wider uppercase text-stone-900 dark:text-white">
               Complementos
             </h4>
           </div>
@@ -124,7 +124,7 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
                 <Link 
                   href={item.href}
                   onClick={onClose}
-                  className="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-gray-300 hover:text-[#8B0024] dark:hover:text-[#FF97A4] p-1.5 rounded-xl hover:bg-[#fff0ef]/60 dark:hover:bg-gray-800/60 transition-all"
+                  className="flex items-center justify-between text-xs font-semibold text-stone-700 dark:text-gray-300 hover:text-[#163422] dark:hover:text-[#C5A059] p-1.5 rounded-xl hover:bg-stone-100 dark:hover:bg-gray-800/60 transition-all"
                 >
                   <span>🌸 {item.name}</span>
                   {item.tag && (
@@ -139,15 +139,15 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
         </div>
 
         {/* Columna 4: Banner Visual de Oferta / Destacado */}
-        <div className="relative rounded-2xl overflow-hidden group bg-gradient-to-br from-[#80273B] to-[#2B0002] p-5 text-white flex flex-col justify-between shadow-lg border border-[#D4AF37]/30">
+        <div className="relative rounded-2xl overflow-hidden group bg-gradient-to-br from-[#163422] to-[#1B2E22] p-5 text-white flex flex-col justify-between shadow-lg border border-[#D4AF37]/30">
           <div className="relative z-10 space-y-2">
-            <span className="inline-block bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-[#FF97A4]">
+            <span className="inline-block bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-[#C5A059]">
               ✨ Edición Especial
             </span>
             <h5 className="font-serif font-bold text-base leading-snug">
               Ramos de 100 Rosas Rojas de Lujo
             </h5>
-            <p className="text-[11px] text-pink-100/80 font-medium">
+            <p className="text-[11px] text-stone-200 font-medium">
               Entrega express el mismo día en todo Houston.
             </p>
           </div>
@@ -155,7 +155,7 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
           <Link
             href="/productos"
             onClick={onClose}
-            className="mt-4 relative z-10 inline-flex items-center justify-center gap-2 bg-white text-[#2B0002] px-4 py-2.5 rounded-xl text-xs font-black hover:bg-[#FF97A4] hover:text-white transition-all shadow-md active:scale-95"
+            className="mt-4 relative z-10 inline-flex items-center justify-center gap-2 bg-white text-stone-900 px-4 py-2.5 rounded-xl text-xs font-black hover:bg-[#163422] hover:text-white transition-all shadow-md active:scale-95"
           >
             <span>Ver Catálogo Completo</span>
             <ArrowRight size={13} />

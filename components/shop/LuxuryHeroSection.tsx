@@ -13,8 +13,8 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
   const catalogUrl = "/productos";
 
   return (
-    <section className="relative overflow-hidden bg-[#FAF5F0] dark:bg-[#0F1015] py-12 md:py-20 lg:py-24 border-b border-stone-200 dark:border-gray-800 transition-colors duration-300 select-none">
-      {/* Elementos decorativos florales laterales con ligera rotación (inspirados en flor.zip) */}
+    <section className="relative overflow-hidden bg-white dark:bg-[#0F1015] py-12 md:py-20 lg:py-24 border-b border-stone-200 dark:border-gray-800 transition-colors duration-300 select-none">
+      {/* Elementos decorativos florales laterales con ligera rotación */}
       <div className="absolute inset-0 flex justify-between items-center opacity-30 dark:opacity-20 pointer-events-none px-4 md:px-12 select-none overflow-hidden">
         {/* Bouquet Izquierdo */}
         <div className="w-56 md:w-80 transform -translate-x-10 rotate-[-6deg] hidden sm:block">
@@ -40,13 +40,13 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
         {/* Logotipo Oficial de Bonbon Flowers con aro dorado */}
         <div className="flex justify-center mb-4">
           <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-[#C5A059] via-[#B81845] to-[#C5A059] rounded-full blur opacity-40 group-hover:opacity-75 transition duration-500" />
+            <div className="absolute -inset-1.5 bg-gradient-to-r from-[#C5A059] via-[#163422] to-[#C5A059] rounded-full blur opacity-35 group-hover:opacity-65 transition duration-500" />
             <img
               src={logoUrl}
               alt="Bonbon Flowers Houston"
-              width={90}
-              height={90}
-              className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-xl border-2 border-[#C5A059] transform hover:scale-105 transition-transform duration-300 bg-white"
+              width={96}
+              height={96}
+              className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-xl border-2 sm:border-4 border-[#C5A059] transform hover:scale-105 transition-transform duration-300 bg-white"
             />
           </div>
         </div>
@@ -56,10 +56,10 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
           Bonbon Flowers Houston
         </p>
 
-        {/* Titular Principal Editorial con Script Cursivo "feel loved ♡" */}
+        {/* Titular Principal Editorial con Script Cursivo en Verde Bosque y fuentes negras */}
         <h1 className="text-3xl md:text-5xl lg:text-6xl font-luxury-serif text-stone-900 dark:text-white leading-tight font-normal">
           Flowers that <br className="hidden sm:block" />make them <br />
-          <span className="font-script-custom text-[#B81845] dark:text-[#FF809F] text-6xl md:text-8xl lg:text-9xl block -mt-2 md:-mt-4">
+          <span className="font-script-custom text-[#163422] dark:text-[#C5A059] text-6xl md:text-8xl lg:text-9xl block -mt-2 md:-mt-4">
             feel loved ♡
           </span>
         </h1>
@@ -69,56 +69,56 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
         </p>
 
         {/* Fila de 4 Badges de Valor con estilo circular limpio */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-8 text-stone-700 dark:text-gray-300">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-8 text-stone-800 dark:text-gray-200">
           {/* Badge 1 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white/60 dark:bg-[#181922]/60 backdrop-blur-sm border border-stone-200/60 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-[#B81845] dark:text-pink-400">
+          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
+            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] shadow-sm">
               <Truck size={18} />
             </div>
-            <span className="text-xs font-semibold text-center leading-snug">
+            <span className="text-xs font-bold text-center leading-snug">
               Same Day<br />Delivery
             </span>
           </div>
 
           {/* Badge 2 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white/60 dark:bg-[#181922]/60 backdrop-blur-sm border border-stone-200/60 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-[#B81845] dark:text-pink-400">
+          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
+            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] shadow-sm">
               <MailCheck size={18} />
             </div>
-            <span className="text-xs font-semibold text-center leading-snug">
+            <span className="text-xs font-bold text-center leading-snug">
               Personalized<br />Card Included
             </span>
           </div>
 
           {/* Badge 3 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white/60 dark:bg-[#181922]/60 backdrop-blur-sm border border-stone-200/60 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-[#B81845] dark:text-pink-400">
+          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
+            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] shadow-sm">
               <Sparkles size={18} />
             </div>
-            <span className="text-xs font-semibold text-center leading-snug">
+            <span className="text-xs font-bold text-center leading-snug">
               Premium<br />Roses &amp; Flowers
             </span>
           </div>
 
           {/* Badge 4 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-white/60 dark:bg-[#181922]/60 backdrop-blur-sm border border-stone-200/60 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-red-50 dark:bg-red-950/40 flex items-center justify-center text-[#B81845] dark:text-pink-400">
-              <Star size={18} fill="#B81845" />
+          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
+            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#C5A059] shadow-sm">
+              <Star size={18} fill="#C5A059" />
             </div>
-            <span className="text-xs font-semibold text-center leading-snug">
+            <span className="text-xs font-bold text-center leading-snug">
               5-Star<br />Rated Boutique
             </span>
           </div>
         </div>
 
-        {/* Botón CTA Principal de Lujo */}
+        {/* Botón CTA Principal en Verde Bosque de Lujo */}
         <div className="mb-4">
           <Link
             href={catalogUrl}
-            className="inline-flex items-center justify-center bg-[#B81845] hover:bg-[#911035] text-white text-sm md:text-base font-bold tracking-wider px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group"
+            className="inline-flex items-center justify-center bg-[#163422] hover:bg-[#1B2E22] text-white text-sm md:text-base font-bold tracking-wider px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group"
           >
             <span>SHOP BEST SELLERS</span>
-            <span className="ml-2.5 w-6 h-6 rounded-full bg-white text-[#B81845] inline-flex items-center justify-center text-xs font-black transition-transform group-hover:translate-x-0.5">
+            <span className="ml-2.5 w-6 h-6 rounded-full bg-white text-[#163422] inline-flex items-center justify-center text-xs font-black transition-transform group-hover:translate-x-0.5">
               ›
             </span>
           </Link>

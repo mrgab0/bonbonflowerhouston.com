@@ -151,7 +151,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
             <div className="w-[90vw] sm:w-[380px] h-[520px] max-h-[80vh] bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-2xl rounded-3xl border border-[#D4AF37]/30 dark:border-gray-800 shadow-[0_20px_60px_rgba(42,0,2,0.3)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.9)] flex flex-col overflow-hidden mb-4 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
               
               {/* Encabezado del Chat Expandido */}
-              <div className="bg-gradient-to-r from-[#80273B] via-[#982D46] to-[#2B0002] p-4 text-white flex items-center justify-between shadow-md flex-shrink-0">
+              <div className="bg-gradient-to-r from-[#163422] via-[#1B2E22] to-[#163422] p-4 text-white flex items-center justify-between shadow-md flex-shrink-0">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full border border-[#D4AF37]/60 overflow-hidden bg-white p-0.5 shadow-sm flex items-center justify-center">
                     <img src="https://bonbonflowershouston.com/logo.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
@@ -200,7 +200,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                     <div
                       className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed font-medium ${
                         msg.sender === "user"
-                          ? "bg-[#80273B] text-white rounded-br-none shadow-sm"
+                          ? "bg-[#163422] text-white rounded-br-none shadow-sm"
                           : "bg-gray-100 dark:bg-gray-800/90 text-black dark:text-gray-100 rounded-bl-none border border-gray-200/80 dark:border-gray-700 shadow-sm chatbot-bot-bubble"
                       }`}
                     >
@@ -214,7 +214,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                           <button
                             key={i}
                             onClick={opt.action}
-                            className="bg-white dark:bg-pink-950/60 text-black dark:text-pink-300 border border-gray-300 dark:border-pink-900/60 hover:bg-[#80273B] hover:text-white dark:hover:bg-[#80273B] dark:hover:text-white px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition-all shadow-xs active:scale-95 text-left chatbot-chip-btn"
+                            className="bg-white dark:bg-stone-800 text-black dark:text-emerald-300 border border-gray-300 dark:border-stone-700 hover:bg-[#163422] hover:text-white dark:hover:bg-[#163422] dark:hover:text-white px-3 py-1.5 rounded-xl text-[11px] font-extrabold transition-all shadow-xs active:scale-95 text-left chatbot-chip-btn"
                           >
                             {opt.label}
                           </button>
@@ -256,12 +256,12 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Escribe un mensaje..."
-                  className="flex-1 bg-gray-100 dark:bg-gray-800/80 text-black dark:text-white px-4 py-2.5 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#80273B]/40 dark:focus:ring-pink-500/40"
+                  className="flex-1 bg-gray-100 dark:bg-gray-800/80 text-black dark:text-white px-4 py-2.5 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#163422]/40 dark:focus:ring-emerald-500/40"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim()}
-                  className="w-9 h-9 rounded-full bg-[#80273B] hover:bg-[#982D46] text-white flex items-center justify-center disabled:opacity-40 disabled:hover:bg-[#80273B] transition-all shadow-sm active:scale-95"
+                  className="w-9 h-9 rounded-full bg-[#163422] hover:bg-[#1B2E22] text-white flex items-center justify-center disabled:opacity-40 disabled:hover:bg-[#163422] transition-all shadow-sm active:scale-95"
                 >
                   <Send size={15} />
                 </button>
@@ -273,7 +273,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
           {!isOpen && (
             <div 
               onClick={() => setIsOpen(true)}
-              className="bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-xl p-3 sm:p-3.5 rounded-3xl border border-[#D4AF37]/40 dark:border-gray-800 shadow-[0_12px_40px_rgba(42,0,2,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.8)] cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 max-w-[280px] sm:max-w-[320px] group"
+              className="bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-xl p-3 sm:p-3.5 rounded-3xl border border-[#D4AF37]/40 dark:border-gray-800 shadow-[0_12px_40px_rgba(0,0,0,0.18)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.8)] cursor-pointer hover:scale-105 active:scale-95 transition-all duration-300 max-w-[280px] sm:max-w-[320px] group"
             >
               {/* Cabecera del Mini-Chat */}
               <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-gray-100 dark:border-gray-800">
@@ -283,7 +283,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                     <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border border-white"></span>
                   </div>
                   <div className="leading-tight">
-                    <h5 className="font-serif font-black text-xs text-[#2B0002] dark:text-white flex items-center gap-1">
+                    <h5 className="font-serif font-black text-xs text-stone-900 dark:text-white flex items-center gap-1">
                       <span>Flor</span>
                       <Sparkles size={11} className="text-[#D4AF37]" />
                     </h5>
@@ -293,14 +293,14 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
                   </div>
                 </div>
 
-                <div className="p-1.5 bg-[#80273B] text-white rounded-full group-hover:scale-110 transition-transform shadow-sm">
+                <div className="p-1.5 bg-[#163422] text-white rounded-full group-hover:scale-110 transition-transform shadow-sm">
                   <Maximize2 size={13} />
                 </div>
               </div>
 
               {/* Burbuja Preview del Mini-Chat */}
               <div className="py-2.5 text-slate-800 dark:text-gray-200">
-                <div className="p-2.5 rounded-2xl bg-pink-50/70 dark:bg-pink-950/30 border border-pink-100 dark:border-pink-900/40 text-[11px] leading-relaxed font-medium chatbot-mini-preview text-black dark:text-gray-100">
+                <div className="p-2.5 rounded-2xl bg-stone-50 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-[11px] leading-relaxed font-medium chatbot-mini-preview text-black dark:text-gray-100">
                   {messages.length > 0 && messages[messages.length - 1].sender === "bot"
                     ? messages[messages.length - 1].text.slice(0, 75) + "..."
                     : "¡Hola! 🌸 ¿Cómo puedo ayudarte hoy con tus flores?"}
@@ -308,7 +308,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
               </div>
 
               {/* Barra de Acción Rápida para Expandir */}
-              <div className="flex items-center justify-between text-[10px] font-extrabold text-[#80273B] dark:text-pink-300 bg-gray-50 dark:bg-gray-800/60 px-3 py-1.5 rounded-xl border border-gray-150 dark:border-gray-700/60">
+              <div className="flex items-center justify-between text-[10px] font-extrabold text-[#163422] dark:text-emerald-300 bg-gray-50 dark:bg-gray-800/60 px-3 py-1.5 rounded-xl border border-gray-150 dark:border-gray-700/60">
                 <span>💬 Toca para chatear</span>
                 <span className="text-[9px] uppercase tracking-wider opacity-75">Expandir ↗</span>
               </div>

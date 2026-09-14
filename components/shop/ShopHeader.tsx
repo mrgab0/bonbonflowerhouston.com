@@ -34,8 +34,8 @@ export const ShopHeader = () => {
               <img src="https://bonbonflowershouston.com/logo.png" alt="Bonbon Flowers Logo" className="w-full h-full object-cover rounded-full" />
             </div>
             <div className="hidden xl:block flex-shrink-0">
-              <span className="text-lg font-serif font-black text-[#2B0002] dark:text-white tracking-tight group-hover:text-[#FF97A4] transition-colors block">
-                Bonbon <span className="text-[#FF97A4]">Flowers</span>
+              <span className="text-lg font-serif font-black text-stone-900 dark:text-white tracking-tight group-hover:text-[#163422] transition-colors block">
+                Bonbon <span className="text-[#163422] dark:text-[#C5A059]">Flowers</span>
               </span>
               <span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold block -mt-0.5">
                 Boutique Floral • Houston, TX
@@ -49,7 +49,7 @@ export const ShopHeader = () => {
               <Link 
                 key={idx}
                 href={link.href} 
-                className="px-2.5 xl:px-3.5 2xl:px-4 py-1.5 xl:py-2 2xl:py-2.5 rounded-full bg-white/60 dark:bg-gray-800/60 text-[#2B0002] dark:text-gray-200 shadow-[0_4px_12px_rgba(42,0,2,0.15)] dark:shadow-none hover:shadow-[0_8px_20px_rgba(42,0,2,0.25)] hover:bg-white dark:hover:bg-gray-700 hover:text-[#8B0025] hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-300 border border-transparent hover:border-[#FF97A4]/30"
+                className="px-2.5 xl:px-3.5 2xl:px-4 py-1.5 xl:py-2 2xl:py-2.5 rounded-full bg-white/60 dark:bg-gray-800/60 text-stone-900 dark:text-gray-200 shadow-[0_4px_12px_rgba(0,0,0,0.06)] dark:shadow-none hover:shadow-[0_8px_20px_rgba(0,0,0,0.12)] hover:bg-white dark:hover:bg-gray-700 hover:text-[#163422] hover:-translate-y-0.5 active:scale-95 active:translate-y-0 transition-all duration-300 border border-transparent hover:border-[#163422]/20"
               >
                 {link.label}
               </Link>
@@ -61,7 +61,7 @@ export const ShopHeader = () => {
             {/* Botón de Acceso Biométrico / Passkeys con Huella */}
             <button
               onClick={() => setIsBioModalOpen(true)}
-              className="flex items-center gap-1.5 bg-pink-50 dark:bg-pink-950/60 text-[#8B0025] border border-pink-200 dark:border-pink-900 px-2.5 xl:px-3 py-2 rounded-full text-xs font-bold shadow-[0_2px_8px_rgba(42,0,2,0.06)] hover:shadow-[0_6px_16px_rgba(42,0,2,0.12)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
+              className="flex items-center gap-1.5 bg-stone-100 dark:bg-stone-800 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700 px-2.5 xl:px-3 py-2 rounded-full text-xs font-bold shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
               title="Acceso con Huella / Face ID"
             >
               <Fingerprint size={16} />
@@ -79,12 +79,12 @@ export const ShopHeader = () => {
             <div className="relative ml-1">
               <Link
                 href="/checkout"
-                className="flex items-center gap-1.5 xl:gap-2 bg-[#FF97A4] text-white px-2.5 xl:px-3.5 2xl:px-5 py-2 2xl:py-2.5 rounded-full font-bold text-xs hover:bg-[#B0004A] transition-all shadow-md shadow-[#FF97A4]/20"
+                className="flex items-center gap-1.5 xl:gap-2 bg-[#163422] text-white px-2.5 xl:px-3.5 2xl:px-5 py-2 2xl:py-2.5 rounded-full font-bold text-xs hover:bg-[#1B2E22] transition-all shadow-md"
               >
                 <ShoppingCart size={18} />
                 <span className="hidden 2xl:inline">Carrito</span>
                 {totalCount > 0 && (
-                  <span className="bg-[#1A1C1C] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                  <span className="bg-[#D4AF37] text-stone-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
                     {totalCount}
                   </span>
                 )}
@@ -94,7 +94,7 @@ export const ShopHeader = () => {
             {/* Botón Toggle de Menú Móvil */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 rounded-full bg-slate-100 dark:bg-gray-800 text-[#2B0002] dark:text-gray-200 border border-gray-200 dark:border-gray-700 hover:bg-slate-200 dark:hover:bg-gray-700 active:scale-95 transition-all"
+              className="lg:hidden p-2 rounded-full bg-slate-100 dark:bg-gray-800 text-stone-900 dark:text-gray-200 border border-gray-200 dark:border-gray-700 hover:bg-slate-200 dark:hover:bg-gray-700 active:scale-95 transition-all"
               aria-label={isMobileMenuOpen ? "Contraer menú" : "Desplegar menú"}
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -111,10 +111,10 @@ export const ShopHeader = () => {
                   key={idx}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center justify-between px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-800/80 text-[#2B0002] dark:text-gray-100 font-bold text-sm shadow-sm active:scale-[0.98] transition-all hover:bg-[#FF97A4]/10 hover:text-[#8B0025] dark:hover:text-[#FF97A4]"
+                  className="flex items-center justify-between px-4 py-3 rounded-2xl bg-gray-50 dark:bg-gray-800/80 text-stone-900 dark:text-gray-100 font-bold text-sm shadow-sm active:scale-[0.98] transition-all hover:bg-stone-100 hover:text-[#163422]"
                 >
                   <span>{link.label}</span>
-                  <span className="text-xs text-[#FF97A4]">→</span>
+                  <span className="text-xs text-[#163422] dark:text-[#C5A059]">→</span>
                 </Link>
               ))}
             </nav>

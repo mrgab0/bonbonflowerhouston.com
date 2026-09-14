@@ -35,7 +35,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             <p className="text-sm text-black dark:text-black font-semibold">El post que buscas no existe o fue movido.</p>
             <Link
               href="/nosotros"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#8B0024] text-white rounded-full text-xs font-bold"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#163422] text-white rounded-full text-xs font-bold hover:bg-[#1B2E22] transition-colors"
             >
               <ArrowLeft size={14} />
               <span>Volver a Nosotros & Blog</span>
@@ -89,7 +89,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           // Blockquote (>)
           if (trimmed.startsWith("> ")) {
             return (
-              <blockquote key={i} className="p-4 sm:p-5 my-4 bg-pink-50/80 dark:bg-pink-100/40 rounded-2xl border-l-4 border-[#8B0024] text-black dark:text-black font-semibold italic">
+              <blockquote key={i} className="p-4 sm:p-5 my-4 bg-stone-100 dark:bg-stone-800 rounded-2xl border-l-4 border-[#163422] text-black dark:text-black font-semibold italic">
                 {trimmed.replace(/^>\s*/, "")}
               </blockquote>
             );
@@ -99,7 +99,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
             const items = trimmed.split(/\n/).filter((l) => l.trim().length > 0);
             return (
-              <ul key={i} className="space-y-2.5 my-3 pl-4 list-disc marker:text-[#8B0024]">
+              <ul key={i} className="space-y-2.5 my-3 pl-4 list-disc marker:text-[#163422]">
                 {items.map((it, idx) => {
                   const cleanItem = it.replace(/^[-*]\s*/, "");
                   return (
@@ -161,7 +161,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           <div className="flex items-center justify-between gap-3">
             <Link
               href="/nosotros"
-              className="inline-flex items-center gap-2 text-xs font-black text-black dark:text-black hover:text-[#8B0024] transition-colors"
+              className="inline-flex items-center gap-2 text-xs font-black text-black dark:text-black hover:text-[#163422] transition-colors"
             >
               <ArrowLeft size={14} />
               <span>Volver a Nosotros & Blog</span>
@@ -192,8 +192,8 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
           {/* Encabezado del Post */}
           <header className="space-y-4 text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-pink-100 dark:bg-pink-100 text-black dark:text-black px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
-              <Sparkles size={13} className="text-[#8B0024]" />
+            <div className="inline-flex items-center gap-2 bg-stone-100 dark:bg-stone-800 text-black dark:text-black px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+              <Sparkles size={13} className="text-[#163422]" />
               <span>Boutique Floral & Consejos</span>
             </div>
 
@@ -209,12 +209,12 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
             <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-black dark:text-black pt-1">
               <span className="flex items-center gap-1">
-                <Calendar size={14} className="text-[#8B0024]" />
+                <Calendar size={14} className="text-[#163422]" />
                 {new Date(post.createdAt || Date.now()).toLocaleDateString("es-ES", { month: "long", day: "numeric", year: "numeric" })}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Clock size={14} className="text-purple-600" />
+                <Clock size={14} className="text-stone-700" />
                 3 min de lectura
               </span>
               <span>•</span>
@@ -242,8 +242,8 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           </div>
 
           {/* CAJA DE ACCIÓN / COMPRA RELACIONADA */}
-          <div className="bg-gradient-to-r from-[#fff0ef] via-pink-50 to-[#fff0ef] dark:from-[#181922] dark:via-[#221820] dark:to-[#181922] p-6 sm:p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-4 text-center">
-            <div className="w-12 h-12 rounded-full bg-[#8B0024] text-white flex items-center justify-center mx-auto shadow-md">
+          <div className="bg-stone-50 dark:from-[#181922] dark:via-[#221820] dark:to-[#181922] p-6 sm:p-8 rounded-3xl border border-[#D4AF37]/30 shadow-md space-y-4 text-center">
+            <div className="w-12 h-12 rounded-full bg-[#163422] text-white flex items-center justify-center mx-auto shadow-md">
               <Gift size={22} />
             </div>
             <h3 className="text-2xl font-serif font-black !text-black dark:!text-black" style={{ color: '#000000' }}>
@@ -255,7 +255,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link
                 href="/productos"
-                className="px-6 py-3 rounded-full bg-[#8B0024] hover:bg-[#B0004A] text-white font-black text-xs shadow-md transition-all active:scale-95"
+                className="px-6 py-3 rounded-full bg-[#163422] hover:bg-[#1B2E22] text-white font-black text-xs shadow-md transition-all active:scale-95"
               >
                 Ver Catálogo de Flores
               </Link>

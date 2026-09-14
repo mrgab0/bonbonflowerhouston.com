@@ -55,8 +55,8 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
             <div className="max-w-3xl mx-auto text-center space-y-4">
               
               {/* Kicker */}
-              <div className="inline-flex items-center gap-2 bg-[#fff0ef] dark:bg-pink-100 text-black dark:text-black border border-[#D4AF37]/40 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-sm">
-                <Sparkles size={13} className="text-[#8B0024]" />
+              <div className="inline-flex items-center gap-2 bg-stone-100 dark:bg-stone-800 text-black dark:text-black border border-[#D4AF37]/40 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-sm">
+                <Sparkles size={13} className="text-[#163422]" />
                 <span>Boutique Floral & Storytelling</span>
               </div>
 
@@ -72,15 +72,15 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
 
               <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-black dark:text-black pt-2">
                 <span className="flex items-center gap-1 text-black dark:text-black">
-                  <MapPin size={15} className="text-[#8B0024]" /> Houston, TX
+                  <MapPin size={15} className="text-[#163422]" /> Houston, TX
                 </span>
                 <span className="text-black dark:text-black">•</span>
                 <span className="flex items-center gap-1 text-black dark:text-black">
-                  <Clock size={15} className="text-purple-600" /> Entrega el Mismo Día
+                  <Clock size={15} className="text-stone-700" /> Entrega el Mismo Día
                 </span>
                 <span className="text-black dark:text-black">•</span>
                 <span className="flex items-center gap-1 text-black dark:text-black">
-                  <Heart size={15} className="text-[#8B0024]" /> Floristas Expertos
+                  <Heart size={15} className="text-[#163422]" /> Floristas Expertos
                 </span>
               </div>
 
@@ -89,8 +89,8 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
             {/* 3 PILARES DE LA BOUTIQUE */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mt-14">
               
-              <div className="bg-white/80 dark:bg-[#181922]/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-[#D4AF37]/25 shadow-[0_4px_20px_rgba(42,0,2,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all">
-                <div className="w-12 h-12 rounded-2xl bg-pink-50 dark:bg-pink-950/60 text-[#8B0024] dark:text-[#FF97A4] flex items-center justify-center mb-4 shadow-sm border border-pink-100 dark:border-pink-900/50">
+              <div className="bg-white/80 dark:bg-[#181922]/80 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-[#D4AF37]/25 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-lg hover:-translate-y-1 transition-all">
+                <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-stone-800 text-[#163422] dark:text-emerald-400 flex items-center justify-center mb-4 shadow-sm border border-stone-200 dark:border-stone-700">
                   <Heart size={24} />
                 </div>
                 <h3 className="font-serif font-black text-lg !text-black dark:!text-black mb-2" style={{ color: '#000000' }}>
@@ -137,8 +137,8 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
             {/* Cabecera del Blog */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-gray-800 pb-6">
               <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 bg-pink-100 dark:bg-pink-100 text-black dark:text-black px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
-                  <BookOpen size={14} className="text-[#8B0024]" />
+                <div className="inline-flex items-center gap-2 bg-stone-100 dark:bg-stone-800 text-black dark:text-black px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+                  <BookOpen size={14} className="text-[#163422]" />
                   <span>Blog & Consejos Florales</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-serif font-black !text-black dark:!text-black" style={{ color: '#000000' }}>
@@ -157,7 +157,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                     onClick={() => setSelectedTag(tag.id)}
                     className={`px-4 py-2 rounded-full text-xs font-black transition-all whitespace-nowrap border ${
                       selectedTag === tag.id
-                        ? "bg-[#8B0024] text-white border-[#8B0024] shadow-sm"
+                        ? "bg-[#163422] text-white border-[#163422] shadow-sm"
                         : "bg-white dark:bg-white text-black dark:text-black border-gray-300 dark:border-gray-300 hover:bg-gray-100"
                     }`}
                   >
@@ -198,14 +198,14 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                     <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                       <div className="space-y-2.5">
                         <div className="flex items-center gap-2 text-[11px] text-black dark:text-black font-bold">
-                          <Calendar size={13} className="text-[#8B0024]" />
+                          <Calendar size={13} className="text-[#163422]" />
                           <span>{new Date(post.createdAt || Date.now()).toLocaleDateString("es-ES", { month: "short", day: "numeric", year: "numeric" })}</span>
                           <span>•</span>
                           <span>3 min de lectura</span>
                         </div>
 
                         <Link href={`/nosotros/${post.slug}`}>
-                          <h3 className="font-serif font-black text-lg !text-black dark:!text-black group-hover:text-[#8B0024] transition-colors line-clamp-2 leading-snug" style={{ color: '#000000' }}>
+                          <h3 className="font-serif font-black text-lg !text-black dark:!text-black group-hover:text-[#163422] transition-colors line-clamp-2 leading-snug" style={{ color: '#000000' }}>
                             {post.title}
                           </h3>
                         </Link>
@@ -219,10 +219,10 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                       <div className="pt-3 border-t border-gray-100 dark:border-gray-800">
                         <Link
                           href={`/nosotros/${post.slug}`}
-                          className="inline-flex items-center gap-1.5 text-xs font-black text-black dark:text-black hover:text-[#8B0024] group-hover:translate-x-1 transition-transform"
+                          className="inline-flex items-center gap-1.5 text-xs font-black text-black dark:text-black hover:text-[#163422] group-hover:translate-x-1 transition-transform"
                         >
                           <span>Leer Artículo Completo</span>
-                          <ArrowRight size={14} className="text-[#8B0024]" />
+                          <ArrowRight size={14} className="text-[#163422]" />
                         </Link>
                       </div>
                     </div>
@@ -235,7 +235,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
         </section>
 
         {/* CTA FINAL DE COMPRA / COTIZACIÓN */}
-        <section className="py-14 bg-gradient-to-r from-pink-50 via-rose-50 to-pink-50 dark:from-[#181922] dark:via-[#20171d] dark:to-[#181922] border-t border-[#D4AF37]/20">
+        <section className="py-14 bg-gradient-to-r from-stone-100 via-stone-50 to-stone-100 dark:from-[#181922] dark:via-[#161822] dark:to-[#181922] border-t border-[#D4AF37]/20">
           <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
             <h2 className="text-3xl sm:text-4xl font-serif font-black !text-black dark:!text-black" style={{ color: '#000000' }}>
               ¿Deseas Sorprender con un Arreglo Personalizado?
@@ -246,7 +246,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link
                 href="/productos"
-                className="bg-[#8B0024] hover:bg-[#B0004A] text-white px-7 py-3.5 rounded-full font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
+                className="bg-[#163422] hover:bg-[#1B2E22] text-white px-7 py-3.5 rounded-full font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
               >
                 <Gift size={16} />
                 <span>Explorar Catálogo de Flores</span>

@@ -46,7 +46,7 @@ export function Footer({ siteConfig }: FooterProps) {
               Saturday: 10 AM - 3 PM<br />
               Sunday: Special event &amp; advance orders delivery
             </p>
-            <p className="mt-3 text-[11px] text-[#B81845] dark:text-pink-400 font-semibold tracking-wide">
+            <p className="mt-3 text-[11px] text-[#163422] dark:text-[#C5A059] font-semibold tracking-wide">
               Houston, TX &amp; Metro Area • Same Day Delivery Available
             </p>
           </div>

@@ -26,7 +26,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-slate-900 dark:text-gray-200 hover:text-[#8B0024] dark:hover:text-[#FF97A4] transition-all shadow-sm border border-gray-200 dark:border-gray-700 flex items-center justify-center cursor-pointer"
+      className="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-slate-900 dark:text-gray-200 hover:text-[#163422] dark:hover:text-[#C5A059] transition-all shadow-sm border border-gray-200 dark:border-gray-700 flex items-center justify-center cursor-pointer"
       title={isDark ? "Cambiar a Modo Claro ☀️" : "Cambiar a Modo Oscuro 🌙"}
       aria-label="Alternar tema claro/oscuro"
     >
