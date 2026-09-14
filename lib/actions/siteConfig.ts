@@ -26,7 +26,7 @@ const DEFAULT_SITE_CONFIG = {
   facebookUrl: "https://www.facebook.com/bonbon.flowers.2025",
   instagramUrl: "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==",
   tiktokUrl: "https://tiktok.com",
-  whatsappUrl: "https://wa.me/18323911835",
+  whatsappUrl: "https://wa.me/13467392730",
   enableSocialFeed: true,
   socialFeedTitle: "Síguenos en Instagram @bonbonflowers__ 📸",
   socialEmbedHtml: "",

@@ -39,7 +39,7 @@ export function StickyNav({ siteConfig }: StickyNavProps) {
   const instagramUrl = siteConfig?.instagramUrl || "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==";
   const facebookUrl = siteConfig?.facebookUrl || "https://www.facebook.com/bonbon.flowers.2025";
   const tiktokUrl = siteConfig?.tiktokUrl || "https://tiktok.com";
-  const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/13463484835";
+  const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/13467392730";
 
   const navLinks = [
     { href: "/", label: t('home') },

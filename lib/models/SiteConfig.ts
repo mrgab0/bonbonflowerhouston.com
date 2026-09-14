@@ -108,7 +108,7 @@ const SiteConfigSchema: Schema = new Schema({
   facebookUrl: { type: String, default: "https://www.facebook.com/bonbon.flowers.2025" },
   instagramUrl: { type: String, default: "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==" },
   tiktokUrl: { type: String, default: "https://tiktok.com" },
-  whatsappUrl: { type: String, default: "https://wa.me/18323911835" },
+  whatsappUrl: { type: String, default: "https://wa.me/13467392730" },
 
   // Módulo Social Pre-Footer (Incrustados Instagram/TikTok)
   enableSocialFeed: { type: Boolean, default: true },
@@ -151,7 +151,7 @@ const SiteConfigSchema: Schema = new Schema({
   bingSiteVerification: { type: String, default: "" },
   googleAnalyticsId: { type: String, default: "" },
   businessName: { type: String, default: "Bonbon Flowers" },
-  businessPhone: { type: String, default: "+1 (832) 391-1835" },
+  businessPhone: { type: String, default: "+1 (346) 739-2730" },
   businessAddress: { type: String, default: "Houston, TX" },
   businessCity: { type: String, default: "Houston, TX" },
 

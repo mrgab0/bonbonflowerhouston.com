@@ -36,7 +36,7 @@ Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código m
   "title": "Título SEO atractivo, elegante y magnético (máximo 70 caracteres)",
   "slug": "slug-amigable-para-url-en-minusculas-con-guiones",
   "excerpt": "Meta descripción resumida de 140 a 160 caracteres perfecta para Google Search.",
-  "content": "Contenido completo del artículo en formato Markdown. Debe incluir subtítulos (## y ###), listas con viñetas, consejos de cuidado o selección, y una sección final con llamado a la acción para ordenar flores en la tienda online o vía WhatsApp (+1 832 391-1835).",
+  "content": "Contenido completo del artículo en formato Markdown. Debe incluir subtítulos (## y ###), listas con viñetas, consejos de cuidado o selección, y una sección final con llamado a la acción para ordenar flores en la tienda online o vía WhatsApp (+1 346 739 2730).",
   "tags": ["Tag1", "Tag2", "Tag3"],
   "suggestedImage": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80"
 }

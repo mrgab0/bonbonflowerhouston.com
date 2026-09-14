@@ -841,7 +841,7 @@ export default function AdminOrdenesPage() {
                   <h1 className="text-2xl font-serif font-extrabold text-[#1A1C1C] tracking-tight">Bonbon Flowers Houston</h1>
                   <p className="text-[11px] font-bold uppercase tracking-wider text-[#FF97A4]">High Floral Design Boutique</p>
                   <p className="text-gray-500 text-[11px] mt-1">Houston, Texas & Metropolitan Areas</p>
-                  <p className="text-gray-500 text-[11px]">Tel / WhatsApp: +1 (832) 391-1835</p>
+                  <p className="text-gray-500 text-[11px]">Tel / WhatsApp: +1 (346) 739-2730</p>
                 </div>
 
                 <div className="text-right space-y-1">

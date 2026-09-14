@@ -35,7 +35,7 @@ export default async function ConfirmacionPage({
 
         <div className="flex flex-col gap-4">
           <a 
-            href={`https://wa.me/18323911835?text=Hola!%20He%20finalizado%20mi%20pedido%20${orderId}.%20Quisiera%20confirmar%20los%20detalles.`}
+            href={`https://wa.me/13467392730?text=Hola!%20He%20finalizado%20mi%20pedido%20${orderId}.%20Quisiera%20confirmar%20los%20detalles.`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 bg-green-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-green-600 transition-all"

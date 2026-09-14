@@ -573,8 +573,8 @@ export default function AdminConfiguracionPage() {
                   <label className="text-xs font-bold text-gray-700 dark:text-gray-300">WhatsApp Directo</label>
                   <input
                     name="whatsappUrl"
-                    defaultValue={config.whatsappUrl || "https://wa.me/18323911835"}
-                    placeholder="https://wa.me/18323911835"
+                    defaultValue={config.whatsappUrl || "https://wa.me/13467392730"}
+                    placeholder="https://wa.me/13467392730"
                     className="p-3 border rounded-xl text-xs font-medium dark:bg-gray-900 dark:text-white"
                   />
                 </div>

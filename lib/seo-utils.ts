@@ -41,7 +41,7 @@ export function getLocalBusinessSchema(config: any, siteUrl: string = "https://b
     "image": config?.ogImage || `${siteUrl}/logo.png`,
     "@id": siteUrl,
     "url": siteUrl,
-    "telephone": config?.businessPhone || "+1 (832) 391-1835",
+    "telephone": config?.businessPhone || "+1 (346) 739-2730",
     "priceRange": "$$",
     "address": {
       "@type": "PostalAddress",

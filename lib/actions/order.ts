@@ -116,7 +116,7 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
       const toEmails = Array.from(new Set(recipients)).join(", ");
 
       const cleanPhoneDigits = (savedOrder.customerPhone || "").replace(/\D/g, "");
-      const waLink = cleanPhoneDigits ? `https://wa.me/${cleanPhoneDigits.length === 10 ? '1' + cleanPhoneDigits : cleanPhoneDigits}` : "https://wa.me/18323911835";
+      const waLink = cleanPhoneDigits ? `https://wa.me/${cleanPhoneDigits.length === 10 ? '1' + cleanPhoneDigits : cleanPhoneDigits}` : "https://wa.me/13467392730";
 
       const orderTotal = savedOrder.total || 0;
       const deliveryFee = savedOrder.deliveryFee || 0;

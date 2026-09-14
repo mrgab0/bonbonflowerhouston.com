@@ -10,9 +10,9 @@ interface StoreLocationSectionProps {
 }
 
 export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
-  phone = "(346) 348-4835",
+  phone = "(346) 739-2730",
   email = "contacto@bonbonflowershouston.com",
-  whatsappUrl = "https://wa.me/13463484835?text=Hola!%20Quisiera%20información%20sobre%20sus%20flores%20en%20Houston."
+  whatsappUrl = "https://wa.me/13467392730?text=Hola!%20Quisiera%20información%20sobre%20sus%20flores%20en%20Houston."
 }) => {
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
@@ -73,7 +73,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
               <span>Teléfono / Pedidos</span>
             </h4>
             <a
-              href={`tel:${cleanPhone || "+13463484835"}`}
+              href={`tel:${cleanPhone || "+13467392730"}`}
               className="text-xs sm:text-sm text-stone-800 dark:text-gray-300 hover:text-[#163422] transition-colors font-semibold"
             >
               {phone}

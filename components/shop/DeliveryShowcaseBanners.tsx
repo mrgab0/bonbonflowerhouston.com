@@ -109,7 +109,7 @@ export function DeliveryShowcaseBanners() {
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <a
-                  href="https://wa.me/18323911835?text=Hola%20Bonbon%20Flowers,%20deseo%20un%20arreglo%20floral%20personalizado"
+                  href="https://wa.me/13467392730?text=Hola%20Bonbon%20Flowers,%20deseo%20un%20arreglo%20floral%20personalizado"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] hover:bg-[#1EBE5D] text-white px-6 py-3.5 rounded-2xl font-black text-xs uppercase tracking-wider transition-all duration-300 shadow-xl active:scale-95"

@@ -203,7 +203,7 @@ export function BentoEditorialGrid({ products = [] }: BentoEditorialGridProps) {
           </p>
 
           <a
-            href="https://wa.me/18323911835?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20un%20arreglo%20floral%20personalizado"
+            href="https://wa.me/13467392730?text=Hola%2C%20me%20gustar%C3%ADa%20cotizar%20un%20arreglo%20floral%20personalizado"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-[#163422] hover:bg-[#1B2E22] text-white px-6 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-lg hover:scale-105 active:scale-95 border border-[#D4AF37]/60"

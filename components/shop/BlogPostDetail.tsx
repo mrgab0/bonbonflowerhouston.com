@@ -260,7 +260,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
                 Ver Catálogo de Flores
               </Link>
               <a
-                href={`https://wa.me/18323911835?text=${encodeURIComponent(`¡Hola! Leí su artículo sobre "${post.title}" y quisiera cotizar un arreglo floral.`)}`}
+                href={`https://wa.me/13467392730?text=${encodeURIComponent(`¡Hola! Leí su artículo sobre "${post.title}" y quisiera cotizar un arreglo floral.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-1.5"

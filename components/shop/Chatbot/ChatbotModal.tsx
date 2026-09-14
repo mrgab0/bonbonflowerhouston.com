@@ -29,7 +29,7 @@ const I18N_CONTENT = {
     ],
     welcomeMessage: "¡Hola! 🌸 Soy **Flor**, tu asesora floral en **Bonbon Flowers Houston**.\n\n¿Para qué ocasión especial estás buscando flores hoy?",
     resetMessage: "¡Hola de nuevo! 🌸 Te saluda Flor, ¿en qué te puedo ayudar hoy?",
-    errorMessage: "🌸 Hubo un pequeño inconveniente de conexión. Puedes escribirnos directo a nuestro WhatsApp [+1 832 391-1835](https://wa.me/18323911835) para asistirte de inmediato.",
+    errorMessage: "🌸 Hubo un pequeño inconveniente de conexión. Puedes escribirnos directo a nuestro WhatsApp [+1 346 739 2730](https://wa.me/13467392730) para asistirte de inmediato.",
     defaultErrorResponse: "Disculpa, no pude procesar tu solicitud. Por favor intenta nuevamente.",
     advisorRole: "FLOR • ASESORA FLORAL",
     liveBadge: "EN LÍNEA",
@@ -58,7 +58,7 @@ const I18N_CONTENT = {
     ],
     welcomeMessage: "Hello! 🌸 I'm **Flor**, your floral advisor at **Bonbon Flowers Houston**.\n\nWhat special occasion are you looking for flowers for today?",
     resetMessage: "Hello again! 🌸 Flor here, how can I help you today?",
-    errorMessage: "🌸 There was a brief connection issue. You can message us directly on WhatsApp [+1 832 391-1835](https://wa.me/18323911835) for instant assistance.",
+    errorMessage: "🌸 There was a brief connection issue. You can message us directly on WhatsApp [+1 346 739 2730](https://wa.me/13467392730) for instant assistance.",
     defaultErrorResponse: "Sorry, I couldn't process your request. Please try again.",
     advisorRole: "FLOR • FLORAL ADVISOR",
     liveBadge: "ONLINE",
@@ -540,7 +540,7 @@ export const ChatbotModal = () => {
                 {content.poweredBy}
               </span>
               <a
-                href="https://wa.me/18323911835"
+                href="https://wa.me/13467392730"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#25D366] hover:underline flex items-center gap-1 font-semibold"

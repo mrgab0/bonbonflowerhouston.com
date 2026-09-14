@@ -53,7 +53,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0B0C10] text-stone-800 dark:text-gray-100 transition-colors duration-300 relative overflow-x-hidden">
       {/* Barra de anuncio superior (SAME DAY DELIVERY) y barra de confianza estilo flor.zip */}
-      <TrustAnnouncementBar phone="(346) 348-4835" />
+      <TrustAnnouncementBar phone="(346) 739-2730" />
 
       {/* Navegación y Menú Principal */}
       <StickyNav siteConfig={siteConfig} />
@@ -118,9 +118,9 @@ export default async function Home() {
 
       {/* Sección de Ubicación y Cobertura en Houston (Mapa estilizado y tarjeta flotante de flor.zip) */}
       <StoreLocationSection
-        phone="(346) 348-4835"
+        phone="(346) 739-2730"
         email="contacto@bonbonflowershouston.com"
-        whatsappUrl="https://wa.me/13463484835?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston."
+        whatsappUrl="https://wa.me/13467392730?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston."
       />
 
       {/* Secciones de Reseñas y Feed de Instagram */}

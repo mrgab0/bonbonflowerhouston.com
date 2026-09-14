@@ -47,8 +47,8 @@ export async function POST(req: Request) {
       ? deliveryRes.data.map((d: any) => `- ${d.title}: Base $${d.extraPrice} + $${d.pricePerMile}/milla (${d.estimatedTimeLabel})`).join('\n')
       : "- Same-Day Delivery across Houston, TX and metropolitan areas.";
 
-    const whatsappPhone = "+1 832 391-1835";
-    const whatsappUrl = "https://wa.me/18323911835";
+    const whatsappPhone = "+1 346 739 2730";
+    const whatsappUrl = "https://wa.me/13467392730";
     const storeAddress = siteConfig?.businessAddress || "Houston, TX";
 
     // 2. Definir instrucciones de sistema precisas según idioma (Humanizado & Corto con Mapa del Sitio)
@@ -59,7 +59,7 @@ ${clientContextSnippet}
 Full Business & Website Knowledge:
 - Website Sections & Links:
   * Contact & Email: [Contact Page](/contacto) (direct web form to send emails and inquiries to our florists).
-  * WhatsApp & Phone: [📲 WhatsApp (+1 832 391-1835)](${whatsappUrl}) or call ${whatsappPhone}.
+  * WhatsApp & Phone: [📲 WhatsApp (${whatsappPhone})](${whatsappUrl}) or call ${whatsappPhone}.
   * Flower Catalog: [Flower Catalog](/productos) (luxury rose bouquets, buchón bouquets, luxury boxes, orchids, anniversary/birthday arrangements).
   * Order Tracking: [Track My Order](/rastreo) (customers can check live order status using their Order ID or their phone number).
   * About Us & Floral Blog: [About Us & Blog](/nosotros) (our story, flower care guides, and floral tips).
@@ -92,7 +92,7 @@ ${clientContextSnippet}
 Conocimiento Completo del Sitio Web y Negocio:
 - Secciones y Enlaces de la Web:
   * Contacto y Email: [Página de Contacto](/contacto) (formulario web directo para enviar correos electrónicos y mensajes al equipo floral).
-  * WhatsApp y Teléfono: [📲 WhatsApp (+1 832 391-1835)](${whatsappUrl}) o llamar al ${whatsappPhone}.
+  * WhatsApp y Teléfono: [📲 WhatsApp (${whatsappPhone})](${whatsappUrl}) o llamar al ${whatsappPhone}.
   * Catálogo de Flores: [Catálogo de Flores](/productos) (ramos buchones, rosas de exportación, cajas de lujo, orquídeas, aniversarios, cumpleaños).
   * Rastreo de Pedidos: [Rastrear Mi Envío](/rastreo) (los clientes consultan el estado en vivo con su ID de orden o su número de teléfono).
   * Nosotros y Blog Floral: [Nosotros & Consejos](/nosotros) (nuestra historia boutique, guías de cuidado de flores y tendencias).
@@ -194,7 +194,7 @@ Reglas estrictas de conversación humana y corta:
   } catch (error: any) {
     console.error("Error en Chatbot API:", error);
     return NextResponse.json({
-      text: "🌸 Con mucho gusto te ayudamos / We're happy to help. Puedes explorar nuestros ramos en el [Catálogo de Flores / Catalog](/productos) o escribirnos directo a [📲 WhatsApp (+1 832 391-1835)](https://wa.me/18323911835) para atenderte en tiempo real."
+      text: "🌸 Con mucho gusto te ayudamos / We're happy to help. Puedes explorar nuestros ramos en el [Catálogo de Flores / Catalog](/productos) o escribirnos directo a [📲 WhatsApp (+1 346 739 2730)](https://wa.me/13467392730) para atenderte en tiempo real."
     }, { status: 200 });
   }
 }

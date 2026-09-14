@@ -252,13 +252,13 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                 <span>Explorar Catálogo de Flores</span>
               </Link>
               <a
-                href="https://wa.me/18323911835?text=¡Hola!%20Leí%20su%20página%20de%20Nosotros%20y%20quisiera%20cotizar%20un%20arreglo%20floral%20personalizado."
+                href="https://wa.me/13467392730?text=¡Hola!%20Leí%20su%20página%20de%20Nosotros%20y%20quisiera%20cotizar%20un%20arreglo%20floral%20personalizado."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white px-7 py-3.5 rounded-full font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
               >
                 <MessageCircle size={16} />
-                <span>Hablar por WhatsApp (+1 832 391-1835)</span>
+                <span>Hablar por WhatsApp (+1 346 739 2730)</span>
               </a>
             </div>
           </div>

@@ -43,7 +43,7 @@ export function ContactFormClient() {
     }
   };
 
-  const whatsappUrl = `https://wa.me/18323911835?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/13467392730?text=${encodeURIComponent(
     `¡Hola! 🌸 Soy ${formData.name || "un cliente"}. ${formData.message || "Quisiera información sobre sus arreglos florales."}`
   )}`;
 
@@ -96,8 +96,8 @@ export function ContactFormClient() {
                     </div>
                     <div>
                       <strong className="block text-white text-xs uppercase tracking-wider font-bold">Atención Directa / WhatsApp</strong>
-                      <a href="https://wa.me/18323911835" target="_blank" rel="noreferrer" className="text-[#FF97A4] hover:underline font-bold">
-                        +1 (832) 391-1835
+                      <a href="https://wa.me/13467392730" target="_blank" rel="noreferrer" className="text-[#FF97A4] hover:underline font-bold">
+                        +1 (346) 739-2730
                       </a>
                     </div>
                   </div>
@@ -128,7 +128,7 @@ export function ContactFormClient() {
 
               <div className="pt-6 border-t border-gray-800">
                 <a
-                  href="https://wa.me/18323911835?text=¡Hola!%20🌸%20Quisiera%20asesoría%20para%20un%20arreglo%20floral."
+                  href="https://wa.me/13467392730?text=¡Hola!%20🌸%20Quisiera%20asesoría%20para%20un%20arreglo%20floral."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full bg-[#FF97A4] hover:bg-[#B0004A] text-white py-3.5 rounded-2xl font-bold text-xs transition-all shadow-md flex items-center justify-center gap-2"
@@ -269,7 +269,7 @@ export function ContactFormClient() {
         </div>
       </main>
 
-      <WhatsAppButton phoneNumber="18323911835" />
+      <WhatsAppButton phoneNumber="13467392730" />
       <Footer />
     </div>
   );

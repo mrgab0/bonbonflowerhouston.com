@@ -42,7 +42,7 @@ export default function AdminSeoPage() {
       setBingVerification(data.bingSiteVerification || "");
       setAnalyticsId(data.googleAnalyticsId || "");
       setBusinessName(data.businessName || "Bonbon Flowers");
-      setBusinessPhone(data.businessPhone || "+1 (832) 391-1835");
+      setBusinessPhone(data.businessPhone || "+1 (346) 739-2730");
       setBusinessAddress(data.businessAddress || "Houston, TX");
       setBusinessCity(data.businessCity || "Houston, TX");
     }

@@ -10,7 +10,7 @@ interface InquiryModalProps {
 export const InquiryModal = ({ isOpen, onClose }: InquiryModalProps) => {
   if (!isOpen) return null;
 
-  const phone = "18323911835";
+  const phone = "13467392730";
   const defaultMessage = "¡Hola! 🌸 Me gustaría recibir asesoría personalizada para elegir el arreglo floral ideal. ¿Me podrían ayudar?";
   const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(defaultMessage)}`;
 

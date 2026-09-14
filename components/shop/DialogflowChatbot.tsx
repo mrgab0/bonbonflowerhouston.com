@@ -41,7 +41,7 @@ export function DialogflowChatbot({ siteConfig }: DialogflowChatbotProps) {
   const location = siteConfig?.dialogflowLocation || "us-central1";
   const languageCode = siteConfig?.dialogflowLanguageCode || "es";
   const chatTitle = siteConfig?.dialogflowChatTitle || "Flor • Bonbon Flowers 🌸";
-  const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/18323911835";
+  const whatsappUrl = siteConfig?.whatsappUrl || "https://wa.me/13467392730";
 
   const isRealDialogflowConfigured = Boolean(agentId && projectId && agentId.trim() !== "" && projectId.trim() !== "");
 

@@ -8,7 +8,7 @@ interface TrustAnnouncementBarProps {
 }
 
 export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
-  phone = "(346) 348-4835"
+  phone = "(346) 739-2730"
 }) => {
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
@@ -18,7 +18,7 @@ export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
       <aside className="bg-[#163422] text-white text-xs md:text-sm font-medium py-2 px-4 text-center tracking-wide flex justify-center items-center">
         <a
           className="hover:underline flex items-center gap-1.5 transition-opacity hover:opacity-95 font-semibold"
-          href={`tel:${cleanPhone || "+13463484835"}`}
+          href={`tel:${cleanPhone || "+13467392730"}`}
         >
           <Phone size={13} className="inline-block animate-pulse text-[#E6C98B]" />
           <span>SAME DAY DELIVERY HOUSTON {phone}</span>
