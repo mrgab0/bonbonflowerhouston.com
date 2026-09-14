@@ -1,7 +1,6 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { ProductCard } from "@/components/shop/ProductCard/ProductCard";
-import { HeroSlider } from "@/components/shop/HeroSlider/HeroSlider";
 import { StickyNav } from "@/components/shop/StickyNav";
 import { TrustAnnouncementBar } from "@/components/shop/TrustAnnouncementBar";
 import { LuxuryHeroSection } from "@/components/shop/LuxuryHeroSection";
@@ -9,7 +8,6 @@ import { StoreLocationSection } from "@/components/shop/StoreLocationSection";
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
 import { getSiteConfig } from "@/lib/actions/siteConfig";
-import { getSliders } from "@/lib/actions/slider";
 
 const SocialAndReviewsSection = dynamic(
   () => import("@/components/shop/SocialAndReviewsSection").then((m) => m.SocialAndReviewsSection),
@@ -39,44 +37,21 @@ export default async function Home() {
 
   try {
     await dbConnect();
-    const [productsRaw, siteConfigRes, slidersRes] = await Promise.all([
+    const [productsRaw, siteConfigRes] = await Promise.all([
       Product.find({ isActive: { $ne: false } })
         .sort({ isFeatured: -1, createdAt: -1 })
         .limit(20)
         .lean(),
       getSiteConfig(),
-      getSliders(),
     ]);
     products = JSON.parse(JSON.stringify(productsRaw || []));
     siteConfig = siteConfigRes?.data;
-    initialSlides = slidersRes?.data ? [...slidersRes.data].sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
   } catch (err) {
     console.warn("Aviso: No se pudo conectar a la base de datos durante el pre-renderizado estático de Home. Usando valores seguros.", err);
   }
 
-  const firstBannerImage = initialSlides.length > 0 && initialSlides[0].type === 'banner' && !initialSlides[0].image?.match(/\.(mp4|webm|ogg)$/i)
-    ? initialSlides[0].image
-    : null;
-
-  const preloadBannerUrl = firstBannerImage
-    ? (firstBannerImage.includes("images.unsplash.com")
-        ? `${firstBannerImage.split("?")[0]}?w=600&q=75&auto=format`
-        : firstBannerImage.includes("ik.imagekit.io")
-        ? `${firstBannerImage.split("?")[0]}?tr=w-600,q-75,f-auto`
-        : firstBannerImage)
-    : null;
-
   return (
     <main className="min-h-screen bg-white dark:bg-[#0B0C10] text-stone-800 dark:text-gray-100 transition-colors duration-300 relative overflow-x-hidden">
-      {preloadBannerUrl && (
-        <link
-          rel="preload"
-          as="image"
-          href={preloadBannerUrl}
-          fetchPriority="high"
-        />
-      )}
-      
       {/* Barra de anuncio superior (SAME DAY DELIVERY) y barra de confianza estilo flor.zip */}
       <TrustAnnouncementBar phone="(346) 348-4835" />
 
@@ -85,13 +60,6 @@ export default async function Home() {
 
       {/* Hero Section Editorial de Lujo con tipografía script 'feel loved ♡' y 4 badges */}
       <LuxuryHeroSection siteConfig={siteConfig} />
-
-      {/* Sliders Dinámicos (si están activos) */}
-      {initialSlides.length > 0 && (
-        <div className="container mx-auto px-4 sm:px-6 -mt-6 sm:-mt-8 relative z-20">
-          <HeroSlider initialSlides={initialSlides} />
-        </div>
-      )}
 
       {/* Módulo iFrame Personalizado (si está activo en el Administrador) */}
       {siteConfig?.enableCustomIframe && (
