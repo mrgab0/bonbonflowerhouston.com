@@ -163,31 +163,33 @@ html:not(.dark) .nosotros-page-root .text-\[\#8B0024\] {
   color: #163422 !important;
 }
 
-/* --- FOOTER GLOBAL: TIPOGRAFÍA SIEMPRE BLANCA Y DORADA --- */
-footer,
-footer h1,
-footer h2,
-footer h3,
-footer h4,
-footer h5,
-footer h6,
-footer p:not(.text-\[\#D4AF37\]),
-footer span:not(.text-\[\#D4AF37\]),
-footer div,
-footer a {
+/* --- FOOTER GLOBAL: TIPOGRAFÍA EN NEGRO PURO EN MODO CLARO --- */
+html:not(.dark) footer {
+  background-color: #FFFFFF !important;
+}
+html:not(.dark) footer,
+html:not(.dark) footer h1,
+html:not(.dark) footer h2,
+html:not(.dark) footer h3,
+html:not(.dark) footer h4,
+html:not(.dark) footer h5,
+html:not(.dark) footer h6,
+html:not(.dark) footer p,
+html:not(.dark) footer a,
+html:not(.dark) footer .footer-text {
+  color: #000000 !important;
+}
+
+html:not(.dark) footer .text-\[\#163422\] {
+  color: #163422 !important;
+}
+
+html.dark footer {
+  background-color: #0B0C10 !important;
   color: #FFFFFF !important;
 }
-
-footer .text-\[\#D4AF37\],
-footer p.text-\[\#D4AF37\],
-footer span.text-\[\#D4AF37\] {
-  color: #D4AF37 !important;
-}
-
-footer .text-gray-400,
-footer .text-gray-300,
-footer .text-gray-200 {
-  color: rgba(255, 255, 255, 0.85) !important;
+html.dark footer a {
+  color: #E2E8F0 !important;
 }
 
 /* --- COBERTURA COMPLETA DE MODO OSCURO (CLIENTE & ADMIN) --- */

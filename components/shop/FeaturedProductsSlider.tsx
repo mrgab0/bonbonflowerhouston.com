@@ -201,7 +201,7 @@ export function FeaturedProductsSlider({ products }: FeaturedProductsSliderProps
                   
                   {/* Badge de Categoría */}
                   <div className="absolute top-3 left-3">
-                    <span className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md text-[#163422] dark:text-emerald-300 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+                    <span className="bg-white dark:bg-gray-900 text-[#163422] dark:text-emerald-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-stone-300 dark:border-gray-700">
                       {product.category || "Boutique"}
                     </span>
                   </div>
@@ -209,7 +209,7 @@ export function FeaturedProductsSlider({ products }: FeaturedProductsSliderProps
                   {/* Badge Destacado */}
                   {product.badge && (
                     <div className="absolute top-3 right-3">
-                      <span className="bg-[#163422] text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37]/40 flex items-center gap-1">
+                      <span className="bg-[#163422] text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37] flex items-center gap-1">
                         <Flame size={10} className="text-amber-300" />
                         {product.badge}
                       </span>

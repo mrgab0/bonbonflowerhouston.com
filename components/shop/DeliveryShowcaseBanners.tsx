@@ -30,7 +30,7 @@ export function DeliveryShowcaseBanners() {
                 <Truck size={13} />
                 <span>Entrega Garantizada</span>
               </span>
-              <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-pink-200">
+              <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/30">
                 <MapPin size={12} />
                 <span>Houston & Alrededores</span>
               </span>
@@ -39,7 +39,7 @@ export function DeliveryShowcaseBanners() {
             {/* Texto y Llamado a la Acción Inferior */}
             <div className="relative z-10 space-y-4 max-w-lg">
               <div className="space-y-2">
-                <span className="text-pink-300 text-xs font-black uppercase tracking-[0.2em] block">
+                <span className="text-[#E6C98B] text-xs font-black uppercase tracking-[0.2em] block">
                   Experiencia VIP a Domicilio
                 </span>
                 <h3 className="font-serif font-black text-3xl sm:text-4xl leading-tight tracking-tight">
@@ -87,7 +87,7 @@ export function DeliveryShowcaseBanners() {
                 <Sparkles size={13} className="text-[#D4AF37]" />
                 <span>Boutique de Lujo</span>
               </span>
-              <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-pink-200">
+              <span className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold text-white border border-white/30">
                 <ShieldCheck size={12} />
                 <span>100% Personalizable</span>
               </span>
@@ -96,7 +96,7 @@ export function DeliveryShowcaseBanners() {
             {/* Texto y Llamado a la Acción Inferior */}
             <div className="relative z-10 space-y-4 max-w-lg">
               <div className="space-y-2">
-                <span className="text-[#FF97A4] text-xs font-black uppercase tracking-[0.2em] block">
+                <span className="text-[#E6C98B] text-xs font-black uppercase tracking-[0.2em] block">
                   Alta Floristería
                 </span>
                 <h3 className="font-serif font-black text-3xl sm:text-4xl leading-tight tracking-tight">

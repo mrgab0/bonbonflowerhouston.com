@@ -247,7 +247,7 @@ export default function CheckoutPage() {
                               <div className="flex items-center gap-2">
                                 <span className="font-bold text-sm text-[#1A1C1C]">{option.title}</span>
                                 {option.badge && (
-                                  <span className="bg-[#FF97A4]/15 text-[#FF97A4] text-[9px] font-extrabold px-2 py-0.5 rounded-full uppercase">
+                                  <span className="bg-[#163422] text-white text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase shadow-sm border border-[#D4AF37]/50">
                                     {option.badge}
                                   </span>
                                 )}

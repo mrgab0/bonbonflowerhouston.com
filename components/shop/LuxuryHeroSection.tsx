@@ -64,48 +64,48 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
           </span>
         </h1>
 
-        <p className="text-stone-700 dark:text-gray-300 text-sm md:text-base font-medium mt-3 mb-8 max-w-lg mx-auto">
+        <p className="text-black dark:text-gray-300 text-sm md:text-base font-medium mt-3 mb-8 max-w-lg mx-auto">
           Same day luxury flower delivery in Houston, TX &amp; surrounding areas.
         </p>
 
-        {/* Fila de 4 Badges de Valor con estilo circular limpio */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-8 text-stone-800 dark:text-gray-200">
+        {/* Fila de 4 Badges de Valor con estilo circular limpio y fuentes negras */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-8 text-black dark:text-white">
           {/* Badge 1 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] shadow-sm">
+          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
               <Truck size={18} />
             </div>
-            <span className="text-xs font-bold text-center leading-snug">
+            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
               Same Day<br />Delivery
             </span>
           </div>
 
           {/* Badge 2 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] shadow-sm">
+          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
               <MailCheck size={18} />
             </div>
-            <span className="text-xs font-bold text-center leading-snug">
+            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
               Personalized<br />Card Included
             </span>
           </div>
 
           {/* Badge 3 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] shadow-sm">
+          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
               <Sparkles size={18} />
             </div>
-            <span className="text-xs font-bold text-center leading-snug">
+            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
               Premium<br />Roses &amp; Flowers
             </span>
           </div>
 
           {/* Badge 4 */}
-          <div className="flex flex-col items-center justify-center p-2 rounded-xl bg-stone-50/90 dark:bg-[#181922]/90 backdrop-blur-sm border border-stone-200 dark:border-gray-800">
-            <div className="w-10 h-10 mb-1 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center text-[#C5A059] shadow-sm">
+          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
+            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
               <Star size={18} fill="#C5A059" />
             </div>
-            <span className="text-xs font-bold text-center leading-snug">
+            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
               5-Star<br />Rated Boutique
             </span>
           </div>
@@ -125,9 +125,9 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
         </div>
 
         {/* Prueba social de estrellas */}
-        <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm text-stone-600 dark:text-gray-400 font-medium">
+        <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm text-black dark:text-gray-300 font-medium">
           <span className="text-amber-500 text-sm">★★★★★</span>
-          <span className="font-bold text-stone-800 dark:text-white ml-1">4.9/5</span>
+          <span className="font-extrabold text-black dark:text-white ml-1">4.9/5</span>
           <span>Based on 500+ happy customers in Houston</span>
         </div>
 

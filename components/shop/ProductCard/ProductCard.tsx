@@ -80,7 +80,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Badge Flotante estilo Categoría */}
           <div className="absolute top-3 left-3">
-            <span className="bg-white/95 dark:bg-gray-900/90 backdrop-blur-md text-[#163422] dark:text-[#C5A059] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-stone-200 dark:border-gray-800 shadow-sm">
+            <span className="bg-white dark:bg-gray-900 text-[#163422] dark:text-[#C5A059] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider border border-stone-300 dark:border-gray-700 shadow-md">
               {category}
             </span>
           </div>
@@ -88,7 +88,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Insignia / Badge Personalizada */}
           {badge && (
             <div className="absolute top-3 right-3">
-              <span className="bg-[#163422] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37]/50 flex items-center gap-1">
+              <span className="bg-[#163422] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37] flex items-center gap-1">
                 <Sparkles size={10} className="text-[#D4AF37]" />
                 {badge}
               </span>

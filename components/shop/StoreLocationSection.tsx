@@ -40,54 +40,54 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
         <div className="text-[#163422] animate-bounce drop-shadow-lg">
           <MapPin size={42} fill="#163422" className="text-white" />
         </div>
-        <span className="bg-white/95 text-stone-900 text-[11px] font-extrabold px-3 py-1 rounded-full shadow-md border border-stone-300 uppercase tracking-wider -mt-1">
+        <span className="bg-white text-black text-[11px] font-black px-3.5 py-1 rounded-full shadow-md border-2 border-[#163422] uppercase tracking-wider -mt-1">
           Bonbon Flowers Houston
         </span>
       </div>
 
       {/* Marca de agua estilo mapa */}
-      <div className="absolute bottom-3 left-6 z-10 text-[11px] text-stone-500 font-sans flex items-center gap-2 select-none">
-        <span className="font-bold text-stone-600 text-sm tracking-tight">Houston Metro Map</span>
-        <span>• Same Day Local Floral Delivery</span>
+      <div className="absolute bottom-3 left-6 z-10 text-[11px] text-black font-sans flex items-center gap-2 select-none">
+        <span className="font-bold text-black text-sm tracking-tight">Houston Metro Map</span>
+        <span className="font-medium">• Same Day Local Floral Delivery</span>
       </div>
 
       {/* Tarjeta flotante de lujo con información del estudio y entregas */}
-      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-md p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-200 dark:border-gray-800 text-stone-900 dark:text-gray-100">
-        <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-gray-800 text-[#163422] dark:text-[#C5A059] text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider mb-3">
+      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white dark:bg-[#12131A] p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-300 dark:border-gray-800 text-black dark:text-gray-100">
+        <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-gray-800 text-[#163422] dark:text-[#C5A059] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 border border-[#163422]/20">
           <MapPin size={11} />
           <span>Houston Floral Studio</span>
         </div>
 
-        <h3 className="text-base font-bold text-stone-900 dark:text-white uppercase tracking-wider mb-2 font-serif">
+        <h3 className="text-base font-black text-black dark:text-white uppercase tracking-wider mb-2 font-serif">
           Pick-Up &amp; Delivery Hub
         </h3>
-        <p className="text-stone-600 dark:text-gray-300 text-xs sm:text-sm leading-relaxed mb-4">
+        <p className="text-black dark:text-gray-300 text-xs sm:text-sm leading-relaxed mb-4 font-medium">
           Houston, Texas &amp; Greater Houston Metroplex<br />
-          <span className="text-[11px] text-stone-500 dark:text-gray-400">Entregas a domicilio garantizadas el mismo día.</span>
+          <span className="text-[11px] text-stone-600 dark:text-gray-400 font-semibold">Entregas a domicilio garantizadas el mismo día.</span>
         </p>
 
-        <div className="space-y-3 pt-3 border-t border-stone-100 dark:border-gray-800">
+        <div className="space-y-3 pt-3 border-t border-stone-200 dark:border-gray-800">
           <div>
-            <h4 className="text-[11px] font-bold text-stone-900 dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+            <h4 className="text-[11px] font-black text-black dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
               <Phone size={12} className="text-[#163422]" />
               <span>Teléfono / Pedidos</span>
             </h4>
             <a
               href={`tel:${cleanPhone || "+13467392730"}`}
-              className="text-xs sm:text-sm text-stone-800 dark:text-gray-300 hover:text-[#163422] transition-colors font-semibold"
+              className="text-xs sm:text-sm text-black dark:text-gray-300 hover:text-[#163422] transition-colors font-bold"
             >
               {phone}
             </a>
           </div>
 
           <div>
-            <h4 className="text-[11px] font-bold text-stone-900 dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+            <h4 className="text-[11px] font-black text-black dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
               <Mail size={12} className="text-[#163422]" />
               <span>Correo Electrónico</span>
             </h4>
             <a
               href={`mailto:${email}`}
-              className="text-xs sm:text-sm text-stone-800 dark:text-gray-300 hover:text-[#163422] transition-colors font-medium break-all"
+              className="text-xs sm:text-sm text-black dark:text-gray-300 hover:text-[#163422] transition-colors font-semibold break-all"
             >
               {email}
             </a>

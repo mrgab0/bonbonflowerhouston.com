@@ -99,13 +99,13 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
           
           {/* Cabecera Principal del Catálogo */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-[#FF97A4] text-xs font-extrabold uppercase tracking-[0.25em] bg-pink-50 px-4 py-1.5 rounded-full border border-pink-100 inline-block">
+            <span className="text-[#163422] text-xs font-black uppercase tracking-[0.25em] bg-stone-100 px-4 py-1.5 rounded-full border border-[#163422]/20 inline-block shadow-sm">
               {t('headerBadge')}
             </span>
             <h1 className="text-4xl md:text-5xl font-serif font-black text-[#1A1C1C] tracking-tight">
               {t('headerTitle')}
             </h1>
-            <p className="text-gray-500 text-sm md:text-base font-medium leading-relaxed">
+            <p className="text-gray-600 text-sm md:text-base font-medium leading-relaxed">
               {t('headerDesc')}
             </p>
           </div>
@@ -116,7 +116,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
               onClick={() => { setActiveTab("all"); setSelectedCategory("all"); }}
               className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
                 activeTab === "all"
-                  ? "bg-white text-[#1A1C1C] shadow-md"
+                  ? "bg-black text-white shadow-md"
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >
@@ -126,7 +126,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
               onClick={() => { setActiveTab("products"); setSelectedCategory("all"); }}
               className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
                 activeTab === "products"
-                  ? "bg-[#FF97A4] text-white shadow-md"
+                  ? "bg-[#163422] text-white shadow-md"
                   : "text-gray-600 hover:text-gray-900"
               }`}
             >

@@ -83,7 +83,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                     {product.category}
                   </span>
                   {product.badge && (
-                    <span className="bg-[#FF97A4] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                    <span className="bg-[#163422] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37]">
                       {product.badge}
                     </span>
                   )}
@@ -98,7 +98,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       key={idx}
                       onClick={() => setActiveImage(img)}
                       className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-all ${
-                        activeImage === img ? "border-[#FF97A4] ring-2 ring-[#FF97A4]/30 scale-105" : "border-gray-200 dark:border-gray-700 opacity-70 hover:opacity-100"
+                        activeImage === img ? "border-[#163422] ring-2 ring-[#163422]/30 scale-105" : "border-gray-200 dark:border-gray-700 opacity-70 hover:opacity-100"
                       }`}
                     >
                       <img src={img} alt={`Vista ${idx + 1}`} className="w-full h-full object-cover" />
@@ -113,7 +113,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
               
               {/* Titular y Precio Dinámico */}
               <div>
-                <span className="text-[#FF97A4] text-xs font-black uppercase tracking-[0.2em] block mb-1">
+                <span className="text-[#163422] dark:text-[#C5A059] text-xs font-black uppercase tracking-[0.2em] block mb-1">
                   Arreglo Floral Exclusivo
                 </span>
                 <h1 className="text-3xl md:text-4xl font-serif font-black text-[#1A1C1C] dark:text-white leading-tight mb-3">
@@ -122,7 +122,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
 
                 <div className="flex flex-wrap items-baseline gap-3">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl md:text-4xl font-extrabold text-[#FF97A4] transition-all">
+                    <span className="text-3xl md:text-4xl font-black text-black dark:text-white transition-all">
                       ${combinedTotalPrice.toFixed(2)} USD
                     </span>
                     {addonsTotalPrice > 0 && (
@@ -133,8 +133,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                   </div>
 
                   {addonsTotalPrice > 0 && (
-                    <span className="bg-pink-50 dark:bg-pink-950/50 text-[#FF97A4] text-xs font-black px-3 py-1 rounded-full border border-pink-200 dark:border-pink-800 flex items-center gap-1 animate-pulse">
-                      <Sparkles size={13} /> +${addonsTotalPrice.toFixed(2)} en adicionales
+                    <span className="bg-stone-100 dark:bg-stone-800 text-[#163422] dark:text-[#C5A059] text-xs font-black px-3 py-1 rounded-full border border-[#163422]/20 dark:border-[#C5A059]/30 flex items-center gap-1 shadow-sm">
+                      <Sparkles size={13} className="text-[#D4AF37]" /> +${addonsTotalPrice.toFixed(2)} en adicionales
                     </span>
                   )}
                 </div>
@@ -248,7 +248,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                         <span className="text-[10px] text-pink-300 font-medium">Sumado al total: ${combinedTotalPrice.toFixed(2)} USD</span>
                       </div>
                     </div>
-                    <span className="text-xs font-black text-[#FF97A4] bg-white/10 px-2.5 py-1 rounded-full">
+                    <span className="text-xs font-black text-white bg-white/20 px-2.5 py-1 rounded-full">
                       +${lastAddonToast.price.toFixed(2)}
                     </span>
                   </div>

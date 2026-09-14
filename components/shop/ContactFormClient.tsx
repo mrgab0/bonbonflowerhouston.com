@@ -56,7 +56,7 @@ export function ContactFormClient() {
           
           {/* Header de la Página */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-[#FF97A4] text-xs font-extrabold uppercase tracking-[0.25em] bg-pink-50 px-4 py-1.5 rounded-full border border-pink-100 inline-block">
+            <span className="text-[#163422] text-xs font-black uppercase tracking-[0.25em] bg-stone-100 px-4 py-1.5 rounded-full border border-[#163422]/20 inline-block shadow-sm">
               🌸 Atención & Asesoría Personalizada
             </span>
             <h1 className="text-4xl md:text-5xl font-serif font-black text-[#1A1C1C] tracking-tight">
