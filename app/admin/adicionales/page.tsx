@@ -67,12 +67,20 @@ export default function AdicionalesPage() {
           <h1 className="text-2xl font-bold text-[#1A1C1C]">Gestión de Adicionales y Personalizaciones</h1>
           <p className="text-xs text-gray-400">Total: {addons.length} adicionales configurados para los productos</p>
         </div>
-        <Link
-          href="/admin/adicionales/crear"
-          className="bg-purple-600 text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-purple-700 transition-colors shadow-md flex items-center gap-2"
-        >
-          <Plus size={18} /> Crear Nuevo Adicional
-        </Link>
+        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+          <Link
+            href="/admin/adicionales/carga-en-masa"
+            className="bg-[#1A1C1C] text-white px-5 py-3 rounded-full font-bold text-sm hover:bg-black transition-colors shadow-md flex items-center gap-2"
+          >
+            <Layers size={18} /> Crear Adicionales en Masa
+          </Link>
+          <Link
+            href="/admin/adicionales/crear"
+            className="bg-purple-600 text-white px-6 py-3 rounded-full font-bold text-sm hover:bg-purple-700 transition-colors shadow-md flex items-center gap-2"
+          >
+            <Plus size={18} /> Crear Nuevo Adicional
+          </Link>
+        </div>
       </div>
 
       {/* Buscador y Filtro */}

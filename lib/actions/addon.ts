@@ -101,3 +101,102 @@ export async function deleteAddon(id: string) {
     return { success: false, error: "No se pudo eliminar el adicional" };
   }
 }
+
+export async function createBulkAddons(
+  addonsData: Array<{
+    name: string;
+    price: number;
+    category: string;
+    description?: string;
+    image?: string;
+    type?: "checkbox" | "text" | "select";
+    options?: string[];
+  }>,
+  publishImmediately: boolean = false
+) {
+  try {
+    await dbConnect();
+    if (!addonsData || !Array.isArray(addonsData) || addonsData.length === 0) {
+      return { success: false, error: "No hay adicionales para guardar." };
+    }
+
+    const batchCreatedAt = new Date();
+    const preparedAddons = addonsData.map((item) => ({
+      name: item.name.trim() || "Adicional Sin Nombre",
+      price: typeof item.price === "number" && !isNaN(item.price) ? item.price : 0,
+      category: item.category?.trim() || "Otros",
+      description: item.description?.trim() || "",
+      image: item.image || "",
+      type: item.type || "checkbox",
+      options: item.options || [],
+      isActive: publishImmediately,
+      createdAt: batchCreatedAt,
+      order: 0
+    }));
+
+    const inserted = await Addon.insertMany(preparedAddons);
+    revalidatePath("/admin/adicionales");
+    revalidatePath("/admin/productos");
+    return { success: true, count: inserted.length };
+  } catch (error) {
+    console.error("Error en carga masiva de adicionales:", error);
+    return { success: false, error: error instanceof Error ? error.message : "Error al procesar la carga en masa." };
+  }
+}
+
+export async function updateBulkAddonBatch(
+  addonIds: string[],
+  updates: {
+    category?: string;
+    price?: number;
+    type?: "checkbox" | "text" | "select";
+    description?: string;
+  }
+) {
+  try {
+    await dbConnect();
+    if (!addonIds || addonIds.length === 0) {
+      return { success: false, error: "No se seleccionaron adicionales para actualizar." };
+    }
+
+    const updateFields: any = {};
+    if (updates.category !== undefined && updates.category.trim() !== "") updateFields.category = updates.category.trim();
+    if (updates.price !== undefined && updates.price >= 0) updateFields.price = updates.price;
+    if (updates.type !== undefined) updateFields.type = updates.type;
+    if (updates.description !== undefined && updates.description.trim() !== "") updateFields.description = updates.description.trim();
+
+    await Addon.updateMany(
+      { _id: { $in: addonIds } },
+      { $set: updateFields }
+    );
+
+    revalidatePath("/admin/adicionales");
+    revalidatePath("/admin/productos");
+    return { success: true, count: addonIds.length };
+  } catch (error) {
+    console.error("Error al actualizar lote de adicionales:", error);
+    return { success: false, error: "Error al aplicar cambios masivos." };
+  }
+}
+
+export async function publishBulkAddonBatch(addonIds: string[]) {
+  try {
+    await dbConnect();
+    if (!addonIds || addonIds.length === 0) {
+      return { success: false, error: "No se seleccionaron adicionales para publicar." };
+    }
+
+    await Addon.updateMany(
+      { _id: { $in: addonIds } },
+      { $set: { isActive: true } }
+    );
+
+    revalidatePath("/admin/adicionales");
+    revalidatePath("/admin/productos");
+    return { success: true, count: addonIds.length };
+  } catch (error) {
+    console.error("Error al publicar lote de adicionales:", error);
+    return { success: false, error: "Error al publicar lote." };
+  }
+}
+
