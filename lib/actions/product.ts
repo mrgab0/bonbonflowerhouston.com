@@ -24,6 +24,8 @@ export async function createProduct(formData: FormData) {
     const badge = formData.get("badge") as string || "";
     const addonsRaw = formData.getAll("addons") as string[];
     const addons = addonsRaw.filter((a) => a && typeof a === 'string' && a.trim() !== "");
+    const variantsRaw = formData.getAll("variants") as string[];
+    const variants = variantsRaw.filter((v) => v && typeof v === 'string' && v.trim() !== "");
 
     // Procesar características
     const featureLabels = formData.getAll("featureLabels") as string[];
@@ -51,6 +53,7 @@ export async function createProduct(formData: FormData) {
       bouquetType,
       badge,
       addons,
+      variants,
       features,
       slug,
       isActive: true,
@@ -227,6 +230,8 @@ export async function updateProduct(id: string, formData: FormData) {
     const badge = formData.get("badge") as string || "";
     const addonsRaw = formData.getAll("addons") as string[];
     const addons = addonsRaw.filter((a) => a && typeof a === 'string' && a.trim() !== "");
+    const variantsRaw = formData.getAll("variants") as string[];
+    const variants = variantsRaw.filter((v) => v && typeof v === 'string' && v.trim() !== "");
 
     // Procesar características
     const featureLabels = formData.getAll("featureLabels") as string[];
@@ -256,6 +261,7 @@ export async function updateProduct(id: string, formData: FormData) {
         bouquetType,
         badge,
         addons,
+        variants,
         features,
         slug,
       },

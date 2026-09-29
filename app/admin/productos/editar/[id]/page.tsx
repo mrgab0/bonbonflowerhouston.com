@@ -7,6 +7,7 @@ import { ArrowLeft, Package, Tag, DollarSign, Image as ImageIcon, Flower2, Save 
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { FeatureListBuilder } from "@/components/admin/FeatureListBuilder";
 import { AdminAddonManager } from "@/components/admin/AdminAddonManager";
+import { AdminVariantManager } from "@/components/admin/AdminVariantManager";
 import { ProductNameSkuInputs } from "@/components/admin/ProductNameSkuInputs";
 import mongoose from "mongoose";
 
@@ -28,8 +29,9 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
     );
   }
 
-  const product = (await Product.findById(resolvedParams.id).populate('addons').lean()) as IProduct | null;
+  const product = (await Product.findById(resolvedParams.id).populate('addons').populate('variants').lean()) as IProduct | null;
   const allAddons = await Addon.find({ isActive: true }).lean();
+  const allProducts = await Product.find({ isActive: true, _id: { $ne: resolvedParams.id } }).select('_id name price').lean();
 
   if (!product) {
     return (
@@ -44,6 +46,7 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
   }
 
   const selectedAddonIds = product.addons ? product.addons.map((a: any) => a._id ? a._id.toString() : a.toString()) : [];
+  const selectedVariantIds = product.variants ? product.variants.map((v: any) => v._id ? v._id.toString() : v.toString()) : [];
 
   // Sanitización pura de características para evitar transmisión de Mongoose ObjectIds a Client Components
   const plainFeatures = product.features 
@@ -198,6 +201,11 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
 
           {/* Constructor de Viñetas / Puntos Clave Sanitizados */}
           <FeatureListBuilder initialFeatures={plainFeatures} />
+        </div>
+
+        {/* Admin Variant Manager */}
+        <div className="bg-white dark:bg-[#12131A] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">
+          <AdminVariantManager variants={JSON.parse(JSON.stringify(allProducts))} selectedIds={selectedVariantIds} />
         </div>
 
         {/* Admin Addon Manager sin event handlers en props de RSC */}

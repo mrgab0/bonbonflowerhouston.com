@@ -8,7 +8,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   await dbConnect();
   
   const resolvedParams = await params;
-  const productDoc: any = await Product.findOne({ slug: resolvedParams.slug }).populate('addons').lean();
+  const productDoc: any = await Product.findOne({ slug: resolvedParams.slug })
+    .populate('addons')
+    .populate({ path: 'variants', select: 'name price images slug flowerCount bouquetType' })
+    .lean();
 
   if (!productDoc || productDoc.isActive === false) {
     notFound();

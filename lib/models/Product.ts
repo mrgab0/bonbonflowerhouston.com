@@ -14,6 +14,7 @@ export interface IProduct extends Document {
   dimensions?: string;
   careInstructions?: string;
   addons?: mongoose.Types.ObjectId[] | any[];
+  variants?: mongoose.Types.ObjectId[] | any[];
   badge?: string;
   isActive?: boolean;
   flowerCount?: number;
@@ -39,6 +40,7 @@ const ProductSchema: Schema = new Schema({
   dimensions: { type: String, default: "" },
   careInstructions: { type: String, default: "" },
   addons: [{ type: Schema.Types.ObjectId, ref: 'Addon' }],
+  variants: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   badge: { type: String, default: "" },
   isActive: { type: Boolean, default: true },
   flowerCount: { type: Number, default: 0 },
