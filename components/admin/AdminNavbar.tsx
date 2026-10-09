@@ -60,6 +60,12 @@ const NAV_ITEMS = [
     badgeColor: "bg-purple-100 dark:bg-purple-950/80 text-purple-950 dark:text-purple-200 border-purple-300 dark:border-purple-800/80 hover:bg-purple-200"
   },
   {
+    href: "/admin/qr",
+    label: "Códigos QR",
+    icon: "📱",
+    badgeColor: "bg-pink-100 dark:bg-pink-950/80 text-[#B0004A] dark:text-pink-300 border-pink-300 dark:border-pink-800/80 hover:bg-pink-200"
+  },
+  {
     href: "/admin/pagos",
     label: "Cuentas",
     icon: "💳",
