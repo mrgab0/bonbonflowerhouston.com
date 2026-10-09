@@ -145,11 +145,11 @@ export function AdminShell({ children, logoutAction }: AdminShellProps) {
               if (isOverlayMode) setIsOverlayOpen(false);
             }}
           >
-            <div className="w-9 h-9 rounded-full border border-pink-200 dark:border-pink-900/60 overflow-hidden bg-pink-50 dark:bg-pink-950/40 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-full border-2 border-[#FF97A4] overflow-hidden bg-white dark:bg-pink-950/40 flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 transition-transform p-0.5">
               <img
                 src="/logo.png"
-                alt="Bonbon Flowers"
-                className="w-full h-full object-cover"
+                alt="Bonbon Flowers Logo"
+                className="w-full h-full object-contain rounded-full"
               />
             </div>
 
