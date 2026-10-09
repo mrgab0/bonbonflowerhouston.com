@@ -9,6 +9,7 @@ import { StoreLocationSection } from "@/components/shop/StoreLocationSection";
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
 import { getSiteConfig } from "@/lib/actions/siteConfig";
+import { filterUniqueVariantProducts } from "@/lib/utils/variantFilter";
 
 const SocialAndReviewsSection = dynamic(
   () => import("@/components/shop/SocialAndReviewsSection").then((m) => m.SocialAndReviewsSection),
@@ -39,12 +40,13 @@ export default async function LocalizedHome({ params }: { params: Promise<{ loca
     const [productsRaw, siteConfigRes] = await Promise.all([
       Product.find({ isActive: { $ne: false } })
         .sort({ isFeatured: -1, createdAt: -1 })
-        .limit(20)
         .lean(),
       getSiteConfig(),
     ]);
 
-    products = JSON.parse(JSON.stringify(productsRaw || []));
+    const plainProducts = JSON.parse(JSON.stringify(productsRaw || []));
+    const uniqueProducts = filterUniqueVariantProducts(plainProducts);
+    products = uniqueProducts.slice(0, 20);
     siteConfig = siteConfigRes?.data;
   } catch (err) {
     console.warn("Aviso: No se pudo conectar a la base de datos durante el pre-renderizado estático de [locale]/page. Usando valores seguros.", err);
