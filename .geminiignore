@@ -1,0 +1,15 @@
+# Antigravity Ignore File (Ahorro masivo de tokens)
+node_modules/
+.next/
+dist/
+build/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.sqlite
+*.db
+.env*
