@@ -12,7 +12,6 @@ import {
   X,
   Layers,
   Pin,
-  PinOff,
   Sparkles,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shop/ThemeToggle";
@@ -256,39 +255,6 @@ export function AdminShell({ children, logoutAction }: AdminShellProps) {
             )}
           </Link>
 
-          {/* Selector de Modo Solapado / Fijado (A gusto de la jefa) */}
-          <button
-            type="button"
-            onClick={() => {
-              const newMode = !isOverlayMode;
-              setIsOverlayMode(newMode);
-              if (newMode) {
-                setIsOverlayOpen(false); // Comienza cerrado para dar espacio libre
-              }
-            }}
-            className={`hidden lg:flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all border ${
-              isOverlayMode
-                ? "bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800/60"
-                : "bg-white dark:bg-gray-800/60 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700"
-            } ${isCollapsed && !isOverlayMode ? "justify-center" : ""}`}
-            title={
-              isOverlayMode
-                ? "Modo actual: Solapado (El menú flota). Haz clic para Fijarlo."
-                : "Modo actual: Fijado (Columna fija). Haz clic para Solaparlo."
-            }
-          >
-            {isOverlayMode ? (
-              <PinOff size={14} className="text-purple-600 dark:text-purple-400 flex-shrink-0" />
-            ) : (
-              <Pin size={14} className="text-gray-500 flex-shrink-0" />
-            )}
-
-            {(!isCollapsed || isOverlayMode) && (
-              <span className="truncate flex-1 text-left">
-                {isOverlayMode ? "Modo Solapado" : "Modo Fijado"}
-              </span>
-            )}
-          </button>
 
           {/* Fila Inferior: Tema y Logout */}
           <div
