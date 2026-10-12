@@ -32,11 +32,33 @@ export function AdminAddonManager({ addons, selectedIds = [], onChange }: AdminA
     }
   };
 
+  const allAddonIds = addons.map((addon) => (addon._id ? addon._id.toString() : "")).filter(Boolean);
+  const isAllSelected = allAddonIds.length > 0 && allAddonIds.every((id) => selected.includes(id));
+
+  const handleSelectAll = () => {
+    const updated = isAllSelected ? [] : allAddonIds;
+    setSelected(updated);
+    if (onChange) {
+      onChange(updated);
+    }
+  };
+
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2 text-xs font-bold text-gray-700 dark:text-gray-300">
-        <Layers size={16} className="text-[#FF97A4]" />
-        <span>Adicionales / Complementos disponibles</span>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs font-bold text-gray-700 dark:text-gray-300">
+          <Layers size={16} className="text-[#FF97A4]" />
+          <span>Adicionales / Complementos disponibles</span>
+        </div>
+        {addons.length > 0 && (
+          <button
+            type="button"
+            onClick={handleSelectAll}
+            className="text-[11px] font-bold text-[#FF97A4] hover:text-[#B0004A] transition-colors px-2.5 py-1 rounded-lg hover:bg-pink-50 dark:hover:bg-pink-950/30"
+          >
+            {isAllSelected ? "Deseleccionar todos" : "Seleccionar todos"}
+          </button>
+        )}
       </div>
 
       {/* Renderizar inputs ocultos name="addons" para cada adicional seleccionado en el formulario */}
