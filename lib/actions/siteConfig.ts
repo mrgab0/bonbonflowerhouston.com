@@ -39,6 +39,7 @@ const DEFAULT_SITE_CONFIG = {
   customIframeTitle: "Ubicación & Promociones Destacadas",
   customIframeHtml: "",
   enableChatbot: true,
+  geminiApiKey: "",
   dialogflowAgentId: "",
   dialogflowProjectId: "",
   dialogflowLocation: "us-central1",
@@ -129,8 +130,9 @@ export async function updateSiteConfig(formData: FormData) {
     const customIframeTitle = getValue("customIframeTitle", DEFAULT_SITE_CONFIG.customIframeTitle);
     const customIframeHtml = getValue("customIframeHtml", "");
 
-    // Módulo de Chatbot Dialogflow CX (Toggle ON/OFF)
+    // Módulo de Chatbot Dialogflow CX & Google Gemini (Toggle ON/OFF)
     const enableChatbot = getBool("enableChatbot", true);
+    const geminiApiKey = getValue("geminiApiKey", "");
     const dialogflowAgentId = getValue("dialogflowAgentId", "");
     const dialogflowProjectId = getValue("dialogflowProjectId", "");
     const dialogflowLocation = getValue("dialogflowLocation", "us-central1");
@@ -173,6 +175,7 @@ export async function updateSiteConfig(formData: FormData) {
         customIframeTitle,
         customIframeHtml,
         enableChatbot,
+        geminiApiKey,
         dialogflowAgentId,
         dialogflowProjectId,
         dialogflowLocation,

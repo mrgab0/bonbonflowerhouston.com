@@ -794,6 +794,24 @@ export default function AdminConfiguracionPage() {
                   className="p-3.5 border rounded-xl text-xs font-bold dark:bg-gray-900 dark:text-white"
                 />
               </div>
+
+              {/* Clave de Google Gemini API */}
+              <div className="flex flex-col gap-1.5 md:col-span-2 p-4 rounded-2xl bg-purple-50/50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40">
+                <label className="text-xs font-bold text-purple-900 dark:text-purple-300 flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-purple-500" />
+                  Google Gemini API Key (Motor de IA para Flor y Flor Co-Pilot)
+                </label>
+                <input
+                  type="password"
+                  name="geminiApiKey"
+                  defaultValue={config.geminiApiKey || ""}
+                  placeholder="Pega aquí tu clave de Google AI Studio (ej. AIzaSy...)"
+                  className="p-3.5 border rounded-xl text-xs font-mono dark:bg-gray-900 dark:text-white"
+                />
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  Permite que Flor responda con inteligencia artificial en tiempo real a clientes y administradores. Si no tienes una variable en Vercel, puedes configurarla directamente aquí.
+                </span>
+              </div>
             </div>
           </div>
         )}

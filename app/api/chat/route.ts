@@ -7,8 +7,11 @@ import { getDeliveryOptions } from '@/lib/actions/delivery';
 export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
+  let clientContext: any = null;
   try {
-    const { messages, locale = 'es', clientContext } = await req.json();
+    const body = await req.json();
+    clientContext = body?.clientContext;
+    const { messages, locale = 'es' } = body;
     const isEn = locale === 'en';
     const isAdmin = Boolean(clientContext?.isAdmin);
 
@@ -27,8 +30,6 @@ export async function POST(req: Request) {
           : `\nContexto de Cliente Recurrente:\n${customerName ? `- Nombre del cliente: ${customerName}\n` : ''}${lastOrderId ? `- Último pedido registrado: ${lastOrderId}\n` : ''}- Nota: Si saludas o das la bienvenida al cliente, puedes llamarlo cordialmente por su nombre (ej: "¡Hola de nuevo, ${customerName}! 🌸"). Solo haz referencia al ID de orden si pregunta por su pedido o rastreo.\n`)
       : '';
 
-    const apiKey = process.env.GEMINI_API_KEY;
-
     // 1. Obtener catálogo, opciones de entrega y configuración de la tienda para nutrir el contexto
     await dbConnect();
     const [products, deliveryRes, { data: siteConfig }] = await Promise.all([
@@ -39,6 +40,13 @@ export async function POST(req: Request) {
       getDeliveryOptions(),
       getSiteConfig()
     ]);
+
+    const apiKey = (
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
+      siteConfig?.geminiApiKey
+    )?.trim();
 
     const productCatalogSummary = (products && products.length > 0)
       ? products.map((p: any) => `- ${p.name} ($${p.price} USD) [Categoría: ${p.category || 'General'}] [Enlace: /productos/${p.slug}]: ${p.description ? p.description.slice(0, 100) : ''}`).join('\n')
@@ -157,11 +165,11 @@ Reglas estrictas de conversación humana y corta:
 
     const effectiveSystemPrompt = isAdmin ? adminSystemPrompt : systemPrompt;
 
-    // Si no hay API key configurada, responder con un mensaje comercial cálido
+    // Si no hay API key configurada, responder con un mensaje acorde al rol
     if (!apiKey) {
       if (isAdmin) {
         return NextResponse.json({
-          text: `⚡ ¡Hola, Administrador! Soy **Flor Co-Pilot**. Puedo asistirte con tus [Órdenes](/admin/ordenes), [Productos](/admin/productos), [Variantes & Adicionales](/admin/adicionales), [Tarifas de Entrega](/admin/entregas) y [Estadísticas](/admin/estadisticas). ¿Qué sección deseas configurar?`
+          text: `⚡ **Flor Co-Pilot (Sin Clave de Gemini Detectada)**\n\nNo se encontró una clave de Gemini configurada en Vercel (\`GEMINI_API_KEY\`) ni en la base de datos de la tienda.\n\n👉 **Para activar respuestas con IA en tiempo real:**\n1. Ve a [Configuración > Chatbot](/admin/configuracion).\n2. Pega tu clave de [Google AI Studio](https://aistudio.google.com) (\`AIzaSy...\`) y presiona Guardar.\n\n🛠️ **Enlaces directos de administración:**\n- [📦 Gestión de Productos](/admin/productos)\n- [🛍️ Gestor de Órdenes](/admin/ordenes)\n- [✨ Adicionales & Variantes](/admin/adicionales)\n- [🚚 Opciones de Entrega](/admin/entregas)\n- [📈 Estadísticas & Métricas](/admin/estadisticas)`
         });
       }
       if (isEn) {
@@ -180,8 +188,14 @@ Reglas estrictas de conversación humana y corta:
       parts: [{ text: m.text }]
     }));
 
-    // 4. Llamar a la API de Gemini con modelos compatibles de Google AI
-    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest', 'gemini-3.7-flash'];
+    // 4. Llamar a la API de Gemini con modelos reales y vigentes de Google AI
+    const modelsToTry = [
+      'gemini-1.5-flash',
+      'gemini-2.0-flash',
+      'gemini-1.5-pro',
+      'gemini-1.5-flash-8b',
+      'gemini-2.0-flash-lite'
+    ];
     let aiResponseText = "";
     let lastError: any = null;
 
@@ -212,7 +226,7 @@ Reglas estrictas de conversación humana y corta:
         } else {
           const errData = await response.text();
           console.warn(`Intento con modelo ${model} falló (${response.status}):`, errData);
-          lastError = errData;
+          lastError = { status: response.status, body: errData, model };
         }
       } catch (err) {
         console.warn(`Error de conexión con modelo ${model}:`, err);
@@ -221,6 +235,34 @@ Reglas estrictas de conversación humana y corta:
     }
 
     if (!aiResponseText) {
+      if (isAdmin) {
+        let errorDetail = "";
+        if (lastError?.body) {
+          try {
+            const parsed = JSON.parse(lastError.body);
+            errorDetail = parsed.error?.message || lastError.body;
+          } catch {
+            errorDetail = typeof lastError.body === "string" ? lastError.body : JSON.stringify(lastError.body);
+          }
+        } else if (lastError?.message) {
+          errorDetail = lastError.message;
+        }
+
+        return NextResponse.json({
+          text: `⚠️ **Aviso de Google Gemini API:** ${errorDetail ? `\`${errorDetail}\`` : "No se pudo obtener respuesta del modelo de IA"}.
+
+👉 **Diagnóstico para el Administrador:**
+1. Si tu clave da error de \`PERMISSION_DENIED\` o \`SERVICE_DISABLED\`, asegúrate de habilitar la **Generative Language API** en Google Cloud o crear una clave limpia desde [Google AI Studio (aistudio.google.com)](https://aistudio.google.com).
+2. Puedes ingresar tu clave directamente en [Configuración > Chatbot](/admin/configuracion) sin necesidad de redeployar en Vercel.
+
+🛠️ **Navegación directa:**
+- [📦 Gestionar Productos](/admin/productos)
+- [🛍️ Gestor de Órdenes](/admin/ordenes)
+- [✨ Adicionales & Variantes](/admin/adicionales)
+- [🚚 Opciones de Entrega](/admin/entregas)`
+        });
+      }
+
       if (isEn) {
         return NextResponse.json({
           text: `🌸 Hello! I'd be happy to assist you. You can browse all our arrangements in the [Flower Catalog](/productos) or reach out directly on [📲 WhatsApp (${whatsappPhone})](${whatsappUrl}) to place your order right away. ✨`
@@ -235,6 +277,11 @@ Reglas estrictas de conversación humana y corta:
 
   } catch (error: any) {
     console.error("Error en Chatbot API:", error);
+    if (clientContext?.isAdmin) {
+      return NextResponse.json({
+        text: `⚠️ **Error en Chatbot API:** ${error?.message || "Error procesando solicitud"}. Puedes gestionar tus [Productos](/admin/productos) u [Órdenes](/admin/ordenes).`
+      }, { status: 200 });
+    }
     return NextResponse.json({
       text: "🌸 Con mucho gusto te ayudamos / We're happy to help. Puedes explorar nuestros ramos en el [Catálogo de Flores / Catalog](/productos) o escribirnos directo a [📲 WhatsApp (+1 346 739 2730)](https://wa.me/13467392730) para atenderte en tiempo real."
     }, { status: 200 });
