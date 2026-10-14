@@ -107,6 +107,19 @@ export const ProductDetail = ({ product }: { product: any }) => {
                   ))}
                 </div>
               )}
+
+              {/* SECCIÓN DE ADICIONALES COMPATIBLES (Ubicada en columna izquierda con fotos ampliadas) */}
+              {product.addons && product.addons.length > 0 && (
+                <div className="space-y-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center justify-between pb-1">
+                    <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                      <Sparkles size={14} className="text-[#FF97A4]" /> {t('addonsTitle')}
+                    </h3>
+                    <span className="text-[11px] font-medium text-gray-400">Personaliza tu regalo</span>
+                  </div>
+                  <AddonSelection addons={product.addons} onSelectionChange={handleSelectionChange} />
+                </div>
+              )}
             </div>
 
             {/* COLUMNA DERECHA: Información y Especificaciones Estructuradas */}
@@ -243,15 +256,6 @@ export const ProductDetail = ({ product }: { product: any }) => {
                 </div>
               )}
 
-              {/* SECCIÓN DE ADICIONALES COMPATIBLES */}
-              {product.addons && product.addons.length > 0 && (
-                <div className="space-y-3 pt-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    <Tag size={14} className="text-[#FF97A4]" /> {t('addonsTitle')}
-                  </h3>
-                  <AddonSelection addons={product.addons} onSelectionChange={handleSelectionChange} />
-                </div>
-              )}
 
               {/* DESCRIPCIÓN SECTORIZADA EN VIÑETAS LIMPIAS */}
               <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-800">

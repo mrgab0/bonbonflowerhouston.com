@@ -142,144 +142,171 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
 
             {/* CONTENIDO DESPLEGABLE DE CASCADA */}
             {isOpen && (
-              <div className="p-4 pt-1 border-t border-gray-50 dark:border-gray-800 space-y-3 bg-gray-50/40 dark:bg-[#12131A] animate-in fade-in duration-300">
-                {items.map((addon) => {
-                  const addonIdStr = addon._id.toString();
-                  const selectedObj = selected.find((s) => s.addonId === addonIdStr);
-                  const isSelected = !!selectedObj;
+              <div className="p-4 pt-3 border-t border-gray-50 dark:border-gray-800 bg-gray-50/40 dark:bg-[#12131A] animate-in fade-in duration-300">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                  {items.map((addon) => {
+                    const addonIdStr = addon._id.toString();
+                    const selectedObj = selected.find((s) => s.addonId === addonIdStr);
+                    const isSelected = !!selectedObj;
 
-                  // 1. TIPO SELECCIÓN DE OPCIÓN (SWATCHES / DROPDOWN)
-                  if (addon.type === "select" && addon.options && addon.options.length > 0) {
-                    const currentSelectedVal = selectedObj?.value || "";
+                    // 1. TIPO SELECCIÓN DE OPCIÓN (SWATCHES / DROPDOWN)
+                    if (addon.type === "select" && addon.options && addon.options.length > 0) {
+                      const currentSelectedVal = selectedObj?.value || "";
 
-                    return (
-                      <div key={addonIdStr} className="bg-white dark:bg-[#181922] p-3.5 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2 shadow-sm">
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-xs text-gray-800 dark:text-gray-200">{addon.name}</span>
-                          {addon.price > 0 && <span className="font-bold text-xs text-[#FF97A4]">+${addon.price.toFixed(2)}</span>}
+                      return (
+                        <div key={addonIdStr} className="col-span-2 bg-white dark:bg-[#181922] p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-2 shadow-sm">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-xs text-gray-800 dark:text-gray-200">{addon.name}</span>
+                            {addon.price > 0 && <span className="font-bold text-xs text-[#FF97A4]">+${addon.price.toFixed(2)}</span>}
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 pt-1">
+                            {addon.options.map((opt) => (
+                              <button
+                                type="button"
+                                key={opt}
+                                onClick={() => handleSelectOption(addon, currentSelectedVal === opt ? "" : opt)}
+                                className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                                  currentSelectedVal === opt
+                                    ? "bg-[#1A1C1C] dark:bg-pink-500 text-white border-[#1A1C1C] shadow-sm scale-105"
+                                    : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100"
+                                }`}
+                              >
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Entrada opcional de dedicatoria/texto si está seleccionado */}
+                          {isSelected && (
+                            <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                              <label className="flex items-center gap-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-400 mb-1">
+                                <Edit3 size={12} className="text-[#FF97A4]" />
+                                <span>Nota o Dedicatoria para este adicional (opcional):</span>
+                              </label>
+                              <input
+                                type="text"
+                                value={selectedObj?.customText || ""}
+                                onChange={(e) => handleCustomTextChange(addonIdStr, e.target.value)}
+                                placeholder="Ej: Escribir Feliz Cumpleaños en la cinta..."
+                                className="w-full p-2 border border-pink-200 dark:border-gray-700 rounded-lg text-xs dark:bg-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
+                              />
+                            </div>
+                          )}
                         </div>
+                      );
+                    }
 
-                        <div className="flex flex-wrap gap-2 pt-1">
-                          {addon.options.map((opt) => (
-                            <button
-                              type="button"
-                              key={opt}
-                              onClick={() => handleSelectOption(addon, currentSelectedVal === opt ? "" : opt)}
-                              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all border ${
-                                currentSelectedVal === opt
-                                  ? "bg-[#1A1C1C] dark:bg-pink-500 text-white border-[#1A1C1C] shadow-sm scale-105"
-                                  : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-100"
+                    // 2. TIPO MENSAJE DE TEXTO PERSONALIZADO (ej: Tarjeta de Dedicatoria)
+                    if (addon.type === "text") {
+                      const currentText = selectedObj?.value || "";
+
+                      return (
+                        <div key={addonIdStr} className="col-span-2 bg-white dark:bg-[#181922] p-3.5 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-2 shadow-sm">
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-xs text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
+                              <MessageSquare size={14} className="text-[#FF97A4]" /> {addon.name}
+                            </span>
+                            {addon.price > 0 && <span className="font-bold text-xs text-[#FF97A4]">+${addon.price.toFixed(2)}</span>}
+                          </div>
+
+                          <textarea
+                            value={currentText}
+                            onChange={(e) => handleTextInput(addon, e.target.value)}
+                            placeholder="Escribe aquí tu mensaje especial de dedicatoria..."
+                            className="w-full p-2.5 border rounded-xl text-xs dark:bg-gray-900 dark:border-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#FF97A4] h-20"
+                          />
+                        </div>
+                      );
+                    }
+
+                    // 3. TIPO CHECKBOX / EXTRA CON FOTO GRANDE (200x200 responsivo) (ej: Ferrero Rocher, Peluche, Globo, Coronas)
+                    return (
+                      <div
+                        key={addonIdStr}
+                        onClick={() => toggleCheckbox(addon)}
+                        className={`group relative bg-white dark:bg-[#181922] p-2.5 sm:p-3 rounded-2xl border-2 transition-all duration-300 cursor-pointer flex flex-col justify-between shadow-xs hover:shadow-md ${
+                          isSelected
+                            ? "border-[#FF97A4] ring-2 ring-[#FF97A4]/20 bg-pink-50/20 dark:bg-pink-950/20"
+                            : "border-gray-100 dark:border-gray-800 hover:border-pink-300 dark:hover:border-gray-700"
+                        }`}
+                      >
+                        <div>
+                          {/* Contenedor Cuadrado de Foto (~200x200 responsivo) */}
+                          <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-gray-50 dark:bg-gray-900 mb-2.5 border border-gray-100 dark:border-gray-800">
+                            {addon.image ? (
+                              <img
+                                src={addon.image}
+                                alt={addon.name}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center text-purple-400">
+                                <Sparkles size={24} />
+                              </div>
+                            )}
+
+                            {/* Checkmark en la esquina superior derecha */}
+                            <div
+                              className={`absolute top-2 right-2 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all shadow-sm ${
+                                isSelected
+                                  ? "bg-[#FF97A4] border-[#FF97A4] text-white scale-105"
+                                  : "border-gray-300 dark:border-gray-600 bg-white/90 dark:bg-gray-800/90 text-transparent group-hover:border-pink-400"
                               }`}
                             >
-                              {opt}
-                            </button>
-                          ))}
+                              <Check size={12} strokeWidth={3} />
+                            </div>
+
+                            {/* Badge de Precio Flotante en la esquina inferior izquierda */}
+                            <div className="absolute bottom-2 left-2 px-2 py-0.5 bg-white/95 dark:bg-[#181922]/95 backdrop-blur-md rounded-lg shadow-xs border border-black/5 dark:border-white/10">
+                              <span className="font-black text-[11px] text-[#FF97A4]">
+                                {addon.price > 0 ? `+$${addon.price.toFixed(2)}` : "Gratis"}
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Nombre del Adicional */}
+                          <span className="font-bold text-xs text-gray-800 dark:text-gray-200 line-clamp-2 leading-tight block">
+                            {addon.name}
+                          </span>
+
+                          {addon.description && (
+                            <span className="text-[10px] text-gray-400 line-clamp-1 block mt-0.5">
+                              {addon.description}
+                            </span>
+                          )}
                         </div>
 
-                        {/* Entrada opcional de dedicatoria/texto si está seleccionado */}
+                        {/* Pie de la tarjeta */}
+                        <div className="pt-2 mt-2 border-t border-gray-50 dark:border-gray-800/60 flex items-center justify-between text-[11px]">
+                          <span className={`font-semibold ${isSelected ? "text-[#FF97A4]" : "text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"}`}>
+                            {isSelected ? "Equipado ✓" : "+ Agregar"}
+                          </span>
+                        </div>
+
+                        {/* Dedicatoria personalizada si está seleccionado */}
                         {isSelected && (
-                          <div className="mt-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-                            <label className="flex items-center gap-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-400 mb-1">
-                              <Edit3 size={12} className="text-[#FF97A4]" />
-                              <span>Nota o Dedicatoria para este adicional (opcional):</span>
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="mt-2.5 pt-2 border-t border-pink-100 dark:border-pink-900/40 animate-in fade-in duration-200"
+                          >
+                            <label className="flex items-center gap-1 text-[10px] font-bold text-gray-500 dark:text-gray-400 mb-1">
+                              <Edit3 size={11} className="text-[#FF97A4]" />
+                              <span>Nota / dedicatoria:</span>
                             </label>
                             <input
                               type="text"
                               value={selectedObj?.customText || ""}
                               onChange={(e) => handleCustomTextChange(addonIdStr, e.target.value)}
-                              placeholder="Ej: Escribir Feliz Cumpleaños en la cinta..."
-                              className="w-full p-2 border border-pink-200 dark:border-gray-700 rounded-lg text-xs dark:bg-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
+                              placeholder="Ej: Impresión o dedicatoria..."
+                              className="w-full p-2 border border-pink-200 dark:border-gray-700 rounded-lg text-[11px] dark:bg-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
                             />
                           </div>
                         )}
                       </div>
                     );
-                  }
-
-                  // 2. TIPO MENSAJE DE TEXTO PERSONALIZADO (ej: Tarjeta de Dedicatoria)
-                  if (addon.type === "text") {
-                    const currentText = selectedObj?.value || "";
-
-                    return (
-                      <div key={addonIdStr} className="bg-white dark:bg-[#181922] p-3.5 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2 shadow-sm">
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-xs text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
-                            <MessageSquare size={14} className="text-[#FF97A4]" /> {addon.name}
-                          </span>
-                          {addon.price > 0 && <span className="font-bold text-xs text-[#FF97A4]">+${addon.price.toFixed(2)}</span>}
-                        </div>
-
-                        <textarea
-                          value={currentText}
-                          onChange={(e) => handleTextInput(addon, e.target.value)}
-                          placeholder="Escribe aquí tu mensaje especial de dedicatoria..."
-                          className="w-full p-2.5 border rounded-xl text-xs dark:bg-gray-900 dark:border-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#FF97A4] h-20"
-                        />
-                      </div>
-                    );
-                  }
-
-                  // 3. TIPO CHECKBOX / EXTRA CON FOTO IMAGEKIT (ej: Ferrero Rocher, Peluche, Globo)
-                  return (
-                    <div
-                      key={addonIdStr}
-                      className={`bg-white dark:bg-[#181922] p-3.5 rounded-xl border-2 transition-all shadow-sm ${
-                        isSelected ? "border-[#FF97A4] bg-pink-50/20 dark:bg-pink-950/20" : "border-gray-100 dark:border-gray-800 hover:border-gray-200"
-                      }`}
-                    >
-                      <div 
-                        onClick={() => toggleCheckbox(addon)}
-                        className="flex items-center justify-between cursor-pointer"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 rounded-lg bg-gray-50 dark:bg-gray-900 border border-gray-100 dark:border-gray-800 overflow-hidden flex-shrink-0 flex items-center justify-center">
-                            {addon.image ? (
-                              <img src={addon.image} alt={addon.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <Sparkles size={16} className="text-purple-400" />
-                            )}
-                          </div>
-
-                          <div>
-                            <span className="font-bold text-xs text-gray-800 dark:text-gray-200 block">{addon.name}</span>
-                            {addon.description && <span className="text-[10px] text-gray-400 block">{addon.description}</span>}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2.5">
-                          <span className="font-extrabold text-xs text-[#FF97A4]">
-                            {addon.price > 0 ? `+$${addon.price.toFixed(2)}` : "Gratis"}
-                          </span>
-                          <div
-                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
-                              isSelected ? "bg-[#FF97A4] border-[#FF97A4] text-white" : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
-                            }`}
-                          >
-                            {isSelected && <Check size={12} strokeWidth={3} />}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Casilla de Dedicatoria/Mensaje para este Adicional al seleccionarlo */}
-                      {isSelected && (
-                        <div className="mt-3 pt-2.5 border-t border-pink-100 dark:border-pink-900/40 animate-in fade-in duration-200">
-                          <label className="flex items-center gap-1.5 text-[11px] font-bold text-gray-600 dark:text-gray-300 mb-1.5">
-                            <Edit3 size={12} className="text-[#FF97A4]" />
-                            <span>Mensaje o Dedicatoria para este adicional (opcional):</span>
-                          </label>
-                          <input
-                            type="text"
-                            value={selectedObj?.customText || ""}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) => handleCustomTextChange(addonIdStr, e.target.value)}
-                            placeholder="Ej: Para María, o imprimir 'Te Amo' en el globo/cinta..."
-                            className="w-full p-2.5 border border-pink-200 dark:border-gray-700 rounded-xl text-xs dark:bg-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                  })}
+                </div>
               </div>
             )}
           </div>
