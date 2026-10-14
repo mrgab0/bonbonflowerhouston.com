@@ -278,3 +278,43 @@ html:not(.dark) textarea::placeholder {
   background-size: 30px 30px, 120px 120px, 120px 120px;
 }
 
+/* Shimmer Skeleton Animation for React loading state */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0) 100%);
+  animation: shimmer 1.5s infinite;
+}
+
+/* Stagger fade in */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stagger-item.loaded {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Tactile touchable feedback */
+.btn-touchable {
+  transition: transform 0.15s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-touchable:active {
+  transform: scale(0.975);
+}
+

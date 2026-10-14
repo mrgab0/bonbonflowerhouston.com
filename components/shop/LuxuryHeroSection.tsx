@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { Truck, MailCheck, Sparkles, Star } from "lucide-react";
+import { MessageCircle, Star, Award, Truck, Sparkles } from "lucide-react";
 
 interface LuxuryHeroSectionProps {
   siteConfig?: any;
@@ -11,126 +11,128 @@ interface LuxuryHeroSectionProps {
 export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig }) => {
   const logoUrl = siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png";
   const catalogUrl = "/productos";
+  const whatsappUrl = "https://wa.me/13467392730?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston.";
 
   return (
-    <section className="relative overflow-hidden bg-white dark:bg-[#0F1015] py-12 md:py-20 lg:py-24 border-b border-stone-200 dark:border-gray-800 transition-colors duration-300 select-none">
-      {/* Elementos decorativos florales laterales con ligera rotación */}
-      <div className="absolute inset-0 flex justify-between items-center opacity-30 dark:opacity-20 pointer-events-none px-4 md:px-12 select-none overflow-hidden">
-        {/* Bouquet Izquierdo */}
-        <div className="w-56 md:w-80 transform -translate-x-10 rotate-[-6deg] hidden sm:block">
-          <img
-            alt="Bouquet Presentation Left"
-            className="rounded-3xl shadow-2xl w-full object-cover aspect-[3/4]"
-            src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=500&q=75&auto=format"
-          />
-        </div>
-        {/* Bouquet Derecho */}
-        <div className="w-56 md:w-80 transform translate-x-10 rotate-[6deg] hidden sm:block">
-          <img
-            alt="Bouquet Presentation Right"
-            className="rounded-3xl shadow-2xl w-full object-cover aspect-[3/4]"
-            src="https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=500&q=75&auto=format"
-          />
-        </div>
-      </div>
+    <section className="relative overflow-hidden bg-white dark:bg-[#0B0C10] py-12 lg:py-20 border-b border-stone-200/80 dark:border-gray-800/80 transition-colors duration-300 select-none">
+      {/* Luces sutiles ambientales de fondo */}
+      <div className="absolute top-0 right-1/4 w-[450px] h-[350px] bg-[#FF97A4]/10 rounded-full blur-[140px] pointer-events-none -z-0" />
+      <div className="absolute bottom-10 left-10 w-[350px] h-[250px] bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none -z-0" />
 
-      {/* Contenido Central Hero */}
-      <div className="relative max-w-4xl mx-auto text-center px-4 z-10">
-        
-        {/* Logotipo Oficial de Bonbon Flowers con aro dorado */}
-        <div className="flex justify-center mb-4">
-          <div className="relative group">
-            <div className="absolute -inset-1.5 bg-gradient-to-r from-[#C5A059] via-[#163422] to-[#C5A059] rounded-full blur opacity-35 group-hover:opacity-65 transition duration-500" />
-            <img
-              src={logoUrl}
-              alt="Bonbon Flowers Houston"
-              width={96}
-              height={96}
-              className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-xl border-2 sm:border-4 border-[#C5A059] transform hover:scale-105 transition-transform duration-300 bg-white"
-            />
-          </div>
-        </div>
-
-        {/* Kicker de marca en tipografía dorada con tracking amplio */}
-        <p className="text-[#C5A059] dark:text-[#E6C98B] font-serif tracking-[0.25em] uppercase text-xs md:text-sm font-semibold mb-2">
-          Bonbon Flowers Houston
-        </p>
-
-        {/* Titular Principal Editorial con Script Cursivo en Verde Bosque y fuentes negras */}
-        <h1 className="text-3xl md:text-5xl lg:text-6xl font-luxury-serif text-stone-900 dark:text-white leading-tight font-normal">
-          Flowers that <br className="hidden sm:block" />make them <br />
-          <span className="font-script-custom text-[#163422] dark:text-[#C5A059] text-6xl md:text-8xl lg:text-9xl block -mt-2 md:-mt-4">
-            feel loved ♡
-          </span>
-        </h1>
-
-        <p className="text-black dark:text-gray-300 text-sm md:text-base font-medium mt-3 mb-8 max-w-lg mx-auto">
-          Same day luxury flower delivery in Houston, TX &amp; surrounding areas.
-        </p>
-
-        {/* Fila de 4 Badges de Valor con estilo circular limpio y fuentes negras */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto mb-8 text-black dark:text-white">
-          {/* Badge 1 */}
-          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
-              <Truck size={18} />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          
+          {/* Columna Izquierda: Tipografía Editorial y CTAs de Conversión */}
+          <div className="lg:col-span-7 flex flex-col items-start space-y-5 text-left">
+            {/* Badge de Taller Couture */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 text-[#B0004A] dark:text-[#FF97A4] shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-[#FF97A4] animate-pulse" />
+              <span className="text-[11px] font-bold uppercase tracking-widest font-mono">
+                Houston Couture Atelier • White-Glove
+              </span>
             </div>
-            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
-              Same Day<br />Delivery
-            </span>
-          </div>
 
-          {/* Badge 2 */}
-          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
-              <MailCheck size={18} />
+            {/* Kicker y Título Principal */}
+            <div className="space-y-1.5">
+              <span className="text-xs font-serif uppercase tracking-[0.25em] text-[#C5A059] dark:text-[#E6C98B] font-semibold block">
+                Haute Parfumerie &amp; Art Floral • Houston
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-luxury-serif text-stone-900 dark:text-white tracking-tight leading-[1.08] font-normal">
+                Flowers that make them{" "}
+                <span className="font-script-custom text-[#163422] dark:text-[#C5A059] text-6xl sm:text-7xl lg:text-8xl italic block mt-1">
+                  feel loved ♡
+                </span>
+              </h1>
             </div>
-            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
-              Personalized<br />Card Included
-            </span>
-          </div>
 
-          {/* Badge 3 */}
-          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#163422] dark:text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
-              <Sparkles size={18} />
+            {/* Descripción Editorial */}
+            <p className="text-sm sm:text-base text-stone-600 dark:text-gray-300 max-w-xl leading-relaxed font-medium">
+              Entrega de flores de alta costura el mismo día en Houston, TX y área metropolitana. Composiciones de autor confeccionadas a mano con rosas ecuatorianas selectas para momentos inolvidables.
+            </p>
+
+            {/* Botones de Acción */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2 w-full sm:w-auto">
+              <Link
+                href="#catalogo"
+                className="px-8 py-3.5 rounded-xl bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#C5A059] dark:hover:bg-[#d8b56f] text-white dark:text-stone-950 text-xs font-extrabold uppercase tracking-widest text-center shadow-md hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300"
+              >
+                EXPLORAR COLECCIÓN
+              </Link>
+
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-8 py-3.5 rounded-xl bg-[#FAF7F5] dark:bg-[#15161F] hover:bg-pink-50 dark:hover:bg-gray-800 text-stone-800 dark:text-gray-200 border border-stone-200 dark:border-gray-700 text-xs font-bold uppercase tracking-wider text-center shadow-sm hover:border-[#FF97A4]/50 hover:text-[#B0004A] dark:hover:text-[#FF97A4] transition-all duration-300 flex items-center justify-center gap-2"
+              >
+                <MessageCircle size={16} className="text-emerald-500" />
+                <span>PEDIR POR WHATSAPP</span>
+              </a>
             </div>
-            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
-              Premium<br />Roses &amp; Flowers
-            </span>
-          </div>
 
-          {/* Badge 4 */}
-          <div className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white dark:bg-[#181922] border border-stone-300 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
-            <div className="w-10 h-10 mb-2 rounded-full bg-stone-100 dark:bg-gray-800 flex items-center justify-center text-[#C5A059] border border-stone-200 dark:border-gray-700 shadow-sm">
-              <Star size={18} fill="#C5A059" />
+            {/* Fila de Insignias de Confianza en Vivo */}
+            <div className="pt-4 flex flex-wrap items-center gap-y-2.5 gap-x-5 text-xs text-stone-500 dark:text-gray-400 font-semibold uppercase tracking-wider border-t border-stone-100 dark:border-gray-800/80 w-full">
+              <div className="flex items-center gap-1.5">
+                <div className="flex text-amber-500 text-sm">
+                  <Star size={14} fill="currentColor" />
+                  <Star size={14} fill="currentColor" />
+                  <Star size={14} fill="currentColor" />
+                  <Star size={14} fill="currentColor" />
+                  <Star size={14} fill="currentColor" />
+                </div>
+                <span className="font-extrabold text-stone-900 dark:text-white">4.9/5</span>
+                <span className="text-[11px]">• 500+ CLIENTES FELICES</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
+                <span className="text-[11px]">CORTE HOY: 1:00 PM CST</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[11px]">ROSAS 100% FRESCAS</span>
+              </div>
             </div>
-            <span className="text-xs font-black text-black dark:text-white text-center leading-snug">
-              5-Star<br />Rated Boutique
-            </span>
           </div>
-        </div>
 
-        {/* Botón CTA Principal en Verde Bosque de Lujo */}
-        <div className="mb-4">
-          <Link
-            href={catalogUrl}
-            className="inline-flex items-center justify-center bg-[#163422] hover:bg-[#1B2E22] text-white text-sm md:text-base font-bold tracking-wider px-8 py-3.5 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95 group"
-          >
-            <span>SHOP BEST SELLERS</span>
-            <span className="ml-2.5 w-6 h-6 rounded-full bg-white text-[#163422] inline-flex items-center justify-center text-xs font-black transition-transform group-hover:translate-x-0.5">
-              ›
-            </span>
-          </Link>
-        </div>
+          {/* Columna Derecha: Showcase Asimétrico Hero con Tarjetas Flotantes */}
+          <div className="lg:col-span-5 relative flex justify-center items-center">
+            {/* Círculo Principal con Marco Elegante */}
+            <div className="relative w-full max-w-[420px] aspect-square rounded-full bg-gradient-to-tr from-[#FAF7F5] via-white to-pink-50 dark:from-[#12131A] dark:via-[#181922] dark:to-[#12131A] p-4 shadow-2xl border border-stone-200/80 dark:border-gray-800 group">
+              <div className="relative w-full h-full rounded-full overflow-hidden shadow-inner">
+                <img
+                  alt="Anniversary Romance Haute Floral Collection Houston"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+              </div>
 
-        {/* Prueba social de estrellas */}
-        <div className="flex items-center justify-center space-x-1 text-xs sm:text-sm text-black dark:text-gray-300 font-medium">
-          <span className="text-amber-500 text-sm">★★★★★</span>
-          <span className="font-extrabold text-black dark:text-white ml-1">4.9/5</span>
-          <span>Based on 500+ happy customers in Houston</span>
-        </div>
+              {/* Badge Flotante 1: Atelier Handcrafted */}
+              <div className="absolute -bottom-3 left-4 sm:left-8 bg-white dark:bg-[#181922] px-4 py-3 rounded-2xl shadow-xl border border-stone-200/80 dark:border-gray-700/80 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 flex items-center justify-center text-[#B0004A] dark:text-[#FF97A4]">
+                  <Award size={20} />
+                </div>
+                <div className="flex flex-col text-left">
+                  <span className="text-[10px] uppercase tracking-widest text-[#C5A059] font-extrabold">
+                    Atelier Handcrafted
+                  </span>
+                  <span className="text-sm font-bold text-stone-900 dark:text-white leading-tight">
+                    Desde $99.99 USD
+                  </span>
+                </div>
+              </div>
 
+              {/* Badge Flotante 2: Houston Tag */}
+              <div className="absolute top-4 -right-2 sm:-right-4 bg-[#163422] text-white px-3.5 py-1.5 rounded-full shadow-lg border border-[#C5A059]/40 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider">
+                <Truck size={13} className="text-[#C5A059]" />
+                <span className="text-[11px]">River Oaks &amp; Galleria</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </section>
   );
