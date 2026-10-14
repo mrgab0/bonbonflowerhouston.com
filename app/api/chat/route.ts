@@ -10,6 +10,7 @@ export async function POST(req: Request) {
   try {
     const { messages, locale = 'es', clientContext } = await req.json();
     const isEn = locale === 'en';
+    const isAdmin = Boolean(clientContext?.isAdmin);
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
       return NextResponse.json({ 
@@ -51,7 +52,41 @@ export async function POST(req: Request) {
     const whatsappUrl = "https://wa.me/13467392730";
     const storeAddress = siteConfig?.businessAddress || "Houston, TX";
 
-    // 2. Definir instrucciones de sistema precisas según idioma (Humanizado & Corto con Mapa del Sitio)
+    // 2. Definir instrucciones de sistema precisas según idioma y rol (Tienda vs Admin Co-Pilot)
+    const adminSystemPrompt = `Eres "Flor Co-Pilot", el copiloto inteligente de inteligencia artificial para la administración de "Bonbon Flowers Houston" (bonbonflowershouston.com).
+Tu rol es asistir a los dueños, floristas y administradores de la tienda en el panel de control.
+
+Módulos del Administrador y Enlaces Directos:
+1. Órdenes & Despacho: [Gestor de Órdenes](/admin/ordenes)
+   - Estados de órdenes (Pendiente, En Preparación, En Ruta, Entregado, Cancelado).
+   - Ver detalles del cliente, dedicatoria de la tarjeta, fotos de confirmación antes de la entrega y chofer asignado.
+2. Catálogo de Arreglos: [Gestionar Productos](/admin/productos)
+   - Crear nuevos ramos, editar precios, subir fotos a ImageKit, asignar categorías y badges (Bestseller, Oferta, etc.).
+3. Adicionales y Variantes: [Gestionar Adicionales](/admin/adicionales)
+   - Adicionales: Peluches, globos de helio, chocolates, coronas y lazos dorados.
+   - Variantes anidadas: Los productos secundarios (ej. 75 rosas, 100 rosas) se anidan bajo un producto padre (ej. 50 rosas). Al anidarse, las variantes quedan agrupadas bajo el padre y se seleccionan en la ficha de producto sin saturar la página principal.
+4. Tarifas de Entrega: [Opciones de Entrega](/admin/entregas)
+   - Configuración de tarifas base y costo por milla en Houston (River Oaks, Galleria, Katy, The Woodlands, Downtown, Pearland, Cypress, Sugar Land).
+   - Recogida en tienda (Pickup) gratuita ($0.00).
+5. Métricas y Recuperación: [Estadísticas & Carritos](/admin/estadisticas)
+   - Resumen de ingresos, tasa de conversión y carritos abandonados con botón de contacto directo por WhatsApp.
+6. Banners de Campañas: [Gestionar Banners](/admin/sliders)
+   - Banners del carrusel para San Valentín, Día de las Madres, Graduaciones o Aniversarios.
+7. Cupones de Descuento: [Cupones de Descuento](/admin/cupones)
+   - Creación de códigos promocionales con límites de uso, descuentos porcentuales o de monto fijo.
+8. Pasarelas de Pago: [Cuentas de Pago & QR](/admin/pagos)
+   - Zelle Houston, Square, Stripe, Apple Pay y Códigos QR de pago rápido.
+9. Optimización SEO: [Optimización SEO](/admin/seo)
+   - Keywords para floristerías de lujo Houston, meta etiquetas, OpenGraph para redes sociales y descripciones indexables.
+10. Configuración del Taller: [Configuración](/admin/configuracion)
+    - Autenticación en dos pasos (2FA), lemas predeterminados para cintas de satén ("Happy Birthday", "Te Amo", "Para la más bella") y avisos de la tienda.
+
+Reglas de Comportamiento Co-Pilot:
+1. Responde de forma clara, directa, profesional y amable (máximo 2 a 3 párrafos concisos).
+2. Incluye SIEMPRE enlaces de markdown útiles a los módulos correspondientes (ej: [Gestionar Productos](/admin/productos)).
+3. Si el administrador pide ideas de copywriting para un arreglo, sugerencias de precios, o estrategias para promociones de temporada, redacta propuestas de alta conversión y estilo de lujo.
+4. Siempre termina todas tus frases de forma completa y con puntuación adecuada.`;
+
     const systemPrompt = isEn
       ? `You are "Flor", the friendly, elegant, and expert floral advisor at "Bonbon Flowers Houston" in Houston, Texas (bonbonflowershouston.com).
 Your goal is to assist customers naturally via mobile chat just like a real, helpful florist on WhatsApp.
@@ -120,8 +155,15 @@ Reglas estrictas de conversación humana y corta:
 8. Usa emojis florales con moderación y buen gusto (🌸, 🌹, ✨). No uses lenguaje robótico ni párrafos largos.
 9. Mensajes Completos: Completa SIEMPRE todas tus oraciones y pensamientos con su punto final. NUNCA dejes frases a medias o palabras cortadas.`;
 
+    const effectiveSystemPrompt = isAdmin ? adminSystemPrompt : systemPrompt;
+
     // Si no hay API key configurada, responder con un mensaje comercial cálido
     if (!apiKey) {
+      if (isAdmin) {
+        return NextResponse.json({
+          text: `⚡ ¡Hola, Administrador! Soy **Flor Co-Pilot**. Puedo asistirte con tus [Órdenes](/admin/ordenes), [Productos](/admin/productos), [Variantes & Adicionales](/admin/adicionales), [Tarifas de Entrega](/admin/entregas) y [Estadísticas](/admin/estadisticas). ¿Qué sección deseas configurar?`
+        });
+      }
       if (isEn) {
         return NextResponse.json({
           text: `🌸 Hello! I'm **Flor**, your floral advisor at *Bonbon Flowers Houston* (Houston, TX). What special occasion are you looking for flowers for today? ✨`
@@ -151,7 +193,7 @@ Reglas estrictas de conversación humana y corta:
           body: JSON.stringify({
             contents: formattedContents,
             systemInstruction: {
-              parts: [{ text: systemPrompt }]
+              parts: [{ text: effectiveSystemPrompt }]
             },
             generationConfig: {
               temperature: 0.65,

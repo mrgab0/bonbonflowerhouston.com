@@ -270,9 +270,24 @@ export function AdminDashboard() {
               />
               <span className="hidden sm:inline">Simular Carga (useEffect)</span>
             </button>
+
+            {/* Botón Flor Co-Pilot Asistente */}
+            <button
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("open-bonbon-chat"));
+                }
+              }}
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-gradient-to-r from-pink-500/20 to-purple-500/20 hover:from-pink-500/30 hover:to-purple-500/30 active:scale-95 border border-[#FF97A4]/40 text-xs font-bold text-white transition-all shadow-sm group"
+              title="Abrir Flor Co-Pilot Asistente de Gestión"
+            >
+              <span className="text-base group-hover:scale-110 transition-transform">🌸</span>
+              <span>Flor Co-Pilot ⚡</span>
+            </button>
           </div>
         </div>
       </div>
+
 
       {/* ENCABEZADO DE MÓDULOS */}
       <div className="flex items-center justify-between px-1">

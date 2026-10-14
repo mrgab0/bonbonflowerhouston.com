@@ -71,20 +71,47 @@ const I18N_CONTENT = {
     popularQuestions: "Popular questions:",
     inputPlaceholder: "Type your message here...",
     poweredBy: "Flor • Bonbon Flowers",
+  },
+  admin: {
+    quickQuestions: [
+      "📦 ¿Cómo creo o edito un producto?",
+      "🛍️ ¿Dónde reviso las órdenes de hoy?",
+      "✨ ¿Cómo anidar y vincular variantes?",
+      "🚚 Configurar zonas de entrega Houston",
+      "📈 Consejos de SEO para floristería"
+    ],
+    previewTickers: [
+      "🌸 Asistente de Gestión Atelier Bonbon",
+      "📦 ¿Dudas con productos o variantes? Pregúntame",
+      "🚚 Configuración de envíos y tarifas",
+      "⚡ Co-Pilot en línea para ayudarte"
+    ],
+    welcomeMessage: "¡Hola, Administrador! 🌸 Soy **Flor Co-Pilot**, tu asistente inteligente del panel de administración de **Bonbon Flowers**.\n\nPuedo guiarte para crear arreglos, configurar opciones de entrega, vincular variantes o resolver dudas de gestión. ¿Qué deseas consultar hoy?",
+    resetMessage: "¡Hola de nuevo! ⚡ Flor Co-Pilot lista. ¿Qué módulo o configuración deseas revisar?",
+    errorMessage: "⚠️ Hubo un inconveniente temporal de conexión con el motor de IA. Por favor intenta de nuevo en unos segundos.",
+    defaultErrorResponse: "Disculpa, no pude procesar tu consulta técnica. Por favor intenta de nuevo.",
+    advisorRole: "ATELIER CO-PILOT • ADMIN",
+    liveBadge: "MODO GESTIÓN",
+    headerStatus: "Co-Pilot Administrativo • En línea ⚡",
+    ariaOpen: "Abrir Asistente Co-Pilot de Administración",
+    ariaRestart: "Reiniciar chat de administración",
+    ariaClose: "Cerrar asistente",
+    ariaSend: "Enviar consulta",
+    searchingCatalog: "Consultando sistema...",
+    popularQuestions: "Consultas frecuentes de gestión:",
+    inputPlaceholder: "Pregunta sobre productos, órdenes, entregas o SEO...",
+    poweredBy: "Flor Co-Pilot • Atelier Console",
   }
 };
 
 const CHAT_STORAGE_KEY = "bonbon_chat_history_v2";
+const ADMIN_STORAGE_KEY = "bonbon_admin_chat_history_v1";
 const LEGACY_STORAGE_KEYS = ["gf_chat_history_v1", "florist_chat_history", "chat_history"];
 const CHAT_STORAGE_TTL = 24 * 60 * 60 * 1000; // 24 horas
 
 export const ChatbotModal = () => {
   const pathname = usePathname();
-
-  // No renderizar el chatbot en el panel de administración
-  if (pathname?.startsWith("/admin")) {
-    return null;
-  }
+  const isAdmin = Boolean(pathname?.startsWith("/admin"));
 
   let currentLocale = "es";
   try {
@@ -98,7 +125,10 @@ export const ChatbotModal = () => {
     currentLocale = "en";
   }
 
-  const content = currentLocale === "en" ? I18N_CONTENT.en : I18N_CONTENT.es;
+  const content = isAdmin
+    ? I18N_CONTENT.admin
+    : (currentLocale === "en" ? I18N_CONTENT.en : I18N_CONTENT.es);
+  const activeStorageKey = isAdmin ? ADMIN_STORAGE_KEY : CHAT_STORAGE_KEY;
 
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
@@ -113,6 +143,7 @@ export const ChatbotModal = () => {
       text: content.welcomeMessage,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     }
+
   ]);
 
   // Cargar historial persistido al montar en el navegador y purgar cachés antiguos con "Sofia" o "Flowers For You"
@@ -123,7 +154,7 @@ export const ChatbotModal = () => {
         try { localStorage.removeItem(k); } catch (e) {}
       });
 
-      const saved = localStorage.getItem(CHAT_STORAGE_KEY);
+      const saved = localStorage.getItem(activeStorageKey);
       if (saved) {
         const parsed = JSON.parse(saved);
         if (parsed && Array.isArray(parsed.messages) && parsed.messages.length > 0) {
@@ -135,7 +166,7 @@ export const ChatbotModal = () => {
           if (!isExpired && !hasLegacyNames) {
             setMessages(parsed.messages);
           } else {
-            localStorage.removeItem(CHAT_STORAGE_KEY);
+            localStorage.removeItem(activeStorageKey);
           }
         }
       }
@@ -144,7 +175,7 @@ export const ChatbotModal = () => {
     } finally {
       isHydratedRef.current = true;
     }
-  }, []);
+  }, [activeStorageKey]);
 
   // Guardar historial en localStorage ante cualquier cambio
   useEffect(() => {
@@ -153,16 +184,16 @@ export const ChatbotModal = () => {
       if (messages.length === 1 && messages[0].id === "welcome-msg") {
         return;
       }
-      localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify({
+      localStorage.setItem(activeStorageKey, JSON.stringify({
         savedAt: Date.now(),
         messages
       }));
     } catch (e) {
       console.warn("Error guardando historial de chat:", e);
     }
-  }, [messages]);
+  }, [messages, activeStorageKey]);
 
-  // Sincronizar mensaje de bienvenida si cambia el idioma y no hay historial previo
+  // Sincronizar mensaje de bienvenida si cambia el idioma o modo y no hay historial previo
   useEffect(() => {
     setMessages((prev) => {
       if (prev.length === 1 && prev[0].id === "welcome-msg") {
@@ -175,7 +206,7 @@ export const ChatbotModal = () => {
       }
       return prev;
     });
-  }, [currentLocale]);
+  }, [currentLocale, isAdmin, content.welcomeMessage]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -187,6 +218,12 @@ export const ChatbotModal = () => {
     }, 3800);
     return () => clearInterval(interval);
   }, [content.previewTickers.length]);
+
+  useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener("open-bonbon-chat", handleOpenChat);
+    return () => window.removeEventListener("open-bonbon-chat", handleOpenChat);
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -217,16 +254,15 @@ export const ChatbotModal = () => {
     setIsLoading(true);
 
     try {
-      let clientContext: { customerName?: string; lastOrderId?: string } = {};
+      let clientContext: Record<string, any> = {
+        isAdmin,
+        currentPath: pathname
+      };
       try {
         const customerName = localStorage.getItem("customerName") || "";
         const lastOrderId = localStorage.getItem("lastOrderId") || "";
-        if (customerName || lastOrderId) {
-          clientContext = {
-            customerName: customerName || undefined,
-            lastOrderId: lastOrderId || undefined
-          };
-        }
+        if (customerName) clientContext.customerName = customerName;
+        if (lastOrderId) clientContext.lastOrderId = lastOrderId;
       } catch (e) {}
 
       const apiHistory = newMessages.map(m => ({
@@ -240,9 +276,10 @@ export const ChatbotModal = () => {
         body: JSON.stringify({
           messages: apiHistory,
           locale: currentLocale,
-          clientContext: Object.keys(clientContext).length > 0 ? clientContext : undefined
+          clientContext
         })
       });
+
 
       if (!res.ok) throw new Error("Error en la respuesta");
       const data = await res.json();
@@ -283,7 +320,7 @@ export const ChatbotModal = () => {
 
   const handleReset = () => {
     try {
-      localStorage.removeItem(CHAT_STORAGE_KEY);
+      localStorage.removeItem(activeStorageKey);
     } catch (e) {}
     setMessages([
       {
@@ -348,7 +385,7 @@ export const ChatbotModal = () => {
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setIsOpen(true)}
           aria-label={content.ariaOpen}
-          className="fixed bottom-5 right-4 sm:right-6 z-40 cursor-pointer group select-none animate-in fade-in slide-in-from-bottom-4 duration-300"
+          className="fixed bottom-5 right-4 sm:right-6 z-50 cursor-pointer group select-none animate-in fade-in slide-in-from-bottom-4 duration-300"
         >
           <div className="flex items-center gap-2.5 sm:gap-3.5 bg-white/95 dark:bg-[#12131a]/95 backdrop-blur-md pl-2 pr-3.5 sm:pr-4 py-2 rounded-2xl shadow-[0px_10px_35px_rgba(22,52,34,0.2)] border-2 border-[#D4AF37]/80 hover:border-[#D4AF37] hover:shadow-[0px_12px_40px_rgba(22,52,34,0.3)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] max-w-[310px] sm:max-w-none">
             
@@ -407,7 +444,7 @@ export const ChatbotModal = () => {
 
       {/* Ventana Modal del Chatbot */}
       {isOpen && (
-        <div className="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-50 w-[94vw] sm:w-[410px] h-[560px] max-h-[85vh] bg-white dark:bg-[#12131a] rounded-3xl shadow-[0px_20px_50px_rgba(0,0,0,0.35)] border-2 border-[#D4AF37]/50 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="fixed bottom-4 sm:bottom-6 right-3 sm:right-6 z-[60] w-[94vw] sm:w-[410px] h-[560px] max-h-[85vh] bg-white dark:bg-[#12131a] rounded-3xl shadow-[0px_20px_50px_rgba(0,0,0,0.35)] border-2 border-[#D4AF37]/50 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
           
           {/* Header del Chatbot */}
           <div className="bg-gradient-to-r from-[#163422] via-[#1B2E22] to-[#163422] text-white px-4 py-3.5 flex items-center justify-between border-b border-[#D4AF37]/40 shadow-md">
