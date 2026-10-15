@@ -42,10 +42,10 @@ export async function POST(req: Request) {
     ]);
 
     const apiKey = (
+      siteConfig?.geminiApiKey ||
       process.env.GEMINI_API_KEY ||
       process.env.GOOGLE_API_KEY ||
-      process.env.GOOGLE_GENERATIVE_AI_API_KEY ||
-      siteConfig?.geminiApiKey
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY
     )?.trim();
 
     const productCatalogSummary = (products && products.length > 0)
@@ -188,13 +188,15 @@ Reglas estrictas de conversación humana y corta:
       parts: [{ text: m.text }]
     }));
 
-    // 4. Llamar a la API de Gemini con modelos reales y vigentes de Google AI
+    // 4. Llamar a la API de Gemini con modelos compatibles (Flash Latest, 3.5 Lite, 3.8, 3.7, 2.0 y 1.5)
     const modelsToTry = [
-      'gemini-1.5-flash',
+      'gemini-flash-latest',
+      'gemini-3.5-flash-lite',
+      'gemini-3.8-flash',
+      'gemini-3.7-flash',
+      'gemini-2.5-flash',
       'gemini-2.0-flash',
-      'gemini-1.5-pro',
-      'gemini-1.5-flash-8b',
-      'gemini-2.0-flash-lite'
+      'gemini-1.5-flash'
     ];
     let aiResponseText = "";
     let lastError: any = null;
