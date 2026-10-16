@@ -13,6 +13,12 @@ export interface ISiteConfig extends Document {
   productColumnsDesktop?: number; // 3, 4, o 5 columnas
   productColumnsMobile?: number;  // 1 o 2 columnas
 
+  // Configuración del Producto Destacado en Hero (Showcase)
+  heroProductMode?: "popular" | "single" | "custom_list";
+  heroProductId?: string;
+  heroPopularCount?: number;
+  heroCustomProductIds?: string[];
+
   // Identidad de Marca y Menú de Navegación
   logoUrl?: string;
   brandSlogan?: string;
@@ -93,6 +99,12 @@ const SiteConfigSchema: Schema = new Schema({
   // Personalización del Home & Cuadrícula (Por defecto 3 columnas en escritorio = Preservación 100%)
   productColumnsDesktop: { type: Number, default: 3 },
   productColumnsMobile: { type: Number, default: 2 },
+
+  // Configuración del Producto Destacado en Hero (Showcase)
+  heroProductMode: { type: String, default: "popular" },
+  heroProductId: { type: String, default: "" },
+  heroPopularCount: { type: Number, default: 10 },
+  heroCustomProductIds: { type: [String], default: [] },
 
   // Identidad de Marca y Menú
   logoUrl: { type: String, default: "https://bonbonflowershouston.com/logo.png" },

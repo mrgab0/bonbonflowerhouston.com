@@ -1,17 +1,47 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { MessageCircle, Star, Award, Truck, Sparkles } from "lucide-react";
 
 interface LuxuryHeroSectionProps {
   siteConfig?: any;
+  heroProducts?: any[];
 }
 
-export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig }) => {
+export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig, heroProducts = [] }) => {
   const logoUrl = siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png";
   const catalogUrl = "/productos";
   const whatsappUrl = "https://wa.me/13467392730?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston.";
+
+  const fallbackProduct = {
+    name: "Anniversary Romance Haute Floral Collection Houston",
+    slug: "",
+    price: 99.99,
+    badge: "Atelier Handcrafted",
+    images: ["https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format"]
+  };
+
+  const [currentProduct, setCurrentProduct] = useState<any>(
+    heroProducts && heroProducts.length > 0 ? heroProducts[0] : fallbackProduct
+  );
+
+  useEffect(() => {
+    if (heroProducts && heroProducts.length > 1) {
+      const randomIndex = Math.floor(Math.random() * heroProducts.length);
+      setCurrentProduct(heroProducts[randomIndex]);
+    } else if (heroProducts && heroProducts.length === 1) {
+      setCurrentProduct(heroProducts[0]);
+    }
+  }, [heroProducts]);
+
+  const activeProduct = currentProduct || fallbackProduct;
+  const productImage = (activeProduct.images && activeProduct.images.length > 0 && activeProduct.images[0])
+    ? activeProduct.images[0]
+    : "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format";
+  const productPrice = typeof activeProduct.price === "number" ? activeProduct.price.toFixed(2) : "99.99";
+  const productBadge = activeProduct.badge || "Atelier Handcrafted";
+  const productLink = activeProduct.slug ? `/producto/${activeProduct.slug}` : "#catalogo";
 
   return (
     <section className="relative overflow-hidden bg-white dark:bg-[#0B0C10] py-12 lg:py-20 border-b border-stone-200/80 dark:border-gray-800/80 transition-colors duration-300 select-none">
@@ -99,12 +129,16 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
           {/* Columna Derecha: Showcase Asimétrico Hero con Tarjetas Flotantes */}
           <div className="lg:col-span-5 relative flex justify-center items-center">
             {/* Círculo Principal con Marco Elegante */}
-            <div className="relative w-full max-w-[420px] aspect-square rounded-full bg-gradient-to-tr from-[#FAF7F5] via-white to-pink-50 dark:from-[#12131A] dark:via-[#181922] dark:to-[#12131A] p-4 shadow-2xl border border-stone-200/80 dark:border-gray-800 group">
+            <Link
+              href={productLink}
+              title={activeProduct.name || "Ver producto"}
+              className="relative w-full max-w-[420px] aspect-square rounded-full bg-gradient-to-tr from-[#FAF7F5] via-white to-pink-50 dark:from-[#12131A] dark:via-[#181922] dark:to-[#12131A] p-4 shadow-2xl border border-stone-200/80 dark:border-gray-800 group block cursor-pointer transition-transform duration-500 hover:scale-[1.02]"
+            >
               <div className="relative w-full h-full rounded-full overflow-hidden shadow-inner">
                 <img
-                  alt="Anniversary Romance Haute Floral Collection Houston"
+                  alt={activeProduct.name || "Anniversary Romance Haute Floral Collection Houston"}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  src="https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format"
+                  src={productImage}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               </div>
@@ -114,12 +148,12 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
                 <div className="w-10 h-10 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 flex items-center justify-center text-[#B0004A] dark:text-[#FF97A4]">
                   <Award size={20} />
                 </div>
-                <div className="flex flex-col text-left">
-                  <span className="text-[10px] uppercase tracking-widest text-[#C5A059] font-extrabold">
-                    Atelier Handcrafted
+                <div className="flex flex-col text-left max-w-[190px]">
+                  <span className="text-[10px] uppercase tracking-widest text-[#C5A059] font-extrabold truncate">
+                    {productBadge}
                   </span>
                   <span className="text-sm font-bold text-stone-900 dark:text-white leading-tight">
-                    Desde $99.99 USD
+                    Desde ${productPrice} USD
                   </span>
                 </div>
               </div>
@@ -129,7 +163,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
                 <Truck size={13} className="text-[#C5A059]" />
                 <span className="text-[11px]">River Oaks &amp; Galleria</span>
               </div>
-            </div>
+            </Link>
           </div>
 
         </div>

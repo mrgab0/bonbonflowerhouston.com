@@ -35,6 +35,7 @@ export default async function LocalizedHome({ params }: { params: Promise<{ loca
 
   let products: any[] = [];
   let siteConfig: any = null;
+  let heroProducts: any[] = [];
 
   try {
     await dbConnect();
@@ -49,6 +50,23 @@ export default async function LocalizedHome({ params }: { params: Promise<{ loca
     const uniqueProducts = filterUniqueVariantProducts(plainProducts);
     products = uniqueProducts.slice(0, 24);
     siteConfig = siteConfigRes?.data;
+
+    // Resolución de candidatos para el Hero Showcase según configuración
+    const mode = siteConfig?.heroProductMode || "popular";
+    if (mode === "single" && siteConfig?.heroProductId) {
+      const match = plainProducts.find((p: any) => String(p._id) === String(siteConfig.heroProductId));
+      if (match) heroProducts = [match];
+    } else if (mode === "custom_list" && Array.isArray(siteConfig?.heroCustomProductIds) && siteConfig.heroCustomProductIds.length > 0) {
+      const selectedSet = new Set(siteConfig.heroCustomProductIds.map(String));
+      const matched = plainProducts.filter((p: any) => selectedSet.has(String(p._id)));
+      if (matched.length > 0) heroProducts = matched;
+    }
+
+    // Modo "popular" o fallback seguro
+    if (heroProducts.length === 0) {
+      const count = Number(siteConfig?.heroPopularCount) || 10;
+      heroProducts = plainProducts.slice(0, count);
+    }
   } catch (err) {
     console.warn("Aviso: No se pudo conectar a la base de datos durante el pre-renderizado estático de [locale]/page. Usando valores seguros.", err);
   }
@@ -62,7 +80,7 @@ export default async function LocalizedHome({ params }: { params: Promise<{ loca
       <StickyNav siteConfig={siteConfig} />
 
       {/* Hero Section Editorial de Lujo Stitch 'Flowers that make them feel loved ♡' */}
-      <LuxuryHeroSection siteConfig={siteConfig} />
+      <LuxuryHeroSection siteConfig={siteConfig} heroProducts={heroProducts} />
 
       {/* 4 Pilares de Excelencia (Entrega Mismo Día, Tarjeta Caligrafiada, Rosas Ecuador, White Glove) */}
       <PillarsOfExcellence />

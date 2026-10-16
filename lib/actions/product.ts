@@ -322,3 +322,18 @@ export async function deleteProduct(id: string) {
     return { success: false, error: "No se pudo eliminar el producto" };
   }
 }
+
+export async function getAdminProductsList() {
+  try {
+    await dbConnect();
+    const products = await Product.find({ isActive: { $ne: false } })
+      .select("_id name price images category slug badge createdAt")
+      .sort({ createdAt: -1 })
+      .lean();
+    return { success: true, products: JSON.parse(JSON.stringify(products)) };
+  } catch (error) {
+    console.error("Error al cargar lista de productos para administración:", error);
+    return { success: false, products: [] };
+  }
+}
+

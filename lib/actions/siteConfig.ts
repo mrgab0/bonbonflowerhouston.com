@@ -14,6 +14,10 @@ const DEFAULT_SITE_CONFIG = {
   footerCopyright: "© 2026 Bonbon Flowers Houston. Todos los derechos reservados.",
   productColumnsDesktop: 3,
   productColumnsMobile: 2,
+  heroProductMode: "popular",
+  heroProductId: "",
+  heroPopularCount: 10,
+  heroCustomProductIds: [],
   logoUrl: "https://bonbonflowershouston.com/logo.png",
   brandSlogan: "Boutique Floral Digital • Houston, Texas",
   menuHomeLabel: "Inicio",
@@ -96,6 +100,28 @@ export async function updateSiteConfig(formData: FormData) {
       ? (parseInt(formData.get("productColumnsMobile") as string) || 2)
       : (prev.productColumnsMobile || 2);
 
+    // Configuración del Producto Destacado Hero
+    const heroProductMode = getValue("heroProductMode", DEFAULT_SITE_CONFIG.heroProductMode || "popular");
+    const heroProductId = getValue("heroProductId", "");
+    const heroPopularCount = formData.has("heroPopularCount")
+      ? (parseInt(formData.get("heroPopularCount") as string) || 10)
+      : (prev.heroPopularCount || 10);
+
+    let heroCustomProductIds: string[] = prev.heroCustomProductIds || [];
+    if (formData.has("heroCustomProductIds")) {
+      const rawCustom = formData.get("heroCustomProductIds");
+      if (typeof rawCustom === "string") {
+        try {
+          const parsed = JSON.parse(rawCustom);
+          if (Array.isArray(parsed)) {
+            heroCustomProductIds = parsed;
+          }
+        } catch {
+          heroCustomProductIds = formData.getAll("heroCustomProductIds").map(String).filter(Boolean);
+        }
+      }
+    }
+
     // Identidad y Menú
     const logoUrl = getValue("logoUrl", "https://bonbonflowershouston.com/logo.png");
     const brandSlogan = getValue("brandSlogan", DEFAULT_SITE_CONFIG.brandSlogan);
@@ -150,6 +176,10 @@ export async function updateSiteConfig(formData: FormData) {
         footerCopyright,
         productColumnsDesktop,
         productColumnsMobile,
+        heroProductMode,
+        heroProductId,
+        heroPopularCount,
+        heroCustomProductIds,
         logoUrl,
         brandSlogan,
         menuHomeLabel,

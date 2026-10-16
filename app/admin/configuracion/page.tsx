@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { getSiteConfig, updateSiteConfig } from "@/lib/actions/siteConfig";
+import { getAdminProductsList } from "@/lib/actions/product";
 import { generateTotpSecretAction, getOrCreateTotpSecretAction, update2FASettingsAction, test2FACodeAction } from "@/lib/actions/admin2fa";
-import { Sparkles, Save, CheckCircle2, ArrowLeft, Layout, AlignLeft, Type, Footprints, ShieldCheck, Key, Smartphone, QrCode, RefreshCw, Lock, AlertTriangle, Check, Grid, Image as ImageIcon, Menu, Share2, Globe, Eye, Palette, Sliders, Star, Bot } from "lucide-react";
+import { Sparkles, Save, CheckCircle2, ArrowLeft, Layout, AlignLeft, Type, Footprints, ShieldCheck, Key, Smartphone, QrCode, RefreshCw, Lock, AlertTriangle, Check, Grid, Image as ImageIcon, Menu, Share2, Globe, Eye, Palette, Sliders, Star, Bot, Search, CheckSquare, Square, Award, Truck, Flame } from "lucide-react";
 import Link from "next/link";
 import { SingleImageUploader } from "@/components/admin/SingleImageUploader";
 
@@ -12,16 +13,37 @@ export default function AdminConfiguracionPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
-  const [activeTab, setActiveTab] = useState<"grid" | "branding" | "social" | "reviews" | "iframe" | "chatbot" | "security">("grid");
+  const [activeTab, setActiveTab] = useState<"grid" | "branding" | "heroProduct" | "social" | "reviews" | "iframe" | "chatbot" | "security">("grid");
+
+  // Estados para gestión de Producto Destacado Hero
+  const [adminProducts, setAdminProducts] = useState<any[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+  const [heroProductMode, setHeroProductMode] = useState<"popular" | "single" | "custom_list">("popular");
+  const [heroProductId, setHeroProductId] = useState<string>("");
+  const [heroPopularCount, setHeroPopularCount] = useState<number>(10);
+  const [heroCustomProductIds, setHeroCustomProductIds] = useState<string[]>([]);
+  const [productSearch, setProductSearch] = useState<string>("");
 
   useEffect(() => {
     loadConfig();
+    getAdminProductsList().then(res => {
+      if (res.success && res.products) {
+        setAdminProducts(res.products);
+      }
+      setLoadingProducts(false);
+    });
   }, []);
 
   async function loadConfig() {
     setLoading(true);
     const { data } = await getSiteConfig();
-    if (data) setConfig(data);
+    if (data) {
+      setConfig(data);
+      if (data.heroProductMode) setHeroProductMode(data.heroProductMode);
+      if (data.heroProductId) setHeroProductId(data.heroProductId);
+      if (data.heroPopularCount) setHeroPopularCount(data.heroPopularCount);
+      if (Array.isArray(data.heroCustomProductIds)) setHeroCustomProductIds(data.heroCustomProductIds);
+    }
     setLoading(false);
   }
 
@@ -40,6 +62,38 @@ export default function AdminConfiguracionPage() {
       alert("Error al guardar la configuración del sitio.");
     }
   }
+
+  const toggleCustomProduct = (id: string) => {
+    setHeroCustomProductIds(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
+  };
+
+  const selectAllProducts = () => {
+    setHeroCustomProductIds(adminProducts.map(p => String(p._id)));
+  };
+
+  const deselectAllProducts = () => {
+    setHeroCustomProductIds([]);
+  };
+
+  const filteredProducts = useMemo(() => {
+    if (!productSearch.trim()) return adminProducts;
+    const term = productSearch.toLowerCase();
+    return adminProducts.filter(p =>
+      p.name?.toLowerCase().includes(term) || p.category?.toLowerCase().includes(term)
+    );
+  }, [adminProducts, productSearch]);
+
+  const previewProduct = useMemo(() => {
+    if (heroProductMode === "single") {
+      return adminProducts.find(p => String(p._id) === String(heroProductId)) || adminProducts[0];
+    }
+    if (heroProductMode === "custom_list" && heroCustomProductIds.length > 0) {
+      return adminProducts.find(p => heroCustomProductIds.includes(String(p._id))) || adminProducts[0];
+    }
+    return adminProducts[0];
+  }, [heroProductMode, heroProductId, heroCustomProductIds, adminProducts]);
 
   if (loading) {
     return (
@@ -92,6 +146,18 @@ export default function AdminConfiguracionPage() {
           }`}
         >
           <Grid size={16} /> Cuadrícula de Productos (3, 4, 5 Cols)
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("heroProduct")}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-extrabold text-xs whitespace-nowrap transition-all ${
+            activeTab === "heroProduct"
+              ? "bg-[#FF97A4] text-white shadow-md shadow-pink-500/20"
+              : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+          }`}
+        >
+          <Sparkles size={16} /> Producto Hero Portada 🌹
         </button>
 
         <button
@@ -169,6 +235,11 @@ export default function AdminConfiguracionPage() {
 
       {/* Formulario Principal de Configuración */}
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Hidden inputs para sincronizar Hero Product en cualquier pestaña */}
+        <input type="hidden" name="heroProductMode" value={heroProductMode} />
+        <input type="hidden" name="heroProductId" value={heroProductId} />
+        <input type="hidden" name="heroPopularCount" value={heroPopularCount.toString()} />
+        <input type="hidden" name="heroCustomProductIds" value={JSON.stringify(heroCustomProductIds)} />
 
         {/* PESTAÑA 1: Cuadrícula de Productos */}
         {activeTab === "grid" && (
@@ -268,6 +339,340 @@ export default function AdminConfiguracionPage() {
                 </div>
                 <span className="text-[11px] text-gray-400 font-medium">Abarca todo el ancho de pantalla para catálogos muy extensos.</span>
               </label>
+            </div>
+          </div>
+        )}
+
+        {/* PESTAÑA: Producto Hero Showcase */}
+        {activeTab === "heroProduct" && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            {/* Cabecera de la sección */}
+            <div className="bg-white dark:bg-[#12131A] p-6 md:p-8 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b pb-3 border-gray-100 dark:border-gray-800">
+                <div className="flex items-center gap-2.5">
+                  <Sparkles size={22} className="text-[#FF97A4]" />
+                  <h2 className="font-serif font-black text-lg text-[#1A1C1C] dark:text-white">
+                    Producto Destacado en Hero Showcase
+                  </h2>
+                </div>
+                <span className="text-[11px] font-bold text-[#FF97A4] bg-pink-50 dark:bg-pink-950/50 px-3 py-1 rounded-full border border-pink-200 dark:border-pink-900/40">
+                  Círculo Principal Portada
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                Elige qué arreglo floral real se exhibe dentro del marco circular de la portada (&ldquo;Flowers that make them feel loved ♡&rdquo;). Puedes configurarlo para rotar aleatoriamente entre los más populares, fijar un producto específico, o seleccionar a mano qué productos rotan mediante palomitas selectoras.
+              </p>
+            </div>
+
+            {/* Grid Principal: Modos de Selección a la Izquierda, Preview a la Derecha */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
+              {/* Columna Izquierda: Modos de Selección */}
+              <div className="lg:col-span-7 space-y-4">
+                
+                {/* Opción 1: Top Populares (Aleatorio) */}
+                <div
+                  onClick={() => setHeroProductMode("popular")}
+                  className={`p-5 rounded-3xl border-2 cursor-pointer transition-all space-y-4 ${
+                    heroProductMode === "popular"
+                      ? "border-[#FF97A4] bg-pink-50/20 dark:bg-pink-950/20 shadow-md"
+                      : "border-gray-100 dark:border-gray-800 bg-white dark:bg-[#12131A] hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-2xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800/40">
+                        <Flame size={20} />
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-sm text-[#1A1C1C] dark:text-white">
+                          Top Populares (Rotación Aleatoria)
+                        </h3>
+                        <p className="text-[11px] text-gray-400 font-medium">
+                          Selecciona al azar un arreglo entre los más destacados en cada visita.
+                        </p>
+                      </div>
+                    </div>
+                    <input
+                      type="radio"
+                      name="heroModeRadio"
+                      checked={heroProductMode === "popular"}
+                      onChange={() => setHeroProductMode("popular")}
+                      className="mt-1 text-[#FF97A4] focus:ring-[#FF97A4]"
+                    />
+                  </div>
+
+                  {/* Selector de cantidad de populares */}
+                  {heroProductMode === "popular" && (
+                    <div className="pt-2 border-t border-pink-100 dark:border-gray-800 space-y-2">
+                      <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block">
+                        Cantidad de Productos en Rotación:
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[10, 20, 50].map((num) => (
+                          <button
+                            key={num}
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setHeroPopularCount(num);
+                            }}
+                            className={`py-2 px-3 rounded-xl text-xs font-black transition-all ${
+                              heroPopularCount === num
+                                ? "bg-[#FF97A4] text-white shadow-sm"
+                                : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-pink-300"
+                            }`}
+                          >
+                            Top {num} Populares
+                          </button>
+                        ))}
+                      </div>
+                      <span className="text-[10px] text-gray-400 block pt-1">
+                        Cada visitante o recarga verá uno de los {heroPopularCount} productos más recientes y destacados.
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Opción 2: Producto Específico Fijo */}
+                <div
+                  onClick={() => setHeroProductMode("single")}
+                  className={`p-5 rounded-3xl border-2 cursor-pointer transition-all space-y-4 ${
+                    heroProductMode === "single"
+                      ? "border-[#FF97A4] bg-pink-50/20 dark:bg-pink-950/20 shadow-md"
+                      : "border-gray-100 dark:border-gray-800 bg-white dark:bg-[#12131A] hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-2xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-800/40">
+                        <Award size={20} />
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-sm text-[#1A1C1C] dark:text-white">
+                          Producto Específico Fijo
+                        </h3>
+                        <p className="text-[11px] text-gray-400 font-medium">
+                          Muestra siempre un producto exacto que tú elijas en la portada.
+                        </p>
+                      </div>
+                    </div>
+                    <input
+                      type="radio"
+                      name="heroModeRadio"
+                      checked={heroProductMode === "single"}
+                      onChange={() => setHeroProductMode("single")}
+                      className="mt-1 text-[#FF97A4] focus:ring-[#FF97A4]"
+                    />
+                  </div>
+
+                  {heroProductMode === "single" && (
+                    <div className="pt-2 border-t border-purple-100 dark:border-gray-800 space-y-2">
+                      <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block">
+                        Selecciona el Producto Fijo:
+                      </label>
+                      <select
+                        value={heroProductId}
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          setHeroProductId(e.target.value);
+                        }}
+                        className="w-full p-3 border rounded-xl text-xs font-bold bg-white dark:bg-gray-900 text-gray-900 dark:text-white border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF97A4]"
+                      >
+                        <option value="">-- Elige un producto del catálogo --</option>
+                        {adminProducts.map((p) => (
+                          <option key={String(p._id)} value={String(p._id)}>
+                            {p.name} - ${Number(p.price || 0).toFixed(2)} USD
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {/* Opción 3: Selección Manual con Palomitas Selectoras */}
+                <div
+                  onClick={() => setHeroProductMode("custom_list")}
+                  className={`p-5 rounded-3xl border-2 cursor-pointer transition-all space-y-4 ${
+                    heroProductMode === "custom_list"
+                      ? "border-[#FF97A4] bg-pink-50/20 dark:bg-pink-950/20 shadow-md"
+                      : "border-gray-100 dark:border-gray-800 bg-white dark:bg-[#12131A] hover:border-gray-300"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">
+                        <CheckSquare size={20} />
+                      </div>
+                      <div>
+                        <h3 className="font-extrabold text-sm text-[#1A1C1C] dark:text-white">
+                          Selección Manual con Palomitas Selectoras
+                        </h3>
+                        <p className="text-[11px] text-gray-400 font-medium">
+                          Marca con palomita exactamente cuáles productos deseas que roten en la portada.
+                        </p>
+                      </div>
+                    </div>
+                    <input
+                      type="radio"
+                      name="heroModeRadio"
+                      checked={heroProductMode === "custom_list"}
+                      onChange={() => setHeroProductMode("custom_list")}
+                      className="mt-1 text-[#FF97A4] focus:ring-[#FF97A4]"
+                    />
+                  </div>
+
+                  {heroProductMode === "custom_list" && (
+                    <div className="pt-3 border-t border-emerald-100 dark:border-gray-800 space-y-3" onClick={(e) => e.stopPropagation()}>
+                      {/* Barra de Filtro y Acciones Rápidas */}
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+                        <div className="relative flex-1">
+                          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="text"
+                            value={productSearch}
+                            onChange={(e) => setProductSearch(e.target.value)}
+                            placeholder="Buscar producto por nombre..."
+                            className="w-full pl-8 pr-3 py-2 border rounded-xl text-xs dark:bg-gray-900 dark:text-white border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-[#FF97A4]"
+                          />
+                        </div>
+                        <div className="flex items-center gap-1.5 self-end">
+                          <button
+                            type="button"
+                            onClick={selectAllProducts}
+                            className="px-2.5 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-[10px] font-bold rounded-lg text-gray-700 dark:text-gray-300"
+                          >
+                            Marcar Todos
+                          </button>
+                          <button
+                            type="button"
+                            onClick={deselectAllProducts}
+                            className="px-2.5 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-[10px] font-bold rounded-lg text-gray-700 dark:text-gray-300"
+                          >
+                            Desmarcar Todos
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Contador de seleccionados */}
+                      <div className="flex items-center justify-between text-xs font-bold text-gray-500">
+                        <span>{heroCustomProductIds.length} producto(s) seleccionado(s) con palomita</span>
+                        {heroCustomProductIds.length === 0 && (
+                          <span className="text-amber-500 text-[11px]">⚠️ Sin selección (se usarán los más populares)</span>
+                        )}
+                      </div>
+
+                      {/* Lista con scroll de productos y checkboxes */}
+                      <div className="max-h-72 overflow-y-auto space-y-1.5 pr-1 border border-gray-100 dark:border-gray-800 rounded-2xl p-2 bg-gray-50/50 dark:bg-gray-900/40">
+                        {filteredProducts.map((p) => {
+                          const id = String(p._id);
+                          const isChecked = heroCustomProductIds.includes(id);
+                          return (
+                            <div
+                              key={id}
+                              onClick={() => toggleCustomProduct(id)}
+                              className={`flex items-center justify-between p-2.5 rounded-xl cursor-pointer transition-all ${
+                                isChecked
+                                  ? "bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-700"
+                                  : "bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-750 border border-transparent"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
+                                  isChecked ? "bg-emerald-600 text-white" : "border border-gray-300 dark:border-gray-600"
+                                }`}>
+                                  {isChecked && <Check size={14} />}
+                                </div>
+                                <img
+                                  src={p.images?.[0] || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=100"}
+                                  alt={p.name}
+                                  className="w-9 h-9 rounded-lg object-cover border border-stone-200 dark:border-gray-700"
+                                />
+                                <div>
+                                  <span className="text-xs font-bold text-stone-900 dark:text-white block line-clamp-1">
+                                    {p.name}
+                                  </span>
+                                  <span className="text-[10px] text-gray-400 font-medium">
+                                    ${Number(p.price || 0).toFixed(2)} USD • {p.category || "General"}
+                                  </span>
+                                </div>
+                              </div>
+                              <span className="text-[11px] font-mono font-bold text-[#FF97A4]">
+                                {isChecked ? "Activo" : ""}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+              </div>
+
+              {/* Columna Derecha: Vista Previa en Vivo de Portada */}
+              <div className="lg:col-span-5 bg-white dark:bg-[#12131A] p-6 rounded-3xl border border-gray-100 dark:border-gray-800 shadow-sm space-y-4 lg:sticky lg:top-24">
+                <div className="flex items-center justify-between border-b pb-2.5 border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-2">
+                    <Eye size={18} className="text-[#FF97A4]" />
+                    <h3 className="font-serif font-black text-sm text-[#1A1C1C] dark:text-white">
+                      Vista Previa Portada
+                    </h3>
+                  </div>
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                    En Vivo
+                  </span>
+                </div>
+
+                <p className="text-[11px] text-gray-400">
+                  Así se visualiza el círculo asimétrico con el producto actualmente configurado:
+                </p>
+
+                {/* Contenedor Mockup Círculo Hero */}
+                <div className="relative flex justify-center items-center py-6">
+                  <div className="relative w-full max-w-[280px] aspect-square rounded-full bg-gradient-to-tr from-[#FAF7F5] via-white to-pink-50 dark:from-[#12131A] dark:via-[#181922] dark:to-[#12131A] p-3 shadow-2xl border border-stone-200/80 dark:border-gray-800 group">
+                    <div className="relative w-full h-full rounded-full overflow-hidden shadow-inner">
+                      <img
+                        alt={previewProduct?.name || "Preview"}
+                        className="w-full h-full object-cover"
+                        src={previewProduct?.images?.[0] || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format"}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                    </div>
+
+                    {/* Badge 1 Preview */}
+                    <div className="absolute -bottom-2 left-2 bg-white dark:bg-[#181922] px-3 py-2 rounded-xl shadow-lg border border-stone-200/80 dark:border-gray-700 flex items-center gap-2 max-w-[170px]">
+                      <div className="w-7 h-7 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 flex items-center justify-center text-[#B0004A] dark:text-[#FF97A4]">
+                        <Award size={14} />
+                      </div>
+                      <div className="flex flex-col text-left overflow-hidden">
+                        <span className="text-[8px] uppercase tracking-wider text-[#C5A059] font-extrabold truncate">
+                          {previewProduct?.badge || "Atelier Handcrafted"}
+                        </span>
+                        <span className="text-xs font-bold text-stone-900 dark:text-white leading-tight">
+                          {previewProduct?.price ? `Desde $${Number(previewProduct.price).toFixed(2)} USD` : "Desde $99.99 USD"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Badge 2 Preview */}
+                    <div className="absolute top-2 -right-1 bg-[#163422] text-white px-2.5 py-1 rounded-full shadow-md border border-[#C5A059]/40 flex items-center gap-1 text-[9px] font-bold">
+                      <Truck size={10} className="text-[#C5A059]" />
+                      <span>River Oaks</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-3 bg-stone-50 dark:bg-stone-900/60 rounded-2xl border border-stone-100 dark:border-gray-800 text-center">
+                  <span className="text-[11px] font-bold text-stone-800 dark:text-stone-200 block truncate">
+                    {previewProduct?.name || "Arreglo Floral"}
+                  </span>
+                  <span className="text-[10px] text-gray-400 font-mono block mt-0.5">
+                    Modo: {heroProductMode === "popular" ? `Top ${heroPopularCount} Populares` : heroProductMode === "single" ? "Producto Fijo" : `Personalizado (${heroCustomProductIds.length} seleccionados)`}
+                  </span>
+                </div>
+              </div>
+
             </div>
           </div>
         )}
