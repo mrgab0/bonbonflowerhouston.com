@@ -1,16 +1,18 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/db';
 import { getSiteConfig } from '@/lib/actions/siteConfig';
+import { Product } from '@/lib/models/Product';
 
 export const runtime = 'nodejs';
 
 const CURATED_FLORAL_IMAGES = [
-  "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=1200&auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1200&auto=format&fit=crop&q=80"
+  { url: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80", alt: "Ramo de rosas rosadas y arreglos de lujo en Houston" },
+  { url: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200&auto=format&fit=crop&q=80", alt: "Caja floral hatbox exclusiva con rosas de exportación" },
+  { url: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=1200&auto=format&fit=crop&q=80", alt: "Rosas rojas aterciopeladas para aniversarios y romance" },
+  { url: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=1200&auto=format&fit=crop&q=80", alt: "Arreglo en tonos pasteles y flores frescas de temporada" },
+  { url: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=1200&auto=format&fit=crop&q=80", alt: "Ramo buchón monumental con envoltura coreana de lujo" },
+  { url: "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1200&auto=format&fit=crop&q=80", alt: "Diseño floral primaveral con orquídeas y flores exóticas" },
+  { url: "https://images.unsplash.com/photo-1508610048659-a06b669e3321?w=1200&auto=format&fit=crop&q=80", alt: "Flores finas seleccionadas a mano en boutique de Houston" }
 ];
 
 export async function POST(req: Request) {
@@ -24,7 +26,10 @@ export async function POST(req: Request) {
     }
 
     await dbConnect();
-    const { data: siteConfig } = await getSiteConfig();
+    const [{ data: siteConfig }, storeProducts] = await Promise.all([
+      getSiteConfig(),
+      Product.find({ isActive: { $ne: false } }).select('name slug images').limit(8).lean()
+    ]);
 
     const apiKey = (
       siteConfig?.geminiApiKey ||
@@ -40,7 +45,24 @@ export async function POST(req: Request) {
     }
 
     const isEn = language === 'en';
-    const randomFallbackImage = CURATED_FLORAL_IMAGES[Math.floor(Math.random() * CURATED_FLORAL_IMAGES.length)];
+
+    // Construir galería con imágenes editoriales de alta calidad y fotos de productos reales
+    const availableImages: Array<{ url: string; alt: string }> = [...CURATED_FLORAL_IMAGES];
+    if (storeProducts && Array.isArray(storeProducts)) {
+      storeProducts.forEach((p: any) => {
+        if (p.images && p.images.length > 0 && p.images[0]) {
+          availableImages.push({
+            url: p.images[0],
+            alt: `${p.name} - Bonbon Flowers Houston`
+          });
+        }
+      });
+    }
+
+    const shuffled = [...availableImages].sort(() => 0.5 - Math.random());
+    const coverImage = shuffled[0]?.url || CURATED_FLORAL_IMAGES[0].url;
+    const contentImg1 = shuffled[1] || CURATED_FLORAL_IMAGES[1];
+    const contentImg2 = shuffled[2] || CURATED_FLORAL_IMAGES[2];
 
     const systemPrompt = `Eres el redactor jefe y especialista en SEO de contenidos para "Bonbon Flowers Houston", una prestigiosa boutique floral de lujo ubicada en Houston, Texas (bonbonflowershouston.com).
 Tu objetivo es generar artículos de blog cautivadores, elegantes, informativos y altamente optimizados para los algoritmos de búsqueda de Google (SEO local en Houston y SEO floral e-commerce).
@@ -51,18 +73,21 @@ Información del negocio para incluir naturalmente en el post:
 - Cobertura de Entrega: Houston, Pearland, Sugar Land, Katy, The Woodlands y áreas metropolitanas de Texas.
 - Servicios: Entrega el mismo día, flores frescas garantizadas, complementos como chocolates finos, globos y dedicatorias de lujo.
 
-Instrucciones estrictas de formato y longitud:
+Instrucciones estrictas de formato y maquetación visual:
 1. Longitud ideal: Entre 550 y 850 palabras.
-2. Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código markdown adicionales fuera del JSON, con la siguiente estructura exacta:
+2. MAQUETACIÓN CON IMÁGENES: En el campo "content", DEBES insertar exactamente estas 2 imágenes ilustrativas intercaladas naturalmente entre las secciones usando el formato Markdown ![Texto alternativo](URL):
+   - Primera imagen (después del primer o segundo subtítulo ##): ![${contentImg1.alt}](${contentImg1.url})
+   - Segunda imagen (en el cuerpo medio del artículo antes de la conclusión): ![${contentImg2.alt}](${contentImg2.url})
+3. Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código markdown adicionales fuera del JSON, con la siguiente estructura exacta:
 {
   "title": "Título SEO atractivo, elegante y magnético (máximo 70 caracteres)",
   "slug": "slug-amigable-para-url-en-minusculas-con-guiones",
   "excerpt": "Meta descripción resumida de 140 a 160 caracteres perfecta para Google Search.",
-  "content": "Contenido completo del artículo en formato Markdown. Debe incluir subtítulos (## y ###), listas con viñetas, consejos de cuidado o selección, y una sección final con llamado a la acción para ordenar flores en la tienda online o vía WhatsApp (+1 346 739 2730).",
+  "content": "Contenido completo del artículo en formato Markdown. Debe incluir subtítulos (## y ###), viñetas, consejos de cuidado o selección, las 2 imágenes ilustrativas indicadas y una sección final con llamado a la acción para ordenar flores en la tienda online o vía WhatsApp (+1 346 739 2730).",
   "tags": ["Tag1", "Tag2", "Tag3"],
-  "suggestedImage": "${randomFallbackImage}"
+  "suggestedImage": "${coverImage}"
 }
-3. IMPORTANTE: Cierra estrictamente todas las comillas dobles y la llave final del objeto JSON.
+4. IMPORTANTE: Cierra estrictamente todas las comillas dobles y la llave final del objeto JSON.
 
 Idioma del artículo: ${isEn ? "Inglés (English)" : "Español"}.`;
 
@@ -125,7 +150,7 @@ ${keywords ? `Palabras clave secundarias a incluir: "${keywords.trim()}".` : ''}
     }
 
     // Parseo resiliente de JSON para evitar "Unterminated string" ante cualquier corte imprevisto
-    const postData = parseAiJsonSafely(rawAiText, randomFallbackImage);
+    const postData = parseAiJsonSafely(rawAiText, coverImage);
 
     return NextResponse.json({ success: true, post: postData });
 

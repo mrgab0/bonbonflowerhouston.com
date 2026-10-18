@@ -112,7 +112,50 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             );
           }
 
-          // Párrafo normal
+          // Imagen en Markdown: ![alt](url)
+          const imgMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
+          if (imgMatch) {
+            const [, alt, src] = imgMatch;
+            return (
+              <figure key={i} className="my-6 overflow-hidden rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm bg-white dark:bg-stone-900">
+                <img
+                  src={src}
+                  alt={alt || "Arreglo Floral Bonbon Flowers"}
+                  className="w-full h-auto max-h-[500px] object-cover hover:scale-[1.01] transition-transform duration-300"
+                  loading="lazy"
+                />
+                {alt && (
+                  <figcaption className="text-center text-xs text-gray-500 py-2.5 px-4 bg-stone-50 dark:bg-stone-900/60 border-t border-stone-100 dark:border-stone-800 italic">
+                    {alt}
+                  </figcaption>
+                )}
+              </figure>
+            );
+          }
+
+          // Párrafo normal (con detección de imagen inline si estuviese combinada)
+          if (trimmed.includes("![") && trimmed.includes("](") && trimmed.includes(")")) {
+            const inlineMatch = trimmed.match(/!\[(.*?)\]\((.*?)\)/);
+            if (inlineMatch) {
+              const [, alt, src] = inlineMatch;
+              return (
+                <figure key={i} className="my-6 overflow-hidden rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm bg-white dark:bg-stone-900">
+                  <img
+                    src={src}
+                    alt={alt || "Arreglo Floral Bonbon Flowers"}
+                    className="w-full h-auto max-h-[500px] object-cover hover:scale-[1.01] transition-transform duration-300"
+                    loading="lazy"
+                  />
+                  {alt && (
+                    <figcaption className="text-center text-xs text-gray-500 py-2.5 px-4 bg-stone-50 dark:bg-stone-900/60 border-t border-stone-100 dark:border-stone-800 italic">
+                      {alt}
+                    </figcaption>
+                  )}
+                </figure>
+              );
+            }
+          }
+
           return (
             <p key={i} className="font-medium text-black dark:text-black leading-relaxed">
               {trimmed}
