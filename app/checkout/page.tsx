@@ -32,7 +32,12 @@ const iconMap: Record<string, any> = {
   Store: Store,
 };
 
-import { DeliveryMapPicker } from "@/components/shop/DeliveryMapPicker";
+import dynamic from "next/dynamic";
+
+const DeliveryMapPicker = dynamic(
+  () => import("@/components/shop/DeliveryMapPicker").then((mod) => mod.DeliveryMapPicker),
+  { ssr: false }
+);
 
 export default function CheckoutPage() {
   const { cartItems, clearCart, updateAddonCustomText } = useCart();

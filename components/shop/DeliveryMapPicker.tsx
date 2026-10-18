@@ -101,6 +101,11 @@ export function DeliveryMapPicker({
   const [errorMsg, setErrorMsg] = useState("");
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [isScriptLoading, setIsScriptLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Sugerencias de autocompletado predictivo
   const [suggestions, setSuggestions] = useState<MapboxSuggestion[]>([]);
@@ -750,7 +755,7 @@ export function DeliveryMapPicker({
           <div ref={mapContainerRef} className="w-full h-full" />
 
           {/* Fallback si el script aún no ha cargado */}
-          {(!window.mapboxgl || isScriptLoading) && (
+          {(!isMounted || !isMapLoaded || isScriptLoading) && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100/90 dark:bg-gray-900/90 backdrop-blur-sm p-4 text-center">
               <img
                 src={staticFallbackUrl}

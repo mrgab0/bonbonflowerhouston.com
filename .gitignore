@@ -18,6 +18,7 @@ build/
 .profile
 # Logs de Next.js
 next-env.d.ts
+tsconfig.tsbuildinfo
 
 # ==========================================
 # React Native & Expo (Mobile)
