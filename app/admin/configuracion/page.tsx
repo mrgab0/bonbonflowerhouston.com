@@ -1217,6 +1217,24 @@ export default function AdminConfiguracionPage() {
                   Permite que Flor responda con inteligencia artificial en tiempo real a clientes y administradores. Si no tienes una variable en Vercel, puedes configurarla directamente aquí.
                 </span>
               </div>
+
+              {/* Clave Pública de Mapbox para Checkout & GPS */}
+              <div className="flex flex-col gap-1.5 md:col-span-2 p-4 rounded-2xl bg-blue-50/50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40">
+                <label className="text-xs font-bold text-blue-900 dark:text-blue-300 flex items-center gap-1.5">
+                  <Globe size={14} className="text-blue-500" />
+                  Mapbox Public Access Token (Autocompletado y Mapas del Checkout)
+                </label>
+                <input
+                  type="text"
+                  name="mapboxToken"
+                  defaultValue={config.mapboxToken || ""}
+                  placeholder="pk.eyJ..."
+                  className="p-3.5 border rounded-xl text-xs font-mono dark:bg-gray-900 dark:text-white"
+                />
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  Token oficial de Mapbox para búsqueda de direcciones en Houston, pin interactivo arrastrable y cálculo exacto de millas por carretera (Directions API).
+                </span>
+              </div>
             </div>
           </div>
         )}

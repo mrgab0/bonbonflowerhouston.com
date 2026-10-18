@@ -164,6 +164,7 @@ export async function updateSiteConfig(formData: FormData) {
     const dialogflowLocation = getValue("dialogflowLocation", "us-central1");
     const dialogflowLanguageCode = getValue("dialogflowLanguageCode", "es");
     const dialogflowChatTitle = getValue("dialogflowChatTitle", "Bonbon Flowers Virtual Assistant 🌸");
+    const mapboxToken = getValue("mapboxToken", "");
 
     await SiteConfig.findOneAndUpdate(
       { key: "global" },
@@ -211,6 +212,7 @@ export async function updateSiteConfig(formData: FormData) {
         dialogflowLocation,
         dialogflowLanguageCode,
         dialogflowChatTitle,
+        mapboxToken,
         updatedAt: new Date()
       },
       { upsert: true, new: true }

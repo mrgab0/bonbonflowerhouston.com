@@ -83,6 +83,7 @@ export interface ISiteConfig extends Document {
   businessPhone?: string;
   businessAddress?: string;
   businessCity?: string;
+  mapboxToken?: string;
 
   updatedAt: Date;
 }
@@ -168,6 +169,7 @@ const SiteConfigSchema: Schema = new Schema({
   businessPhone: { type: String, default: "+1 (346) 739-2730" },
   businessAddress: { type: String, default: "Houston, TX" },
   businessCity: { type: String, default: "Houston, TX" },
+  mapboxToken: { type: String, default: "" },
 
   updatedAt: { type: Date, default: Date.now }
 });
