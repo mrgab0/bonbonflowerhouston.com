@@ -188,15 +188,13 @@ Reglas estrictas de conversación humana y corta:
       parts: [{ text: m.text }]
     }));
 
-    // 4. Llamar a la API de Gemini con modelos compatibles (Flash Latest, 3.5 Lite, 3.8, 3.7, 2.0 y 1.5)
+    // 4. Llamar a la API de Gemini con modelos oficiales de alta velocidad y Free Tier
     const modelsToTry = [
-      'gemini-flash-latest',
-      'gemini-3.5-flash-lite',
-      'gemini-3.8-flash',
-      'gemini-3.7-flash',
-      'gemini-2.5-flash',
+      'gemini-2.0-flash-lite',
       'gemini-2.0-flash',
-      'gemini-1.5-flash'
+      'gemini-1.5-flash',
+      'gemini-1.5-flash-8b',
+      'gemini-flash-latest'
     ];
     let aiResponseText = "";
     let lastError: any = null;

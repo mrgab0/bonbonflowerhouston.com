@@ -49,6 +49,7 @@ export default function AdminBlogPage() {
   const [aiKeywords, setAiKeywords] = useState("");
   const [aiLanguage, setAiLanguage] = useState<"es" | "en">("es");
   const [generatingAi, setGeneratingAi] = useState(false);
+  const [autopilotPublishing, setAutopilotPublishing] = useState(false);
   const [generatedResult, setGeneratedResult] = useState<any | null>(null);
   const [aiError, setAiError] = useState("");
 
@@ -168,6 +169,63 @@ export default function AdminBlogPage() {
       setAiError("Error de conexión con el servidor. Intenta de nuevo.");
     } finally {
       setGeneratingAi(false);
+    }
+  }
+
+  // Generador Autopilot 1-Clic: Redacta y publica directamente en la base de datos
+  async function handleGenerateAndPublishAutopilot() {
+    if (!aiPrompt.trim()) {
+      setAiError("Por favor ingresa un tema, idea o producto.");
+      return;
+    }
+
+    setAutopilotPublishing(true);
+    setAiError("");
+    setGeneratedResult(null);
+
+    try {
+      const response = await fetch("/api/admin/blog/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic: aiPrompt.trim(),
+          keywords: aiKeywords.trim(),
+          language: aiLanguage
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success && data.post) {
+        const post = data.post;
+        const res = await createPost({
+          title: post.title,
+          slug: post.slug,
+          excerpt: post.excerpt,
+          content: post.content,
+          mainImage: post.suggestedImage || "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200&auto=format&fit=crop&q=80",
+          published: true
+        });
+
+        if (res.success) {
+          setIsAiModalOpen(false);
+          setAiPrompt("");
+          setAiKeywords("");
+          setNotification({
+            type: "success",
+            message: `🚀 ¡Post Autopilot publicado con éxito! "${post.title}"`
+          });
+          loadPosts();
+          setTimeout(() => setNotification(null), 5000);
+        } else {
+          setAiError(res.error || "Artículo generado pero ocurrió un error al guardarlo.");
+        }
+      } else {
+        setAiError(data.error || "Error al generar contenido con la IA.");
+      }
+    } catch (err: any) {
+      setAiError("Error de conexión al procesar el modo Autopilot.");
+    } finally {
+      setAutopilotPublishing(false);
     }
   }
 
@@ -592,31 +650,66 @@ export default function AdminBlogPage() {
               </div>
 
               {aiError && (
-                <div className="p-3 bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-xs font-bold rounded-xl border border-red-200 dark:border-red-800 flex items-center gap-2">
-                  <AlertCircle size={15} />
-                  <span>{aiError}</span>
+                <div className="p-3.5 bg-red-50 dark:bg-red-950/60 text-red-700 dark:text-red-300 text-xs font-bold rounded-2xl border border-red-200 dark:border-red-800 space-y-2.5">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle size={16} className="shrink-0 mt-0.5 text-red-600" />
+                    <span className="leading-relaxed">{aiError}</span>
+                  </div>
+                  {aiError.includes("/admin/configuracion") && (
+                    <div className="pt-1">
+                      <Link
+                        href="/admin/configuracion"
+                        className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-red-600 to-pink-600 hover:opacity-90 text-white text-[11px] font-black shadow-sm"
+                      >
+                        <span>Configurar Gemini API Key en Panel ⚙️</span>
+                        <ExternalLink size={12} />
+                      </Link>
+                    </div>
+                  )}
                 </div>
               )}
 
-              {/* Botón de Generar */}
-              <button
-                type="button"
-                onClick={handleGenerateWithAi}
-                disabled={generatingAi || !aiPrompt.trim()}
-                className="w-full py-3.5 bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:opacity-95 text-white rounded-2xl font-black text-sm shadow-md transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {generatingAi ? (
-                  <>
-                    <RefreshCw className="animate-spin" size={18} />
-                    <span>Redactando artículo SEO con Gemini...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles size={18} />
-                    <span>Generar Artículo Completo con IA ✨</span>
-                  </>
-                )}
-              </button>
+              {/* Acciones de Generación: Autopilot 1-Clic o Borrador Manual */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                {/* Botón 1: Autopilot 100% Automático */}
+                <button
+                  type="button"
+                  onClick={handleGenerateAndPublishAutopilot}
+                  disabled={autopilotPublishing || generatingAi || !aiPrompt.trim()}
+                  className="py-3.5 px-4 bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:opacity-95 text-white rounded-2xl font-black text-xs shadow-md transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {autopilotPublishing ? (
+                    <>
+                      <RefreshCw className="animate-spin" size={16} />
+                      <span>Autopilot redactando y publicando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>🚀 Autopilot: Generar y Publicar</span>
+                    </>
+                  )}
+                </button>
+
+                {/* Botón 2: Generar solo Borrador para Revisar */}
+                <button
+                  type="button"
+                  onClick={handleGenerateWithAi}
+                  disabled={autopilotPublishing || generatingAi || !aiPrompt.trim()}
+                  className="py-3.5 px-4 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-750 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-2xl font-black text-xs transition-all active:scale-[0.99] disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  {generatingAi ? (
+                    <>
+                      <RefreshCw className="animate-spin" size={16} />
+                      <span>Generando borrador...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={16} className="text-purple-500" />
+                      <span>Solo Generar Borrador</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Resultado Generado con Gemini */}

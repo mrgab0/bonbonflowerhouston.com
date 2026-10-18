@@ -1,6 +1,17 @@
 import { NextResponse } from 'next/server';
+import dbConnect from '@/lib/db';
+import { getSiteConfig } from '@/lib/actions/siteConfig';
 
 export const runtime = 'nodejs';
+
+const CURATED_FLORAL_IMAGES = [
+  "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=1200&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=1200&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=1200&auto=format&fit=crop&q=80",
+  "https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=1200&auto=format&fit=crop&q=80"
+];
 
 export async function POST(req: Request) {
   try {
@@ -12,14 +23,24 @@ export async function POST(req: Request) {
       }, { status: 400 });
     }
 
-    const apiKey = process.env.GEMINI_API_KEY;
+    await dbConnect();
+    const { data: siteConfig } = await getSiteConfig();
+
+    const apiKey = (
+      siteConfig?.geminiApiKey ||
+      process.env.GEMINI_API_KEY ||
+      process.env.GOOGLE_API_KEY ||
+      process.env.GOOGLE_GENERATIVE_AI_API_KEY
+    )?.trim();
+
     if (!apiKey) {
       return NextResponse.json({
-        error: "No se encontró la clave GEMINI_API_KEY en las variables de entorno."
-      }, { status: 500 });
+        error: "No se encontró la clave de Google Gemini. Puedes ingresarla directamente en el panel de Administración en /admin/configuracion (pestaña Chatbot / IA) o como variable GEMINI_API_KEY en Vercel."
+      }, { status: 400 });
     }
 
     const isEn = language === 'en';
+    const randomFallbackImage = CURATED_FLORAL_IMAGES[Math.floor(Math.random() * CURATED_FLORAL_IMAGES.length)];
 
     const systemPrompt = `Eres el redactor jefe y especialista en SEO de contenidos para "Bonbon Flowers Houston", una prestigiosa boutique floral de lujo ubicada en Houston, Texas (bonbonflowershouston.com).
 Tu objetivo es generar artículos de blog cautivadores, elegantes, informativos y altamente optimizados para los algoritmos de búsqueda de Google (SEO local en Houston y SEO floral e-commerce).
@@ -38,7 +59,7 @@ Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código m
   "excerpt": "Meta descripción resumida de 140 a 160 caracteres perfecta para Google Search.",
   "content": "Contenido completo del artículo en formato Markdown. Debe incluir subtítulos (## y ###), listas con viñetas, consejos de cuidado o selección, y una sección final con llamado a la acción para ordenar flores en la tienda online o vía WhatsApp (+1 346 739 2730).",
   "tags": ["Tag1", "Tag2", "Tag3"],
-  "suggestedImage": "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80"
+  "suggestedImage": "${randomFallbackImage}"
 }
 
 Idioma del artículo: ${isEn ? "Inglés (English)" : "Español"}.`;
@@ -46,7 +67,14 @@ Idioma del artículo: ${isEn ? "Inglés (English)" : "Español"}.`;
     const userPrompt = `Genera un post de blog completo y optimizado para SEO sobre el siguiente tema: "${topic.trim()}".
 ${keywords ? `Palabras clave secundarias a incluir: "${keywords.trim()}".` : ''}`;
 
-    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-flash-latest', 'gemini-3.7-flash'];
+    // Modelos oficiales de Google AI Studio con soporte en Free Tier (ordenados por velocidad y estabilidad)
+    const modelsToTry = [
+      'gemini-2.0-flash-lite',
+      'gemini-2.0-flash',
+      'gemini-1.5-flash',
+      'gemini-1.5-flash-8b',
+      'gemini-flash-latest'
+    ];
     let rawAiText = "";
     let lastError: any = null;
 
