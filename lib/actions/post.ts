@@ -57,6 +57,7 @@ Si tu arreglo viene en caja o base con espuma floral, vierte media taza de agua 
     excerpt: "Conoce por qué los ramos buchones y las cajas florales personalizadas se han convertido en el regalo favorito en eventos y celebraciones.",
     mainImage: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?w=1200&auto=format&fit=crop&q=80",
     published: true,
+    language: "es",
     createdAt: new Date("2026-03-01T15:00:00Z"),
     content: `## El Arte de Regalar a lo Grande
 
@@ -69,15 +70,71 @@ Los **ramos buchones** han revolucionado la floristería contemporánea en Texas
 - **Impacto Visual Inolvidable:** Es el detalle definitivo para cumpleaños, propuestas de matrimonio, graduaciones y celebraciones de quinceañeras.
 
 Descubre nuestra colección completa en nuestro catálogo online o comunícate directamente con nosotros en Houston, TX.`
+  },
+  {
+    title: "Houston Flower Guide: The Best Floral Arrangements for Anniversary & Romance",
+    slug: "houston-flower-guide-anniversary-romance",
+    excerpt: "Discover how to choose the perfect luxury flower arrangement to celebrate anniversaries and romantic occasions in Houston, Texas with same-day delivery.",
+    mainImage: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
+    published: true,
+    language: "en",
+    createdAt: new Date("2026-02-14T10:00:00Z"),
+    content: `## Celebrating Love with Bonbon Flowers Elegance
+
+At **Bonbon Flowers Houston**, we believe every anniversary and romantic date tells an extraordinary story. Selecting the perfect bouquet is not simply about beautiful petals; it is about conveying sincere emotions that remain forever in the heart of that special person.
+
+### 🌹 Most Requested Anniversary Floral Designs
+
+1. **Luxury Red Rose Buchón Bouquets:** An imposing classic symbolizing everlasting passion, available from 50 to 200+ premium long-stem Ecuadorian roses.
+2. **Signature Hatboxes with Roses & Fine Chocolates:** Sophisticated presentation in round or heart-shaped boxes, paired with decadent Ferrero Rocher chocolates.
+3. **Exotic Mixed Centerpieces with Orchids & Lilies:** Perfect for modern, aromatic, and long-lasting floral statements.
+
+### 🚚 Express Delivery Across the Houston Metropolitan Area
+We provide prompt same-day flower delivery across **Houston, Pearland, Sugar Land, Katy, Cypress, and The Woodlands**. Every arrangement is handcrafted by expert florists minutes before dispatch to ensure peak freshness.
+
+> **💡 Florist Tip:** You can customize your silk ribbon with personalized inscriptions, helium balloons, or giant teddy bears directly on our website or via WhatsApp.`
+  },
+  {
+    title: "How to Care for Fresh Roses: Professional Tips for Long-Lasting Beauty",
+    slug: "how-to-care-for-fresh-roses-pro-guide",
+    excerpt: "Learn the secrets of Bonbon Flowers professional florists to extend the life, fragrance, and vibrant color of your fresh cut roses at home.",
+    mainImage: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200&auto=format&fit=crop&q=80",
+    published: true,
+    language: "en",
+    createdAt: new Date("2026-02-20T12:00:00Z"),
+    content: `## Maximize the Beauty of Your Floral Bouquet
+
+Receiving a bouquet from **Bonbon Flowers Houston** is an unforgettable sensory experience. To keep your luxury roses firm, radiant, and fragrant for over a week, follow these professional florist guidelines:
+
+### 1. The 45-Degree Diagonal Stem Cut
+Before placing your flowers into a vase, trim approximately 1 inch off the stems at a **45-degree angle** using sharp garden shears or a clean knife. This diagonal cut maximizes water uptake.
+
+### 2. Clean, Fresh Cold Water Daily
+- Refresh the vase water every **24 to 48 hours**.
+- Ensure no leaves remain submerged underwater, as decaying foliage accelerates bacterial growth.
+
+### 3. The Ideal Display Location
+Keep your arrangement in a cool spot away from direct sunlight, heating vents, or drafty air conditioners.
+
+### 4. Hydrating Floral Foam (Oasis Boxes)
+If your bouquet arrives in a luxury hatbox with floral foam, gently pour half a cup of cold water into the center of the base every 2 days to maintain optimal moisture.`
   }
 ];
 
-export async function getPosts(options?: { publishedOnly?: boolean; limit?: number }) {
+export async function getPosts(options?: { publishedOnly?: boolean; limit?: number; language?: string }) {
   try {
     await dbConnect();
     const query: any = {};
     if (options?.publishedOnly) {
       query.published = true;
+    }
+
+    if (options?.language) {
+      if (options.language === 'en') {
+        query.language = 'en';
+      } else {
+        query.$or = [{ language: 'es' }, { language: { $exists: false } }, { language: null }];
+      }
     }
 
     const limit = options?.limit || 50;
@@ -87,19 +144,20 @@ export async function getPosts(options?: { publishedOnly?: boolean; limit?: numb
       .lean();
 
     if (!posts || posts.length === 0) {
-      // Si la colección está vacía en BD, insertamos automáticamente los posts semilla
+      // Si la colección está vacía o faltan en el idioma, aseguramos los posts semilla
       try {
         await Post.insertMany(SEED_POSTS);
         posts = await Post.find(query).sort({ createdAt: -1 }).limit(limit).lean();
       } catch (seedErr) {
-        posts = SEED_POSTS as any;
+        posts = SEED_POSTS.filter((p: any) => !options?.language || p.language === options.language) as any;
       }
     }
 
     return { success: true, data: JSON.parse(JSON.stringify(posts || SEED_POSTS)) };
   } catch (error) {
     console.warn("Aviso de BD en getPosts, usando posts semilla:", error);
-    return { success: true, data: JSON.parse(JSON.stringify(SEED_POSTS)) };
+    const fallback = SEED_POSTS.filter((p: any) => !options?.language || p.language === options.language);
+    return { success: true, data: JSON.parse(JSON.stringify(fallback)) };
   }
 }
 
@@ -143,10 +201,13 @@ export async function createPost(data: any) {
       excerpt: data.excerpt || (data.content ? data.content.slice(0, 160) : ""),
       mainImage: data.mainImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
       published: data.published !== false,
+      language: data.language || 'es',
+      translationOf: data.translationOf || "",
       createdAt: data.createdAt ? new Date(data.createdAt) : new Date(),
     });
 
     revalidatePath("/nosotros");
+    revalidatePath("/en/nosotros");
     revalidatePath("/admin/blog");
     return { success: true, data: JSON.parse(JSON.stringify(newPost)) };
   } catch (error: any) {
@@ -169,6 +230,7 @@ export async function updatePost(id: string, data: any) {
 
     const updated = await Post.findByIdAndUpdate(id, data, { new: true });
     revalidatePath("/nosotros");
+    revalidatePath("/en/nosotros");
     revalidatePath("/admin/blog");
     return { success: true, data: JSON.parse(JSON.stringify(updated)) };
   } catch (error: any) {
@@ -182,6 +244,7 @@ export async function deletePost(id: string) {
   try {
     await Post.findByIdAndDelete(id);
     revalidatePath("/nosotros");
+    revalidatePath("/en/nosotros");
     revalidatePath("/admin/blog");
     return { success: true };
   } catch (error: any) {

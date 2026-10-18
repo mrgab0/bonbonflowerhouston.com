@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NosotrosPage() {
-  const { data: posts } = await getPosts({ publishedOnly: true });
+  const { data: posts } = await getPosts({ publishedOnly: true, language: "es" });
 
   return <NosotrosClient initialPosts={posts || []} locale="es" />;
 }

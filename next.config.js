@@ -66,6 +66,32 @@ const nextConfig = {
       },
     ];
   },
+
+  // 3. Redirecciones automáticas (alias singular /producto -> plural /productos para prevenir 404s)
+  async redirects() {
+    return [
+      {
+        source: '/producto',
+        destination: '/productos',
+        permanent: true,
+      },
+      {
+        source: '/producto/:slug*',
+        destination: '/productos/:slug*',
+        permanent: true,
+      },
+      {
+        source: '/:locale(es|en)/producto',
+        destination: '/:locale/productos',
+        permanent: true,
+      },
+      {
+        source: '/:locale(es|en)/producto/:slug*',
+        destination: '/:locale/productos/:slug*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = withNextIntl(nextConfig);

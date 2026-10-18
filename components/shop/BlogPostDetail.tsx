@@ -57,24 +57,43 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
   const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(`Mira este artículo de Bonbon Flowers: ${post.title} ` + (typeof window !== "undefined" ? window.location.href : ""))}`;
 
+  const cleanExcerpt = (text: string) => {
+    if (!text) return "";
+    return text
+      .replace(/!\[.*?\]\(.*?\)/g, "")
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/#{1,6}\s+/g, "")
+      .replace(/\*\*/g, "")
+      .replace(/\*/g, "")
+      .replace(/^[-*]\s+/gm, "")
+      .trim();
+  };
+
   // Función auxiliar para parsear negritas, cursivas y enlaces inline en el texto
   const renderInlineFormattedText = (text: string) => {
     if (!text) return "";
     const parts: (string | React.ReactNode)[] = [];
-    const tokenRegex = /(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g;
+    const tokenRegex = /(\*\*\*.*?\*\*\*|\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g;
     let lastIndex = 0;
     let match;
 
     while ((match = tokenRegex.exec(text)) !== null) {
       if (match.index > lastIndex) {
-        parts.push(text.substring(lastIndex, match.index));
+        // Limpiamos cualquier asterisco huérfano del texto regular
+        parts.push(text.substring(lastIndex, match.index).replace(/\*\*/g, ''));
       }
 
       const token = match[0];
-      if (token.startsWith('**') && token.endsWith('**')) {
+      if (token.startsWith('***') && token.endsWith('***')) {
+        parts.push(
+          <strong key={match.index} className="font-extrabold italic text-black dark:text-black">
+            {token.slice(3, -3).replace(/\*\*/g, '')}
+          </strong>
+        );
+      } else if (token.startsWith('**') && token.endsWith('**')) {
         parts.push(
           <strong key={match.index} className="font-extrabold text-black dark:text-black">
-            {token.slice(2, -2)}
+            {token.slice(2, -2).replace(/\*\*/g, '')}
           </strong>
         );
       } else if (token.startsWith('*') && token.endsWith('*')) {
@@ -95,7 +114,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
                 href={url}
                 className="text-[#163422] dark:text-emerald-800 font-extrabold underline hover:text-[#0f2417] transition-colors"
               >
-                {label}
+                {label.replace(/\*\*/g, '')}
               </Link>
             ) : (
               <a
@@ -105,22 +124,22 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
                 rel="noopener noreferrer"
                 className="text-[#163422] dark:text-emerald-800 font-extrabold underline hover:text-[#0f2417] transition-colors"
               >
-                {label}
+                {label.replace(/\*\*/g, '')}
               </a>
             )
           );
         } else {
-          parts.push(token);
+          parts.push(token.replace(/\*\*/g, ''));
         }
       }
       lastIndex = tokenRegex.lastIndex;
     }
 
     if (lastIndex < text.length) {
-      parts.push(text.substring(lastIndex));
+      parts.push(text.substring(lastIndex).replace(/\*\*/g, ''));
     }
 
-    return parts.length > 0 ? parts : text;
+    return parts.length > 0 ? parts : text.replace(/\*\*/g, '');
   };
 
   // Formatear markdown básico a HTML seguro y estructurado
@@ -151,7 +170,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
           // Subtítulo H2 (## o pregunta/título destacado sin prefijo)
           const isExplicitH2 = trimmed.startsWith("## ");
-          const isAutoH2 = !isExplicitH2 && trimmed.length < 85 && (trimmed.startsWith("¿") || trimmed.endsWith("?") || /^(principales|beneficios|del laboratorio|ordena|como cuidar|guia)/i.test(trimmed)) && !trimmed.includes('\n');
+          const isAutoH2 = !isExplicitH2 && trimmed.length < 85 && (trimmed.startsWith("¿") || trimmed.endsWith("?") || /^(principales|beneficios|del laboratorio|ordena|como cuidar|guia|celebrating|the art|how to|about|order your)/i.test(trimmed)) && !trimmed.includes('\n');
           
           if (isExplicitH2 || isAutoH2) {
             const headingText = isExplicitH2 ? trimmed.replace(/^##\s*/, "") : trimmed;
@@ -218,7 +237,32 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             );
           }
 
-          // Lista de viñetas (-)
+          // Bloque con viñetas o líneas que comienzan en negrita (**Poder...**)
+          const sublines = trimmed.split('\n').map(l => l.trim()).filter(Boolean);
+          const isBoldListBlock = sublines.length > 1 && sublines.some(l => l.startsWith('**') || l.startsWith('- ') || l.startsWith('* '));
+          
+          if (isBoldListBlock) {
+            return (
+              <div key={i} className="space-y-3 my-4">
+                {sublines.map((sub, idx) => {
+                  const cleanItem = sub.replace(/^[-*]\s*/, "");
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3.5 p-3.5 rounded-2xl bg-stone-50 dark:bg-stone-900/50 border border-stone-200 dark:border-stone-800 shadow-xs hover:border-[#D4AF37]/40 transition-colors"
+                    >
+                      <span className="w-2.5 h-2.5 rounded-full bg-[#163422] dark:bg-[#D4AF37] mt-2 shrink-0 shadow-xs" />
+                      <div className="flex-1 font-medium text-black dark:text-black text-sm sm:text-base leading-relaxed">
+                        {renderInlineFormattedText(cleanItem)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          }
+
+          // Lista de viñetas simples (-)
           if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
             const items = trimmed.split(/\n/).filter((l) => l.trim().length > 0);
             return (
@@ -279,6 +323,20 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             }
           }
 
+          // Si el párrafo tiene saltos de línea simples, respetamos cada línea
+          if (trimmed.includes('\n')) {
+            const simpleLines = trimmed.split('\n').filter((l) => l.trim().length > 0);
+            return (
+              <div key={i} className="space-y-3 font-medium text-black dark:text-black leading-relaxed">
+                {simpleLines.map((l, lIdx) => (
+                  <p key={lIdx}>
+                    {renderInlineFormattedText(l)}
+                  </p>
+                ))}
+              </div>
+            );
+          }
+
           return (
             <p key={i} className="font-medium text-black dark:text-black leading-relaxed">
               {renderInlineFormattedText(trimmed)}
@@ -288,6 +346,9 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
       </div>
     );
   };
+
+
+  const isEn = locale === "en" || post.language === "en";
 
   return (
     <div className="min-h-screen bg-[#FDFBF9] dark:bg-[#0B0C10] text-black dark:text-black flex flex-col transition-colors duration-300">
@@ -301,7 +362,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             headline: post.title,
-            description: post.excerpt || post.title,
+            description: cleanExcerpt(post.excerpt) || post.title,
             image: post.mainImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200",
             author: {
               "@type": "Organization",
@@ -326,21 +387,21 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           {/* Navegación de Regreso */}
           <div className="flex items-center justify-between gap-3">
             <Link
-              href="/nosotros"
+              href={isEn ? "/en/nosotros" : "/nosotros"}
               className="inline-flex items-center gap-2 text-xs font-black text-black dark:text-black hover:text-[#163422] transition-colors"
             >
               <ArrowLeft size={14} />
-              <span>Volver a Nosotros & Blog</span>
+              <span>{isEn ? "Back to About & Blog" : "Volver a Nosotros & Blog"}</span>
             </Link>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={handleCopyLink}
                 className="p-2 rounded-full bg-gray-100 dark:bg-gray-100 text-black dark:text-black hover:bg-gray-200 transition-all text-xs font-bold flex items-center gap-1.5"
-                title="Copiar enlace"
+                title={isEn ? "Copy link" : "Copiar enlace"}
               >
                 {copied ? <Check size={14} className="text-emerald-500" /> : <Share2 size={14} />}
-                <span className="hidden sm:inline">{copied ? "¡Copiado!" : "Compartir"}</span>
+                <span className="hidden sm:inline">{copied ? (isEn ? "Copied!" : "¡Copiado!") : (isEn ? "Share" : "Compartir")}</span>
               </button>
 
               <a
@@ -348,7 +409,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 transition-all text-xs font-bold flex items-center gap-1.5"
-                title="Compartir por WhatsApp"
+                title="WhatsApp"
               >
                 <MessageCircle size={14} />
                 <span className="hidden sm:inline">WhatsApp</span>
@@ -360,7 +421,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           <header className="space-y-4 text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 bg-stone-100 dark:bg-stone-800 text-black dark:text-black px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
               <Sparkles size={13} className="text-[#163422]" />
-              <span>Boutique Floral & Consejos</span>
+              <span>{isEn ? "Floral Boutique & Insights" : "Boutique Floral & Consejos"}</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-black !text-black dark:!text-black leading-tight tracking-tight" style={{ color: '#000000' }}>
@@ -369,19 +430,19 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
             {post.excerpt && (
               <p className="text-sm sm:text-base text-black dark:text-black font-semibold leading-relaxed max-w-2xl mx-auto">
-                {post.excerpt}
+                {cleanExcerpt(post.excerpt)}
               </p>
             )}
 
             <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-black dark:text-black pt-1">
               <span className="flex items-center gap-1">
                 <Calendar size={14} className="text-[#163422]" />
-                {new Date(post.createdAt || Date.now()).toLocaleDateString("es-ES", { month: "long", day: "numeric", year: "numeric" })}
+                {new Date(post.createdAt || Date.now()).toLocaleDateString(isEn ? "en-US" : "es-ES", { month: "long", day: "numeric", year: "numeric" })}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
                 <Clock size={14} className="text-stone-700" />
-                3 min de lectura
+                {isEn ? "3 min read" : "3 min de lectura"}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
@@ -413,26 +474,29 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
               <Gift size={22} />
             </div>
             <h3 className="text-2xl font-serif font-black !text-black dark:!text-black" style={{ color: '#000000' }}>
-              ¿Listo para Enviar Flores de Lujo en Houston?
+              {isEn ? "Ready to Order Luxury Flowers in Houston?" : "¿Listo para Enviar Flores de Lujo en Houston?"}
             </h3>
             <p className="text-xs sm:text-sm text-black dark:text-black max-w-lg mx-auto font-medium">
-              Explora nuestra exclusiva colección de ramos buchones, rosas de exportación y cajas personalizadas con entrega el mismo día.
+              {isEn 
+                ? "Explore our exclusive collection of luxury rose bouquets, signature hatboxes, and custom designs with prompt same-day delivery."
+                : "Explora nuestra exclusiva colección de ramos buchones, rosas de exportación y cajas personalizadas con entrega el mismo día."
+              }
             </p>
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link
-                href="/productos"
+                href={isEn ? "/en/productos" : "/productos"}
                 className="px-6 py-3 rounded-full bg-[#163422] hover:bg-[#1B2E22] text-white font-black text-xs shadow-md transition-all active:scale-95"
               >
-                Ver Catálogo de Flores
+                {isEn ? "Explore Flower Catalog" : "Ver Catálogo de Flores"}
               </Link>
               <a
-                href={`https://wa.me/13467392730?text=${encodeURIComponent(`¡Hola! Leí su artículo sobre "${post.title}" y quisiera cotizar un arreglo floral.`)}`}
+                href={`https://wa.me/13467392730?text=${encodeURIComponent(isEn ? `Hello! I just read your article "${post.title}" and would like to order a flower arrangement.` : `¡Hola! Leí su artículo sobre "${post.title}" y quisiera cotizar un arreglo floral.`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-1.5"
               >
                 <MessageCircle size={15} />
-                <span>Ordenar por WhatsApp</span>
+                <span>{isEn ? "Order via WhatsApp" : "Ordenar por WhatsApp"}</span>
               </a>
             </div>
           </div>

@@ -25,13 +25,33 @@ interface NosotrosClientProps {
 
 export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosClientProps) {
   const [selectedTag, setSelectedTag] = useState("all");
+  const isEn = locale === "en";
 
-  const tags = [
-    { id: "all", label: "Todos los Artículos" },
-    { id: "guias", label: "Guías Florales" },
-    { id: "aniversarios", label: "Aniversarios & Amor" },
-    { id: "cuidados", label: "Cuidado de Flores" }
-  ];
+  const cleanExcerpt = (text: string) => {
+    if (!text) return "";
+    return text
+      .replace(/!\[.*?\]\(.*?\)/g, "")
+      .replace(/\[(.*?)\]\(.*?\)/g, "$1")
+      .replace(/#{1,6}\s+/g, "")
+      .replace(/\*\*/g, "")
+      .replace(/\*/g, "")
+      .replace(/^[-*]\s+/gm, "")
+      .trim();
+  };
+
+  const tags = isEn
+    ? [
+        { id: "all", label: "All Articles" },
+        { id: "guides", label: "Floral Guides" },
+        { id: "anniversaries", label: "Anniversaries & Romance" },
+        { id: "care", label: "Flower Care" }
+      ]
+    : [
+        { id: "all", label: "Todos los Artículos" },
+        { id: "guias", label: "Guías Florales" },
+        { id: "aniversarios", label: "Aniversarios & Amor" },
+        { id: "cuidados", label: "Cuidado de Flores" }
+      ];
 
   const filteredPosts = initialPosts.filter((post) => {
     if (selectedTag === "all") return true;
@@ -57,17 +77,25 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
               {/* Kicker */}
               <div className="inline-flex items-center gap-2 bg-stone-100 dark:bg-stone-800 text-black dark:text-black border border-[#D4AF37]/40 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] shadow-sm">
                 <Sparkles size={13} className="text-[#163422]" />
-                <span>Boutique Floral & Storytelling</span>
+                <span>{isEn ? "Floral Boutique & Storytelling" : "Boutique Floral & Storytelling"}</span>
               </div>
 
               {/* Título Principal */}
               <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-black !text-black dark:!text-black tracking-tight leading-tight" style={{ color: '#000000' }}>
-                Detalles que Enamoran
+                {isEn ? "Details That Enchant" : "Detalles que Enamoran"}
               </h1>
 
               {/* Resumen de Historia */}
               <p className="text-base sm:text-lg text-black dark:text-black leading-relaxed font-medium pt-2">
-                En <strong className="font-bold text-black dark:text-black">Bonbon Flowers Houston</strong>, nacimos en Houston, Texas con un solo propósito: transformar cada sentimiento en una obra de arte floral inolvidable. Seleccionamos las rosas y flores más frescas de exportación para confeccionar ramos buchones, cajas de lujo y arreglos exclusivos que celebran la vida, el amor y los momentos que perduran.
+                {isEn ? (
+                  <>
+                    At <strong className="font-bold text-black dark:text-black">Bonbon Flowers Houston</strong>, we were born in Houston, Texas with a single mission: to transform every emotion into an unforgettable floral work of art. We handpick the freshest premium export roses to craft luxury buchón bouquets, signature boxes, and exclusive arrangements that celebrate life, love, and timeless memories.
+                  </>
+                ) : (
+                  <>
+                    En <strong className="font-bold text-black dark:text-black">Bonbon Flowers Houston</strong>, nacimos en Houston, Texas con un solo propósito: transformar cada sentimiento en una obra de arte floral inolvidable. Seleccionamos las rosas y flores más frescas de exportación para confeccionar ramos buchones, cajas de lujo y arreglos exclusivos que celebran la vida, el amor y los momentos que perduran.
+                  </>
+                )}
               </p>
 
               <div className="flex flex-wrap justify-center items-center gap-4 text-xs font-bold text-black dark:text-black pt-2">
@@ -76,11 +104,11 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                 </span>
                 <span className="text-black dark:text-black">•</span>
                 <span className="flex items-center gap-1 text-black dark:text-black">
-                  <Clock size={15} className="text-stone-700" /> Entrega el Mismo Día
+                  <Clock size={15} className="text-stone-700" /> {isEn ? "Same-Day Delivery" : "Entrega el Mismo Día"}
                 </span>
                 <span className="text-black dark:text-black">•</span>
                 <span className="flex items-center gap-1 text-black dark:text-black">
-                  <Heart size={15} className="text-[#163422]" /> Floristas Expertos
+                  <Heart size={15} className="text-[#163422]" /> {isEn ? "Master Florists" : "Floristas Expertos"}
                 </span>
               </div>
 
@@ -94,10 +122,12 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                   <Heart size={24} />
                 </div>
                 <h3 className="font-serif font-black text-lg !text-black dark:!text-black mb-2" style={{ color: '#000000' }}>
-                  Frescura Incomparable
+                  {isEn ? "Unmatched Freshness" : "Frescura Incomparable"}
                 </h3>
                 <p className="text-xs text-black dark:text-black leading-relaxed font-medium">
-                  Rosas y follajes seleccionados a mano todos los días para asegurar pétalos firmes, colores vibrantes y una duración prolongada.
+                  {isEn
+                    ? "Freshly handpicked roses and foliage daily to ensure firm petals, vibrant colors, and long-lasting vase life."
+                    : "Rosas y follajes seleccionados a mano todos los días para asegurar pétalos firmes, colores vibrantes y una duración prolongada."}
                 </p>
               </div>
 
@@ -106,10 +136,12 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                   <Sparkles size={24} />
                 </div>
                 <h3 className="font-serif font-black text-lg !text-black dark:!text-black mb-2" style={{ color: '#000000' }}>
-                  Diseño de Alta Floristería
+                  {isEn ? "Haute Floral Couture" : "Diseño de Alta Floristería"}
                 </h3>
                 <p className="text-xs text-black dark:text-black leading-relaxed font-medium">
-                  Ramos buchones de impacto, coronas brillantes, mariposas decorativas, cajas redondas de lujo y dedicatorias exclusivas en cada pedido.
+                  {isEn
+                    ? "Imposing buchón bouquets, glittering crowns, decorative butterflies, luxury round boxes, and bespoke inscriptions with every order."
+                    : "Ramos buchones de impacto, coronas brillantes, mariposas decorativas, cajas redondas de lujo y dedicatorias exclusivas en cada pedido."}
                 </p>
               </div>
 
@@ -118,10 +150,12 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                   <Truck size={24} />
                 </div>
                 <h3 className="font-serif font-black text-lg !text-black dark:!text-black mb-2" style={{ color: '#000000' }}>
-                  Envíos y Puntualidad
+                  {isEn ? "Punctual Delivery" : "Envíos y Puntualidad"}
                 </h3>
                 <p className="text-xs text-black dark:text-black leading-relaxed font-medium">
-                  Cobertura puntual en Houston, Pearland y zonas metropolitanas con seguimiento en vivo de tu envío.
+                  {isEn
+                    ? "Prompt same-day delivery across Houston, Pearland, Sugar Land, Katy, and metropolitan areas with real-time tracking."
+                    : "Cobertura puntual en Houston, Pearland y zonas metropolitanas con seguimiento en vivo de tu envío."}
                 </p>
               </div>
 
@@ -139,13 +173,15 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 bg-stone-100 dark:bg-stone-800 text-black dark:text-black px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
                   <BookOpen size={14} className="text-[#163422]" />
-                  <span>Blog & Consejos Florales</span>
+                  <span>{isEn ? "Blog & Floral Insights" : "Blog & Consejos Florales"}</span>
                 </div>
                 <h2 className="text-3xl sm:text-4xl font-serif font-black !text-black dark:!text-black" style={{ color: '#000000' }}>
-                  Historias, Guías y Tendencias
+                  {isEn ? "Stories, Guides & Trends" : "Historias, Guías y Tendencias"}
                 </h2>
                 <p className="text-sm text-black dark:text-black font-semibold max-w-xl">
-                  Aprende a elegir y cuidar tus flores con los consejos de nuestros floristas profesionales en Texas.
+                  {isEn
+                    ? "Learn how to choose and care for fresh luxury flowers with advice from our professional Texas florists."
+                    : "Aprende a elegir y cuidar tus flores con los consejos de nuestros floristas profesionales en Texas."}
                 </p>
               </div>
 
@@ -170,7 +206,9 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
             {/* GRID DE POSTS */}
             {filteredPosts.length === 0 ? (
               <div className="text-center py-16 bg-white dark:bg-[#181922] rounded-3xl border border-gray-200 dark:border-gray-800 p-8">
-                <p className="text-sm font-bold text-black dark:text-black">No hay artículos en esta categoría en este momento.</p>
+                <p className="text-sm font-bold text-black dark:text-black">
+                  {isEn ? "No articles available in this category at the moment." : "No hay artículos en esta categoría en este momento."}
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -180,7 +218,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                     className="bg-white dark:bg-[#181922] rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
                   >
                     {/* Imagen del Post */}
-                    <Link href={`/nosotros/${post.slug}`} className="relative h-56 overflow-hidden block bg-gray-100 dark:bg-gray-800">
+                    <Link href={isEn ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`} className="relative h-56 overflow-hidden block bg-gray-100 dark:bg-gray-800">
                       <img
                         src={post.mainImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800"}
                         alt={post.title}
@@ -189,7 +227,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                       />
                       <div className="absolute top-4 left-4">
                         <span className="bg-[#1A1C1C]/80 backdrop-blur-md text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
-                          Boutique Floral
+                          {isEn ? "Floral Boutique" : "Boutique Floral"}
                         </span>
                       </div>
                     </Link>
@@ -199,29 +237,29 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                       <div className="space-y-2.5">
                         <div className="flex items-center gap-2 text-[11px] text-black dark:text-black font-bold">
                           <Calendar size={13} className="text-[#163422]" />
-                          <span>{new Date(post.createdAt || Date.now()).toLocaleDateString("es-ES", { month: "short", day: "numeric", year: "numeric" })}</span>
+                          <span>{new Date(post.createdAt || Date.now()).toLocaleDateString(isEn ? "en-US" : "es-ES", { month: "short", day: "numeric", year: "numeric" })}</span>
                           <span>•</span>
-                          <span>3 min de lectura</span>
+                          <span>{isEn ? "3 min read" : "3 min de lectura"}</span>
                         </div>
 
-                        <Link href={`/nosotros/${post.slug}`}>
+                        <Link href={isEn ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`}>
                           <h3 className="font-serif font-black text-lg !text-black dark:!text-black group-hover:text-[#163422] transition-colors line-clamp-2 leading-snug" style={{ color: '#000000' }}>
                             {post.title}
                           </h3>
                         </Link>
 
                         <p className="text-xs text-black dark:text-black line-clamp-3 leading-relaxed font-medium">
-                          {post.excerpt || post.content?.slice(0, 140)}
+                          {cleanExcerpt(post.excerpt) || cleanExcerpt(post.content?.slice(0, 140))}
                         </p>
                       </div>
 
                       {/* Botón Leer Más */}
                       <div className="pt-3 border-t border-gray-100 dark:border-gray-800">
                         <Link
-                          href={`/nosotros/${post.slug}`}
+                          href={isEn ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`}
                           className="inline-flex items-center gap-1.5 text-xs font-black text-black dark:text-black hover:text-[#163422] group-hover:translate-x-1 transition-transform"
                         >
-                          <span>Leer Artículo Completo</span>
+                          <span>{isEn ? "Read Full Article" : "Leer Artículo Completo"}</span>
                           <ArrowRight size={14} className="text-[#163422]" />
                         </Link>
                       </div>
@@ -238,27 +276,29 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
         <section className="py-14 bg-gradient-to-r from-stone-100 via-stone-50 to-stone-100 dark:from-[#181922] dark:via-[#161822] dark:to-[#181922] border-t border-[#D4AF37]/20">
           <div className="max-w-4xl mx-auto px-4 text-center space-y-5">
             <h2 className="text-3xl sm:text-4xl font-serif font-black !text-black dark:!text-black" style={{ color: '#000000' }}>
-              ¿Deseas Sorprender con un Arreglo Personalizado?
+              {isEn ? "Looking to Surprise with a Bespoke Floral Arrangement?" : "¿Deseas Sorprender con un Arreglo Personalizado?"}
             </h2>
             <p className="text-sm text-black dark:text-black max-w-xl mx-auto font-medium leading-relaxed">
-              Conoce nuestro catálogo con entregas en Houston, TX o comunícate directamente con nuestros floristas para diseñar un ramo a tu medida.
+              {isEn
+                ? "Browse our exclusive online catalog with same-day delivery in Houston, TX or contact our floral designers to create a custom arrangement."
+                : "Conoce nuestro catálogo con entregas en Houston, TX o comunícate directamente con nuestros floristas para diseñar un ramo a tu medida."}
             </p>
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link
-                href="/productos"
+                href={isEn ? "/en/productos" : "/productos"}
                 className="bg-[#163422] hover:bg-[#1B2E22] text-white px-7 py-3.5 rounded-full font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
               >
                 <Gift size={16} />
-                <span>Explorar Catálogo de Flores</span>
+                <span>{isEn ? "Explore Flower Catalog" : "Explorar Catálogo de Flores"}</span>
               </Link>
               <a
-                href="https://wa.me/13467392730?text=¡Hola!%20Leí%20su%20página%20de%20Nosotros%20y%20quisiera%20cotizar%20un%20arreglo%20floral%20personalizado."
+                href={isEn ? "https://wa.me/13467392730?text=Hello!%20I%20am%20visiting%20your%20About%20page%20and%20would%20like%20to%20order%20a%20custom%20flower%20arrangement." : "https://wa.me/13467392730?text=¡Hola!%20Leí%20su%20página%20de%20Nosotros%20y%20quisiera%20cotizar%20un%20arreglo%20floral%20personalizado."}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="bg-emerald-600 hover:bg-emerald-700 text-white px-7 py-3.5 rounded-full font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
               >
                 <MessageCircle size={16} />
-                <span>Hablar por WhatsApp (+1 346 739 2730)</span>
+                <span>{isEn ? "Chat on WhatsApp (+1 346 739 2730)" : "Hablar por WhatsApp (+1 346 739 2730)"}</span>
               </a>
             </div>
           </div>

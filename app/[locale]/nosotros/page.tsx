@@ -27,7 +27,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function LocalizedNosotrosPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const { data: posts } = await getPosts({ publishedOnly: true });
+  const targetLanguage = locale === "en" ? "en" : "es";
+  const { data: posts } = await getPosts({ publishedOnly: true, language: targetLanguage });
 
   return <NosotrosClient initialPosts={posts || []} locale={locale} />;
 }

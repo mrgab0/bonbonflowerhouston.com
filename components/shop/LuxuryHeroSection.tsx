@@ -7,11 +7,13 @@ import { MessageCircle, Star, Award, Truck, Sparkles } from "lucide-react";
 interface LuxuryHeroSectionProps {
   siteConfig?: any;
   heroProducts?: any[];
+  locale?: string;
 }
 
-export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig, heroProducts = [] }) => {
+export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig, heroProducts = [], locale = "es" }) => {
   const logoUrl = siteConfig?.logoUrl || "https://bonbonflowershouston.com/logo.png";
-  const catalogUrl = "/productos";
+  const prefix = locale === "en" ? "/en" : "";
+  const catalogUrl = `${prefix}/productos`;
   const whatsappUrl = "https://wa.me/13467392730?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston.";
 
   const fallbackProduct = {
@@ -41,7 +43,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
     : "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format";
   const productPrice = typeof activeProduct.price === "number" ? activeProduct.price.toFixed(2) : "99.99";
   const productBadge = activeProduct.badge || "Haute Handcrafted";
-  const productLink = activeProduct.slug ? `/producto/${activeProduct.slug}` : "#catalogo";
+  const productLink = activeProduct.slug ? `${prefix}/productos/${activeProduct.slug}` : "#catalogo";
 
   return (
     <section className="relative overflow-hidden bg-white dark:bg-[#0B0C10] py-12 lg:py-20 border-b border-stone-200/80 dark:border-gray-800/80 transition-colors duration-300 select-none">

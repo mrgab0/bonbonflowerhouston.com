@@ -28,6 +28,8 @@ export default function AdminBlogPage() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [languageFilter, setLanguageFilter] = useState<"all" | "es" | "en">("all");
+  const [translatingId, setTranslatingId] = useState<string | null>(null);
 
   // Estado del Formulario
   const [isEditing, setIsEditing] = useState(false);
@@ -38,7 +40,8 @@ export default function AdminBlogPage() {
     excerpt: "",
     content: "",
     mainImage: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
-    published: true
+    published: true,
+    language: "es" as "es" | "en"
   });
   const [saving, setSaving] = useState(false);
   const [notification, setNotification] = useState<{ type: "success" | "error"; message: string } | null>(null);
@@ -75,7 +78,8 @@ export default function AdminBlogPage() {
       excerpt: "",
       content: "",
       mainImage: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
-      published: true
+      published: true,
+      language: "es"
     });
     setIsEditing(true);
   }
@@ -88,7 +92,8 @@ export default function AdminBlogPage() {
       excerpt: post.excerpt || "",
       content: post.content || "",
       mainImage: post.mainImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=1200&auto=format&fit=crop&q=80",
-      published: post.published !== false
+      published: post.published !== false,
+      language: post.language || "es"
     });
     setIsEditing(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -203,7 +208,8 @@ export default function AdminBlogPage() {
           excerpt: post.excerpt,
           content: post.content,
           mainImage: post.suggestedImage || "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=1200&auto=format&fit=crop&q=80",
-          published: true
+          published: true,
+          language: aiLanguage || "es"
         });
 
         if (res.success) {
@@ -229,6 +235,52 @@ export default function AdminBlogPage() {
     }
   }
 
+  // Traducción 1-Clic con IA a Inglés o Español
+  async function handleTranslatePost(post: any) {
+    const targetLang = post.language === "en" ? "es" : "en";
+    const targetLabel = targetLang === "en" ? "Inglés 🇺🇸" : "Español 🇲🇽";
+
+    if (!confirm(`¿Deseas traducir el artículo "${post.title}" al ${targetLabel} con IA y publicarlo automáticamente en el blog?`)) {
+      return;
+    }
+
+    setTranslatingId(post._id);
+    setNotification(null);
+
+    try {
+      const response = await fetch("/api/admin/blog/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          postId: post._id,
+          targetLanguage: targetLang
+        })
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setNotification({
+          type: "success",
+          message: `✨ ¡Artículo traducido al ${targetLabel} con éxito! "${data.post?.title}"`
+        });
+        loadPosts();
+        setTimeout(() => setNotification(null), 5000);
+      } else {
+        setNotification({
+          type: "error",
+          message: data.error || "Ocurrió un error al traducir el artículo."
+        });
+      }
+    } catch (err: any) {
+      setNotification({
+        type: "error",
+        message: "Error de conexión al procesar la traducción con IA."
+      });
+    } finally {
+      setTranslatingId(null);
+    }
+  }
+
   // Aplicar borrador de la IA al formulario
   function handleApplyAiResult() {
     if (!generatedResult) return;
@@ -239,7 +291,8 @@ export default function AdminBlogPage() {
       excerpt: generatedResult.excerpt || formData.excerpt,
       content: generatedResult.content || formData.content,
       mainImage: generatedResult.suggestedImage || formData.mainImage,
-      published: true
+      published: true,
+      language: aiLanguage || "es"
     });
 
     setIsAiModalOpen(false);
@@ -251,12 +304,17 @@ export default function AdminBlogPage() {
     setTimeout(() => setNotification(null), 4000);
   }
 
-  const filteredPosts = posts.filter(
-    (p) =>
+  const filteredPosts = posts.filter((p) => {
+    const matchesSearch =
       p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.excerpt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.slug?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+      p.slug?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    if (!matchesSearch) return false;
+    if (languageFilter === "all") return true;
+    if (languageFilter === "en") return p.language === "en";
+    return p.language !== "en";
+  });
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl space-y-8">
@@ -395,6 +453,21 @@ export default function AdminBlogPage() {
                   className="w-full p-3.5 border rounded-2xl text-sm text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
                 />
               </div>
+
+              {/* Idioma de Publicación */}
+              <div className="space-y-1.5 md:col-span-2">
+                <label className="text-xs font-black uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                  Idioma de Publicación *
+                </label>
+                <select
+                  value={formData.language}
+                  onChange={(e: any) => setFormData({ ...formData, language: e.target.value })}
+                  className="w-full p-3.5 border rounded-2xl text-xs font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
+                >
+                  <option value="es">Español 🇲🇽 (Se publicará en /nosotros)</option>
+                  <option value="en">Inglés 🇺🇸 (Se publicará en /en/nosotros)</option>
+                </select>
+              </div>
             </div>
 
             {/* Resumen / Meta Descripción */}
@@ -470,8 +543,8 @@ export default function AdminBlogPage() {
         </div>
       )}
 
-      {/* BARRA DE BÚSQUEDA Y ESTADÍSTICAS */}
-      <div className="bg-white dark:bg-[#181922] p-4 sm:p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      {/* BARRA DE BÚSQUEDA Y FILTROS POR IDIOMA */}
+      <div className="bg-white dark:bg-[#181922] p-4 sm:p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md">
           <Search className="absolute left-3.5 top-3 text-gray-400" size={16} />
           <input
@@ -483,8 +556,41 @@ export default function AdminBlogPage() {
           />
         </div>
 
-        <div className="text-xs font-bold text-gray-500 dark:text-gray-400">
-          Total de artículos: <span className="text-gray-900 dark:text-white font-black">{posts.length}</span>
+        {/* Pestañas de Filtro por Idioma */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <button
+            type="button"
+            onClick={() => setLanguageFilter("all")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all border ${
+              languageFilter === "all"
+                ? "bg-[#163422] text-white border-[#163422] shadow-xs"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            Todos ({posts.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguageFilter("es")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all border ${
+              languageFilter === "es"
+                ? "bg-[#163422] text-white border-[#163422] shadow-xs"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            Español 🇲🇽 ({posts.filter((p) => p.language !== "en").length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguageFilter("en")}
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all border ${
+              languageFilter === "en"
+                ? "bg-[#163422] text-white border-[#163422] shadow-xs"
+                : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            English 🇺🇸 ({posts.filter((p) => p.language === "en").length})
+          </button>
         </div>
       </div>
 
@@ -516,6 +622,11 @@ export default function AdminBlogPage() {
                   alt={post.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+                <div className="absolute top-3 left-3">
+                  <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm bg-black/80 backdrop-blur-md text-white border border-white/20">
+                    {post.language === "en" ? "EN 🇺🇸" : "ES 🇲🇽"}
+                  </span>
+                </div>
                 <div className="absolute top-3 right-3 flex items-center gap-1.5">
                   <span
                     className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm border ${
@@ -533,7 +644,7 @@ export default function AdminBlogPage() {
               <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                 <div className="space-y-2">
                   <span className="text-[11px] font-mono text-gray-400 block">
-                    /{post.slug}
+                    /{post.language === "en" ? "en/nosotros/" : "nosotros/"}{post.slug}
                   </span>
                   <h3 className="font-serif font-black text-base text-gray-900 dark:!text-white line-clamp-2 leading-snug">
                     {post.title}
@@ -545,14 +656,31 @@ export default function AdminBlogPage() {
 
                 {/* Acciones */}
                 <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-2">
-                  <Link
-                    href={`/nosotros/${post.slug}`}
-                    target="_blank"
-                    className="text-xs font-bold text-[#8B0024] dark:text-pink-300 hover:underline flex items-center gap-1"
-                  >
-                    <Eye size={14} />
-                    <span>Ver Post</span>
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={post.language === "en" ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`}
+                      target="_blank"
+                      className="text-xs font-bold text-[#8B0024] dark:text-pink-300 hover:underline flex items-center gap-1"
+                    >
+                      <Eye size={14} />
+                      <span>Ver Post</span>
+                    </Link>
+
+                    {/* Botón Traducción 1-Clic con IA */}
+                    <button
+                      onClick={() => handleTranslatePost(post)}
+                      disabled={translatingId === post._id}
+                      className="px-2.5 py-1 rounded-xl bg-purple-50 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 hover:bg-purple-100 transition-all text-[11px] font-black flex items-center gap-1 border border-purple-200 dark:border-purple-800 disabled:opacity-50"
+                      title={post.language === "en" ? "Traducir a Español con IA" : "Traducir a Inglés con IA"}
+                    >
+                      {translatingId === post._id ? (
+                        <RefreshCw className="animate-spin" size={12} />
+                      ) : (
+                        <Globe size={12} />
+                      )}
+                      <span>{post.language === "en" ? "A Español" : "Traducir EN ✨"}</span>
+                    </button>
+                  </div>
 
                   <div className="flex items-center gap-1">
                     <button

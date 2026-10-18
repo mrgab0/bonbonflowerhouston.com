@@ -80,7 +80,7 @@ export default async function LocalizedHome({ params }: { params: Promise<{ loca
       <StickyNav siteConfig={siteConfig} />
 
       {/* Hero Section Editorial de Lujo Stitch 'Flowers that make them feel loved ♡' */}
-      <LuxuryHeroSection siteConfig={siteConfig} heroProducts={heroProducts} />
+      <LuxuryHeroSection siteConfig={siteConfig} heroProducts={heroProducts} locale={locale} />
 
       {/* 4 Pilares de Excelencia (Entrega Mismo Día, Tarjeta Caligrafiada, Rosas Ecuador, White Glove) */}
       <PillarsOfExcellence />
