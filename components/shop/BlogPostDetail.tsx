@@ -57,22 +57,111 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
   const whatsappShareUrl = `https://wa.me/?text=${encodeURIComponent(`Mira este artículo de Bonbon Flowers: ${post.title} ` + (typeof window !== "undefined" ? window.location.href : ""))}`;
 
-  // Formatear markdown básico a HTML seguro
+  // Función auxiliar para parsear negritas, cursivas y enlaces inline en el texto
+  const renderInlineFormattedText = (text: string) => {
+    if (!text) return "";
+    const parts: (string | React.ReactNode)[] = [];
+    const tokenRegex = /(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g;
+    let lastIndex = 0;
+    let match;
+
+    while ((match = tokenRegex.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.substring(lastIndex, match.index));
+      }
+
+      const token = match[0];
+      if (token.startsWith('**') && token.endsWith('**')) {
+        parts.push(
+          <strong key={match.index} className="font-extrabold text-black dark:text-black">
+            {token.slice(2, -2)}
+          </strong>
+        );
+      } else if (token.startsWith('*') && token.endsWith('*')) {
+        parts.push(
+          <em key={match.index} className="italic text-black dark:text-black font-semibold">
+            {token.slice(1, -1)}
+          </em>
+        );
+      } else if (token.startsWith('[') && token.includes('](')) {
+        const linkMatch = token.match(/\[(.*?)\]\((.*?)\)/);
+        if (linkMatch) {
+          const [, label, url] = linkMatch;
+          const isInternal = url.startsWith('/');
+          parts.push(
+            isInternal ? (
+              <Link
+                key={match.index}
+                href={url}
+                className="text-[#163422] dark:text-emerald-800 font-extrabold underline hover:text-[#0f2417] transition-colors"
+              >
+                {label}
+              </Link>
+            ) : (
+              <a
+                key={match.index}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#163422] dark:text-emerald-800 font-extrabold underline hover:text-[#0f2417] transition-colors"
+              >
+                {label}
+              </a>
+            )
+          );
+        } else {
+          parts.push(token);
+        }
+      }
+      lastIndex = tokenRegex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return parts.length > 0 ? parts : text;
+  };
+
+  // Formatear markdown básico a HTML seguro y estructurado
   const renderFormattedContent = (content: string) => {
     if (!content) return null;
 
-    const paragraphs = content.split(/\n\n+/);
+    // Normalizar saltos de línea para aislar títulos y divisores
+    const normalized = content
+      .replace(/\r\n/g, '\n')
+      .replace(/\n---\n/g, '\n\n---\n\n');
+
+    const paragraphs = normalized.split(/\n\n+/);
 
     return (
       <div className="space-y-6 text-black dark:text-black text-sm sm:text-base leading-relaxed">
         {paragraphs.map((para, i) => {
           const trimmed = para.trim();
+          if (!trimmed) return null;
 
-          // Subtítulo H2 (##)
-          if (trimmed.startsWith("## ")) {
+          // Separador horizontal (--- o ***)
+          if (trimmed === '---' || trimmed === '***') {
             return (
-              <h2 key={i} className="text-2xl sm:text-3xl font-serif font-black !text-black dark:!text-black pt-6 pb-1 border-b border-gray-200 dark:border-gray-800" style={{ color: '#000000' }}>
-                {trimmed.replace("## ", "")}
+              <div key={i} className="py-2">
+                <hr className="border-t-2 border-stone-200 dark:border-stone-800" />
+              </div>
+            );
+          }
+
+          // Subtítulo H2 (## o pregunta/título destacado sin prefijo)
+          const isExplicitH2 = trimmed.startsWith("## ");
+          const isAutoH2 = !isExplicitH2 && trimmed.length < 85 && (trimmed.startsWith("¿") || trimmed.endsWith("?") || /^(principales|beneficios|del laboratorio|ordena|como cuidar|guia)/i.test(trimmed)) && !trimmed.includes('\n');
+          
+          if (isExplicitH2 || isAutoH2) {
+            const headingText = isExplicitH2 ? trimmed.replace(/^##\s*/, "") : trimmed;
+            return (
+              <h2
+                key={i}
+                className="text-2xl sm:text-3xl font-serif font-black !text-black dark:!text-black pt-6 pb-2 border-b-2 border-stone-200 dark:border-stone-800 tracking-tight"
+                style={{ color: '#000000' }}
+              >
+                {renderInlineFormattedText(headingText)}
               </h2>
             );
           }
@@ -80,8 +169,12 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           // Subtítulo H3 (###)
           if (trimmed.startsWith("### ")) {
             return (
-              <h3 key={i} className="text-lg sm:text-xl font-serif font-black !text-black dark:!text-black pt-4 pb-0.5" style={{ color: '#000000' }}>
-                {trimmed.replace("### ", "")}
+              <h3
+                key={i}
+                className="text-lg sm:text-xl font-serif font-black !text-black dark:!text-black pt-4 pb-1"
+                style={{ color: '#000000' }}
+              >
+                {renderInlineFormattedText(trimmed.replace(/^###\s*/, ""))}
               </h3>
             );
           }
@@ -89,9 +182,39 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           // Blockquote (>)
           if (trimmed.startsWith("> ")) {
             return (
-              <blockquote key={i} className="p-4 sm:p-5 my-4 bg-stone-100 dark:bg-stone-800 rounded-2xl border-l-4 border-[#163422] text-black dark:text-black font-semibold italic">
-                {trimmed.replace(/^>\s*/, "")}
+              <blockquote
+                key={i}
+                className="p-4 sm:p-5 my-4 bg-stone-100 dark:bg-stone-800/80 rounded-2xl border-l-4 border-[#163422] text-black dark:text-black font-semibold italic shadow-xs"
+              >
+                {renderInlineFormattedText(trimmed.replace(/^>\s*/, ""))}
               </blockquote>
+            );
+          }
+
+          // Lista numerada (1. , 2. ) con tarjetas destacadas para variedades o pasos
+          if (/^\d+\.\s+/.test(trimmed)) {
+            const items = trimmed.split(/\n(?=\d+\.\s+)/).filter((l) => l.trim().length > 0);
+            return (
+              <div key={i} className="space-y-3.5 my-4">
+                {items.map((item, idx) => {
+                  const numberMatch = item.match(/^(\d+)\.\s+([\s\S]*)/);
+                  const num = numberMatch ? numberMatch[1] : (idx + 1);
+                  const body = numberMatch ? numberMatch[2] : item;
+                  return (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3.5 p-4 rounded-2xl bg-stone-50 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 shadow-xs hover:border-[#D4AF37]/50 transition-colors"
+                    >
+                      <span className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#163422] text-[#D4AF37] font-black text-xs sm:text-sm flex items-center justify-center shadow-xs">
+                        {num}
+                      </span>
+                      <div className="flex-1 font-medium text-black dark:text-black text-sm sm:text-base leading-relaxed">
+                        {renderInlineFormattedText(body)}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             );
           }
 
@@ -104,7 +227,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
                   const cleanItem = it.replace(/^[-*]\s*/, "");
                   return (
                     <li key={idx} className="font-semibold text-black dark:text-black">
-                      {cleanItem}
+                      {renderInlineFormattedText(cleanItem)}
                     </li>
                   );
                 })}
@@ -158,7 +281,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
 
           return (
             <p key={i} className="font-medium text-black dark:text-black leading-relaxed">
-              {trimmed}
+              {renderInlineFormattedText(trimmed)}
             </p>
           );
         })}
