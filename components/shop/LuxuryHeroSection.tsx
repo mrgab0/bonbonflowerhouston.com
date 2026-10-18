@@ -18,7 +18,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
     name: "Anniversary Romance Haute Floral Collection Houston",
     slug: "",
     price: 99.99,
-    badge: "Atelier Handcrafted",
+    badge: "Haute Handcrafted",
     images: ["https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format"]
   };
 
@@ -40,7 +40,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
     ? activeProduct.images[0]
     : "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=600&q=80&auto=format";
   const productPrice = typeof activeProduct.price === "number" ? activeProduct.price.toFixed(2) : "99.99";
-  const productBadge = activeProduct.badge || "Atelier Handcrafted";
+  const productBadge = activeProduct.badge || "Haute Handcrafted";
   const productLink = activeProduct.slug ? `/producto/${activeProduct.slug}` : "#catalogo";
 
   return (
@@ -58,7 +58,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 text-[#B0004A] dark:text-[#FF97A4] shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#FF97A4] animate-pulse" />
               <span className="text-[11px] font-bold uppercase tracking-widest font-mono">
-                Houston Couture Atelier • White-Glove
+                Houston Couture Boutique • White-Glove
               </span>
             </div>
 
@@ -143,7 +143,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
               </div>
 
-              {/* Badge Flotante 1: Atelier Handcrafted */}
+              {/* Badge Flotante 1: Haute Handcrafted */}
               <div className="absolute -bottom-3 left-4 sm:left-8 bg-white dark:bg-[#181922] px-4 py-3 rounded-2xl shadow-xl border border-stone-200/80 dark:border-gray-700/80 flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 flex items-center justify-center text-[#B0004A] dark:text-[#FF97A4]">
                   <Award size={20} />

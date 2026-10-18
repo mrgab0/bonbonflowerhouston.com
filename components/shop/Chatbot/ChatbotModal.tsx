@@ -81,7 +81,7 @@ const I18N_CONTENT = {
       "📈 Consejos de SEO para floristería"
     ],
     previewTickers: [
-      "🌸 Asistente de Gestión Atelier Bonbon",
+      "🌸 Asistente de Gestión Bonbon Flowers",
       "📦 ¿Dudas con productos o variantes? Pregúntame",
       "🚚 Configuración de envíos y tarifas",
       "⚡ Co-Pilot en línea para ayudarte"
@@ -90,7 +90,7 @@ const I18N_CONTENT = {
     resetMessage: "¡Hola de nuevo! ⚡ Flor Co-Pilot lista. ¿Qué módulo o configuración deseas revisar?",
     errorMessage: "⚠️ Hubo un inconveniente temporal de conexión con el motor de IA. Por favor intenta de nuevo en unos segundos.",
     defaultErrorResponse: "Disculpa, no pude procesar tu consulta técnica. Por favor intenta de nuevo.",
-    advisorRole: "ATELIER CO-PILOT • ADMIN",
+    advisorRole: "AI CO-PILOT • ADMIN",
     liveBadge: "MODO GESTIÓN",
     headerStatus: "Co-Pilot Administrativo • En línea ⚡",
     ariaOpen: "Abrir Asistente Co-Pilot de Administración",
@@ -100,7 +100,7 @@ const I18N_CONTENT = {
     searchingCatalog: "Consultando sistema...",
     popularQuestions: "Consultas frecuentes de gestión:",
     inputPlaceholder: "Pregunta sobre productos, órdenes, entregas o SEO...",
-    poweredBy: "Flor Co-Pilot • Atelier Console",
+    poweredBy: "Flor Co-Pilot • Admin Console",
   }
 };
 

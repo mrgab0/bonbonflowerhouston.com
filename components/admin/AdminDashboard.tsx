@@ -200,11 +200,11 @@ export function AdminDashboard() {
 
   return (
     <div className="relative space-y-8 select-none">
-      {/* Luces de Fondo Ambientales (Atelier Glow) */}
+      {/* Luces de Fondo Ambientales (Console Glow) */}
       <div className="fixed top-20 right-1/4 w-[450px] h-[300px] bg-purple-700/10 rounded-full blur-[140px] pointer-events-none -z-0" />
       <div className="fixed bottom-10 right-10 w-[400px] h-[300px] bg-pink-600/10 rounded-full blur-[150px] pointer-events-none -z-0" />
 
-      {/* HERO BANNER DE BIENVENIDA (Estilo Stitch Atelier Console) */}
+      {/* HERO BANNER DE BIENVENIDA (Estilo Stitch Admin Console) */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-gray-900 via-[#13141c] to-gray-900 dark:from-[#0F1015] dark:via-[#161822] dark:to-[#0F1015] border border-gray-800 dark:border-gray-800/80 p-6 sm:p-8 shadow-2xl text-white">
         <div className="absolute -right-12 -top-12 w-64 h-64 bg-[#FF97A4]/10 rounded-full blur-3xl pointer-events-none" />
 
@@ -212,7 +212,7 @@ export function AdminDashboard() {
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-bold uppercase tracking-widest text-[#FF97A4]">
-                Atelier Bonbon Flowers • Houston
+                Bonbon Flowers • Houston
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -379,7 +379,7 @@ export function AdminDashboard() {
       <div className="pt-6 border-t border-gray-200 dark:border-gray-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
         <div className="flex items-center gap-2">
           <ShieldCheck size={16} className="text-emerald-500" />
-          <span>Atelier Bonbon Flowers LLC • Houston, Texas</span>
+          <span>Bonbon Flowers LLC • Houston, Texas</span>
           <span className="hidden sm:inline">•</span>
           <span className="font-mono text-[11px] text-emerald-500 font-medium flex items-center gap-1">
             <CheckCircle2 size={12} />
@@ -388,7 +388,7 @@ export function AdminDashboard() {
         </div>
 
         <div className="text-[11px] text-gray-400 font-mono">
-          v2.4 Atelier Console
+          v2.4 Admin Console
         </div>
       </div>
     </div>

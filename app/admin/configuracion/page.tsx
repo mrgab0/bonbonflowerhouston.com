@@ -647,7 +647,7 @@ export default function AdminConfiguracionPage() {
                       </div>
                       <div className="flex flex-col text-left overflow-hidden">
                         <span className="text-[8px] uppercase tracking-wider text-[#C5A059] font-extrabold truncate">
-                          {previewProduct?.badge || "Atelier Handcrafted"}
+                          {previewProduct?.badge || "Haute Handcrafted"}
                         </span>
                         <span className="text-xs font-bold text-stone-900 dark:text-white leading-tight">
                           {previewProduct?.price ? `Desde $${Number(previewProduct.price).toFixed(2)} USD` : "Desde $99.99 USD"}
