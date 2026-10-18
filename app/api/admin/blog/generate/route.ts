@@ -51,8 +51,9 @@ Información del negocio para incluir naturalmente en el post:
 - Cobertura de Entrega: Houston, Pearland, Sugar Land, Katy, The Woodlands y áreas metropolitanas de Texas.
 - Servicios: Entrega el mismo día, flores frescas garantizadas, complementos como chocolates finos, globos y dedicatorias de lujo.
 
-Instrucciones estrictas de formato:
-Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código markdown adicionales fuera del JSON, con la siguiente estructura exacta:
+Instrucciones estrictas de formato y longitud:
+1. Longitud ideal: Entre 550 y 850 palabras.
+2. Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código markdown adicionales fuera del JSON, con la siguiente estructura exacta:
 {
   "title": "Título SEO atractivo, elegante y magnético (máximo 70 caracteres)",
   "slug": "slug-amigable-para-url-en-minusculas-con-guiones",
@@ -61,6 +62,7 @@ Debes responder ÚNICAMENTE con un objeto JSON válido, sin bloques de código m
   "tags": ["Tag1", "Tag2", "Tag3"],
   "suggestedImage": "${randomFallbackImage}"
 }
+3. IMPORTANTE: Cierra estrictamente todas las comillas dobles y la llave final del objeto JSON.
 
 Idioma del artículo: ${isEn ? "Inglés (English)" : "Español"}.`;
 
@@ -93,7 +95,7 @@ ${keywords ? `Palabras clave secundarias a incluir: "${keywords.trim()}".` : ''}
             generationConfig: {
               temperature: 0.7,
               topP: 0.95,
-              maxOutputTokens: 2000,
+              maxOutputTokens: 8192,
               responseMimeType: "application/json"
             }
           })
@@ -122,15 +124,8 @@ ${keywords ? `Palabras clave secundarias a incluir: "${keywords.trim()}".` : ''}
       }, { status: 502 });
     }
 
-    // Limpiar posibles bloques ```json ... ``` que Gemini pueda devolver
-    let cleanJson = rawAiText.trim();
-    if (cleanJson.startsWith('```json')) {
-      cleanJson = cleanJson.replace(/^```json\s*/, '').replace(/\s*```$/, '');
-    } else if (cleanJson.startsWith('```')) {
-      cleanJson = cleanJson.replace(/^```\s*/, '').replace(/\s*```$/, '');
-    }
-
-    const postData = JSON.parse(cleanJson);
+    // Parseo resiliente de JSON para evitar "Unterminated string" ante cualquier corte imprevisto
+    const postData = parseAiJsonSafely(rawAiText, randomFallbackImage);
 
     return NextResponse.json({ success: true, post: postData });
 
@@ -140,4 +135,70 @@ ${keywords ? `Palabras clave secundarias a incluir: "${keywords.trim()}".` : ''}
       error: error.message || "Error al procesar la solicitud de generación con IA." 
     }, { status: 500 });
   }
+}
+
+// Función auxiliar de parseo con auto-reparación
+function parseAiJsonSafely(rawText: string, fallbackImage: string) {
+  let cleanJson = rawText.trim();
+  if (cleanJson.startsWith('```json')) {
+    cleanJson = cleanJson.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+  } else if (cleanJson.startsWith('```')) {
+    cleanJson = cleanJson.replace(/^```\s*/, '').replace(/\s*```$/, '');
+  }
+
+  // 1. Intento estándar de parseo
+  try {
+    return JSON.parse(cleanJson);
+  } catch (initialErr) {
+    console.warn("Parseo inicial falló, reparando estructura JSON...", initialErr);
+  }
+
+  // 2. Intento de reparación de cierres cortados
+  try {
+    let repaired = cleanJson;
+    if (repaired.endsWith('\\')) repaired = repaired.slice(0, -1);
+
+    const quoteMatches = repaired.match(/(?<!\\)"/g) || [];
+    if (quoteMatches.length % 2 !== 0) {
+      repaired += '"';
+    }
+
+    const openBrackets = (repaired.match(/\[/g) || []).length;
+    const closeBrackets = (repaired.match(/\]/g) || []).length;
+    for (let i = 0; i < openBrackets - closeBrackets; i++) repaired += ']';
+
+    const openBraces = (repaired.match(/\{/g) || []).length;
+    const closeBraces = (repaired.match(/\}/g) || []).length;
+    for (let i = 0; i < openBraces - closeBraces; i++) repaired += '}';
+
+    return JSON.parse(repaired);
+  } catch (repairedErr) {
+    console.warn("Parseo reparado falló, intentando extracción con expresiones regulares...", repairedErr);
+  }
+
+  // 3. Fallback inteligente: extracción por expresiones regulares
+  const titleMatch = cleanJson.match(/"title"\s*:\s*"([^"]+)"/);
+  const slugMatch = cleanJson.match(/"slug"\s*:\s*"([^"]+)"/);
+  const excerptMatch = cleanJson.match(/"excerpt"\s*:\s*"([^"]+)"/);
+  const contentMatch = cleanJson.match(/"content"\s*:\s*"([\s\S]*?)(?:",\s*"(?:tags|suggestedImage)"|"\s*\}|$)/);
+
+  if (titleMatch || contentMatch) {
+    const rawContent = contentMatch ? contentMatch[1] : cleanJson;
+    const unescapedContent = rawContent
+      .replace(/\\n/g, '\n')
+      .replace(/\\"/g, '"')
+      .replace(/\\t/g, '\t')
+      .replace(/\\\\/g, '\\');
+
+    return {
+      title: titleMatch ? titleMatch[1] : "Arreglos Florales Exclusivos en Houston",
+      slug: slugMatch ? slugMatch[1] : `guia-floral-houston-${Date.now()}`,
+      excerpt: excerptMatch ? excerptMatch[1] : "Guía y recomendaciones de flores finas para ocasiones especiales en Houston, Texas.",
+      content: unescapedContent,
+      tags: ["Flores Houston", "Rosas de Lujo", "Regalos Especiales"],
+      suggestedImage: fallbackImage
+    };
+  }
+
+  throw new Error("No se pudo interpretar el formato del artículo generado por la IA. Por favor intenta generar de nuevo.");
 }

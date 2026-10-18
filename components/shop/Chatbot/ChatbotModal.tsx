@@ -1,16 +1,26 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Sparkles, RefreshCw, PhoneCall, ExternalLink, Bot, ChevronRight, MessageSquare } from 'lucide-react';
+import { MessageCircle, X, Send, Sparkles, RefreshCw, PhoneCall, ExternalLink, Bot, ChevronRight, MessageSquare, ShoppingBag, Check } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
+import { useCart } from '@/components/shop/Cart/CartContext';
+
+export interface SuggestedProduct {
+  id: string;
+  name: string;
+  slug: string;
+  price: number;
+  image: string;
+}
 
 interface Message {
   id: string;
   role: 'user' | 'model';
   text: string;
   timestamp: string;
+  products?: SuggestedProduct[];
 }
 
 const I18N_CONTENT = {
@@ -129,6 +139,22 @@ export const ChatbotModal = () => {
     ? I18N_CONTENT.admin
     : (currentLocale === "en" ? I18N_CONTENT.en : I18N_CONTENT.es);
   const activeStorageKey = isAdmin ? ADMIN_STORAGE_KEY : CHAT_STORAGE_KEY;
+
+  const { addToCart } = useCart();
+  const [addedItemIds, setAddedItemIds] = useState<Record<string, boolean>>({});
+
+  const handleAddToCartFromChat = (prod: SuggestedProduct) => {
+    addToCart({
+      id: prod.id,
+      name: prod.name,
+      price: prod.price,
+      image: prod.image
+    });
+    setAddedItemIds((prev) => ({ ...prev, [prod.id]: true }));
+    setTimeout(() => {
+      setAddedItemIds((prev) => ({ ...prev, [prod.id]: false }));
+    }, 2200);
+  };
 
   const [isOpen, setIsOpen] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
@@ -297,7 +323,10 @@ export const ChatbotModal = () => {
         id: (Date.now() + 1).toString(),
         role: 'model',
         text: data.text || content.defaultErrorResponse,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        products: (data.products && Array.isArray(data.products) && data.products.length > 0)
+          ? data.products
+          : undefined
       };
 
       setMessages(prev => [...prev, modelMsg]);
@@ -497,13 +526,92 @@ export const ChatbotModal = () => {
                   className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}
                 >
                   <div
-                    className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm whitespace-pre-line shadow-sm ${
+                    className={`${(m.products && m.products.length > 0) ? 'max-w-[92%] sm:max-w-[340px] w-full' : 'max-w-[85%]'} rounded-2xl px-4 py-2.5 text-xs sm:text-sm whitespace-pre-line shadow-sm ${
                       isUser
                         ? 'bg-[#163422] text-white rounded-br-none'
                         : 'bg-white dark:bg-[#1a1b24] text-gray-800 dark:text-gray-100 border border-gray-200/80 dark:border-gray-800 rounded-bl-none'
                     }`}
                   >
                     {renderFormattedText(m.text)}
+
+                    {/* Tarjetas Interactivas de Productos Recomendados */}
+                    {m.products && m.products.length > 0 && (
+                      <div className="mt-3 pt-2.5 border-t border-stone-200/80 dark:border-stone-800 space-y-2">
+                        <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-[#D4AF37]">
+                          <Sparkles size={11} className="text-[#D4AF37]" />
+                          <span>{currentLocale === 'en' ? 'Recommended Arrangements:' : 'Arreglos Recomendados:'}</span>
+                        </div>
+                        <div className="space-y-2">
+                          {m.products.map((prod) => {
+                            const isAdded = Boolean(addedItemIds[prod.id]);
+                            const productUrl = (currentLocale === 'en' && pathname?.startsWith('/en'))
+                              ? `/en/productos/${prod.slug}`
+                              : `/productos/${prod.slug}`;
+                            return (
+                              <div
+                                key={prod.id}
+                                className="flex items-center gap-2.5 p-2 bg-stone-50 dark:bg-[#12131a] rounded-xl border border-stone-200 dark:border-stone-800 hover:border-[#D4AF37]/60 transition-all shadow-xs"
+                              >
+                                {/* Foto del producto con enlace */}
+                                <Link
+                                  href={productUrl}
+                                  onClick={() => setIsOpen(false)}
+                                  className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden flex-shrink-0 border border-stone-200 dark:border-stone-700 bg-stone-200 dark:bg-stone-800 group"
+                                  title={prod.name}
+                                >
+                                  <img
+                                    src={prod.image}
+                                    alt={prod.name}
+                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                    loading="lazy"
+                                  />
+                                </Link>
+
+                                {/* Nombre y Precio con Enlace */}
+                                <div className="flex-1 min-w-0 pr-1">
+                                  <Link
+                                    href={productUrl}
+                                    onClick={() => setIsOpen(false)}
+                                    className="block text-xs font-bold text-gray-900 dark:text-white truncate hover:text-[#163422] dark:hover:text-emerald-400 hover:underline"
+                                    title={prod.name}
+                                  >
+                                    {prod.name}
+                                  </Link>
+                                  <p className="text-[11px] font-extrabold text-[#163422] dark:text-emerald-400 mt-0.5">
+                                    ${prod.price} USD
+                                  </p>
+                                </div>
+
+                                {/* Botón Añadir al Carrito */}
+                                <button
+                                  type="button"
+                                  onClick={() => handleAddToCartFromChat(prod)}
+                                  disabled={isAdded}
+                                  aria-label={`Añadir ${prod.name} al carrito`}
+                                  className={`flex-shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] sm:text-[11px] font-bold flex items-center gap-1 transition-all shadow-xs ${
+                                    isAdded
+                                      ? 'bg-emerald-600 text-white cursor-default'
+                                      : 'bg-[#163422] hover:bg-[#1B2E22] text-white hover:scale-102 active:scale-98 cursor-pointer'
+                                  }`}
+                                >
+                                  {isAdded ? (
+                                    <>
+                                      <Check size={12} className="stroke-[2.5]" />
+                                      <span>{currentLocale === 'en' ? 'Added!' : '¡Añadido!'}</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ShoppingBag size={12} />
+                                      <span>{currentLocale === 'en' ? 'Add' : 'Añadir'}</span>
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   <span className="text-[10px] text-gray-400 mt-1 px-1">{m.timestamp}</span>
                 </div>

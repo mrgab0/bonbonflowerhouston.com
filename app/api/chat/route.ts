@@ -34,8 +34,8 @@ export async function POST(req: Request) {
     await dbConnect();
     const [products, deliveryRes, { data: siteConfig }] = await Promise.all([
       Product.find({ isActive: { $ne: false } })
-        .select('name price slug category description flowerType badge')
-        .limit(30)
+        .select('_id name price slug images category description flowerType badge')
+        .limit(40)
         .lean(),
       getDeliveryOptions(),
       getSiteConfig()
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     )?.trim();
 
     const productCatalogSummary = (products && products.length > 0)
-      ? products.map((p: any) => `- ${p.name} ($${p.price} USD) [Categoría: ${p.category || 'General'}] [Enlace: /productos/${p.slug}]: ${p.description ? p.description.slice(0, 100) : ''}`).join('\n')
+      ? products.map((p: any) => `- "${p.name}" ($${p.price} USD) | Enlace: /productos/${p.slug} | Categoría: ${p.category || 'General'}`).join('\n')
       : (isEn ? "There are currently no products listed in the online catalog." : "No hay productos listados actualmente en el catálogo online.");
 
     const deliveryOptionsSummary = (deliveryRes?.data && deliveryRes.data.length > 0)
@@ -125,10 +125,11 @@ Conversational Guidelines (STRICT):
 3. If the customer asks about order status or tracking, guide them to [Track My Order](/rastreo) with their Order ID or phone number.
 4. If the customer asks about delivery costs, explain that delivery is calculated by distance at [Checkout](/checkout), with free pickup in ${storeAddress}.
 5. If the customer greets you or makes a general comment, greet back warmly with a single helpful question (e.g. "Hi! 🌸 What special occasion are you looking for flowers for today?"). Do NOT dump catalog links immediately on a simple greeting.
-6. When recommending arrangements, suggest only 1 or 2 top choices from the catalog with their exact link: [Product Name](/productos/slug) ($XX USD).
-7. Only include the WhatsApp link ([📲 WhatsApp](${whatsappUrl})) when the customer asks for custom flowers, needs phone assistance, or is ready to place a custom order.
-8. Use tasteful floral emojis sparingly (🌸, 🌹, ✨). Never sound robotic or formal.
-9. Completeness: ALWAYS complete all sentences and thoughts properly with punctuation. NEVER leave a sentence half-cut or truncated.`
+6. PRODUCT RECOMMENDATIONS: When a customer asks for recommendations for any occasion (admirer, anniversary, birthday, romance, luxury roses, etc.), ALWAYS suggest 1 to 3 real products from the catalog above with their exact markdown link: [Product Name](/productos/slug) ($XX USD).
+7. At the very end of your response, add the product tag for each suggested product: [[PRODUCT:slug]]. This activates interactive product cards with photos and 'Add to Cart' buttons in the chat UI!
+8. Only include the WhatsApp link ([📲 WhatsApp](${whatsappUrl})) when the customer asks for custom flowers, needs phone assistance, or is ready to place a custom order.
+9. Use tasteful floral emojis sparingly (🌸, 🌹, ✨). Never sound robotic or formal.
+10. Completeness: ALWAYS complete all sentences and thoughts properly with punctuation. NEVER leave a sentence half-cut or truncated.`
       : `Eres "Flor", la asesora floral experta, cálida y amigable de "Bonbon Flowers Houston" en Houston, Texas (bonbonflowershouston.com).
 Tu objetivo es asesorar a los clientes de forma 100% natural, cercana y humana, exactamente como una florista real atendiendo por WhatsApp.
 ${clientContextSnippet}
@@ -158,10 +159,11 @@ Reglas estrictas de conversación humana y corta:
 3. Si el cliente pregunta por el estado de su pedido o cómo rastrearlo, guíalo a [Rastrear Mi Envío](/rastreo) indicándole que use su ID de orden o número de teléfono.
 4. Si el cliente pregunta por costos de envío o delivery, explícale que se calcula en el [Checkout](/checkout) según las millas, y que el retiro en tienda (${storeAddress}) es gratis.
 5. Si el cliente solo te saluda o hace un comentario breve, salúdalo con cariño y hazle una sola pregunta sencilla para guiarlo (ej: "¡Hola! 🌸 Qué gusto saludarte. ¿Para qué ocasión especial buscas flores hoy?"). NUNCA envíes enlaces de golpe en un saludo inicial.
-6. Cuando el cliente pregunte por flores, sugiere SOLO 1 o 2 arreglos ideales del catálogo con su enlace directo: [Nombre del Arreglo](/productos/slug) ($XX USD).
-7. Incluye el enlace de WhatsApp ([📲 WhatsApp](${whatsappUrl})) cuando el cliente pida un diseño personalizado fuera del catálogo, pregunte por teléfono o necesite atención inmediata de un florista.
-8. Usa emojis florales con moderación y buen gusto (🌸, 🌹, ✨). No uses lenguaje robótico ni párrafos largos.
-9. Mensajes Completos: Completa SIEMPRE todas tus oraciones y pensamientos con su punto final. NUNCA dejes frases a medias o palabras cortadas.`;
+6. RECOMENDACIÓN DE PRODUCTOS: Cuando el cliente pida sugerencias para una ocasión (admiradora, aniversario, cumpleaños, perdón, romance, etc.), DEBES recomendar de 1 a 3 productos REALES del catálogo con su enlace exacto: [Nombre del Arreglo](/productos/slug) ($XX USD). NUNCA inventes nombres que no existan en el catálogo.
+7. Al final de tu mensaje, añade la etiqueta para cada producto que recomiendes: [[PRODUCT:slug]]. Esto activará de forma automática tarjetas visuales con su foto real y el botón interactivo de 'Añadir al Carrito' en la ventana de chat!
+8. Incluye el enlace de WhatsApp ([📲 WhatsApp](${whatsappUrl})) cuando el cliente pida un diseño personalizado fuera del catálogo, pregunte por teléfono o necesite atención inmediata de un florista.
+9. Usa emojis florales con moderación y buen gusto (🌸, 🌹, ✨). No uses lenguaje robótico ni párrafos largos.
+10. Mensajes Completos: Completa SIEMPRE todas tus oraciones y pensamientos con su punto final. NUNCA dejes frases a medias o palabras cortadas.`;
 
     const effectiveSystemPrompt = isAdmin ? adminSystemPrompt : systemPrompt;
 
@@ -275,7 +277,65 @@ Reglas estrictas de conversación humana y corta:
       });
     }
 
-    return NextResponse.json({ text: aiResponseText });
+    // Extracción de productos sugeridos con fotos, slugs, precios y IDs
+    const suggestedProducts: Array<{
+      id: string;
+      name: string;
+      slug: string;
+      price: number;
+      image: string;
+    }> = [];
+
+    const addedSlugs = new Set<string>();
+
+    const addProductIfFound = (found: any) => {
+      if (found && !addedSlugs.has(found.slug)) {
+        addedSlugs.add(found.slug);
+        suggestedProducts.push({
+          id: found._id ? found._id.toString() : found.slug,
+          name: found.name,
+          slug: found.slug,
+          price: found.price,
+          image: (found.images && found.images.length > 0)
+            ? found.images[0]
+            : 'https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=500&q=80'
+        });
+      }
+    };
+
+    // 1. Detección por etiquetas [[PRODUCT:slug]]
+    const tagMatches = Array.from(aiResponseText.matchAll(/\[\[PRODUCT:([a-zA-Z0-9_-]+)\]\]/gi));
+    for (const match of tagMatches) {
+      const slug = match[1]?.toLowerCase();
+      const found = (products as any[]).find((p) => p.slug?.toLowerCase() === slug);
+      if (found) addProductIfFound(found);
+    }
+
+    // 2. Detección por enlaces markdown /productos/slug
+    const urlMatches = Array.from(aiResponseText.matchAll(/\/productos\/([a-zA-Z0-9_-]+)/gi));
+    for (const match of urlMatches) {
+      const slug = match[1]?.toLowerCase();
+      const found = (products as any[]).find((p) => p.slug?.toLowerCase() === slug);
+      if (found) addProductIfFound(found);
+    }
+
+    // 3. Fallback inteligente: si se mencionan títulos exactos de arreglos en el texto
+    if (suggestedProducts.length === 0) {
+      for (const p of (products as any[])) {
+        if (p.name && p.name.length > 4 && aiResponseText.toLowerCase().includes(p.name.toLowerCase())) {
+          addProductIfFound(p);
+          if (suggestedProducts.length >= 3) break;
+        }
+      }
+    }
+
+    // Limpiar las etiquetas técnicas [[PRODUCT:...]] para que el texto visual quede impecable
+    const cleanText = aiResponseText.replace(/\[\[PRODUCT:[a-zA-Z0-9_-]+\]\]/gi, '').trim();
+
+    return NextResponse.json({
+      text: cleanText,
+      products: suggestedProducts
+    });
 
   } catch (error: any) {
     console.error("Error en Chatbot API:", error);
