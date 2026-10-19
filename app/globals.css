@@ -11,13 +11,29 @@
   --bg-main: #FFFFFF;
   --bg-card: #FFFFFF;
   --text-main: #1A1A1A;
+  --text-body: #44403C;
+  --text-muted: #78716C;
+  --text-accent: #163422;
 }
 
 .dark {
-  /* TEMA OSCURO */
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 15, 16, 21;
-  --background-end-rgb: 15, 16, 21;
+  /* TEMA OSCURO BOTÁNICO MENTA & TEAL DE ALTA COSTURA */
+  --foreground-rgb: 230, 247, 240;
+  --background-start-rgb: 11, 12, 16;
+  --background-end-rgb: 11, 12, 16;
+
+  --bg-main: #0B0C10;
+  --bg-card: #12131A;
+  --bg-card-hover: #181922;
+
+  /* Tipografía Menta-Teal con Contraste WCAG AAA */
+  --text-main: #E6F7F0;        /* Ethereal Mint (Títulos y textos primarios, contraste 17.6:1) */
+  --text-body: #B9E6D3;        /* Soft Sage-Mint (Párrafos y lectura, contraste 14.2:1) */
+  --text-muted: #76C7B2;       /* Muted Mint-Teal (Subtítulos, fechas, notas, contraste 9.8:1) */
+  --text-accent: #5EEAD4;      /* Luminous Teal-Mint (Destacados, cursivas, enlaces, contraste 13.2:1) */
+  --text-accent-secondary: #2DD4BF; /* Deep Luminous Teal */
+  --border-mint: rgba(94, 234, 212, 0.18);
+  --border-mint-glow: rgba(94, 234, 212, 0.35);
 }
 
 /* Base Body Typography */
@@ -29,7 +45,7 @@ body {
 
 .dark body {
   background-color: #0B0C10 !important;
-  color: #FFFFFF !important;
+  color: #E6F7F0 !important;
 }
 
 html:not(.dark) .admin-panel-container {
@@ -141,20 +157,45 @@ html:not(.dark) .hover\:bg-\[\#80273B\]:hover {
   background-color: #1B2E22 !important;
 }
 
-/* --- SECCIÓN NOSOTROS Y BLOG EDITORIAL: TIPOGRAFÍA 100% NEGRO PURO --- */
-.nosotros-page-root,
-.nosotros-page-root h1,
-.nosotros-page-root h2,
-.nosotros-page-root h3,
-.nosotros-page-root h4,
-.nosotros-page-root h5,
-.nosotros-page-root h6,
-.nosotros-page-root p,
-.nosotros-page-root strong,
-.nosotros-page-root span:not(.preserve-color),
-.nosotros-page-root li,
-.nosotros-page-root blockquote {
+/* --- SECCIÓN NOSOTROS Y BLOG EDITORIAL: MODO CLARO (NEGRO) VS MODO OSCURO (MENTA-TEAL) --- */
+html:not(.dark) .nosotros-page-root,
+html:not(.dark) .nosotros-page-root h1,
+html:not(.dark) .nosotros-page-root h2,
+html:not(.dark) .nosotros-page-root h3,
+html:not(.dark) .nosotros-page-root h4,
+html:not(.dark) .nosotros-page-root h5,
+html:not(.dark) .nosotros-page-root h6,
+html:not(.dark) .nosotros-page-root p,
+html:not(.dark) .nosotros-page-root strong,
+html:not(.dark) .nosotros-page-root span:not(.preserve-color),
+html:not(.dark) .nosotros-page-root li,
+html:not(.dark) .nosotros-page-root blockquote {
   color: #000000 !important;
+}
+
+html.dark .nosotros-page-root h1,
+html.dark .nosotros-page-root h2,
+html.dark .nosotros-page-root h3,
+html.dark .nosotros-page-root h4,
+html.dark .nosotros-page-root h5,
+html.dark .nosotros-page-root h6 {
+  color: #E6F7F0 !important;
+}
+
+html.dark .nosotros-page-root p,
+html.dark .nosotros-page-root strong,
+html.dark .nosotros-page-root li,
+html.dark .nosotros-page-root em,
+html.dark .nosotros-page-root blockquote {
+  color: #B9E6D3 !important;
+}
+
+html.dark .nosotros-page-root span:not(.preserve-color) {
+  color: #E6F7F0 !important;
+}
+
+html.dark .nosotros-page-root a {
+  color: #5EEAD4 !important;
 }
 
 .nosotros-page-root .text-\[\#8B0024\],
@@ -163,7 +204,12 @@ html:not(.dark) .nosotros-page-root .text-\[\#8B0024\] {
   color: #163422 !important;
 }
 
-/* --- FOOTER GLOBAL: TIPOGRAFÍA EN NEGRO PURO EN MODO CLARO --- */
+html.dark .nosotros-page-root .text-\[\#8B0024\],
+html.dark .nosotros-page-root a.text-\[\#8B0024\] {
+  color: #5EEAD4 !important;
+}
+
+/* --- FOOTER GLOBAL: MODO CLARO VS MODO OSCURO MENTA-TEAL --- */
 html:not(.dark) footer {
   background-color: #FFFFFF !important;
 }
@@ -186,28 +232,122 @@ html:not(.dark) footer .text-\[\#163422\] {
 
 html.dark footer {
   background-color: #0B0C10 !important;
-  color: #FFFFFF !important;
+  color: #B9E6D3 !important;
+}
+html.dark footer h1,
+html.dark footer h2,
+html.dark footer h3,
+html.dark footer h4 {
+  color: #E6F7F0 !important;
+}
+html.dark footer p {
+  color: #B9E6D3 !important;
 }
 html.dark footer a {
-  color: #E2E8F0 !important;
+  color: #B9E6D3 !important;
+}
+html.dark footer a:hover {
+  color: #5EEAD4 !important;
 }
 
-/* --- COBERTURA COMPLETA DE MODO OSCURO (CLIENTE & ADMIN) --- */
+/* --- REGLAS MAESTRAS DE TIPOGRAFÍA MENTA & TEAL EN MODO OSCURO (WCAG AAA) --- */
 
+html.dark h1:not(.preserve-color),
+html.dark h2:not(.preserve-color),
+html.dark h3:not(.preserve-color),
+html.dark h4:not(.preserve-color),
+html.dark h5:not(.preserve-color),
+html.dark h6:not(.preserve-color) {
+  color: #E6F7F0 !important;
+}
+
+/* Tipografía script cursiva ("feel loved ♡") */
+html.dark .font-script-custom {
+  color: #5EEAD4 !important;
+  text-shadow: 0 0 24px rgba(94, 234, 212, 0.4);
+}
+
+/* Transformación de textos oscuros o #163422 a Menta / Teal Luminoso */
+html.dark .text-\[\#163422\],
+html.dark .text-\[\#1B2E22\],
+html.dark .text-\[\#2a0002\],
+html.dark .text-\[\#2B0002\],
+html.dark .text-\[\#0f2417\] {
+  color: #5EEAD4 !important;
+}
+
+html.dark .text-stone-900,
+html.dark .text-stone-800,
+html.dark .text-stone-700,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-neutral-900,
+html.dark .text-black,
+html.dark .text-\[\#1A1C1C\],
+html.dark .text-\[\#1A1A1A\] {
+  color: #E6F7F0 !important;
+}
+
+html.dark .text-stone-600,
+html.dark .text-stone-500,
+html.dark .text-gray-600,
+html.dark .text-gray-500 {
+  color: #B9E6D3 !important;
+}
+
+html.dark .text-stone-400,
+html.dark .text-gray-400 {
+  color: #76C7B2 !important;
+}
+
+/* Enlaces y Navegación en Modo Oscuro */
+html.dark nav a,
+html.dark header a:not(.preserve-color) {
+  color: #E6F7F0 !important;
+}
+html.dark nav a:hover,
+html.dark header a:hover:not(.preserve-color) {
+  color: #5EEAD4 !important;
+  border-color: rgba(94, 234, 212, 0.4) !important;
+}
+
+/* Botones #163422 en Modo Oscuro: Realce con borde menta/teal */
+html.dark .bg-\[\#163422\] {
+  background-color: #163422 !important;
+  border: 1px solid rgba(94, 234, 212, 0.35) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+html.dark .bg-\[\#163422\]:hover {
+  background-color: #1B2E22 !important;
+  border-color: #5EEAD4 !important;
+  box-shadow: 0 0 18px rgba(94, 234, 212, 0.3) !important;
+}
+
+/* Badges e Insignias */
+html.dark .bg-stone-100,
+html.dark .bg-gray-100 {
+  background-color: #161822 !important;
+  color: #E6F7F0 !important;
+  border-color: rgba(94, 234, 212, 0.18) !important;
+}
+
+/* Cobertura de Fondos en Modo Oscuro */
 .dark main,
 .dark .bg-gray-100,
 .dark .bg-gray-200 {
   background-color: #0F1015 !important;
-  color: #FFFFFF !important;
+  color: #E6F7F0 !important;
 }
 
 .dark .bg-white {
   background-color: #181922 !important;
-  color: #FFFFFF !important;
-  border-color: rgba(212, 175, 55, 0.2) !important;
+  color: #E6F7F0 !important;
+  border-color: rgba(94, 234, 212, 0.2) !important;
 }
 
-.dark .bg-\[\#F9F9F9\] {
+.dark .bg-\[\#F9F9F9\],
+.dark .bg-\[\#FDFBF9\],
+.dark .bg-\[\#FAFAF9\] {
   background-color: #0F1015 !important;
 }
 
@@ -215,17 +355,17 @@ html.dark footer a {
 .dark .bg-gray-50\/50,
 .dark .bg-gray-50\/80 {
   background-color: #12131A !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(94, 234, 212, 0.15) !important;
 }
 
-/* Bordes en Modo Oscuro con Tono Dorado sutil */
+/* Bordes en Modo Oscuro con Tono Menta/Teal sutil */
 .dark .border-gray-100,
 .dark .border-gray-200,
 .dark .border-gray-300 {
-  border-color: rgba(212, 175, 55, 0.15) !important;
+  border-color: rgba(94, 234, 212, 0.15) !important;
 }
 
-/* Formularios y Tablas Admin */
+/* Formularios en Modo Oscuro con foco Menta */
 html:not(.dark) input:not([type="submit"]):not([type="button"]):not([type="hidden"]),
 html:not(.dark) textarea,
 html:not(.dark) select {
@@ -241,8 +381,18 @@ html:not(.dark) textarea::placeholder {
 .dark textarea,
 .dark select {
   background-color: #12131A !important;
-  color: #FFFFFF !important;
-  border-color: rgba(212, 175, 55, 0.2) !important;
+  color: #E6F7F0 !important;
+  border-color: rgba(94, 234, 212, 0.2) !important;
+}
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: rgba(185, 230, 211, 0.45) !important;
+}
+.dark input:focus,
+.dark textarea:focus,
+.dark select:focus {
+  border-color: #5EEAD4 !important;
+  box-shadow: 0 0 0 2px rgba(94, 234, 212, 0.25) !important;
 }
 
 .dark table,
@@ -250,13 +400,13 @@ html:not(.dark) textarea::placeholder {
 .dark td,
 .dark th {
   background-color: #181922 !important;
-  color: #FFFFFF !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #E6F7F0 !important;
+  border-color: rgba(94, 234, 212, 0.15) !important;
 }
 
 .dark header {
-  background-color: rgba(24, 25, 34, 0.9) !important;
-  border-color: rgba(212, 175, 55, 0.2) !important;
+  background-color: rgba(24, 25, 34, 0.92) !important;
+  border-color: rgba(94, 234, 212, 0.18) !important;
 }
 
 /* Script font and luxury styling from flor.zip */

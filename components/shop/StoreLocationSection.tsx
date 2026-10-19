@@ -52,54 +52,54 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
       </div>
 
       {/* Tarjeta flotante de lujo con información del estudio y entregas */}
-      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white dark:bg-[#12131A] p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-300 dark:border-gray-800 text-black dark:text-gray-100">
-        <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-gray-800 text-[#163422] dark:text-[#C5A059] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 border border-[#163422]/20">
+      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white dark:bg-[#12131A] p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-300 dark:border-stone-800 text-stone-900 dark:text-[#E6F7F0]">
+        <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-stone-900/80 text-[#163422] dark:text-[#5EEAD4] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 border border-[#163422]/20 dark:border-[#5EEAD4]/30">
           <MapPin size={11} />
           <span>Houston Floral Studio</span>
         </div>
 
-        <h3 className="text-base font-black text-black dark:text-white uppercase tracking-wider mb-2 font-serif">
+        <h3 className="text-base font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-2 font-serif">
           Pick-Up &amp; Delivery Hub
         </h3>
-        <p className="text-black dark:text-gray-300 text-xs sm:text-sm leading-relaxed mb-4 font-medium">
+        <p className="text-stone-600 dark:text-[#B9E6D3] text-xs sm:text-sm leading-relaxed mb-4 font-medium">
           Houston, Texas &amp; Greater Houston Metroplex<br />
-          <span className="text-[11px] text-stone-600 dark:text-gray-400 font-semibold">Entregas a domicilio garantizadas el mismo día.</span>
+          <span className="text-[11px] text-stone-600 dark:text-[#76C7B2] font-semibold">Entregas a domicilio garantizadas el mismo día.</span>
         </p>
 
-        <div className="space-y-3 pt-3 border-t border-stone-200 dark:border-gray-800">
+        <div className="space-y-3 pt-3 border-t border-stone-200 dark:border-stone-800">
           <div>
-            <h4 className="text-[11px] font-black text-black dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
-              <Phone size={12} className="text-[#163422]" />
+            <h4 className="text-[11px] font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+              <Phone size={12} className="text-[#163422] dark:text-[#5EEAD4]" />
               <span>Teléfono / Pedidos</span>
             </h4>
             <a
               href={`tel:${cleanPhone || "+13467392730"}`}
-              className="text-xs sm:text-sm text-black dark:text-gray-300 hover:text-[#163422] transition-colors font-bold"
+              className="text-xs sm:text-sm text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] transition-colors font-bold"
             >
               {phone}
             </a>
           </div>
 
           <div>
-            <h4 className="text-[11px] font-black text-black dark:text-gray-200 uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
-              <Mail size={12} className="text-[#163422]" />
+            <h4 className="text-[11px] font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
+              <Mail size={12} className="text-[#163422] dark:text-[#5EEAD4]" />
               <span>Correo Electrónico</span>
             </h4>
             <a
               href={`mailto:${email}`}
-              className="text-xs sm:text-sm text-black dark:text-gray-300 hover:text-[#163422] transition-colors font-semibold break-all"
+              className="text-xs sm:text-sm text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] transition-colors font-semibold break-all"
             >
               {email}
             </a>
           </div>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-stone-100 dark:border-gray-800">
+        <div className="mt-5 pt-4 border-t border-stone-100 dark:border-stone-800">
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-[#163422] hover:bg-[#1B2E22] text-white py-2.5 px-4 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+            className="w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-2.5 px-4 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
           >
             <MessageCircle size={15} />
             <span>Consultar por WhatsApp</span>

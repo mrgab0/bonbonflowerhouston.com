@@ -127,16 +127,16 @@ export const ProductDetail = ({ product }: { product: any }) => {
               
               {/* Titular y Precio Dinámico */}
               <div>
-                <span className="text-[#163422] dark:text-[#C5A059] text-xs font-black uppercase tracking-[0.2em] block mb-1">
+                <span className="text-[#163422] dark:text-[#5EEAD4] text-xs font-black uppercase tracking-[0.2em] block mb-1">
                   Arreglo Floral Exclusivo
                 </span>
-                <h1 className="text-3xl md:text-4xl font-serif font-black text-[#1A1C1C] dark:text-white leading-tight mb-3">
+                <h1 className="text-3xl md:text-4xl font-serif font-black text-[#1A1C1C] dark:text-[#E6F7F0] leading-tight mb-3">
                   {product.name}
                 </h1>
 
                 <div className="flex flex-wrap items-baseline gap-3">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl md:text-4xl font-black text-black dark:text-white transition-all">
+                    <span className="text-3xl md:text-4xl font-black text-black dark:text-[#5EEAD4] transition-all">
                       ${combinedTotalPrice.toFixed(2)} USD
                     </span>
                     {addonsTotalPrice > 0 && (
@@ -147,8 +147,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                   </div>
 
                   {addonsTotalPrice > 0 && (
-                    <span className="bg-stone-100 dark:bg-stone-800 text-[#163422] dark:text-[#C5A059] text-xs font-black px-3 py-1 rounded-full border border-[#163422]/20 dark:border-[#C5A059]/30 flex items-center gap-1 shadow-sm">
-                      <Sparkles size={13} className="text-[#D4AF37]" /> +${addonsTotalPrice.toFixed(2)} en adicionales
+                    <span className="bg-stone-100 dark:bg-stone-800 text-[#163422] dark:text-[#5EEAD4] text-xs font-black px-3 py-1 rounded-full border border-[#163422]/20 dark:border-[#5EEAD4]/30 flex items-center gap-1 shadow-sm">
+                      <Sparkles size={13} className="text-[#5EEAD4]" /> +${addonsTotalPrice.toFixed(2)} en adicionales
                     </span>
                   )}
                 </div>
@@ -156,8 +156,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
 
               {/* CAJA VISUAL DE ESPECIFICACIONES */}
               <div className="bg-gray-50/80 dark:bg-[#12131A] rounded-2xl p-5 border border-gray-100 dark:border-gray-800 space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                  <Sparkles size={14} className="text-[#FF97A4]" /> Especificaciones del Diseño
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-[#76C7B2] flex items-center gap-2">
+                  <Sparkles size={14} className="text-[#5EEAD4]" /> Especificaciones del Diseño
                 </h3>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
@@ -167,8 +167,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                         <Flower2 size={16} />
                       </div>
                       <div>
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Flores</span>
-                        <span className="font-bold text-gray-800 dark:text-gray-200">{product.flowerCount} Rosas Frescas</span>
+                        <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Flores</span>
+                        <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">{product.flowerCount} Rosas Frescas</span>
                       </div>
                     </div>
                   ) : null}
@@ -179,8 +179,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                         <Package size={16} />
                       </div>
                       <div>
-                        <span className="text-gray-400 block text-[10px] uppercase font-bold">Presentación</span>
-                        <span className="font-bold text-gray-800 dark:text-gray-200 capitalize">{product.bouquetType}</span>
+                        <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Presentación</span>
+                        <span className="font-bold text-gray-800 dark:text-[#B9E6D3] capitalize">{product.bouquetType}</span>
                       </div>
                     </div>
                   ) : null}
@@ -190,8 +190,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <Truck size={16} />
                     </div>
                     <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-bold">Entrega</span>
-                      <span className="font-bold text-gray-800 dark:text-gray-200">Mismo Día Disponible</span>
+                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Entrega</span>
+                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">Mismo Día Disponible</span>
                     </div>
                   </div>
 
@@ -200,8 +200,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <ShieldCheck size={16} />
                     </div>
                     <div>
-                      <span className="text-gray-400 block text-[10px] uppercase font-bold">Garantía</span>
-                      <span className="font-bold text-gray-800 dark:text-gray-200">Flores 100% Frescas</span>
+                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Garantía</span>
+                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">Flores 100% Frescas</span>
                     </div>
                   </div>
                 </div>
@@ -210,13 +210,13 @@ export const ProductDetail = ({ product }: { product: any }) => {
               {/* VIÑETAS / CARACTERÍSTICAS DINÁMICAS (Features) */}
               {product.features && product.features.length > 0 && (
                 <div className="space-y-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">{t('includesTitle')}</h3>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-[#76C7B2]">{t('includesTitle')}</h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {product.features.map((feature: any, index: number) => (
                       <div key={index} className="flex items-center gap-2 text-xs bg-white dark:bg-[#181922] p-2.5 rounded-xl border border-gray-100 dark:border-gray-800">
-                        <CheckCircle2 size={16} className="text-[#FF97A4] flex-shrink-0" />
-                        <span className="font-medium text-gray-700 dark:text-gray-300">
-                          <strong className="text-gray-900 dark:text-white">{feature.label}:</strong> {feature.value}
+                        <CheckCircle2 size={16} className="text-[#5EEAD4] flex-shrink-0" />
+                        <span className="font-medium text-gray-700 dark:text-[#B9E6D3]">
+                          <strong className="text-gray-900 dark:text-[#E6F7F0]">{feature.label}:</strong> {feature.value}
                         </span>
                       </div>
                     ))}
@@ -227,15 +227,15 @@ export const ProductDetail = ({ product }: { product: any }) => {
               {/* TIRA DE VARIANTES DEL PRODUCTO */}
               {product.variants && product.variants.length > 0 && (
                 <div className="space-y-3 pt-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                    <GitMerge size={14} className="text-[#FF97A4]" /> Variantes Disponibles
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-[#76C7B2] flex items-center gap-2">
+                    <GitMerge size={14} className="text-[#5EEAD4]" /> Variantes Disponibles
                   </h3>
                   <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
                     {product.variants.map((variant: any) => (
                       <Link
                         key={variant._id}
                         href={`/productos/${variant.slug}`}
-                        className="flex flex-col min-w-[120px] bg-white dark:bg-[#181922] border border-gray-100 dark:border-gray-800 rounded-xl p-2 hover:border-[#FF97A4] hover:shadow-sm transition-all group"
+                        className="flex flex-col min-w-[120px] bg-white dark:bg-[#181922] border border-gray-100 dark:border-stone-800 hover:border-[#5EEAD4]/40 rounded-xl p-2 hover:shadow-sm transition-all group"
                       >
                         <div className="relative aspect-square w-full mb-2 overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-900">
                           <img
@@ -244,10 +244,10 @@ export const ProductDetail = ({ product }: { product: any }) => {
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
                         </div>
-                        <span className="text-[10px] font-bold text-gray-800 dark:text-gray-200 line-clamp-2 leading-tight">
+                        <span className="text-[10px] font-bold text-gray-800 dark:text-[#E6F7F0] line-clamp-2 leading-tight">
                           {variant.name}
                         </span>
-                        <span className="text-[11px] font-black text-[#163422] dark:text-[#C5A059] mt-auto pt-1">
+                        <span className="text-[11px] font-black text-[#163422] dark:text-[#5EEAD4] mt-auto pt-1">
                           ${Number(variant.price).toFixed(2)}
                         </span>
                       </Link>
@@ -259,11 +259,11 @@ export const ProductDetail = ({ product }: { product: any }) => {
 
               {/* DESCRIPCIÓN SECTORIZADA EN VIÑETAS LIMPIAS */}
               <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-800">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">{t('descriptionTitle')}</h3>
-                <div className="bg-white dark:bg-[#181922] p-5 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-2 text-sm text-gray-600 dark:text-gray-300 font-light leading-relaxed">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-[#76C7B2]">{t('descriptionTitle')}</h3>
+                <div className="bg-white dark:bg-[#181922] p-5 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-2 text-sm text-gray-600 dark:text-[#B9E6D3] font-light leading-relaxed">
                   {descriptionBullets.map((paragraph: string, i: number) => (
                     <div key={i} className="flex items-start gap-2.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#FF97A4] mt-2 flex-shrink-0" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#5EEAD4] mt-2 flex-shrink-0" />
                       <p>{paragraph}</p>
                     </div>
                   ))}
