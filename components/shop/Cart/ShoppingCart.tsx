@@ -19,15 +19,15 @@ export const ShoppingCartComponent = () => {
 
   return (
     <>
-      {/* Botón activador - Magenta Style */}
+      {/* Botón activador sincronizado con tema claro y oscuro */}
       <button 
         onClick={() => setIsOpen(true)}
         aria-label="Ver Carrito de Compras"
-        className="fixed bottom-28 sm:bottom-32 right-5 sm:right-6 z-40 p-3.5 sm:p-4 bg-[#FF97A4] hover:bg-[#ff7b8c] text-white rounded-full shadow-[0px_8px_25px_rgba(216,27,96,0.35)] border-2 border-white/90 dark:border-gray-800 hover:scale-105 transition-all duration-300 active:scale-95 group"
+        className="fixed bottom-28 sm:bottom-32 right-5 sm:right-6 z-40 p-3.5 sm:p-4 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 rounded-full shadow-[0px_8px_25px_rgba(22,52,34,0.35)] dark:shadow-[0px_8px_25px_rgba(94,234,212,0.35)] border-2 border-white/90 dark:border-stone-900 hover:scale-105 transition-all duration-300 active:scale-95 group"
       >
         <ShoppingCart size={22} className="group-hover:scale-110 transition-transform" />
         {cartItems.length > 0 && (
-          <span className="absolute -top-1 -right-1 bg-[#1A1C1C] text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white">
+          <span className="absolute -top-1 -right-1 bg-[#D4AF37] dark:bg-stone-900 text-stone-950 dark:text-[#5EEAD4] text-[10px] font-black h-5 w-5 flex items-center justify-center rounded-full border-2 border-white dark:border-stone-900 shadow-sm">
             {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
           </span>
         )}
@@ -114,7 +114,7 @@ export const ShoppingCartComponent = () => {
               <Link 
                 href="/checkout" 
                 onClick={() => setIsOpen(false)}
-                className={`w-full bg-[#FF97A4] text-white py-5 rounded-xl font-bold hover:bg-[#B0004A] transition-all duration-300 shadow-lg shadow-[#FF97A4]/20 flex justify-center items-center gap-2 group ${cartItems.length === 0 ? 'pointer-events-none bg-gray-200 text-gray-400' : ''}`}
+                className={`w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-5 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-[#163422]/20 dark:shadow-[#5EEAD4]/20 flex justify-center items-center gap-2 group ${cartItems.length === 0 ? 'pointer-events-none bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600' : ''}`}
               >
                 Tramitar Pedido
                 <span className="transform group-hover:translate-x-1 transition-transform">→</span>

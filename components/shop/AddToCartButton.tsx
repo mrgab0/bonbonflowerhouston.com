@@ -16,7 +16,7 @@ export const AddToCartButton = ({ product }: { product: any }) => {
         image: product.images[0],
         addons: product.selectedAddons
       })}
-      className="bg-[#FF97A4] text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-[#B0004A] transition-all shadow-lg shadow-[#FF97A4]/20 hover:scale-105 active:scale-95"
+      className="w-full sm:w-auto bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-10 py-4 rounded-full font-bold text-lg transition-all shadow-lg shadow-[#163422]/20 dark:shadow-[#5EEAD4]/20 hover:scale-105 active:scale-95 text-center flex items-center justify-center gap-2"
     >
       {t('addToCart')}
     </button>
