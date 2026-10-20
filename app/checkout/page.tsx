@@ -288,7 +288,7 @@ export default function CheckoutPage() {
                     <button
                       type="button"
                       onClick={() => setIsBioModalOpen(true)}
-                      className="bg-pink-50 hover:bg-pink-100 text-[#FF97A4] border border-pink-200 px-3 py-1 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"
+                      className="bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 hover:scale-105 active:scale-95"
                     >
                       <Fingerprint size={14} />
                       <span>Ingresar con Huella 👆</span>
@@ -541,7 +541,7 @@ export default function CheckoutPage() {
                 <button 
                   type="submit" 
                   disabled={loading || cartItems.length === 0} 
-                  className="w-full bg-[#FF97A4] text-white py-4 rounded-full font-bold hover:bg-[#B0004A] transition-all shadow-lg shadow-[#FF97A4]/20 disabled:bg-gray-300 text-base"
+                  className="w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-4 rounded-full font-bold transition-all shadow-lg shadow-[#163422]/20 dark:shadow-[#5EEAD4]/20 disabled:bg-gray-300 dark:disabled:bg-gray-800 disabled:text-gray-500 text-base flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99]"
                 >
                   {loading ? "Procesando Orden..." : `Confirmar Pedido - $${finalTotal.toFixed(2)} USD`}
                 </button>

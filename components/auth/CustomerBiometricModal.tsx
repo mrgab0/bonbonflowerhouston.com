@@ -176,7 +176,7 @@ export function CustomerBiometricModal({ isOpen, onClose, onSuccess }: Biometric
 
         {/* Icono Principal de Huella Dactilar */}
         <div className="text-center space-y-3">
-          <div className="relative w-20 h-20 mx-auto bg-gradient-to-tr from-pink-500 to-[#FF97A4] text-white rounded-full flex items-center justify-center shadow-lg shadow-pink-500/30">
+          <div className="relative w-20 h-20 mx-auto bg-gradient-to-tr from-[#163422] to-[#2D5A3C] dark:from-[#0F766E] dark:to-[#5EEAD4] text-white dark:text-stone-950 rounded-full flex items-center justify-center shadow-lg shadow-[#163422]/20 dark:shadow-[#5EEAD4]/20">
             <Fingerprint size={42} className="animate-pulse" />
             <span className="absolute -bottom-1 -right-1 bg-emerald-500 text-white p-1 rounded-full border-2 border-white dark:border-[#12131A]">
               <Lock size={12} />
@@ -236,7 +236,7 @@ export function CustomerBiometricModal({ isOpen, onClose, onSuccess }: Biometric
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="ejemplo@correo.com"
-                className="w-full p-3.5 border rounded-2xl text-sm font-medium dark:bg-gray-900 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
+                className="w-full p-3.5 border rounded-2xl text-sm font-medium dark:bg-gray-900 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#163422] dark:focus:ring-[#5EEAD4]"
                 required
               />
             </div>
@@ -245,7 +245,7 @@ export function CustomerBiometricModal({ isOpen, onClose, onSuccess }: Biometric
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#FF97A4] hover:bg-[#B0004A] text-white py-3.5 rounded-2xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:bg-gray-300"
+              className="w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 disabled:bg-gray-300 dark:disabled:bg-gray-800 disabled:text-gray-500"
             >
               <Fingerprint size={20} />
               <span>{loading ? "Activando Sensor..." : "👆 Escanear Huella e Ingresar"}</span>
