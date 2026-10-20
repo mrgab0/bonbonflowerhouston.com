@@ -1,9 +1,10 @@
 "use client";
 
 import { useCart } from "@/components/shop/Cart/CartContext";
-import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
 import { createOrder } from "@/lib/actions/order";
+import { saveAbandonedCartAction, restoreAbandonedCartAction } from "@/lib/actions/abandonedCart";
 import { ShopHeader } from "@/components/shop/ShopHeader";
 import { DEFAULT_DELIVERY_OPTIONS, DeliveryOption } from "@/lib/deliveryOptions";
 import { getDeliveryOptions } from "@/lib/actions/delivery";
@@ -39,14 +40,17 @@ const DeliveryMapPicker = dynamic(
   { ssr: false }
 );
 
-export default function CheckoutPage() {
-  const { cartItems, clearCart, updateAddonCustomText } = useCart();
+function CheckoutContent() {
+  const { cartItems, clearCart, updateAddonCustomText, restoreCart } = useCart();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [selectedPayment, setSelectedPayment] = useState("");
   const [deliveryOptionsList, setDeliveryOptionsList] = useState<DeliveryOption[]>(DEFAULT_DELIVERY_OPTIONS);
   const [selectedDelivery, setSelectedDelivery] = useState<DeliveryOption | null>(null);
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
+  const [currentCartToken, setCurrentCartToken] = useState<string>("");
+  const [recoveredCartBanner, setRecoveredCartBanner] = useState<string | null>(null);
 
   // Estado de Ubicación y Distancia por Millas
   const [deliveryLocation, setDeliveryLocation] = useState<{
@@ -131,6 +135,35 @@ export default function CheckoutPage() {
     }
   }, [cartItems]);
 
+  // 1. Restaurar carrito si el cliente hace clic en el link de correo (?recover=[cartToken])
+  useEffect(() => {
+    const recoverToken = searchParams.get("recover");
+    if (!recoverToken) return;
+
+    async function handleRecoverCart() {
+      try {
+        const res = await restoreAbandonedCartAction(recoverToken!);
+        if (res.success && res.data) {
+          const cart = res.data;
+          setCurrentCartToken(cart.cartToken);
+          if (cart.customerEmail) setEmail(cart.customerEmail);
+          if (cart.customerName) setName(cart.customerName);
+          if (cart.customerPhone) setPhone(cart.customerPhone);
+          if (cart.items && cart.items.length > 0 && restoreCart) {
+            restoreCart(cart.items);
+          }
+          setRecoveredCartBanner(
+            `🌸 ¡Bienvenido de nuevo${cart.customerName ? `, ${cart.customerName}` : ""}! Hemos recuperado tu carrito para que continúes tu orden con total comodidad.`
+          );
+        }
+      } catch (err) {
+        console.error("Error restaurando carrito abandonado:", err);
+      }
+    }
+
+    handleRecoverCart();
+  }, [searchParams, restoreCart]);
+
 
   const handleCopyText = (text: string) => {
     if (!text) return;
@@ -175,6 +208,46 @@ export default function CheckoutPage() {
   // Total Final = Subtotal Imponible + Sales Tax (8.25%) + Envío
   const finalTotal = taxableSubtotal + taxAmount + deliveryFee;
 
+  // 2. Guardado automático (Debounce) del carrito abandonado al escribir datos de contacto
+  useEffect(() => {
+    if (!email || !email.includes("@") || cartItems.length === 0) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        const res = await saveAbandonedCartAction({
+          customerEmail: email,
+          customerName: name,
+          customerPhone: phone,
+          items: cartItems.map((i) => ({
+            id: i.id,
+            name: i.name,
+            price: i.price,
+            quantity: i.quantity,
+            image: i.image,
+            addons: i.addons,
+          })),
+          subtotal: finalTotal,
+          stepReached: selectedPayment
+            ? "payment_method"
+            : selectedDelivery
+            ? "delivery_selected"
+            : "customer_info",
+        });
+
+        if (res.success && res.cartToken) {
+          setCurrentCartToken(res.cartToken);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("currentCartToken", res.cartToken);
+          }
+        }
+      } catch (err) {
+        // Silencioso para no interferir con la navegación del usuario
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [email, name, phone, cartItems, finalTotal, selectedDelivery, selectedPayment]);
+
   const handleApplyCoupon = async (e: React.FormEvent) => {
     e.preventDefault();
     setCouponError("");
@@ -216,6 +289,11 @@ export default function CheckoutPage() {
     setLoading(true);
 
     const data = new FormData(e.currentTarget);
+    const activeCartToken =
+      currentCartToken ||
+      (typeof window !== "undefined" ? localStorage.getItem("currentCartToken") : "") ||
+      undefined;
+
     const orderData = {
       customerName: data.get("name")?.toString() || "",
       customerEmail: data.get("email")?.toString() || "",
@@ -234,7 +312,8 @@ export default function CheckoutPage() {
       paymentMethod: data.get("paymentMethod")?.toString() || "",
       paymentRef: data.get("paymentRef")?.toString() || "N/A",
       items: cartItems,
-      total: finalTotal
+      total: finalTotal,
+      cartToken: activeCartToken,
     };
 
     const existingOrderId = localStorage.getItem("lastOrderId") || undefined;
@@ -242,6 +321,9 @@ export default function CheckoutPage() {
     
     if (result.success) {
       clearCart();
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("currentCartToken");
+      }
       localStorage.setItem("lastOrderId", result.orderId);
       localStorage.setItem("customerName", orderData.customerName);
       localStorage.setItem("customerEmail", orderData.customerEmail);
@@ -262,6 +344,24 @@ export default function CheckoutPage() {
       <main className="flex-1 py-10 md:py-16">
         <div className="container mx-auto px-4 md:px-6 max-w-6xl space-y-8">
           
+          {/* Banner de Carrito Abandonado Recuperado */}
+          {recoveredCartBanner && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between text-emerald-900 text-sm shadow-sm animate-fade-in">
+              <div className="flex items-center gap-3">
+                <Sparkles className="w-5 h-5 text-emerald-600 flex-shrink-0" />
+                <p className="font-medium">{recoveredCartBanner}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setRecoveredCartBanner(null)}
+                className="text-xs text-emerald-700 hover:text-emerald-950 font-bold ml-4 px-2 py-1 bg-white/70 rounded-lg transition-colors"
+                aria-label="Cerrar notificación"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-6 gap-2">
             <div>
               <h1 className="text-3xl md:text-4xl font-serif font-black text-[#1A1C1C]">Finalizar Pedido</h1>
@@ -686,5 +786,22 @@ export default function CheckoutPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#F9F9F9] flex items-center justify-center">
+          <div className="text-center space-y-3">
+            <div className="w-8 h-8 border-2 border-[#163422] border-t-transparent rounded-full animate-spin mx-auto" />
+            <p className="text-sm font-medium text-gray-500">Cargando checkout seguro...</p>
+          </div>
+        </div>
+      }
+    >
+      <CheckoutContent />
+    </Suspense>
   );
 }

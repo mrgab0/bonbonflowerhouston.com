@@ -58,6 +58,11 @@ export const ADMIN_NAV_ITEMS = [
     icon: "🎟️",
   },
   {
+    href: "/admin/correos",
+    label: "Correos & Webmail",
+    icon: "✉️",
+  },
+  {
     href: "/admin/qr",
     label: "Códigos QR",
     icon: "📱",

@@ -26,6 +26,7 @@ interface CartContextType {
   removeFromCart: (id: string, addons?: AddonItemSelection[]) => void;
   updateAddonCustomText?: (itemId: string, addonId: string, customText: string) => void;
   clearCart: () => void;
+  restoreCart?: (items: CartItem[]) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -88,8 +89,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => setCartItems([]);
 
+  const restoreCart = (items: CartItem[]) => {
+    setCartItems(items);
+    if (typeof window !== "undefined") {
+      localStorage.setItem('flower_cart', JSON.stringify(items));
+    }
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, decreaseFromCart, removeFromCart, updateAddonCustomText, clearCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, decreaseFromCart, removeFromCart, updateAddonCustomText, clearCart, restoreCart }}>
       {children}
     </CartContext.Provider>
   );

@@ -85,6 +85,21 @@ export interface ISiteConfig extends Document {
   businessCity?: string;
   mapboxToken?: string;
 
+  // Configuración de Correo Corporativo & Resend
+  corporateSenderEmail?: string;
+  corporateSenderName?: string;
+  corporateReplyToEmail?: string;
+  resendApiKey?: string;
+  adminNotifyEmails?: string[];
+
+  // Widget Flotante de Captación de Leads (Pop-up Newsletter)
+  leadCaptureActive?: boolean;
+  leadCaptureTemplate?: "champagne_pill" | "velvet_modal" | "corner_toast";
+  leadCaptureTitle?: string;
+  leadCaptureSubtitle?: string;
+  leadCaptureCouponCode?: string;
+  leadCaptureDelaySeconds?: number;
+
   updatedAt: Date;
 }
 
@@ -170,6 +185,21 @@ const SiteConfigSchema: Schema = new Schema({
   businessAddress: { type: String, default: "Houston, TX" },
   businessCity: { type: String, default: "Houston, TX" },
   mapboxToken: { type: String, default: "" },
+
+  // Configuración de Correo Corporativo & Resend
+  corporateSenderEmail: { type: String, default: "orders@bonbonflowerhouston.com" },
+  corporateSenderName: { type: String, default: "Bonbon Flowers Houston" },
+  corporateReplyToEmail: { type: String, default: "contact@bonbonflowerhouston.com" },
+  resendApiKey: { type: String, default: "" },
+  adminNotifyEmails: { type: [String], default: ["orders@bonbonflowerhouston.com", "iirockalonso@gmail.com"] },
+
+  // Widget Flotante de Captación de Leads (Pop-up Newsletter)
+  leadCaptureActive: { type: Boolean, default: true },
+  leadCaptureTemplate: { type: String, default: "champagne_pill" },
+  leadCaptureTitle: { type: String, default: "Recibe 10% de Regalo en tu Primera Compra" },
+  leadCaptureSubtitle: { type: String, default: "Suscríbete a nuestro club exclusivo y recibe un cupón de cortesía para tu próximo arreglo floral." },
+  leadCaptureCouponCode: { type: String, default: "BIENVENIDO10" },
+  leadCaptureDelaySeconds: { type: Number, default: 7 },
 
   updatedAt: { type: Date, default: Date.now }
 });
