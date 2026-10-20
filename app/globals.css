@@ -311,13 +311,13 @@ html.dark header a:hover:not(.preserve-color) {
   border-color: rgba(94, 234, 212, 0.4) !important;
 }
 
-/* Botones #163422 en Modo Oscuro: Realce con borde menta/teal */
-html.dark .bg-\[\#163422\] {
+/* Botones #163422 sin variante oscura explícita: Mantener bosque con realce de borde menta/teal */
+html.dark .bg-\[\#163422\]:not([class*="dark:bg-"]) {
   background-color: #163422 !important;
   border: 1px solid rgba(94, 234, 212, 0.35) !important;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
-html.dark .bg-\[\#163422\]:hover {
+html.dark .bg-\[\#163422\]:not([class*="dark:bg-"]):hover {
   background-color: #1B2E22 !important;
   border-color: #5EEAD4 !important;
   box-shadow: 0 0 18px rgba(94, 234, 212, 0.3) !important;

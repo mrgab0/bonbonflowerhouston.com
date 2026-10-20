@@ -254,7 +254,7 @@ export function FeaturedProductsSlider({ products }: FeaturedProductsSliderProps
                         price: product.price,
                         image: image
                       })}
-                      className="inline-flex items-center gap-1.5 bg-[#163422] hover:bg-[#1B2E22] text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow-md hover:shadow-lg active:scale-95 transition-all"
+                      className="inline-flex items-center gap-1.5 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-3.5 py-2 rounded-xl text-xs font-bold shadow-md hover:shadow-lg active:scale-95 transition-all"
                     >
                       <ShoppingBag size={14} />
                       <span>{t("addToCart") || "Agregar"}</span>
