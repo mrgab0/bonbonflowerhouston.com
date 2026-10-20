@@ -91,6 +91,45 @@ const EMAIL_TEMPLATES = [
   },
 ];
 
+const COPILOT_LEAD_PRESETS = [
+  {
+    id: "welcome",
+    name: "🌸 Bienvenida Signature",
+    template: "champagne_pill" as const,
+    title: "¡Bienvenido a Bonbon Flowers! 🌸",
+    subtitle: "Suscríbete y disfruta un 10% de cortesía en tu primer arreglo floral de lujo.",
+    coupon: "BIENVENIDO10",
+    delay: 7,
+  },
+  {
+    id: "romance",
+    name: "🌹 San Valentín & Romance",
+    template: "velvet_modal" as const,
+    title: "Rosas de Alta Costura en Houston 🌹",
+    subtitle: "Reserva hoy tu bouquet velvet exclusivo y asegura entrega express garantizada.",
+    coupon: "VALENTINLOVE",
+    delay: 5,
+  },
+  {
+    id: "mothers",
+    name: "💐 Día de las Madres",
+    template: "corner_toast" as const,
+    title: "El Regalo Perfecto para Mamá 💐",
+    subtitle: "Únete a nuestro club exclusivo y recibe un lazo de satén con dedicatoria de regalo.",
+    coupon: "PARAMAMA15",
+    delay: 6,
+  },
+  {
+    id: "flash",
+    name: "⚡ Envío Prioritario Gratis",
+    template: "champagne_pill" as const,
+    title: "Envío Prioritario de Cortesía 🚚",
+    subtitle: "Solo por hoy: entrega gratis en River Oaks, Galleria, Katy y The Woodlands.",
+    coupon: "HOUSTONFREE",
+    delay: 8,
+  },
+];
+
 interface EmailCenterClientProps {
   initialEmails: any[];
   initialTotal: number;
@@ -150,9 +189,12 @@ export function EmailCenterClient({
   const [cartStats, setCartStats] = useState(initialCartStats);
   const [recoveringCartId, setRecoveringCartId] = useState<string | null>(null);
 
-  // Estado de Leads Captados
+  // Estado de Leads Captados & Asistente Co-Pilot
   const [leads, setLeads] = useState(initialLeads);
   const [popupConfig, setPopupConfig] = useState(initialSettings.popup);
+  const [isGeneratingWithAI, setIsGeneratingWithAI] = useState(false);
+  const [aiPromptInput, setAiPromptInput] = useState("");
+  const [showAiCustomBox, setShowAiCustomBox] = useState(false);
 
   // Estado de Campañas Masivas
   const [campaignForm, setCampaignForm] = useState({
@@ -352,6 +394,86 @@ export function EmailCenterClient({
         setFeedbackMsg({ type: "error", text: res.error || "Error al guardar." });
       }
     });
+  };
+
+  const handleApplyLeadPreset = (preset: typeof COPILOT_LEAD_PRESETS[0]) => {
+    setPopupConfig({
+      ...popupConfig,
+      leadCaptureTemplate: preset.template,
+      leadCaptureTitle: preset.title,
+      leadCaptureSubtitle: preset.subtitle,
+      leadCaptureCouponCode: preset.coupon,
+      leadCaptureDelaySeconds: preset.delay,
+    });
+    setFeedbackMsg({
+      type: "success",
+      text: `✨ Estrategia "${preset.name}" aplicada por Flor Co-Pilot. Recuerda hacer clic en "Guardar Configuración" para activarla.`,
+    });
+  };
+
+  const handleGenerateLeadWithAI = async (customTopic?: string) => {
+    setIsGeneratingWithAI(true);
+    try {
+      const topicInstruction = customTopic && customTopic.trim()
+        ? `Crea una propuesta creativa para el widget flotante de captación de clientes de Bonbon Flowers Houston sobre: "${customTopic.trim()}".`
+        : `Crea una propuesta creativa de bienvenida de lujo para el widget flotante de captación de leads en Bonbon Flowers Houston.`;
+
+      const promptText = `${topicInstruction}
+IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni explicaciones, siguiendo exactamente esta estructura:
+{
+  "template": "champagne_pill" o "velvet_modal" o "corner_toast",
+  "title": "título corto y persuasivo (máximo 40 caracteres)",
+  "subtitle": "promesa atractiva del cupón o regalo (máximo 95 caracteres)",
+  "coupon": "CUPONENMAYUSCULA",
+  "delaySeconds": 6
+}`;
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{ role: "user", text: promptText }],
+          locale: "es",
+          clientContext: { isAdmin: true },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const rawText = data.text || "";
+        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          setPopupConfig({
+            ...popupConfig,
+            leadCaptureTemplate: (["champagne_pill", "velvet_modal", "corner_toast"].includes(parsed.template)
+              ? parsed.template
+              : "champagne_pill") as any,
+            leadCaptureTitle: parsed.title || popupConfig.leadCaptureTitle,
+            leadCaptureSubtitle: parsed.subtitle || popupConfig.leadCaptureSubtitle,
+            leadCaptureCouponCode: (parsed.coupon || popupConfig.leadCaptureCouponCode).toUpperCase(),
+            leadCaptureDelaySeconds: Number(parsed.delaySeconds) || 7,
+          });
+          setFeedbackMsg({
+            type: "success",
+            text: "✨ ¡Flor Co-Pilot ha redactado la plantilla y actualizado el formulario! Revisa la previsualización a la derecha y guarda.",
+          });
+          setShowAiCustomBox(false);
+          setAiPromptInput("");
+        } else {
+          setFeedbackMsg({
+            type: "error",
+            text: "La IA respondió pero no en formato estructurado. Puedes usar los botones de acceso rápido.",
+          });
+        }
+      } else {
+        setFeedbackMsg({ type: "error", text: "No se pudo comunicar con Flor Co-Pilot." });
+      }
+    } catch (err: any) {
+      setFeedbackMsg({ type: "error", text: err.message || "Error al generar con IA." });
+    } finally {
+      setIsGeneratingWithAI(false);
+    }
   };
 
   // ---------------------------------------------------------------------------
@@ -859,6 +981,84 @@ export function EmailCenterClient({
                   <p className="text-xs text-stone-500 mt-1">
                     Personaliza la notificación flotante que solicita el correo a los nuevos visitantes a cambio de un cupón de cortesía.
                   </p>
+                </div>
+
+                {/* Tarjeta de Co-Pilot: Estrategias & Generador Asistido por IA */}
+                <div className="p-4 rounded-2xl bg-gradient-to-br from-[#163422] to-[#1F452E] text-white border border-[#C5A059]/40 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-full bg-[#C5A059] text-stone-950 flex items-center justify-center font-bold flex-shrink-0">
+                        <Sparkles size={15} />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-xs text-[#E6C98B] uppercase tracking-wider flex items-center gap-1.5">
+                          Flor Co-Pilot • Generador de Plantillas IA
+                        </h4>
+                        <p className="text-[11px] text-[#E6F7F0] opacity-85">
+                          Aplica una estrategia de temporada con 1 clic o genera un gancho exclusivo con IA.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowAiCustomBox(!showAiCustomBox)}
+                      className="text-[11px] font-bold text-[#E6C98B] hover:text-white underline cursor-pointer flex-shrink-0 transition-colors"
+                    >
+                      {showAiCustomBox ? "Cerrar IA ✕" : "Pedir a la IA ✍️"}
+                    </button>
+                  </div>
+
+                  {/* Acceso Rápido a Presets de Temporada */}
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-0.5">
+                    {COPILOT_LEAD_PRESETS.map((preset) => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        onClick={() => handleApplyLeadPreset(preset)}
+                        className="p-2 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-left transition-all text-[11px] leading-tight active:scale-95 group"
+                      >
+                        <span className="block font-bold text-white group-hover:text-[#E6C98B] transition-colors">
+                          {preset.name}
+                        </span>
+                        <span className="block text-[10px] text-[#C5A059] font-mono mt-0.5 font-bold">
+                          {preset.coupon}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Generador Asistido Libre */}
+                  {showAiCustomBox && (
+                    <div className="pt-2 border-t border-white/15 space-y-2">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={aiPromptInput}
+                          onChange={(e) => setAiPromptInput(e.target.value)}
+                          placeholder="Ej: Aniversario de bodas con orquídeas en The Woodlands..."
+                          className="flex-1 p-2 rounded-xl bg-black/30 border border-white/20 text-xs text-white placeholder:text-white/50 focus:outline-none focus:border-[#C5A059]"
+                        />
+                        <button
+                          type="button"
+                          disabled={isGeneratingWithAI}
+                          onClick={() => handleGenerateLeadWithAI(aiPromptInput)}
+                          className="px-3.5 py-2 bg-[#C5A059] text-stone-950 font-bold rounded-xl text-xs hover:bg-[#d6af66] transition-all flex items-center gap-1.5 disabled:opacity-50 flex-shrink-0 cursor-pointer"
+                        >
+                          {isGeneratingWithAI ? (
+                            <>
+                              <Loader2 size={13} className="animate-spin" />
+                              <span>Creando...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Sparkles size={13} />
+                              <span>Generar</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-4 text-xs">
