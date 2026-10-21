@@ -6,7 +6,7 @@ import {
   Package, Truck, CheckCircle2, Clock, MapPin, User, MessageCircle, RefreshCw,
   ArrowLeft, Search, Filter, Store, ExternalLink, Calendar, MessageSquare, Heart,
   Edit3, Printer, Lock, X, Save, DollarSign, Globe, Plus, Trash2, ShieldCheck, FileText,
-  ArrowUpDown
+  Receipt, ArrowUpDown
 } from "lucide-react";
 import Link from "next/link";
 
@@ -30,9 +30,10 @@ export default function AdminOrdenesPage() {
   const [submitting2FA, setSubmitting2FA] = useState(false);
   const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
 
-  // Estado para Modal e Impresión de Factura
+  // Estado para Modal e Impresión de Factura (A4 o Ticket 80mm Star TSP100)
   const [invoiceOrder, setInvoiceOrder] = useState<any | null>(null);
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
+  const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("a4");
 
   useEffect(() => {
     loadOrders();
@@ -215,9 +216,13 @@ export default function AdminOrdenesPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-16">
-      {/* Estilos CSS para Impresión Limpia de Factura */}
+      {/* Estilos CSS para Impresión Limpia de Factura (A4 / Carta o Ticket 80mm Star TSP100) */}
       <style jsx global>{`
         @media print {
+          @page {
+            size: ${invoiceFormat === "ticket80" ? "80mm auto" : "portrait letter"};
+            margin: ${invoiceFormat === "ticket80" ? "0mm" : "10mm"};
+          }
           body * {
             visibility: hidden;
           }
@@ -228,12 +233,14 @@ export default function AdminOrdenesPage() {
             position: absolute;
             left: 0;
             top: 0;
-            width: 100%;
+            width: ${invoiceFormat === "ticket80" ? "72mm !important" : "100% !important"};
+            max-width: ${invoiceFormat === "ticket80" ? "72mm !important" : "none !important"};
             background: white !important;
             color: black !important;
-            padding: 20px !important;
-            margin: 0 !important;
+            padding: ${invoiceFormat === "ticket80" ? "2mm 2mm !important" : "20px !important"};
+            margin: 0 auto !important;
             box-shadow: none !important;
+            border: none !important;
           }
           .no-print {
             display: none !important;
@@ -270,6 +277,40 @@ export default function AdminOrdenesPage() {
           >
             <ArrowLeft size={14} /> Volver al Admin
           </Link>
+        </div>
+      </div>
+
+      {/* Banner de Impresora Térmica Star Micronics TSP143III (80mm) */}
+      <div className="bg-gradient-to-r from-emerald-950 via-[#163422] to-stone-900 border border-emerald-800/50 text-white p-4 sm:p-5 rounded-3xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 no-print">
+        <div className="flex items-center gap-3.5">
+          <div className="p-3 bg-emerald-500/20 text-emerald-300 rounded-2xl border border-emerald-500/30">
+            <Receipt size={24} />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-sm font-extrabold uppercase tracking-wide text-white">
+                Star Micronics TSP100III (TSP143IIILAN)
+              </h2>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/40">
+                80mm Térmico LAN
+              </span>
+            </div>
+            <p className="text-xs text-stone-300 mt-0.5">
+              Formato de ticket adaptado a 72mm imprimibles con corte de guillotina. Impresión dual (A4 y 80mm) y despacho automático en red local.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 text-xs">
+          <a
+            href="/api/pos/printer"
+            target="_blank"
+            className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1 border border-white/10"
+            title="Ver órdenes pendientes de impresión en la API"
+          >
+            <Globe size={13} />
+            <span>API POS</span>
+          </a>
         </div>
       </div>
 
@@ -432,14 +473,30 @@ export default function AdminOrdenesPage() {
                       <span>Modificar</span>
                     </button>
 
-                    {/* Botón Imprimir Factura */}
+                    {/* Botón Imprimir Factura A4 */}
                     <button
-                      onClick={() => setInvoiceOrder(order)}
+                      onClick={() => {
+                        setInvoiceFormat("a4");
+                        setInvoiceOrder(order);
+                      }}
                       className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 shadow-sm transition-all"
-                      title="Imprimir Factura para Cliente"
+                      title="Imprimir Factura A4 para Cliente"
                     >
                       <Printer size={13} />
-                      <span>Factura</span>
+                      <span>Factura A4</span>
+                    </button>
+
+                    {/* Botón Imprimir Ticket 80mm Star TSP100 */}
+                    <button
+                      onClick={() => {
+                        setInvoiceFormat("ticket80");
+                        setInvoiceOrder(order);
+                      }}
+                      className="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 shadow-sm transition-all"
+                      title="Imprimir Ticket Térmico 80mm (Star Micronics TSP143III)"
+                    >
+                      <Receipt size={13} />
+                      <span>Ticket 80mm</span>
                     </button>
 
                     {/* Botón WhatsApp */}
@@ -794,45 +851,71 @@ export default function AdminOrdenesPage() {
       {/* ========================================================= */}
       {invoiceOrder && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white dark:bg-[#1A1C23] max-w-3xl w-full rounded-3xl p-6 space-y-5 border border-gray-200 dark:border-gray-800 shadow-2xl my-8">
+          <div className={`bg-white dark:bg-[#1A1C23] ${invoiceFormat === "ticket80" ? "max-w-md" : "max-w-3xl"} w-full rounded-3xl p-6 space-y-5 border border-gray-200 dark:border-gray-800 shadow-2xl my-8 transition-all`}>
             {/* Cabecera del Modal (No se imprime) */}
-            <div className="flex justify-between items-center border-b pb-4 border-gray-100 dark:border-gray-800 no-print">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b pb-4 border-gray-100 dark:border-gray-800 no-print">
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl">
-                  <FileText size={20} />
+                  {invoiceFormat === "ticket80" ? <Receipt size={20} className="text-pink-600" /> : <FileText size={20} />}
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-gray-900 dark:text-white">Imprimir Factura / Invoice</h3>
-                  <p className="text-xs text-gray-400">Selecciona el idioma deseado para entregar a tu cliente o jefe</p>
+                  <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white">
+                    {invoiceFormat === "ticket80" ? "Ticket Térmico POS (80mm)" : "Imprimir Factura / Invoice"}
+                  </h3>
+                  <p className="text-xs text-gray-400">
+                    {invoiceFormat === "ticket80" ? "Optimizado para Star Micronics TSP143IIILAN" : "Formato estándar para cliente o archivo"}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Selector Formato */}
+                <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl text-xs font-bold">
+                  <button
+                    onClick={() => setInvoiceFormat("a4")}
+                    className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 ${
+                      invoiceFormat === "a4" ? "bg-white dark:bg-gray-900 text-[#163422] dark:text-emerald-400 shadow-sm" : "text-gray-500"
+                    }`}
+                  >
+                    <FileText size={12} />
+                    <span>A4</span>
+                  </button>
+                  <button
+                    onClick={() => setInvoiceFormat("ticket80")}
+                    className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 ${
+                      invoiceFormat === "ticket80" ? "bg-white dark:bg-gray-900 text-pink-600 shadow-sm" : "text-gray-500"
+                    }`}
+                  >
+                    <Receipt size={12} />
+                    <span>80mm</span>
+                  </button>
+                </div>
+
                 {/* Selector Idioma */}
                 <div className="flex items-center gap-1 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl text-xs font-bold">
                   <button
                     onClick={() => setInvoiceLang("es")}
-                    className={`px-3 py-1 rounded-lg transition-all ${
+                    className={`px-2.5 py-1 rounded-lg transition-all ${
                       invoiceLang === "es" ? "bg-white dark:bg-gray-900 text-[#FF97A4] shadow-sm" : "text-gray-500"
                     }`}
                   >
-                    🇪🇸 Español
+                    ES
                   </button>
                   <button
                     onClick={() => setInvoiceLang("en")}
-                    className={`px-3 py-1 rounded-lg transition-all ${
+                    className={`px-2.5 py-1 rounded-lg transition-all ${
                       invoiceLang === "en" ? "bg-white dark:bg-gray-900 text-[#FF97A4] shadow-sm" : "text-gray-500"
                     }`}
                   >
-                    🇺🇸 English
+                    EN
                   </button>
                 </div>
 
                 <button
                   onClick={handlePrintInvoice}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all"
                 >
-                  <Printer size={15} />
+                  <Printer size={14} />
                   <span>{invoiceLang === "es" ? "Imprimir" : "Print"}</span>
                 </button>
 
@@ -845,142 +928,261 @@ export default function AdminOrdenesPage() {
               </div>
             </div>
 
-            {/* ÁREA IMPRIMIBLE DE LA FACTURA */}
-            <div id="invoice-print-area" className="bg-white text-gray-900 p-6 rounded-2xl border border-gray-200 space-y-6 text-xs">
-              {/* Encabezado Oficial Boutique */}
-              <div className="flex justify-between items-start border-b-2 border-pink-200 pb-5">
-                <div>
-                  <h1 className="text-2xl font-serif font-extrabold text-[#1A1C1C] tracking-tight">Bonbon Flowers Houston</h1>
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-[#FF97A4]">High Floral Design Boutique</p>
-                  <p className="text-gray-500 text-[11px] mt-1">Houston, Texas & Metropolitan Areas</p>
-                  <p className="text-gray-500 text-[11px]">Tel / WhatsApp: +1 (346) 739-2730</p>
-                </div>
-
-                <div className="text-right space-y-1">
-                  <div className="inline-block bg-pink-50 border border-pink-200 px-3 py-1 rounded-xl text-pink-600 font-mono font-bold text-sm">
-                    {invoiceLang === "es" ? "FACTURA #" : "INVOICE #"} {invoiceOrder.orderId}
+            {invoiceFormat === "a4" ? (
+              /* ÁREA IMPRIMIBLE DE LA FACTURA A4 */
+              <div id="invoice-print-area" className="bg-white text-gray-900 p-6 rounded-2xl border border-gray-200 space-y-6 text-xs">
+                {/* Encabezado Oficial Boutique */}
+                <div className="flex justify-between items-start border-b-2 border-pink-200 pb-5">
+                  <div>
+                    <h1 className="text-2xl font-serif font-extrabold text-[#1A1C1C] tracking-tight">Bonbon Flowers Houston</h1>
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-[#FF97A4]">High Floral Design Boutique</p>
+                    <p className="text-gray-500 text-[11px] mt-1">Houston, Texas & Metropolitan Areas</p>
+                    <p className="text-gray-500 text-[11px]">Tel / WhatsApp: +1 (346) 739-2730</p>
                   </div>
-                  <p className="text-gray-500 font-medium text-[11px]">
-                    {invoiceLang === "es" ? "Fecha:" : "Date:"} {new Date(invoiceOrder.createdAt).toLocaleDateString(invoiceLang === "es" ? "es-MX" : "en-US", { year: "numeric", month: "long", day: "numeric" })}
-                  </p>
-                  <p className="text-gray-500 font-medium text-[11px]">
-                    {invoiceLang === "es" ? "Estado:" : "Status:"} <strong className="text-gray-800">{invoiceOrder.status || "Confirmed"}</strong>
-                  </p>
-                </div>
-              </div>
 
-              {/* Información del Cliente & Envíos */}
-              <div className="grid grid-cols-2 gap-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                  <div className="text-right space-y-1">
+                    <div className="inline-block bg-pink-50 border border-pink-200 px-3 py-1 rounded-xl text-pink-600 font-mono font-bold text-sm">
+                      {invoiceLang === "es" ? "FACTURA #" : "INVOICE #"} {invoiceOrder.orderId}
+                    </div>
+                    <p className="text-gray-500 font-medium text-[11px]">
+                      {invoiceLang === "es" ? "Fecha:" : "Date:"} {new Date(invoiceOrder.createdAt).toLocaleDateString(invoiceLang === "es" ? "es-MX" : "en-US", { year: "numeric", month: "long", day: "numeric" })}
+                    </p>
+                    <p className="text-gray-500 font-medium text-[11px]">
+                      {invoiceLang === "es" ? "Estado:" : "Status:"} <strong className="text-gray-800">{invoiceOrder.status || "Confirmed"}</strong>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Información del Cliente & Envíos */}
+                <div className="grid grid-cols-2 gap-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                  <div>
+                    <h4 className="font-bold uppercase text-[10px] tracking-wider text-gray-400 mb-1">
+                      {invoiceLang === "es" ? "DATOS DEL CLIENTE" : "CUSTOMER DETAILS"}
+                    </h4>
+                    <p className="font-bold text-gray-800 text-sm">{invoiceOrder.customerName}</p>
+                    <p className="text-gray-600 font-mono mt-0.5">{invoiceOrder.customerPhone}</p>
+                    {invoiceOrder.customerEmail && <p className="text-gray-600">{invoiceOrder.customerEmail}</p>}
+                  </div>
+
+                  <div>
+                    <h4 className="font-bold uppercase text-[10px] tracking-wider text-gray-400 mb-1">
+                      {invoiceLang === "es" ? "DIRECCIÓN DE ENTREGA" : "DELIVERY ADDRESS"}
+                    </h4>
+                    <p className="font-bold text-gray-800">{invoiceOrder.address}</p>
+                    <p className="text-gray-500 mt-1">
+                      {invoiceLang === "es" ? "Método:" : "Method:"} <strong className="text-gray-700">{invoiceOrder.deliveryMethod || "Standard Delivery"}</strong>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tarjeta de Dedicatoria (si existe) */}
+                {invoiceOrder.cardMessage && (
+                  <div className="bg-pink-50/60 p-3 rounded-xl border border-pink-200">
+                    <h4 className="font-bold uppercase text-[10px] tracking-wider text-pink-600 mb-0.5">
+                      {invoiceLang === "es" ? "💌 TARJETA DE DEDICATORIA IMPRESA" : "💌 PRINTED CARD MESSAGE"}
+                    </h4>
+                    <p className="italic font-semibold text-gray-800">"{invoiceOrder.cardMessage}"</p>
+                  </div>
+                )}
+
+                {/* Tabla de Productos */}
                 <div>
-                  <h4 className="font-bold uppercase text-[10px] tracking-wider text-gray-400 mb-1">
-                    {invoiceLang === "es" ? "DATOS DEL CLIENTE" : "CUSTOMER DETAILS"}
-                  </h4>
-                  <p className="font-bold text-gray-800 text-sm">{invoiceOrder.customerName}</p>
-                  <p className="text-gray-600 font-mono mt-0.5">{invoiceOrder.customerPhone}</p>
-                  {invoiceOrder.customerEmail && <p className="text-gray-600">{invoiceOrder.customerEmail}</p>}
-                </div>
-
-                <div>
-                  <h4 className="font-bold uppercase text-[10px] tracking-wider text-gray-400 mb-1">
-                    {invoiceLang === "es" ? "DIRECCIÓN DE ENTREGA" : "DELIVERY ADDRESS"}
-                  </h4>
-                  <p className="font-bold text-gray-800">{invoiceOrder.address}</p>
-                  <p className="text-gray-500 mt-1">
-                    {invoiceLang === "es" ? "Método:" : "Method:"} <strong className="text-gray-700">{invoiceOrder.deliveryMethod || "Standard Delivery"}</strong>
-                  </p>
-                </div>
-              </div>
-
-              {/* Tarjeta de Dedicatoria (si existe) */}
-              {invoiceOrder.cardMessage && (
-                <div className="bg-pink-50/60 p-3 rounded-xl border border-pink-200">
-                  <h4 className="font-bold uppercase text-[10px] tracking-wider text-pink-600 mb-0.5">
-                    {invoiceLang === "es" ? "💌 TARJETA DE DEDICATORIA IMPRESA" : "💌 PRINTED CARD MESSAGE"}
-                  </h4>
-                  <p className="italic font-semibold text-gray-800">"{invoiceOrder.cardMessage}"</p>
-                </div>
-              )}
-
-              {/* Tabla de Productos */}
-              <div>
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="border-b-2 border-gray-200 bg-gray-100 text-gray-600 uppercase text-[10px] font-bold text-left">
-                      <th className="py-2 px-3">{invoiceLang === "es" ? "Descripción de Arreglo / Ítem" : "Item Description"}</th>
-                      <th className="py-2 px-3 text-center">{invoiceLang === "es" ? "Cant." : "Qty"}</th>
-                      <th className="py-2 px-3 text-right">{invoiceLang === "es" ? "Precio Unit." : "Unit Price"}</th>
-                      <th className="py-2 px-3 text-right">{invoiceLang === "es" ? "Subtotal" : "Subtotal"}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-100 font-medium">
-                    {(invoiceOrder.items || []).map((item: any, idx: number) => (
-                      <tr key={idx}>
-                        <td className="py-2.5 px-3">
-                          <strong className="text-gray-900">{item.name}</strong>
-                          {item.addons && item.addons.length > 0 && (
-                            <div className="pl-2 mt-1 space-y-0.5 text-[11px] text-pink-600 font-semibold">
-                              {item.addons.map((a: any, i: number) => (
-                                <div key={i}>
-                                  + {a.name || a.value} {a.price ? `(+$${a.price.toFixed(2)})` : ''}
-                                  {a.customText && <span className="italic block text-gray-700 pl-2">"{a.customText}"</span>}
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </td>
-                        <td className="py-2.5 px-3 text-center font-bold">{item.quantity}</td>
-                        <td className="py-2.5 px-3 text-right">${(item.price || 0).toFixed(2)}</td>
-                        <td className="py-2.5 px-3 text-right font-bold text-gray-900">
-                          ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
-                        </td>
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="border-b-2 border-gray-200 bg-gray-100 text-gray-600 uppercase text-[10px] font-bold text-left">
+                        <th className="py-2 px-3">{invoiceLang === "es" ? "Descripción de Arreglo / Ítem" : "Item Description"}</th>
+                        <th className="py-2 px-3 text-center">{invoiceLang === "es" ? "Cant." : "Qty"}</th>
+                        <th className="py-2 px-3 text-right">{invoiceLang === "es" ? "Precio Unit." : "Unit Price"}</th>
+                        <th className="py-2 px-3 text-right">{invoiceLang === "es" ? "Subtotal" : "Subtotal"}</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100 font-medium">
+                      {(invoiceOrder.items || []).map((item: any, idx: number) => (
+                        <tr key={idx}>
+                          <td className="py-2.5 px-3">
+                            <strong className="text-gray-900">{item.name}</strong>
+                            {item.addons && item.addons.length > 0 && (
+                              <div className="pl-2 mt-1 space-y-0.5 text-[11px] text-pink-600 font-semibold">
+                                {item.addons.map((a: any, i: number) => (
+                                  <div key={i}>
+                                    + {a.name || a.value} {a.price ? `(+$${a.price.toFixed(2)})` : ''}
+                                    {a.customText && <span className="italic block text-gray-700 pl-2">"{a.customText}"</span>}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </td>
+                          <td className="py-2.5 px-3 text-center font-bold">{item.quantity}</td>
+                          <td className="py-2.5 px-3 text-right">${(item.price || 0).toFixed(2)}</td>
+                          <td className="py-2.5 px-3 text-right font-bold text-gray-900">
+                            ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
 
-              {/* Desglose Financiero */}
-              <div className="flex justify-end pt-2">
-                <div className="w-64 space-y-1.5 text-xs bg-gray-50 p-3.5 rounded-xl border border-gray-200">
-                  <div className="flex justify-between text-gray-600">
-                    <span>{invoiceLang === "es" ? "Subtotal Ítems:" : "Items Subtotal:"}</span>
-                    <span className="font-bold">${((invoiceOrder.items || []).reduce((acc: number, it: any) => acc + (it.price * it.quantity), 0)).toFixed(2)}</span>
+                {/* Desglose Financiero */}
+                <div className="flex justify-end pt-2">
+                  <div className="w-64 space-y-1.5 text-xs bg-gray-50 p-3.5 rounded-xl border border-gray-200">
+                    <div className="flex justify-between text-gray-600">
+                      <span>{invoiceLang === "es" ? "Subtotal Ítems:" : "Items Subtotal:"}</span>
+                      <span className="font-bold">${((invoiceOrder.items || []).reduce((acc: number, it: any) => acc + (it.price * it.quantity), 0)).toFixed(2)}</span>
+                    </div>
+
+                    {invoiceOrder.discountAmount ? (
+                      <div className="flex justify-between text-emerald-600 font-semibold">
+                        <span>{invoiceLang === "es" ? "Descuento:" : "Discount:"}</span>
+                        <span>-${invoiceOrder.discountAmount.toFixed(2)}</span>
+                      </div>
+                    ) : null}
+
+                    <div className="flex justify-between text-purple-700 font-semibold">
+                      <span>{invoiceLang === "es" ? "Sales Tax (8.25%):" : "Sales Tax (8.25%):"}</span>
+                      <span>+${(invoiceOrder.taxAmount || 0).toFixed(2)}</span>
+                    </div>
+
+                    <div className="flex justify-between text-gray-600">
+                      <span>{invoiceLang === "es" ? "Envío / Delivery:" : "Delivery Fee:"}</span>
+                      <span>{(invoiceOrder.deliveryFee || 0) > 0 ? `+$${invoiceOrder.deliveryFee.toFixed(2)}` : (invoiceLang === "es" ? "Gratis" : "Free")}</span>
+                    </div>
+
+                    <div className="border-top border-gray-300 pt-2 flex justify-between text-sm font-extrabold text-gray-900">
+                      <span>{invoiceLang === "es" ? "TOTAL FINAL:" : "TOTAL DUE:"}</span>
+                      <span className="text-emerald-700">${(invoiceOrder.total || 0).toFixed(2)} USD</span>
+                    </div>
                   </div>
+                </div>
 
+                {/* Pie de Página de Factura */}
+                <div className="border-t pt-4 text-center text-[10px] text-gray-400 space-y-1">
+                  <p className="font-bold text-gray-600">
+                    {invoiceLang === "es"
+                      ? "¡Gracias por elegir a Bonbon Flowers Houston para regalar sonrisas!"
+                      : "Thank you for choosing Bonbon Flowers Houston for your special moments!"}
+                  </p>
+                  <p>Bonbon Flowers Houston • Houston, Texas • bonbonflowershouston.com</p>
+                </div>
+              </div>
+            ) : (
+              /* FORMATO TICKET TÉRMICO 80mm STAR MICRONICS TSP143III */
+              <div
+                id="invoice-print-area"
+                className="bg-white text-black p-4 rounded-xl border border-gray-300 max-w-[76mm] mx-auto font-mono text-[11px] leading-tight select-text shadow-sm space-y-3"
+              >
+                {/* Encabezado Star Micronics 80mm */}
+                <div className="text-center pb-2 border-b border-dashed border-gray-400 space-y-0.5">
+                  <p className="font-extrabold text-sm uppercase tracking-wide">Bonbon Flowers</p>
+                  <p className="font-bold text-xs uppercase tracking-wider">HOUSTON</p>
+                  <p className="text-[10px] text-gray-700">High Floral Design Boutique</p>
+                  <p className="text-[10px] text-gray-700">Houston, Texas & Metro Areas</p>
+                  <p className="text-[10px] font-bold text-gray-900">Tel/WhatsApp: +1 (346) 739-2730</p>
+                </div>
+
+                {/* Datos de Orden */}
+                <div className="py-2 border-b border-dashed border-gray-400 space-y-1">
+                  <div className="flex justify-between font-bold text-xs">
+                    <span>{invoiceLang === "es" ? "ORDEN:" : "ORDER:"}</span>
+                    <span className="bg-gray-100 px-1.5 py-0.5 rounded text-black font-extrabold">{invoiceOrder.orderId}</span>
+                  </div>
+                  <div className="flex justify-between text-[10px] text-gray-600">
+                    <span>{invoiceLang === "es" ? "FECHA:" : "DATE:"}</span>
+                    <span>{new Date(invoiceOrder.createdAt).toLocaleDateString(invoiceLang === "es" ? "es-MX" : "en-US", { year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</span>
+                  </div>
+                  <div className="flex justify-between text-[10px] text-gray-600">
+                    <span>{invoiceLang === "es" ? "ESTADO:" : "STATUS:"}</span>
+                    <span className="font-bold text-black uppercase">{invoiceOrder.status || "Confirmado"}</span>
+                  </div>
+                </div>
+
+                {/* Cliente y Entrega */}
+                <div className="py-2 border-b border-dashed border-gray-400 space-y-1 text-[11px]">
+                  <p className="font-bold uppercase text-[10px] text-gray-500">
+                    {invoiceLang === "es" ? "DATOS DE ENTREGA:" : "DELIVERY INFO:"}
+                  </p>
+                  <p className="font-bold text-black">{invoiceOrder.customerName}</p>
+                  <p className="text-black font-semibold">Tel: {invoiceOrder.customerPhone}</p>
+                  <p className="text-gray-800 break-words mt-0.5"><span className="font-bold">Dir:</span> {invoiceOrder.address}</p>
+                  <p className="text-[10px] text-gray-600"><span className="font-bold">Método:</span> {invoiceOrder.deliveryMethod || "Envío Estándar"}</p>
+                </div>
+
+                {/* Tarjeta de Dedicatoria Impresa (CRÍTICO PARA FLORERÍA) */}
+                {invoiceOrder.cardMessage && (
+                  <div className="my-2 p-2 bg-gray-50 border border-dashed border-gray-400 rounded space-y-0.5">
+                    <p className="font-bold text-[10px] uppercase text-black">
+                      💌 {invoiceLang === "es" ? "TARJETA DE REGALO:" : "GIFT CARD MESSAGE:"}
+                    </p>
+                    <p className="italic font-bold text-black break-words">
+                      "{invoiceOrder.cardMessage}"
+                    </p>
+                  </div>
+                )}
+
+                {/* Items */}
+                <div className="py-2 border-b border-dashed border-gray-400">
+                  <div className="flex justify-between font-bold text-[10px] uppercase pb-1 border-b border-gray-300">
+                    <span>{invoiceLang === "es" ? "DESCRIPCIÓN" : "ITEM"}</span>
+                    <span>{invoiceLang === "es" ? "TOTAL" : "TOTAL"}</span>
+                  </div>
+                  <div className="divide-y divide-gray-100 pt-1">
+                    {(invoiceOrder.items || []).map((item: any, idx: number) => (
+                      <div key={idx} className="py-1">
+                        <div className="flex justify-between items-start font-bold">
+                          <span className="pr-1">{item.quantity}x {item.name}</span>
+                          <span className="whitespace-nowrap">${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</span>
+                        </div>
+                        {item.addons && item.addons.length > 0 && (
+                          <div className="pl-2 text-[10px] text-gray-700 space-y-0.5">
+                            {item.addons.map((a: any, i: number) => (
+                              <div key={i}>
+                                + {a.name || a.value} {a.price ? `(+$${a.price.toFixed(2)})` : ''}
+                                {a.customText && <div className="italic text-black pl-1">"{a.customText}"</div>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Totales */}
+                <div className="py-2 space-y-1 text-[11px] border-b border-dashed border-gray-400">
+                  <div className="flex justify-between text-gray-700">
+                    <span>{invoiceLang === "es" ? "Subtotal:" : "Subtotal:"}</span>
+                    <span>${((invoiceOrder.items || []).reduce((acc: number, it: any) => acc + (it.price * it.quantity), 0)).toFixed(2)}</span>
+                  </div>
                   {invoiceOrder.discountAmount ? (
-                    <div className="flex justify-between text-emerald-600 font-semibold">
+                    <div className="flex justify-between text-gray-800">
                       <span>{invoiceLang === "es" ? "Descuento:" : "Discount:"}</span>
                       <span>-${invoiceOrder.discountAmount.toFixed(2)}</span>
                     </div>
                   ) : null}
-
-                  <div className="flex justify-between text-purple-700 font-semibold">
-                    <span>{invoiceLang === "es" ? "Sales Tax (8.25%):" : "Sales Tax (8.25%):"}</span>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Sales Tax (8.25%):</span>
                     <span>+${(invoiceOrder.taxAmount || 0).toFixed(2)}</span>
                   </div>
-
-                  <div className="flex justify-between text-gray-600">
-                    <span>{invoiceLang === "es" ? "Envío / Delivery:" : "Delivery Fee:"}</span>
+                  <div className="flex justify-between text-gray-700">
+                    <span>{invoiceLang === "es" ? "Envío:" : "Delivery:"}</span>
                     <span>{(invoiceOrder.deliveryFee || 0) > 0 ? `+$${invoiceOrder.deliveryFee.toFixed(2)}` : (invoiceLang === "es" ? "Gratis" : "Free")}</span>
                   </div>
-
-                  <div className="border-top border-gray-300 pt-2 flex justify-between text-sm font-extrabold text-gray-900">
-                    <span>{invoiceLang === "es" ? "TOTAL FINAL:" : "TOTAL DUE:"}</span>
-                    <span className="text-emerald-700">${(invoiceOrder.total || 0).toFixed(2)} USD</span>
+                  <div className="flex justify-between font-black text-sm pt-1 border-t border-gray-400 text-black">
+                    <span>TOTAL:</span>
+                    <span>${(invoiceOrder.total || 0).toFixed(2)} USD</span>
                   </div>
                 </div>
-              </div>
 
-              {/* Pie de Página de Factura */}
-              <div className="border-t pt-4 text-center text-[10px] text-gray-400 space-y-1">
-                <p className="font-bold text-gray-600">
-                  {invoiceLang === "es"
-                    ? "¡Gracias por elegir a Bonbon Flowers Houston para regalar sonrisas!"
-                    : "Thank you for choosing Bonbon Flowers Houston for your special moments!"}
-                </p>
-                <p>Bonbon Flowers Houston • Houston, Texas • bonbonflowershouston.com</p>
+                {/* Pie de Recibo */}
+                <div className="text-center pt-3 pb-1 space-y-1 text-[10px] text-gray-600">
+                  <p className="font-bold text-black uppercase">
+                    {invoiceLang === "es" ? "¡Gracias por su compra!" : "Thank you for your business!"}
+                  </p>
+                  <p>www.bonbonflowershouston.com</p>
+                  <p className="text-[9px] text-gray-400">Star Micronics TSP100III - 80mm</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}

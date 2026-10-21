@@ -21,6 +21,8 @@ export interface IOrder extends Document {
   paymentMethod: string;
   paymentRef: string;
   status: string;
+  isPrintedToPOS?: boolean;
+  printedAtPOS?: Date;
   createdAt: Date;
 }
 
@@ -48,6 +50,8 @@ const OrderSchema: Schema = new Schema({
     type: String, 
     default: "En diseño",
   },
+  isPrintedToPOS: { type: Boolean, default: false },
+  printedAtPOS: { type: Date },
   createdAt: { type: Date, default: Date.now }
 });
 
