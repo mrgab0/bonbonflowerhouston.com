@@ -6,7 +6,7 @@ import {
   Package, Truck, CheckCircle2, Clock, MapPin, User, MessageCircle, RefreshCw,
   ArrowLeft, Search, Filter, Store, ExternalLink, Calendar, MessageSquare, Heart,
   Edit3, Printer, Lock, X, Save, DollarSign, Globe, Plus, Trash2, ShieldCheck, FileText,
-  Receipt, ArrowUpDown
+  Receipt, ArrowUpDown, Download, BookOpen, Sparkles, Terminal
 } from "lucide-react";
 import Link from "next/link";
 
@@ -34,6 +34,42 @@ export default function AdminOrdenesPage() {
   const [invoiceOrder, setInvoiceOrder] = useState<any | null>(null);
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
   const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("a4");
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isPrinterGuideOpen, setIsPrinterGuideOpen] = useState(false);
+
+  // Generador de Ticket de Prueba para Calibrar Star TSP143III (80mm)
+  const handleTestTicket = () => {
+    setInvoiceOrder({
+      orderId: "TEST-STAR-80MM",
+      customerName: "Cliente de Prueba (Bonbon Flowers)",
+      customerPhone: "+1 (346) 739-2730",
+      customerEmail: "info@bonbonflowershouston.com",
+      address: "1000 Main St, Suite 400, Houston, TX 77002",
+      deliveryMethod: "Hand Delivery (Houston Metro)",
+      cardMessage: "¡Feliz Aniversario! Que este hermoso ramo de 100 rosas llene tu día de amor. Con todo mi cariño. 🌸💖",
+      items: [
+        {
+          name: "Ramo Buchón 100 Rosas Rojas",
+          price: 249.99,
+          quantity: 1,
+          addons: [
+            { name: "Color de Rosas: Rojo Pasión", price: 0 },
+            { name: "Corona de Reina Dorada", price: 25.00 },
+            { name: "Mariposas Monarca 3D (x4)", price: 15.00 },
+            { name: "Listón Personalizado", price: 10.00, customText: "Para la reina de mi corazón" },
+          ],
+        },
+      ],
+      subtotal: 299.99,
+      taxAmount: 24.75,
+      deliveryFee: 15.00,
+      total: 339.74,
+      createdAt: new Date().toISOString(),
+      status: "Pagado (Test)",
+    });
+    setInvoiceFormat("ticket80");
+    setIsInvoiceModalOpen(true);
+  };
 
   useEffect(() => {
     loadOrders();
@@ -302,14 +338,54 @@ export default function AdminOrdenesPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
+          <button
+            type="button"
+            onClick={() => setIsPrinterGuideOpen(true)}
+            className="bg-emerald-500 hover:bg-emerald-400 text-stone-950 px-3.5 py-2 rounded-xl font-black transition-all flex items-center gap-1.5 shadow-sm hover:scale-102"
+            title="Ver guía paso a paso de configuración y conexión"
+          >
+            <BookOpen size={14} />
+            <span>Guía & Conexión</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleTestTicket}
+            className="bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/15"
+            title="Generar un ticket de prueba de 80mm para calibrar la Star TSP143III"
+          >
+            <Receipt size={14} className="text-pink-300" />
+            <span>Ticket Test 80mm</span>
+          </button>
+
+          <a
+            href="/api/pos/printer?download=bat"
+            download="iniciar-impresora.bat"
+            className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/10"
+            title="Descargar script de inicio automático para Windows"
+          >
+            <Download size={13} />
+            <span>Windows (.bat)</span>
+          </a>
+
+          <a
+            href="/api/pos/printer?download=py"
+            download="star-pos-daemon.py"
+            className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/10"
+            title="Descargar script daemon en Python (Multiplataforma)"
+          >
+            <Terminal size={13} />
+            <span>Python (.py)</span>
+          </a>
+
           <a
             href="/api/pos/printer"
             target="_blank"
-            className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1 border border-white/10"
-            title="Ver órdenes pendientes de impresión en la API"
+            className="bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white px-2.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1 border border-white/10"
+            title="Ver endpoint API POS para órdenes pendientes"
           >
             <Globe size={13} />
-            <span>API POS</span>
+            <span>API</span>
           </a>
         </div>
       </div>
@@ -1183,6 +1259,165 @@ export default function AdminOrdenesPage() {
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* MODAL: GUÍA DE CONEXIÓN Y AUTO-IMPRESIÓN STAR MICRONICS TSP143IIILAN */}
+      {isPrinterGuideOpen && (
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 z-50 no-print overflow-y-auto">
+          <div className="bg-white dark:bg-[#12131A] max-w-2xl w-full rounded-3xl p-6 sm:p-8 space-y-6 border border-gray-200 dark:border-gray-800 shadow-2xl my-8 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b pb-4 border-gray-100 dark:border-gray-800">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 rounded-2xl border border-emerald-500/30">
+                  <Receipt size={24} />
+                </div>
+                <div>
+                  <h3 className="font-serif font-black text-lg text-gray-900 dark:text-white">
+                    Guía de Conexión: Star Micronics TSP143IIILAN
+                  </h3>
+                  <span className="text-xs text-gray-400 font-medium">
+                    Impresora Térmica Ethernet / LAN • Rollo 80mm con Guillotina
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsPrinterGuideOpen(false)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-white p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Ficha Técnica Rápida */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
+              <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">Rollo de Papel</span>
+                <span className="font-extrabold text-gray-900 dark:text-white">80 mm (3.15&quot;)</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">Área Útil</span>
+                <span className="font-extrabold text-gray-900 dark:text-white">72 mm (48 cols)</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">Conexión</span>
+                <span className="font-extrabold text-emerald-600 dark:text-emerald-400">Ethernet RJ45</span>
+              </div>
+              <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">Puerto RAW</span>
+                <span className="font-extrabold text-gray-900 dark:text-white">9100 TCP</span>
+              </div>
+            </div>
+
+            {/* Los 4 Pasos de Puesta en Marcha */}
+            <div className="space-y-4">
+              <h4 className="text-xs font-black uppercase tracking-wider text-gray-400">
+                Puesta en Marcha en 4 Pasos Sencillos
+              </h4>
+
+              <div className="space-y-3 text-xs leading-relaxed">
+                {/* Paso 1 */}
+                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-gray-900/40 border border-gray-200 dark:border-gray-800 flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500 text-stone-950 font-black flex items-center justify-center flex-shrink-0 text-xs shadow-xs">
+                    1
+                  </span>
+                  <div>
+                    <strong className="text-gray-900 dark:text-white block text-sm mb-0.5">
+                      Conexión Física del Cable de Red
+                    </strong>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Conecta un cable Ethernet estándar (RJ45) desde el puerto posterior de la TSP143III directamente a cualquier puerto LAN de tu router o switch en la florería. Conecta el cable de corriente y verifica que encienda la luz azul/verde de red.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Paso 2 */}
+                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-gray-900/40 border border-gray-200 dark:border-gray-800 flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500 text-stone-950 font-black flex items-center justify-center flex-shrink-0 text-xs shadow-xs">
+                    2
+                  </span>
+                  <div>
+                    <strong className="text-gray-900 dark:text-white block text-sm mb-0.5">
+                      Obtener la IP de la Impresora en 3 Segundos (Autotest)
+                    </strong>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Apaga la impresora con el switch lateral. Mantén presionado el botón <strong>FEED</strong> (alimentación de papel) y enciéndela. La impresora emitirá un ticket largo con su dirección IP local (ej. <code>192.168.1.150</code>).
+                    </p>
+                  </div>
+                </div>
+
+                {/* Paso 3 */}
+                <div className="p-4 rounded-2xl bg-gray-50 dark:bg-gray-900/40 border border-gray-200 dark:border-gray-800 flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-emerald-500 text-stone-950 font-black flex items-center justify-center flex-shrink-0 text-xs shadow-xs">
+                    3
+                  </span>
+                  <div>
+                    <strong className="text-gray-900 dark:text-white block text-sm mb-0.5">
+                      Impresión Manual desde el Navegador (Plug &amp; Play)
+                    </strong>
+                    <p className="text-gray-600 dark:text-gray-300">
+                      Instala el driver oficial <em>futurePRNT</em> de Star Micronics en tu PC con Windows o Mac. Al abrir cualquier orden en este panel y presionar <strong>Ticket 80mm</strong>, se abrirá el diálogo de impresión con el tamaño de 72mm ya calibrado y el corte de papel automático.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Paso 4 */}
+                <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/50 flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-[#163422] text-white font-black flex items-center justify-center flex-shrink-0 text-xs shadow-xs">
+                    4
+                  </span>
+                  <div className="flex-1">
+                    <strong className="text-emerald-950 dark:text-emerald-300 block text-sm mb-0.5">
+                      Auto-Impresión Desatendida en Segundo Plano (Recomendado)
+                    </strong>
+                    <p className="text-emerald-900 dark:text-emerald-200/80 mb-3">
+                      Descarga el script de inicio y déjalo abierto en la computadora de la florería. El script consulta la tienda en la nube cada 4 segundos. ¡En cuanto un cliente pague un pedido en la web, la impresora expulsará y cortará el recibo automáticamente sin que nadie toque la PC!
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <a
+                        href="/api/pos/printer?download=bat"
+                        download="iniciar-impresora.bat"
+                        className="bg-[#163422] hover:bg-black text-white px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                      >
+                        <Download size={13} />
+                        <span>Descargar para Windows (.bat)</span>
+                      </a>
+                      <a
+                        href="/api/pos/printer?download=py"
+                        download="star-pos-daemon.py"
+                        className="bg-white dark:bg-gray-800 hover:bg-gray-100 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-700 px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5"
+                      >
+                        <Terminal size={13} />
+                        <span>Daemon Python (.py)</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Botones de Pie de Modal */}
+            <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setIsPrinterGuideOpen(false);
+                  handleTestTicket();
+                }}
+                className="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition-all"
+              >
+                <Receipt size={15} />
+                <span>Calibrar Ahora con Ticket de Prueba (80mm)</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsPrinterGuideOpen(false)}
+                className="w-full sm:w-auto px-5 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl font-bold text-xs hover:bg-gray-200 transition-colors"
+              >
+                Cerrar Guía
+              </button>
+            </div>
           </div>
         </div>
       )}
