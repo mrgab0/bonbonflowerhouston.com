@@ -1,29 +1,78 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { Bell, BellOff, Volume2, VolumeX, Sparkles, Receipt, FileText, X, CheckCircle2, ShoppingBag } from "lucide-react";
+import {
+  Bell,
+  Volume2,
+  VolumeX,
+  Sparkles,
+  Receipt,
+  FileText,
+  Printer,
+  ShoppingBag,
+  ExternalLink,
+  Check,
+} from "lucide-react";
 import Link from "next/link";
-
-interface LatestOrder {
-  orderId: string;
-  customerName: string;
-  customerPhone?: string;
-  total: number;
-  items?: Array<{ name: string; quantity: number; price: number }>;
-  createdAt: string;
-  status?: string;
-}
+import {
+  printTicket80mmDirect,
+  printInvoiceA4Direct,
+  isAutoPrintEnabled,
+  setAutoPrintEnabled,
+  getPosTestOrder,
+  listenToPosPrintEvents,
+  POSOrderData,
+} from "@/lib/posPrinterClient";
 
 export function AdminSalesNotificationListener() {
-  const [activeAlertOrder, setActiveAlertOrder] = useState<LatestOrder | null>(null);
+  const [activeAlertOrder, setActiveAlertOrder] = useState<POSOrderData | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [autoPrint, setAutoPrint] = useState(true);
   const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>("default");
   const [isAlarmPlaying, setIsAlarmPlaying] = useState(false);
+  const [isPrintingDirect, setIsPrintingDirect] = useState(false);
 
   const lastSeenOrderIdRef = useRef<string | null>(null);
   const isInitializedRef = useRef<boolean>(false);
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Inicializar estado de Auto-Impresión desde localStorage
+  useEffect(() => {
+    setAutoPrint(isAutoPrintEnabled());
+
+    const handleAutoPrintToggle = (e: Event) => {
+      const custom = e as CustomEvent;
+      if (typeof custom.detail?.enabled === "boolean") {
+        setAutoPrint(custom.detail.enabled);
+      }
+    };
+
+    window.addEventListener("bonbon:pos-autoprint-toggled", handleAutoPrintToggle);
+    return () => {
+      window.removeEventListener("bonbon:pos-autoprint-toggled", handleAutoPrintToggle);
+    };
+  }, []);
+
+  // Suscribirse a eventos de impresión en JavaScript emitidos desde cualquier componente
+  useEffect(() => {
+    const unsubscribe = listenToPosPrintEvents(async ({ order, format, lang }) => {
+      setIsPrintingDirect(true);
+      try {
+        if (format === "a4") {
+          await printInvoiceA4Direct(order, lang);
+        } else {
+          await printTicket80mmDirect(order, lang);
+        }
+      } finally {
+        setIsPrintingDirect(false);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   // Solicitar o consultar permisos de Notificaciones del Navegador
   useEffect(() => {
@@ -65,11 +114,10 @@ export function AdminSalesNotificationListener() {
 
       const now = ctx.currentTime;
       const masterGain = ctx.createGain();
-      masterGain.gain.setValueAtTime(0.85, now); // Alto volumen
+      masterGain.gain.setValueAtTime(0.85, now);
       masterGain.connect(ctx.destination);
 
       // 1. Acorde Arpegiado Ascendente de Caja Registradora ("Ka-Ching!")
-      // Frecuencias: Do5, Mi5, Sol5, Do6, Mi6, Sol6
       const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
       notes.forEach((freq, idx) => {
         const osc = ctx.createOscillator();
@@ -123,7 +171,7 @@ export function AdminSalesNotificationListener() {
     if (alarmIntervalRef.current) clearInterval(alarmIntervalRef.current);
     alarmIntervalRef.current = setInterval(() => {
       playCashRegisterChime();
-    }, 2200); // Repetir cada 2.2 segundos para llamar la atención fuertemente
+    }, 2200);
   }, [soundEnabled, playCashRegisterChime]);
 
   // Detener la Alarma Sonora
@@ -136,7 +184,7 @@ export function AdminSalesNotificationListener() {
   }, []);
 
   // Disparar Notificación Push del Navegador
-  const triggerPushNotification = useCallback((order: LatestOrder) => {
+  const triggerPushNotification = useCallback((order: POSOrderData) => {
     if (typeof window === "undefined" || !("Notification" in window)) return;
 
     if (Notification.permission === "granted") {
@@ -170,7 +218,7 @@ export function AdminSalesNotificationListener() {
 
         const data = await res.json();
         if (data.success && data.latestOrder) {
-          const order: LatestOrder = data.latestOrder;
+          const order: POSOrderData = data.latestOrder;
 
           // Primera carga: Guardar el ID existente sin alertar para no sonar con órdenes viejas
           if (!isInitializedRef.current) {
@@ -179,16 +227,21 @@ export function AdminSalesNotificationListener() {
             return;
           }
 
-          // Si llega una orden NUEVA que no habíamos visto:
+          // Si llega una orden NUEVA:
           if (lastSeenOrderIdRef.current && order.orderId !== lastSeenOrderIdRef.current) {
             lastSeenOrderIdRef.current = order.orderId;
             setActiveAlertOrder(order);
             startAlarmLoop();
             triggerPushNotification(order);
+
+            // Auto-impresión 100% nativa en JavaScript para Star Micronics 80mm
+            if (isAutoPrintEnabled()) {
+              printTicket80mmDirect(order);
+            }
           }
         }
       } catch (e) {
-        // Silencioso ante errores de red temporal
+        // Silencioso ante fluctuaciones de conexión
       }
     };
 
@@ -210,10 +263,28 @@ export function AdminSalesNotificationListener() {
     }, 4500);
   };
 
+  // Botón para probar la impresora Star Micronics 80mm en 1 clic
+  const handleTestPrintStar = async () => {
+    setIsPrintingDirect(true);
+    try {
+      await printTicket80mmDirect(getPosTestOrder());
+    } finally {
+      setIsPrintingDirect(false);
+    }
+  };
+
+  // Conmutar Auto-impresión
+  const toggleAutoPrint = () => {
+    const nextVal = !autoPrint;
+    setAutoPrint(nextVal);
+    setAutoPrintEnabled(nextVal);
+  };
+
   return (
     <>
-      {/* Botón Flotante / Indicador de Estado de Alertas en Admin */}
-      <div className="fixed bottom-4 left-4 z-40 flex items-center gap-2 no-print">
+      {/* Botones Flotantes / Indicadores de Estado en Admin (Inferior Izquierda) */}
+      <div className="fixed bottom-4 left-4 z-40 flex flex-wrap items-center gap-2 no-print">
+        {/* Botón Alarma */}
         <button
           type="button"
           onClick={handleTestSound}
@@ -237,6 +308,33 @@ export function AdminSalesNotificationListener() {
           )}
         </button>
 
+        {/* Toggle Auto-Impresión Star Micronics */}
+        <button
+          type="button"
+          onClick={toggleAutoPrint}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border shadow-lg transition-all ${
+            autoPrint
+              ? "bg-emerald-600 text-white border-emerald-700"
+              : "bg-white/95 dark:bg-[#181922]/95 text-gray-500 border-gray-200 dark:border-gray-800"
+          }`}
+          title="Activa o desactiva la impresión automática de tickets al registrarse una venta"
+        >
+          <Printer size={13} />
+          <span>Auto-Print: {autoPrint ? "ON" : "OFF"}</span>
+        </button>
+
+        {/* Probar Impresión Star TSP100 80mm en 1 Clic */}
+        <button
+          type="button"
+          onClick={handleTestPrintStar}
+          disabled={isPrintingDirect}
+          className="bg-white/95 dark:bg-[#181922]/95 text-stone-800 dark:text-stone-200 border border-gray-200 dark:border-gray-800 hover:border-emerald-500 px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-1.5"
+          title="Probar envío directo de ticket 80mm a la Star Micronics (100% JavaScript)"
+        >
+          <Receipt size={13} className="text-emerald-500" />
+          <span className="hidden md:inline">Test Star 80mm</span>
+        </button>
+
         {notificationPermission !== "granted" && (
           <button
             type="button"
@@ -245,7 +343,7 @@ export function AdminSalesNotificationListener() {
             title="Habilitar notificaciones Push en tu navegador para enterarte de ventas"
           >
             <Sparkles size={12} />
-            <span className="hidden sm:inline">Activar Notificaciones Push</span>
+            <span className="hidden sm:inline">Activar Push</span>
           </button>
         )}
       </div>
@@ -254,7 +352,6 @@ export function AdminSalesNotificationListener() {
       {activeAlertOrder && (
         <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200 no-print">
           <div className="bg-white dark:bg-[#12131A] border-4 border-amber-400 dark:border-[#5EEAD4] max-w-lg w-full rounded-3xl p-6 sm:p-8 space-y-6 shadow-[0px_20px_60px_rgba(245,158,11,0.5)] animate-in zoom-in-95 duration-300 relative text-center">
-            
             {/* Insignia Parpadeante de Nueva Venta */}
             <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-amber-500 to-rose-500 text-white mx-auto flex items-center justify-center shadow-lg animate-bounce">
               <ShoppingBag size={32} />
@@ -284,6 +381,12 @@ export function AdminSalesNotificationListener() {
                   <span className="font-mono font-bold text-gray-800 dark:text-gray-200">{activeAlertOrder.customerPhone}</span>
                 </div>
               )}
+              {activeAlertOrder.address && (
+                <div className="text-[11px] text-gray-600 dark:text-gray-400">
+                  <span className="font-bold text-gray-700 dark:text-gray-300">Entrega: </span>
+                  <span>{activeAlertOrder.address}</span>
+                </div>
+              )}
               {activeAlertOrder.items && activeAlertOrder.items.length > 0 && (
                 <div className="pt-1 text-[11px] text-gray-600 dark:text-gray-400">
                   <span className="font-bold text-gray-800 dark:text-gray-200 block mb-0.5">Arreglo:</span>
@@ -292,41 +395,74 @@ export function AdminSalesNotificationListener() {
               )}
             </div>
 
+            {/* Switch de Auto-Impresión dentro del Modal */}
+            <div className="flex items-center justify-center gap-2 text-xs font-semibold text-gray-700 dark:text-gray-300 py-1">
+              <input
+                id="modal-autoprint-checkbox"
+                type="checkbox"
+                checked={autoPrint}
+                onChange={toggleAutoPrint}
+                className="rounded text-pink-600 focus:ring-pink-500 w-4 h-4 cursor-pointer"
+              />
+              <label htmlFor="modal-autoprint-checkbox" className="cursor-pointer">
+                Auto-imprimir ticket Star 80mm al detectar venta
+              </label>
+            </div>
+
             {/* Acciones de Impresión y Desactivación de Alarma */}
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-2.5 pt-1">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                <Link
-                  href="/admin/ordenes"
-                  onClick={stopAlarmLoop}
-                  className="bg-pink-600 hover:bg-pink-700 text-white py-3 px-4 rounded-2xl font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition-all hover:scale-102"
+                <button
+                  type="button"
+                  onClick={() => {
+                    printTicket80mmDirect(activeAlertOrder);
+                  }}
+                  className="bg-pink-600 hover:bg-pink-700 text-white py-3 px-4 rounded-2xl font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition-all hover:scale-102 cursor-pointer"
+                  title="Disparar impresión de ticket Star 80mm de inmediato en este equipo"
                 >
                   <Receipt size={16} />
-                  <span>Imprimir Ticket Matriz (80mm)</span>
-                </Link>
+                  <span>Imprimir Ticket (80mm)</span>
+                </button>
 
-                <Link
-                  href="/admin/ordenes"
-                  onClick={stopAlarmLoop}
-                  className="bg-slate-800 hover:bg-black text-white py-3 px-4 rounded-2xl font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition-all hover:scale-102"
+                <button
+                  type="button"
+                  onClick={() => {
+                    printInvoiceA4Direct(activeAlertOrder);
+                  }}
+                  className="bg-slate-800 hover:bg-black text-white py-3 px-4 rounded-2xl font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition-all hover:scale-102 cursor-pointer"
+                  title="Disparar impresión de Factura A4 de inmediato en este equipo"
                 >
                   <FileText size={16} />
                   <span>Imprimir Factura A4</span>
-                </Link>
+                </button>
               </div>
 
-              <button
-                type="button"
-                onClick={() => {
-                  stopAlarmLoop();
-                  setActiveAlertOrder(null);
-                }}
-                className="w-full py-3 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <VolumeX size={15} />
-                <span>Silenciar Alarma y Continuar</span>
-              </button>
-            </div>
+              <div className="flex flex-col sm:flex-row items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    stopAlarmLoop();
+                    setActiveAlertOrder(null);
+                  }}
+                  className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <VolumeX size={15} />
+                  <span>Silenciar Alarma y Cerrar</span>
+                </button>
 
+                <Link
+                  href="/admin/ordenes"
+                  onClick={() => {
+                    stopAlarmLoop();
+                    setActiveAlertOrder(null);
+                  }}
+                  className="w-full sm:w-auto whitespace-nowrap py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-950/60 dark:hover:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 rounded-2xl font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <span>Ver en Despacho</span>
+                  <ExternalLink size={13} />
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       )}

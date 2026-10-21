@@ -6,9 +6,16 @@ import {
   Package, Truck, CheckCircle2, Clock, MapPin, User, MessageCircle, RefreshCw,
   ArrowLeft, Search, Filter, Store, ExternalLink, Calendar, MessageSquare, Heart,
   Edit3, Printer, Lock, X, Save, DollarSign, Globe, Plus, Trash2, ShieldCheck, FileText,
-  Receipt, ArrowUpDown, Download, BookOpen, Sparkles, Terminal
+  Receipt, ArrowUpDown, Download, BookOpen, Sparkles, Terminal, Eye
 } from "lucide-react";
 import Link from "next/link";
+import {
+  printTicket80mmDirect,
+  printInvoiceA4Direct,
+  isAutoPrintEnabled,
+  setAutoPrintEnabled,
+  getPosTestOrder,
+} from "@/lib/posPrinterClient";
 
 export default function AdminOrdenesPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -30,42 +37,63 @@ export default function AdminOrdenesPage() {
   const [submitting2FA, setSubmitting2FA] = useState(false);
   const [twoFactorError, setTwoFactorError] = useState<string | null>(null);
 
+  // Estados para Impresión POS 100% JavaScript (Star Micronics TSP100 80mm & Factura A4)
+  const [autoPrintJs, setAutoPrintJs] = useState(true);
+  const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
+  const [showAdvancedScripts, setShowAdvancedScripts] = useState(false);
+
   // Estado para Modal e Impresión de Factura (A4 o Ticket 80mm Star TSP100)
   const [invoiceOrder, setInvoiceOrder] = useState<any | null>(null);
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
-  const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("a4");
+  const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("ticket80");
   const [isPrinterGuideOpen, setIsPrinterGuideOpen] = useState(false);
 
-  // Generador de Ticket de Prueba para Calibrar Star TSP143III (80mm)
+  useEffect(() => {
+    setAutoPrintJs(isAutoPrintEnabled());
+  }, []);
+
+  const toggleAutoPrintJs = () => {
+    const nextVal = !autoPrintJs;
+    setAutoPrintJs(nextVal);
+    setAutoPrintEnabled(nextVal);
+  };
+
+  // Impresión Directa en JavaScript de Ticket 80mm
+  const handleDirectPrint80mm = async (order: any) => {
+    setPrintingOrderId(order.orderId);
+    try {
+      await printTicket80mmDirect(order, invoiceLang);
+      setOrders((prev) =>
+        prev.map((o) => (o.orderId === order.orderId ? { ...o, isPrintedToPOS: true } : o))
+      );
+    } finally {
+      setPrintingOrderId(null);
+    }
+  };
+
+  // Impresión Directa en JavaScript de Factura A4
+  const handleDirectPrintA4 = async (order: any) => {
+    setPrintingOrderId(order.orderId);
+    try {
+      await printInvoiceA4Direct(order, invoiceLang);
+    } finally {
+      setPrintingOrderId(null);
+    }
+  };
+
+  // Generador de Ticket de Prueba para Calibrar Star TSP143III (80mm) en 1 Clic
+  const handleTestTicketDirect = async () => {
+    setPrintingOrderId("TEST-STAR-80MM");
+    try {
+      await printTicket80mmDirect(getPosTestOrder(), invoiceLang);
+    } finally {
+      setPrintingOrderId(null);
+    }
+  };
+
+  // Generador de Ticket de Prueba en Modal
   const handleTestTicket = () => {
-    setInvoiceOrder({
-      orderId: "TEST-STAR-80MM",
-      customerName: "Cliente de Prueba (Bonbon Flowers)",
-      customerPhone: "+1 (346) 739-2730",
-      customerEmail: "info@bonbonflowershouston.com",
-      address: "1000 Main St, Suite 400, Houston, TX 77002",
-      deliveryMethod: "Hand Delivery (Houston Metro)",
-      cardMessage: "¡Feliz Aniversario! Que este hermoso ramo de 100 rosas llene tu día de amor. Con todo mi cariño. 🌸💖",
-      items: [
-        {
-          name: "Ramo Buchón 100 Rosas Rojas",
-          price: 249.99,
-          quantity: 1,
-          addons: [
-            { name: "Color de Rosas: Rojo Pasión", price: 0 },
-            { name: "Corona de Reina Dorada", price: 25.00 },
-            { name: "Mariposas Monarca 3D (x4)", price: 15.00 },
-            { name: "Listón Personalizado", price: 10.00, customText: "Para la reina de mi corazón" },
-          ],
-        },
-      ],
-      subtotal: 299.99,
-      taxAmount: 24.75,
-      deliveryFee: 15.00,
-      total: 339.74,
-      createdAt: new Date().toISOString(),
-      status: "Pagado (Test)",
-    });
+    setInvoiceOrder(getPosTestOrder());
     setInvoiceFormat("ticket80");
   };
 
@@ -234,9 +262,17 @@ export default function AdminOrdenesPage() {
     setSubmitting2FA(false);
   };
 
-  // Manejador de Impresión
-  const handlePrintInvoice = () => {
-    window.print();
+  // Manejador de Impresión en Modal (100% JavaScript nativo)
+  const handlePrintInvoice = async () => {
+    if (!invoiceOrder) return;
+    if (invoiceFormat === "ticket80") {
+      await printTicket80mmDirect(invoiceOrder, invoiceLang);
+      setOrders((prev) =>
+        prev.map((o) => (o.orderId === invoiceOrder.orderId ? { ...o, isPrintedToPOS: true } : o))
+      );
+    } else {
+      await printInvoiceA4Direct(invoiceOrder, invoiceLang);
+    }
   };
 
   if (loading) {
@@ -314,78 +350,115 @@ export default function AdminOrdenesPage() {
         </div>
       </div>
 
-      {/* Banner de Impresora Térmica Star Micronics TSP143III (80mm) */}
-      <div className="bg-gradient-to-r from-emerald-950 via-[#163422] to-stone-900 border border-emerald-800/50 text-white p-4 sm:p-5 rounded-3xl shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 no-print">
-        <div className="flex items-center gap-3.5">
-          <div className="p-3 bg-emerald-500/20 text-emerald-300 rounded-2xl border border-emerald-500/30">
-            <Receipt size={24} />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-extrabold uppercase tracking-wide text-white">
-                Star Micronics TSP100III (TSP143IIILAN)
-              </h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/40">
-                80mm Térmico LAN
-              </span>
+      {/* Banner de Impresora Térmica Star Micronics TSP143III (80mm) - 100% JavaScript */}
+      <div className="bg-gradient-to-r from-emerald-950 via-[#163422] to-stone-900 border border-emerald-800/50 text-white p-4 sm:p-5 rounded-3xl shadow-sm space-y-3 no-print">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3 bg-emerald-500/20 text-emerald-300 rounded-2xl border border-emerald-500/30">
+              <Receipt size={24} />
             </div>
-            <p className="text-xs text-stone-300 mt-0.5">
-              Formato de ticket adaptado a 72mm imprimibles con corte de guillotina. Impresión dual (A4 y 80mm) y despacho automático en red local.
-            </p>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-extrabold uppercase tracking-wide text-white">
+                  Star Micronics TSP100III (TSP143IIILAN)
+                </h2>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 border border-emerald-400/40">
+                  80mm Plug &amp; Play JS
+                </span>
+              </div>
+              <p className="text-xs text-stone-300 mt-0.5">
+                Impresión 100% nativa en JavaScript desde el navegador. Cero instalaciones de Python, scripts .bat ni accesos remotos requeridos.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            {/* Toggle Auto-Impresión en JS */}
+            <button
+              type="button"
+              onClick={toggleAutoPrintJs}
+              className={`px-3.5 py-2 rounded-xl font-black transition-all flex items-center gap-1.5 shadow-sm border ${
+                autoPrintJs
+                  ? "bg-emerald-500 text-stone-950 border-emerald-400 hover:bg-emerald-400"
+                  : "bg-white/10 text-stone-300 border-white/20 hover:bg-white/20"
+              }`}
+              title="Activa o desactiva la auto-impresión inmediata de tickets cuando cae una venta"
+            >
+              <Printer size={14} />
+              <span>Auto-Impresión: {autoPrintJs ? "ACTIVADA" : "DESACTIVADA"}</span>
+            </button>
+
+            {/* Test 80mm Directo */}
+            <button
+              type="button"
+              onClick={handleTestTicketDirect}
+              disabled={printingOrderId === "TEST-STAR-80MM"}
+              className="bg-white/15 hover:bg-white/25 text-white px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/20 cursor-pointer shadow-sm"
+              title="Probar ticket 80mm de inmediato en tu impresora Star Micronics (100% JavaScript)"
+            >
+              <Receipt size={14} className="text-pink-300" />
+              <span>Probar Ticket 80mm</span>
+            </button>
+
+            {/* Test A4 Directo */}
+            <button
+              type="button"
+              onClick={() => handleDirectPrintA4(getPosTestOrder())}
+              className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/15 cursor-pointer"
+              title="Probar formato de factura A4 estándar"
+            >
+              <FileText size={13} className="text-slate-300" />
+              <span>Probar A4</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setIsPrinterGuideOpen(true)}
+              className="bg-white/10 hover:bg-white/20 text-stone-200 px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/10"
+              title="Ver guía paso a paso"
+            >
+              <BookOpen size={13} />
+              <span>Guía</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setShowAdvancedScripts(!showAdvancedScripts)}
+              className="text-stone-400 hover:text-white px-2 py-2 text-[11px] underline transition-colors"
+              title="Ver scripts y opciones de servidor opcionales"
+            >
+              {showAdvancedScripts ? "Ocultar Scripts" : "Scripts Opcionales"}
+            </button>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 text-xs">
-          <button
-            type="button"
-            onClick={() => setIsPrinterGuideOpen(true)}
-            className="bg-emerald-500 hover:bg-emerald-400 text-stone-950 px-3.5 py-2 rounded-xl font-black transition-all flex items-center gap-1.5 shadow-sm hover:scale-102"
-            title="Ver guía paso a paso de configuración y conexión"
-          >
-            <BookOpen size={14} />
-            <span>Guía & Conexión</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleTestTicket}
-            className="bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/15"
-            title="Generar un ticket de prueba de 80mm para calibrar la Star TSP143III"
-          >
-            <Receipt size={14} className="text-pink-300" />
-            <span>Ticket Test 80mm</span>
-          </button>
-
-          <a
-            href="/api/pos/printer?download=bat"
-            download="iniciar-impresora.bat"
-            className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/10"
-            title="Descargar script de inicio automático para Windows"
-          >
-            <Download size={13} />
-            <span>Windows (.bat)</span>
-          </a>
-
-          <a
-            href="/api/pos/printer?download=py"
-            download="star-pos-daemon.py"
-            className="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/10"
-            title="Descargar script daemon en Python (Multiplataforma)"
-          >
-            <Terminal size={13} />
-            <span>Python (.py)</span>
-          </a>
-
-          <a
-            href="/api/pos/printer"
-            target="_blank"
-            className="bg-white/10 hover:bg-white/20 text-stone-300 hover:text-white px-2.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1 border border-white/10"
-            title="Ver endpoint API POS para órdenes pendientes"
-          >
-            <Globe size={13} />
-            <span>API</span>
-          </a>
-        </div>
+        {/* Sección de Scripts Opcionales Colapsable */}
+        {showAdvancedScripts && (
+          <div className="pt-2 border-t border-emerald-900/60 flex flex-wrap items-center gap-2 text-xs text-stone-300">
+            <span className="text-[11px] text-stone-400">Scripts de servidor (opcionales):</span>
+            <a
+              href="/api/pos/printer?download=bat"
+              download="iniciar-impresora.bat"
+              className="bg-black/40 hover:bg-black/70 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1 border border-white/10"
+            >
+              <Download size={11} /> Windows (.bat)
+            </a>
+            <a
+              href="/api/pos/printer?download=py"
+              download="star-pos-daemon.py"
+              className="bg-black/40 hover:bg-black/70 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1 border border-white/10"
+            >
+              <Terminal size={11} /> Python (.py)
+            </a>
+            <a
+              href="/api/pos/printer"
+              target="_blank"
+              className="bg-black/40 hover:bg-black/70 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1 border border-white/10"
+            >
+              <Globe size={11} /> API Pendientes
+            </a>
+          </div>
+        )}
       </div>
 
       {/* Buscador, Filtros y Ordenamiento */}
@@ -563,12 +636,10 @@ export default function AdminOrdenesPage() {
                     {/* Botón 1: Imprimir Factura A4 / Carta */}
                     <button
                       type="button"
-                      onClick={() => {
-                        setInvoiceFormat("a4");
-                        setInvoiceOrder(order);
-                      }}
-                      className="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all hover:scale-102"
-                      title="Imprimir Factura A4 / Carta para el cliente o archivo"
+                      onClick={() => handleDirectPrintA4(order)}
+                      disabled={printingOrderId === order.orderId}
+                      className="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all hover:scale-102 cursor-pointer"
+                      title="Imprimir Factura A4 directamente (JavaScript nativo)"
                     >
                       <FileText size={13} className="text-slate-300" />
                       <span>Factura A4</span>
@@ -577,15 +648,26 @@ export default function AdminOrdenesPage() {
                     {/* Botón 2: Imprimir Ticket Matriz de Punto / Térmico 80mm Star Micronics */}
                     <button
                       type="button"
+                      onClick={() => handleDirectPrint80mm(order)}
+                      disabled={printingOrderId === order.orderId}
+                      className="bg-[#163422] hover:bg-black text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all border border-emerald-700/50 hover:scale-102 cursor-pointer"
+                      title="Imprimir Ticket 80mm en Star Micronics directamente (JavaScript nativo)"
+                    >
+                      <Receipt size={13} className="text-[#5EEAD4]" />
+                      <span>{printingOrderId === order.orderId ? "Imprimiendo..." : "Matriz 80mm"}</span>
+                    </button>
+
+                    {/* Botón 3: Vista Previa en Pantalla */}
+                    <button
+                      type="button"
                       onClick={() => {
                         setInvoiceFormat("ticket80");
                         setInvoiceOrder(order);
                       }}
-                      className="bg-[#163422] hover:bg-black text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all border border-emerald-700/50 hover:scale-102"
-                      title="Imprimir Ticket Térmico / Matriz de 80mm (Star Micronics TSP143IIILAN)"
+                      className="bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 p-1.5 rounded-xl transition-all cursor-pointer"
+                      title="Ver vista previa en pantalla de factura o ticket 80mm"
                     >
-                      <Receipt size={13} className="text-[#5EEAD4]" />
-                      <span>Matriz 80mm</span>
+                      <Eye size={14} />
                     </button>
 
                     {/* Botón WhatsApp */}
@@ -1381,29 +1463,14 @@ export default function AdminOrdenesPage() {
                   </span>
                   <div className="flex-1">
                     <strong className="text-emerald-950 dark:text-emerald-300 block text-sm mb-0.5">
-                      Auto-Impresión Desatendida en Segundo Plano (Recomendado)
+                      Auto-Impresión 100% JavaScript en el Navegador (¡Cero Instalaciones!)
                     </strong>
-                    <p className="text-emerald-900 dark:text-emerald-200/80 mb-3">
-                      Descarga el script de inicio y déjalo abierto en la computadora de la florería. El script consulta la tienda en la nube cada 4 segundos. ¡En cuanto un cliente pague un pedido en la web, la impresora expulsará y cortará el recibo automáticamente sin que nadie toque la PC!
+                    <p className="text-emerald-900 dark:text-emerald-200/80 mb-2">
+                      No necesitas instalar Python, scripts .bat ni conceder accesos remotos a tu computadora. Deja abierta esta pestaña de administración en Chrome o Edge. En cuanto un cliente compre en la web, el sistema reproduce la alarma sonora y dispara directamente el ticket térmico de 80mm a tu impresora Star Micronics.
                     </p>
-                    <div className="flex flex-wrap gap-2">
-                      <a
-                        href="/api/pos/printer?download=bat"
-                        download="iniciar-impresora.bat"
-                        className="bg-[#163422] hover:bg-black text-white px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 shadow-sm"
-                      >
-                        <Download size={13} />
-                        <span>Descargar para Windows (.bat)</span>
-                      </a>
-                      <a
-                        href="/api/pos/printer?download=py"
-                        download="star-pos-daemon.py"
-                        className="bg-white dark:bg-gray-800 hover:bg-gray-100 text-gray-800 dark:text-white border border-gray-300 dark:border-gray-700 px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5"
-                      >
-                        <Terminal size={13} />
-                        <span>Daemon Python (.py)</span>
-                      </a>
-                    </div>
+                    <p className="text-xs text-stone-500 dark:text-stone-400">
+                      💡 Consejo: Al imprimir por primera vez, selecciona la impresora Star TSP100. Chrome recordará automáticamente tu impresora y el formato de 80mm para las siguientes órdenes.
+                    </p>
                   </div>
                 </div>
               </div>
