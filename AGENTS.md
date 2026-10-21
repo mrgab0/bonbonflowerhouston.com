@@ -26,3 +26,8 @@ Al asistir en este proyecto, el agente de IA **DEBE** adherirse estrictamente a 
 - **Estilos:** Se utiliza Tailwind CSS. No introduzcas archivos de CSS tradicionales sin necesidad. Usa la paleta de colores existente (ej. `#FF97A4` para el rosa característico, `#163422` para el verde oscuro).
 - **Componentes:** Prefiere Server Components por defecto, y añade `"use client"` únicamente en los archivos que requieran interactividad del usuario o hooks de React (como `useState` o `useEffect`).
 - **Base de Datos:** Se utiliza Mongoose. Todas las Server Actions que interactúen con la base de datos deben llamar a `await dbConnect()` al inicio.
+
+## 4. Flujo Basado en GitHub Issues (Issue-Driven Development)
+- **Trazabilidad Profesional:** Cada nueva funcionalidad, refactorización o corrección debe contar con su correspondiente **GitHub Issue** registrado en el repositorio.
+- **Documentación Concisa (Solo lo necesario):** Cada Issue debe definir claramente el objetivo, los archivos involucrados y el criterio de aceptación, sin extenderse innecesariamente.
+- **Cierre Vinculado por Commit:** Al completar y verificar la tarea (`npx tsc --noEmit`), el commit o el cierre formal del Issue debe vincularse (`Closes #ID`), dejando un historial público limpio y profesional ante reclutadores y líderes técnicos.
