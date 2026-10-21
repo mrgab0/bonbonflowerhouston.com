@@ -9,6 +9,7 @@ import { FeatureListBuilder } from "@/components/admin/FeatureListBuilder";
 import { AdminAddonManager } from "@/components/admin/AdminAddonManager";
 import { AdminVariantManager } from "@/components/admin/AdminVariantManager";
 import { ProductNameSkuInputs } from "@/components/admin/ProductNameSkuInputs";
+import { ProductFloralConfigurator } from "@/components/admin/ProductFloralConfigurator";
 import mongoose from "mongoose";
 
 export default async function EditarProductoPage({ params }: { params: Promise<{ id: string }> }) {
@@ -202,6 +203,13 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
           {/* Constructor de Viñetas / Puntos Clave Sanitizados */}
           <FeatureListBuilder initialFeatures={plainFeatures} />
         </div>
+
+        {/* SECCIÓN 5: Configurador Floral (Colores, Tiers de Rosas) */}
+        <ProductFloralConfigurator
+          initialColors={Array.isArray(product.availableColors) ? JSON.parse(JSON.stringify(product.availableColors)) : []}
+          initialStemTiers={Array.isArray(product.stemTiers) ? JSON.parse(JSON.stringify(product.stemTiers)) : []}
+          initialPricePerExtraRose={product.pricePerExtraRose || 0}
+        />
 
         {/* Admin Variant Manager */}
         <div className="bg-white dark:bg-[#12131A] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800">

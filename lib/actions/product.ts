@@ -27,6 +27,21 @@ export async function createProduct(formData: FormData) {
     const variantsRaw = formData.getAll("variants") as string[];
     const variants = variantsRaw.filter((v) => v && typeof v === 'string' && v.trim() !== "");
 
+    // Configurador Floral (Colores y Volúmenes de Rosas)
+    const availableColorsRaw = (formData.get("availableColors") as string) || "";
+    const availableColors = availableColorsRaw
+      .split(",")
+      .map((c) => c.trim())
+      .filter((c) => c.length > 0);
+    const stemTiersJson = (formData.get("stemTiers") as string) || "";
+    let stemTiers: any[] = [];
+    if (stemTiersJson) {
+      try {
+        stemTiers = JSON.parse(stemTiersJson);
+      } catch (e) {}
+    }
+    const pricePerExtraRose = parseFloat((formData.get("pricePerExtraRose") as string) || "0") || 0;
+
     // Procesar características
     const featureLabels = formData.getAll("featureLabels") as string[];
     const featureValues = formData.getAll("featureValues") as string[];
@@ -55,6 +70,9 @@ export async function createProduct(formData: FormData) {
       addons,
       variants,
       features,
+      availableColors,
+      stemTiers,
+      pricePerExtraRose,
       slug,
       isActive: true,
     });
@@ -233,6 +251,21 @@ export async function updateProduct(id: string, formData: FormData) {
     const variantsRaw = formData.getAll("variants") as string[];
     const variants = variantsRaw.filter((v) => v && typeof v === 'string' && v.trim() !== "");
 
+    // Configurador Floral (Colores y Volúmenes de Rosas)
+    const availableColorsRaw = (formData.get("availableColors") as string) || "";
+    const availableColors = availableColorsRaw
+      .split(",")
+      .map((c) => c.trim())
+      .filter((c) => c.length > 0);
+    const stemTiersJson = (formData.get("stemTiers") as string) || "";
+    let stemTiers: any[] = [];
+    if (stemTiersJson) {
+      try {
+        stemTiers = JSON.parse(stemTiersJson);
+      } catch (e) {}
+    }
+    const pricePerExtraRose = parseFloat((formData.get("pricePerExtraRose") as string) || "0") || 0;
+
     // Procesar características
     const featureLabels = formData.getAll("featureLabels") as string[];
     const featureValues = formData.getAll("featureValues") as string[];
@@ -263,6 +296,9 @@ export async function updateProduct(id: string, formData: FormData) {
         addons,
         variants,
         features,
+        availableColors,
+        stemTiers,
+        pricePerExtraRose,
         slug,
       },
       { new: true }

@@ -20,6 +20,9 @@ export interface IProduct extends Document {
   flowerCount?: number;
   bouquetType?: string;
   features?: any[];
+  availableColors?: string[];
+  stemTiers?: Array<{ label: string; stems: number; price: number }>;
+  pricePerExtraRose?: number;
   seo?: {
     title?: string;
     description?: string;
@@ -45,6 +48,9 @@ const ProductSchema: Schema = new Schema({
   isActive: { type: Boolean, default: true },
   flowerCount: { type: Number, default: 0 },
   bouquetType: { type: String, default: "" },
+  availableColors: [{ type: String }],
+  stemTiers: [{ label: String, stems: Number, price: Number }],
+  pricePerExtraRose: { type: Number, default: 0 },
   features: [{ label: String, value: String }],
   seo: {
     title: { type: String },

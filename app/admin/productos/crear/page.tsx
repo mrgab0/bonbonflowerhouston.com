@@ -4,6 +4,7 @@ import { ImageUploader } from "@/components/admin/ImageUploader";
 import { FeatureListBuilder } from "@/components/admin/FeatureListBuilder";
 import { AdminAddonManager } from "@/components/admin/AdminAddonManager";
 import { ProductNameSkuInputs } from "@/components/admin/ProductNameSkuInputs";
+import { ProductFloralConfigurator } from "@/components/admin/ProductFloralConfigurator";
 import { useState, useEffect } from "react";
 import { createProduct, getProductById } from "@/lib/actions/product";
 import { getAddons } from "@/lib/actions/addon";
@@ -213,6 +214,13 @@ export default function CrearProductoPage() {
             {/* Constructor de Viñetas / Puntos Clave */}
             <FeatureListBuilder initialFeatures={initialData?.features || []} />
           </div>
+
+          {/* SECCIÓN: Configurador Floral (Colores, Tiers de Rosas) */}
+          <ProductFloralConfigurator
+            initialColors={initialData?.availableColors || []}
+            initialStemTiers={initialData?.stemTiers || []}
+            initialPricePerExtraRose={initialData?.pricePerExtraRose || 0}
+          />
 
           {/* SECCIÓN 5: Adicionales Compatibles */}
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
