@@ -28,29 +28,24 @@ const greatVibes = Great_Vibes({
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
   variable: "--font-playfair",
   display: "swap",
 });
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
   variable: "--font-montserrat",
   display: "swap",
 });
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["500", "700"],
   variable: "--font-plus-jakarta",
   display: "swap",
 });
 
 const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["500", "700"],
   variable: "--font-manrope",
   display: "swap",
 });
