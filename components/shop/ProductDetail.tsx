@@ -334,56 +334,83 @@ export const ProductDetail = ({ product }: { product: any }) => {
                   })}
                 </div>
 
-                {/* BOTONES PARA SUMAR ROSAS ADICIONALES */}
-                <div className="pt-2 border-t border-gray-200/60 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <span className="text-xs font-bold text-gray-800 dark:text-white flex items-center gap-1">
-                      <Plus size={13} className="text-pink-500" /> Sumar Rosas Extra (+${pricePerExtraRose.toFixed(2)} c/u)
-                    </span>
-                    <span className="text-[10px] text-gray-400 block">
-                      Añade más capullos al domo central de tu ramo
-                    </span>
+                {/* BOTONES PARA SUMAR ROSAS ADICIONALES: PRESETS +25, +50, +75 Y MICRO-STEPPER */}
+                <div className="pt-3 border-t border-gray-200/60 dark:border-gray-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="text-xs font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
+                        <Plus size={14} className="text-[#FF97A4]" /> Sumar Rosas Extra (+${pricePerExtraRose.toFixed(2)} c/u)
+                      </span>
+                      <span className="text-[10px] text-gray-400 block">
+                        Aumenta el volumen y opulencia del domo central
+                      </span>
+                    </div>
+
+                    {extraRoses > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setExtraRoses(0)}
+                        className="text-[11px] font-bold text-red-500 hover:text-red-700 dark:text-red-400 underline transition-colors"
+                      >
+                        Quitar extras (0)
+                      </button>
+                    )}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  {/* Los 3 Botones de Incremento Rápido: +25, +50, +75 Rosas */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[25, 50, 75].map((amount) => {
+                      const isSelected = extraRoses === amount;
+                      const addedCost = amount * pricePerExtraRose;
+                      return (
+                        <button
+                          key={amount}
+                          type="button"
+                          onClick={() => setExtraRoses((prev) => (prev === amount ? 0 : amount))}
+                          className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center justify-center select-none ${
+                            isSelected
+                              ? "bg-[#163422] text-white border-[#163422] shadow-sm ring-2 ring-[#5EEAD4]/50 scale-102"
+                              : "bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:border-[#FF97A4]/60"
+                          }`}
+                        >
+                          <span className={`text-xs font-black ${isSelected ? "text-white" : "text-gray-900 dark:text-white"}`}>
+                            +{amount} Rosas
+                          </span>
+                          <span className={`text-[10px] font-bold ${isSelected ? "text-[#5EEAD4]" : "text-gray-500 dark:text-gray-400"}`}>
+                            +${addedCost.toFixed(2)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Micro-Stepper para ajuste fino individual */}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                      Ajuste fino unidad por unidad:
+                    </span>
                     <div className="flex items-center border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl p-1 shadow-xs">
                       <button
                         type="button"
                         onClick={() => setExtraRoses((prev) => Math.max(0, prev - 1))}
                         disabled={extraRoses === 0}
-                        className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white disabled:opacity-30 rounded-lg"
+                        className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white disabled:opacity-30 rounded-lg transition-colors"
                         title="Quitar 1 rosa"
                       >
-                        <Minus size={14} />
+                        <Minus size={13} />
                       </button>
-                      <span className="w-9 text-center font-black text-xs text-gray-900 dark:text-white">
+                      <span className="w-10 text-center font-black text-xs text-gray-900 dark:text-white">
                         +{extraRoses}
                       </span>
                       <button
                         type="button"
                         onClick={() => setExtraRoses((prev) => prev + 1)}
-                        className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white rounded-lg"
+                        className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white rounded-lg transition-colors"
                         title="Sumar 1 rosa"
                       >
-                        <Plus size={14} />
+                        <Plus size={13} />
                       </button>
                     </div>
-
-                    {/* Botones de incremento rápido */}
-                    <button
-                      type="button"
-                      onClick={() => setExtraRoses((prev) => prev + 6)}
-                      className="px-2.5 py-1.5 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-[10px] font-bold text-gray-700 dark:text-gray-300 transition-colors"
-                    >
-                      +6
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setExtraRoses((prev) => prev + 12)}
-                      className="px-2.5 py-1.5 bg-white dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-[10px] font-bold text-gray-700 dark:text-gray-300 transition-colors"
-                    >
-                      +12
-                    </button>
                   </div>
                 </div>
               </div>

@@ -122,15 +122,15 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
           </div>
         </div>
 
-        {/* SECCIÓN 2: Precio e Inventario */}
+        {/* SECCIÓN 2: Precios, Modificadores e Inventario */}
         <div className="bg-white dark:bg-[#12131A] p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 space-y-4">
           <h2 className="text-sm font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2 border-b pb-3 border-gray-100 dark:border-gray-800">
-            <DollarSign size={18} className="text-[#FF97A4]" /> Precio y Disponibilidad
+            <DollarSign size={18} className="text-[#FF97A4]" /> Precios, Modificadores e Inventario
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Precio ($ USD) *</label>
+              <label className="text-xs font-bold text-gray-700 dark:text-gray-300">Precio Base ($ USD) *</label>
               <div className="relative">
                 <span className="absolute left-3.5 top-3 text-gray-400 font-bold">$</span>
                 <input
@@ -143,6 +143,26 @@ export default async function EditarProductoPage({ params }: { params: Promise<{
                   required
                 />
               </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-1">
+                <Flower2 size={13} className="text-[#FF97A4]" /> Rosa Adicional ($ USD / c.u.)
+              </label>
+              <div className="relative">
+                <span className="absolute left-3.5 top-3 text-gray-400 font-bold">$</span>
+                <input
+                  name="pricePerExtraRose"
+                  type="number"
+                  step="0.01"
+                  defaultValue={product.pricePerExtraRose !== undefined ? product.pricePerExtraRose : 3.50}
+                  placeholder="3.50"
+                  className="p-3 pl-8 border rounded-xl w-full focus:outline-none focus:ring-2 focus:ring-[#FF97A4] font-bold text-gray-800 dark:bg-gray-900 dark:text-white"
+                />
+              </div>
+              <span className="text-[10px] text-gray-400">
+                Modificador cobrado por cada rosa extra (+25, +50, +75).
+              </span>
             </div>
 
             <div className="flex flex-col gap-1.5">

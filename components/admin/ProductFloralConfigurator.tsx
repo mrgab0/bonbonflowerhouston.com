@@ -29,12 +29,10 @@ const PRESET_COLORS = [
 export function ProductFloralConfigurator({
   initialColors = [],
   initialStemTiers = [],
-  initialPricePerExtraRose = 0,
 }: ProductFloralConfiguratorProps) {
   const [colors, setColors] = useState<string[]>(initialColors);
   const [customColor, setCustomColor] = useState("");
   const [stemTiers, setStemTiers] = useState<StemTier[]>(initialStemTiers);
-  const [pricePerExtraRose, setPricePerExtraRose] = useState<number>(initialPricePerExtraRose);
 
   // Estados para nuevo tier
   const [newTierLabel, setNewTierLabel] = useState("");
@@ -226,27 +224,18 @@ export function ProductFloralConfigurator({
         </div>
       </div>
 
-      {/* 3. PRECIO POR ROSA ADICIONAL INDIVIDUAL */}
-      <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div>
-          <label className="text-xs font-bold text-gray-700 dark:text-gray-300 block">
-            Precio por Rosa Adicional Individual ($ USD)
-          </label>
-          <p className="text-[11px] text-gray-400">
-            Si se define (&gt; 0), el cliente podrá presionar [+] para sumar rosas individuales al ramo.
-          </p>
-        </div>
-        <div className="relative w-36">
-          <span className="absolute left-3 top-2.5 text-gray-400 font-bold text-xs">$</span>
-          <input
-            name="pricePerExtraRose"
-            type="number"
-            step="0.01"
-            value={pricePerExtraRose}
-            onChange={(e) => setPricePerExtraRose(parseFloat(e.target.value) || 0)}
-            className="p-2 pl-7 border rounded-xl text-xs font-bold w-full dark:bg-gray-900 dark:text-white dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
-            placeholder="0.00"
-          />
+      {/* 3. INFORMACIÓN SOBRE EL MODIFICADOR DE ROSA EXTRA */}
+      <div className="pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3 text-xs bg-pink-50/50 dark:bg-pink-950/20 p-3.5 rounded-xl border border-pink-100 dark:border-pink-900/30">
+        <div className="flex items-center gap-2.5">
+          <Sparkles size={16} className="text-[#FF97A4] flex-shrink-0" />
+          <div>
+            <span className="font-bold text-gray-800 dark:text-gray-200 block">
+              Modificador de Rosa Extra Activo
+            </span>
+            <span className="text-[11px] text-gray-500 dark:text-gray-400">
+              El precio por rosa adicional se define en la sección superior &quot;Precios, Modificadores e Inventario&quot; y alimenta los botones rápidos (+25, +50, +75) y el stepper en la vista de compra.
+            </span>
+          </div>
         </div>
       </div>
     </div>
