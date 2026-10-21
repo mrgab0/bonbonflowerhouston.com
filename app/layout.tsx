@@ -9,6 +9,7 @@ import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 import Script from "next/script";
 import dynamic from "next/dynamic";
 import { getThemeConfigAction } from "@/lib/actions/theme";
+import { getDoorDashConfigAction } from "@/lib/actions/doordash";
 
 const CookieConsent = dynamic(() => import("@/components/CookieConsent").then((m) => m.CookieConsent));
 const PedidoFlotante = dynamic(() => import("@/components/shop/PedidoFlotante").then((m) => m.PedidoFlotante));
@@ -73,8 +74,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const themeRes = await getThemeConfigAction();
+  const [themeRes, doorDashRes] = await Promise.all([
+    getThemeConfigAction(),
+    getDoorDashConfigAction(),
+  ]);
   const theme = themeRes.theme;
+  const doordashConfig = doorDashRes.config;
 
   return (
     <html lang="es" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable} ${greatVibes.variable}`} suppressHydrationWarning>
@@ -87,6 +92,14 @@ export default async function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="trustpilot-one-time-domain-verification-id" content="e993157a-ecc6-48b6-985d-bca8eebb5fb2" />
+
+        {/* Script Oficial e Integración DoorDash Drive / Storefront */}
+        {doordashConfig?.scriptEnabled && doordashConfig?.scriptHtml && (
+          <div
+            id="doordash-injected-script"
+            dangerouslySetInnerHTML={{ __html: doordashConfig.scriptHtml }}
+          />
+        )}
 
         {/* Variables dinámicas del Editor de Tema para la Home y Componentes */}
         <style

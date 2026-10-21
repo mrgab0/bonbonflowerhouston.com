@@ -35,6 +35,21 @@ export interface IThemeConfig {
   badgeText?: string;
 }
 
+export interface IDoorDashConfig {
+  verificationFileName?: string;
+  verificationFileContent?: string;
+  scriptHtml?: string;
+  scriptEnabled?: boolean;
+  developerId?: string;
+  keyId?: string;
+  signingSecret?: string;
+  storeId?: string;
+  pickupInstructions?: string;
+  leadTimeMinutes?: number;
+  environment?: "sandbox" | "production";
+  autoDispatchEnabled?: boolean;
+}
+
 export interface ISiteConfig extends Document {
   key: string; // "global"
   heroTitle: string;
@@ -138,6 +153,9 @@ export interface ISiteConfig extends Document {
 
   // Editor de Tema Visual de la Tienda
   themeConfig?: IThemeConfig;
+
+  // Integración y Verificación de DoorDash Drive
+  doordashConfig?: IDoorDashConfig;
 
   updatedAt: Date;
 }
@@ -306,6 +324,22 @@ const SiteConfigSchema: Schema = new Schema({
     priceColor: { type: String, default: "#163422" },
     badgeBg: { type: String, default: "#FF97A4" },
     badgeText: { type: String, default: "#ffffff" },
+  },
+
+  // Integración y Verificación de DoorDash Drive
+  doordashConfig: {
+    verificationFileName: { type: String, default: "" },
+    verificationFileContent: { type: String, default: "" },
+    scriptHtml: { type: String, default: "" },
+    scriptEnabled: { type: Boolean, default: false },
+    developerId: { type: String, default: "" },
+    keyId: { type: String, default: "" },
+    signingSecret: { type: String, default: "" },
+    storeId: { type: String, default: "" },
+    pickupInstructions: { type: String, default: "Recoger arreglo floral en el mostrador. Manipular en posición vertical." },
+    leadTimeMinutes: { type: Number, default: 30 },
+    environment: { type: String, default: "production" },
+    autoDispatchEnabled: { type: Boolean, default: false },
   },
 
   updatedAt: { type: Date, default: Date.now }

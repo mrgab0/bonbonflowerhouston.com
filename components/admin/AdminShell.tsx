@@ -13,6 +13,7 @@ import {
   Layers,
   Pin,
   Sparkles,
+  Truck,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shop/ThemeToggle";
 
@@ -51,6 +52,11 @@ export const ADMIN_NAV_ITEMS = [
     href: "/admin/entregas",
     label: "Entregas",
     icon: "🚚",
+  },
+  {
+    href: "/admin/doordash",
+    label: "DoorDash Drive",
+    icon: "🚗",
   },
   {
     href: "/admin/cupones",
@@ -352,6 +358,16 @@ export function AdminShell({ children, logoutAction }: AdminShellProps) {
                 <Pin size={11} /> Fijado
               </span>
             )}
+
+            {/* Botón directo DoorDash */}
+            <Link
+              href="/admin/doordash"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/40 text-red-700 dark:text-red-300 text-xs font-bold border border-red-200 dark:border-red-900/60 transition-colors shadow-xs"
+              title="Configuración de Encomiendas DoorDash"
+            >
+              <Truck size={13} className="text-red-600 dark:text-red-400" />
+              <span>DoorDash</span>
+            </Link>
 
             {/* Enlace directo Ver Tienda */}
             <Link
