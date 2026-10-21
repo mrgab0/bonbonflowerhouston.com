@@ -139,9 +139,6 @@ export default function AdminLoginPage() {
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
-                <p className="text-[11px] text-gray-400 italic text-right pt-0.5">
-                  Contraseña inicial: <strong className="text-gray-600">flores2026</strong>
-                </p>
               </div>
 
               <button

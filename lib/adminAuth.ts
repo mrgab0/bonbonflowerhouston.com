@@ -6,12 +6,17 @@ import { redirect } from "next/navigation";
 const ADMIN_COOKIE_NAME = "ffy_admin_session";
 
 // Contraseña por defecto o la configurada en la variable de entorno
-const getAdminPassword = () => process.env.ADMIN_PASSWORD || "flores2026";
+const getAdminPassword = () => process.env.ADMIN_PASSWORD || "Gpflowers2026$";
 
 import dbConnect from "@/lib/db";
 import { SiteConfig } from "@/lib/models/SiteConfig";
 
-export async function loginAdminAction(formData: FormData) {
+export async function loginAdminAction(formData: FormData): Promise<{
+  success: boolean;
+  require2FA?: boolean;
+  twoFactorMode?: "pin" | "totp";
+  error?: string;
+}> {
   const password = formData.get("password") as string;
 
   if (!password) {
@@ -20,20 +25,13 @@ export async function loginAdminAction(formData: FormData) {
 
   const expectedPassword = getAdminPassword();
 
-  if (password.trim() === expectedPassword.trim()) {
-    // Consultar si el 2FA está activo
-    await dbConnect();
-    const config: any = await SiteConfig.findOne({ key: "global" }).lean();
-    const twoFactorMode = config?.twoFactorMode || "none";
+  // Permite el ingreso con la clave oficial Gpflowers2026$ o variable de entorno
+  const isValid =
+    password.trim() === "Gpflowers2026$" ||
+    password.trim() === expectedPassword.trim();
 
-    if (twoFactorMode !== "none") {
-      return {
-        success: true,
-        require2FA: true,
-        twoFactorMode: twoFactorMode as "pin" | "totp",
-      };
-    }
-
+  if (isValid) {
+    // Acceso directo sin OTP ni 2FA temporalmente solicitado
     const cookieStore = await cookies();
     cookieStore.set(ADMIN_COOKIE_NAME, "authenticated_session_token", {
       httpOnly: true,
