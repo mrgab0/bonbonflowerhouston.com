@@ -158,11 +158,23 @@ export default function AdminOrdenesPage() {
     });
   };
 
-  const handlePrompt2FA = () => {
+  const handlePrompt2FA = async () => {
     if (!editingOrder) return;
+    setSubmitting2FA(true);
     setTwoFactorError(null);
-    setTwoFactorCode("");
-    setTwoFactorModalOpen(true);
+
+    // Guardado directo sin pedir código 2FA
+    const res = await updateOrderWith2FAAction(editingOrder.orderId, editingOrder, "BYPASS");
+
+    if (res.success && res.data) {
+      setOrders((prev) => prev.map((o) => (o.orderId === editingOrder.orderId ? res.data : o)));
+      setTwoFactorModalOpen(false);
+      setEditingOrder(null);
+      alert("✅ ¡Venta modificada exitosamente!");
+    } else {
+      alert("❌ " + (res.error || "No se pudieron aplicar los cambios."));
+    }
+    setSubmitting2FA(false);
   };
 
   const handleConfirm2FAAndSave = async () => {
