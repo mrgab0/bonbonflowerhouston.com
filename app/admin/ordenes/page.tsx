@@ -34,7 +34,6 @@ export default function AdminOrdenesPage() {
   const [invoiceOrder, setInvoiceOrder] = useState<any | null>(null);
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
   const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("a4");
-  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [isPrinterGuideOpen, setIsPrinterGuideOpen] = useState(false);
 
   // Generador de Ticket de Prueba para Calibrar Star TSP143III (80mm)
@@ -68,7 +67,6 @@ export default function AdminOrdenesPage() {
       status: "Pagado (Test)",
     });
     setInvoiceFormat("ticket80");
-    setIsInvoiceModalOpen(true);
   };
 
   useEffect(() => {
@@ -549,30 +547,45 @@ export default function AdminOrdenesPage() {
                       <span>Modificar</span>
                     </button>
 
-                    {/* Botón Imprimir Factura A4 */}
+                    {/* Indicador de Estado de Impresión en Star Micronics */}
+                    {order.isPrintedToPOS ? (
+                      <span className="text-[10px] font-extrabold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-xl border border-emerald-200 dark:border-emerald-800 flex items-center gap-1 shadow-2xs" title="Este pedido ya fue impreso en la Star Micronics TSP143III">
+                        <CheckCircle2 size={11} className="text-emerald-500" />
+                        <span>Ticket Impreso</span>
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-extrabold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 rounded-xl border border-amber-200 dark:border-amber-800 flex items-center gap-1 shadow-2xs" title="Pendiente de imprimir en la Star Micronics">
+                        <Clock size={11} className="text-amber-500" />
+                        <span>Ticket Pendiente</span>
+                      </span>
+                    )}
+
+                    {/* Botón 1: Imprimir Factura A4 / Carta */}
                     <button
+                      type="button"
                       onClick={() => {
                         setInvoiceFormat("a4");
                         setInvoiceOrder(order);
                       }}
-                      className="bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 shadow-sm transition-all"
-                      title="Imprimir Factura A4 para Cliente"
+                      className="bg-slate-800 hover:bg-slate-900 text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all hover:scale-102"
+                      title="Imprimir Factura A4 / Carta para el cliente o archivo"
                     >
-                      <Printer size={13} />
+                      <FileText size={13} className="text-slate-300" />
                       <span>Factura A4</span>
                     </button>
 
-                    {/* Botón Imprimir Ticket 80mm Star TSP100 */}
+                    {/* Botón 2: Imprimir Ticket Matriz de Punto / Térmico 80mm Star Micronics */}
                     <button
+                      type="button"
                       onClick={() => {
                         setInvoiceFormat("ticket80");
                         setInvoiceOrder(order);
                       }}
-                      className="bg-pink-600 hover:bg-pink-700 text-white px-3 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1 shadow-sm transition-all"
-                      title="Imprimir Ticket Térmico 80mm (Star Micronics TSP143III)"
+                      className="bg-[#163422] hover:bg-black text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all border border-emerald-700/50 hover:scale-102"
+                      title="Imprimir Ticket Térmico / Matriz de 80mm (Star Micronics TSP143IIILAN)"
                     >
-                      <Receipt size={13} />
-                      <span>Ticket 80mm</span>
+                      <Receipt size={13} className="text-[#5EEAD4]" />
+                      <span>Matriz 80mm</span>
                     </button>
 
                     {/* Botón WhatsApp */}

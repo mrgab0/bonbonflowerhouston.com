@@ -16,6 +16,7 @@ import {
   Truck,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shop/ThemeToggle";
+import { AdminSalesNotificationListener } from "@/components/admin/AdminSalesNotificationListener";
 
 interface AdminShellProps {
   children: React.ReactNode;
@@ -390,6 +391,9 @@ export function AdminShell({ children, logoutAction }: AdminShellProps) {
         <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
           {children}
         </main>
+
+        {/* Listener Global de Ventas en Vivo con Alarma Sonora y Push */}
+        <AdminSalesNotificationListener />
       </div>
     </div>
   );
