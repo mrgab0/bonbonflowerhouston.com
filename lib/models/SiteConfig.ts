@@ -105,6 +105,8 @@ export interface ISiteConfig extends Document {
 
   // Módulo de Chatbot Inteligente Dialogflow CX & Google Gemini
   enableChatbot?: boolean;
+  chatbotMiniMode?: boolean;
+  chatbotInitialPosition?: "bottom-right" | "bottom-left";
   geminiApiKey?: string;
   dialogflowAgentId?: string;
   dialogflowProjectId?: string;
@@ -215,6 +217,8 @@ const SiteConfigSchema: Schema = new Schema({
 
   // Módulo de Chatbot Inteligente Dialogflow CX & Google Gemini
   enableChatbot: { type: Boolean, default: true },
+  chatbotMiniMode: { type: Boolean, default: false },
+  chatbotInitialPosition: { type: String, default: "bottom-right" },
   geminiApiKey: { type: String, default: "" },
   dialogflowAgentId: { type: String, default: "" },
   dialogflowProjectId: { type: String, default: "" },

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useLocale } from 'next-intl';
 import { useCart } from '@/components/shop/Cart/CartContext';
+import { getSiteConfig } from '@/lib/actions/siteConfig';
 
 export interface SuggestedProduct {
   id: string;
@@ -161,6 +162,162 @@ export const ChatbotModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [tickerIndex, setTickerIndex] = useState(0);
   const isHydratedRef = useRef(false);
+
+  // Estados de Configuración y Modo Mini
+  const [siteConfig, setSiteConfig] = useState<any>(null);
+  const [isMiniMode, setIsMiniMode] = useState<boolean>(false);
+
+  // Estados del Motor Draggable (Móvil y Escritorio)
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const bubbleRef = useRef<HTMLDivElement>(null);
+  const dragDataRef = useRef<{
+    startX: number;
+    startY: number;
+    initialX: number;
+    initialY: number;
+    hasMoved: boolean;
+  }>({
+    startX: 0,
+    startY: 0,
+    initialX: 0,
+    initialY: 0,
+    hasMoved: false,
+  });
+
+  // Cargar configuración de administración
+  useEffect(() => {
+    getSiteConfig().then((res) => {
+      if (res?.success && res.data) {
+        setSiteConfig(res.data);
+        if (res.data.chatbotMiniMode) {
+          setIsMiniMode(true);
+        }
+      }
+    });
+  }, []);
+
+  // Restaurar posición previamente arrastrada en la sesión
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = sessionStorage.getItem("bonbon_chatbot_pos");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (typeof parsed.x === "number" && typeof parsed.y === "number") {
+          const maxX = window.innerWidth - 65;
+          const maxY = window.innerHeight - 65;
+          setPosition({
+            x: Math.min(Math.max(10, parsed.x), maxX),
+            y: Math.min(Math.max(10, parsed.y), maxY),
+          });
+        }
+      }
+    } catch (e) {}
+
+    // Ajustar si cambia el tamaño de pantalla
+    const handleResize = () => {
+      setPosition((pos) => {
+        if (!pos || !bubbleRef.current) return pos;
+        const width = bubbleRef.current.offsetWidth || 56;
+        const height = bubbleRef.current.offsetHeight || 56;
+        const maxX = window.innerWidth - width - 8;
+        const maxY = window.innerHeight - height - 8;
+        return {
+          x: Math.min(Math.max(8, pos.x), maxX),
+          y: Math.min(Math.max(8, pos.y), maxY),
+        };
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Handlers de Arrastre Táctil y Ratón
+  const startDrag = (clientX: number, clientY: number) => {
+    const el = bubbleRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    dragDataRef.current = {
+      startX: clientX,
+      startY: clientY,
+      initialX: rect.left,
+      initialY: rect.top,
+      hasMoved: false,
+    };
+
+    const onMove = (moveEvent: MouseEvent | TouchEvent) => {
+      let currX = 0;
+      let currY = 0;
+      if ("touches" in moveEvent) {
+        if (!moveEvent.touches || moveEvent.touches.length === 0) return;
+        currX = moveEvent.touches[0].clientX;
+        currY = moveEvent.touches[0].clientY;
+      } else {
+        currX = (moveEvent as MouseEvent).clientX;
+        currY = (moveEvent as MouseEvent).clientY;
+      }
+
+      const dx = currX - dragDataRef.current.startX;
+      const dy = currY - dragDataRef.current.startY;
+
+      if (!dragDataRef.current.hasMoved && Math.hypot(dx, dy) > 5) {
+        dragDataRef.current.hasMoved = true;
+        setIsDragging(true);
+      }
+
+      if (dragDataRef.current.hasMoved && bubbleRef.current) {
+        const width = bubbleRef.current.offsetWidth || 56;
+        const height = bubbleRef.current.offsetHeight || 56;
+        const maxX = window.innerWidth - width - 8;
+        const maxY = window.innerHeight - height - 8;
+
+        const newX = Math.min(Math.max(8, dragDataRef.current.initialX + dx), maxX);
+        const newY = Math.min(Math.max(8, dragDataRef.current.initialY + dy), maxY);
+
+        setPosition({ x: newX, y: newY });
+      }
+    };
+
+    const onEnd = () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onEnd);
+      window.removeEventListener("touchmove", onMove);
+      window.removeEventListener("touchend", onEnd);
+
+      if (dragDataRef.current.hasMoved) {
+        setIsDragging(false);
+        setPosition((currentPos) => {
+          if (currentPos) {
+            try {
+              sessionStorage.setItem("bonbon_chatbot_pos", JSON.stringify(currentPos));
+            } catch (e) {}
+          }
+          return currentPos;
+        });
+      } else {
+        // Tap / Click directo sin arrastre -> Abrir modal
+        setIsOpen(true);
+      }
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    window.addEventListener("mouseup", onEnd);
+    window.addEventListener("touchmove", onMove, { passive: true });
+    window.addEventListener("touchend", onEnd);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    startDrag(touch.clientX, touch.clientY);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button !== 0) return; // Solo botón primario
+    startDrag(e.clientX, e.clientY);
+  };
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -406,68 +563,123 @@ export const ChatbotModal = () => {
 
   return (
     <>
-      {/* Botón Flotante Estilo Mini-Reproductor / Thumbnail Visual Preview */}
-      {!isOpen && (
+      {/* Botón Flotante Draggable (Modo Mini Circular o Modo Píldora Completo) */}
+      {!isOpen && (siteConfig?.enableChatbot !== false || isAdmin) && (
         <div
-          onClick={() => setIsOpen(true)}
+          ref={bubbleRef}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === 'Enter' && setIsOpen(true)}
           aria-label={content.ariaOpen}
-          className="fixed bottom-5 right-4 sm:right-6 z-50 cursor-pointer group select-none animate-in fade-in slide-in-from-bottom-4 duration-300"
+          style={
+            position
+              ? {
+                  position: "fixed",
+                  left: `${position.x}px`,
+                  top: `${position.y}px`,
+                  touchAction: "none",
+                  zIndex: 50,
+                  userSelect: "none",
+                }
+              : {
+                  position: "fixed",
+                  bottom: "1.25rem",
+                  right: siteConfig?.chatbotInitialPosition === "bottom-left" ? "auto" : "1rem",
+                  left: siteConfig?.chatbotInitialPosition === "bottom-left" ? "1rem" : "auto",
+                  touchAction: "none",
+                  zIndex: 50,
+                  userSelect: "none",
+                }
+          }
+          className={`group select-none animate-in fade-in duration-200 ${
+            isDragging ? "cursor-grabbing scale-105 transition-none" : "cursor-grab"
+          }`}
         >
-          <div className="flex items-center gap-2.5 sm:gap-3.5 bg-white/95 dark:bg-[#12131a]/95 backdrop-blur-md pl-2 pr-3.5 sm:pr-4 py-2 rounded-2xl shadow-[0px_10px_35px_rgba(22,52,34,0.2)] border-2 border-[#D4AF37]/80 hover:border-[#D4AF37] hover:shadow-[0px_12px_40px_rgba(22,52,34,0.3)] transition-all duration-300 hover:scale-[1.03] active:scale-[0.98] max-w-[310px] sm:max-w-none">
-            
-            {/* Thumbnail / Portada estilo Mini-Player */}
-            <div className="relative flex-shrink-0">
-              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-[#D4AF37] shadow-sm relative group-hover:scale-105 transition-transform duration-300 bg-[#163422]">
+          {isMiniMode ? (
+            /* MODO MINI: Burbuja circular compacta solo avatar sin textos */
+            <div className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/95 dark:bg-[#12131a]/95 backdrop-blur-md shadow-[0px_10px_35px_rgba(22,52,34,0.35)] border-2 border-[#D4AF37] hover:border-[#FF97A4] p-1 transition-transform group-hover:scale-105 group-active:scale-95">
+              <div className="relative w-full h-full rounded-full overflow-hidden border border-[#D4AF37]/50 bg-[#163422] pointer-events-none">
                 <img
                   src="https://bonbonflowershouston.com/logo.png"
-                  alt="Flor - Asesora Bonbon Flowers"
-                  className="w-full h-full object-cover"
+                  alt="Flor Asesora"
+                  className="w-full h-full object-cover pointer-events-none select-none"
+                  draggable={false}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
                 <div className="absolute bottom-0.5 right-0.5">
-                  <Sparkles size={11} className="text-[#D4AF37] animate-pulse" />
+                  <Sparkles size={10} className="text-[#D4AF37] animate-pulse" />
                 </div>
               </div>
 
               {/* Indicador de Estado En Vivo con Ondas */}
-              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+              <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 pointer-events-none">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#25D366] border-2 border-white dark:border-[#12131a]"></span>
               </span>
-            </div>
 
-            {/* Texto y Ticker Dinámico estilo Mini-Player */}
-            <div className="flex flex-col text-left overflow-hidden min-w-[155px] sm:min-w-[200px]">
-              <div className="flex items-center gap-1.5 leading-none mb-1">
-                <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-black dark:text-pink-400">
-                  {content.advisorRole}
-                </span>
-                <span className="flex items-center gap-0.5 text-[8px] bg-green-100 dark:bg-green-950/60 text-green-900 dark:text-green-300 font-extrabold px-1.5 py-0.5 rounded-full">
-                  <span className="w-1 h-1 bg-green-500 rounded-full animate-ping"></span>
-                  {content.liveBadge}
+              {/* Badge Ícono de Chat */}
+              <div className="absolute -bottom-1 -left-1 bg-[#163422] text-white p-1 rounded-full shadow-md border border-[#D4AF37]/60 pointer-events-none">
+                <MessageSquare size={12} className="text-white" />
+              </div>
+            </div>
+          ) : (
+            /* MODO COMPLETO: Píldora interactiva estilo Atelier */
+            <div className="flex items-center gap-2.5 sm:gap-3.5 bg-white/95 dark:bg-[#12131a]/95 backdrop-blur-md pl-2 pr-3.5 sm:pr-4 py-2 rounded-2xl shadow-[0px_10px_35px_rgba(22,52,34,0.25)] border-2 border-[#D4AF37]/80 hover:border-[#D4AF37] hover:shadow-[0px_12px_40px_rgba(22,52,34,0.35)] transition-all duration-300 max-w-[310px] sm:max-w-none pointer-events-auto">
+              
+              {/* Thumbnail / Portada estilo Mini-Player */}
+              <div className="relative flex-shrink-0 pointer-events-none">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl overflow-hidden border border-[#D4AF37] shadow-sm relative bg-[#163422]">
+                  <img
+                    src="https://bonbonflowershouston.com/logo.png"
+                    alt="Flor - Asesora Bonbon Flowers"
+                    className="w-full h-full object-cover pointer-events-none select-none"
+                    draggable={false}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute bottom-0.5 right-0.5">
+                    <Sparkles size={11} className="text-[#D4AF37] animate-pulse" />
+                  </div>
+                </div>
+
+                {/* Indicador de Estado En Vivo con Ondas */}
+                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#25D366] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-[#25D366] border-2 border-white dark:border-[#12131a]"></span>
                 </span>
               </div>
 
-              {/* Ticker de mensaje animado */}
-              <div className="h-4 overflow-hidden relative">
-                <p 
-                  key={tickerIndex} 
-                  className="text-[11px] sm:text-xs font-bold text-black dark:text-gray-200 truncate animate-in fade-in slide-in-from-bottom-2 duration-300"
-                >
-                  {content.previewTickers[tickerIndex]}
-                </p>
+              {/* Texto y Ticker Dinámico estilo Mini-Player */}
+              <div className="flex flex-col text-left overflow-hidden min-w-[155px] sm:min-w-[200px] pointer-events-none">
+                <div className="flex items-center gap-1.5 leading-none mb-1">
+                  <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-black dark:text-pink-400">
+                    {content.advisorRole}
+                  </span>
+                  <span className="flex items-center gap-0.5 text-[8px] bg-green-100 dark:bg-green-950/60 text-green-900 dark:text-green-300 font-extrabold px-1.5 py-0.5 rounded-full">
+                    <span className="w-1 h-1 bg-green-500 rounded-full animate-ping"></span>
+                    {content.liveBadge}
+                  </span>
+                </div>
+
+                {/* Ticker de mensaje animado */}
+                <div className="h-4 overflow-hidden relative">
+                  <p 
+                    key={tickerIndex} 
+                    className="text-[11px] sm:text-xs font-bold text-black dark:text-gray-200 truncate animate-in fade-in slide-in-from-bottom-2 duration-300"
+                  >
+                    {content.previewTickers[tickerIndex]}
+                  </p>
+                </div>
               </div>
-            </div>
 
-            {/* Botón Acción Mini-Player (Ícono de Chat / Play) */}
-            <div className="flex-shrink-0 bg-[#163422] text-white p-2 rounded-xl shadow-md hover:bg-[#1B2E22] transition-colors flex items-center justify-center">
-              <MessageSquare size={16} className="text-white group-hover:scale-110 transition-transform" />
-            </div>
+              {/* Botón Acción Mini-Player (Ícono de Chat / Play) */}
+              <div className="flex-shrink-0 bg-[#163422] text-white p-2 rounded-xl shadow-md hover:bg-[#1B2E22] transition-colors flex items-center justify-center pointer-events-none">
+                <MessageSquare size={16} className="text-white" />
+              </div>
 
-          </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -498,6 +710,14 @@ export const ChatbotModal = () => {
             </div>
 
             <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setIsMiniMode((prev) => !prev)}
+                title={isMiniMode ? "Cambiar a modo extendido" : "Contraer a burbuja mini"}
+                className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-[10px] font-bold text-stone-200 hover:text-white transition-colors flex items-center gap-1"
+              >
+                <span>{isMiniMode ? "Modo Completo" : "Modo Mini"}</span>
+              </button>
               <button
                 onClick={handleReset}
                 title={content.ariaRestart}

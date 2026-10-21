@@ -94,6 +94,11 @@ export const ADMIN_NAV_ITEMS = [
     icon: "✍️",
   },
   {
+    href: "/admin/configuracion?tab=chatbot",
+    label: "Chatbot IA",
+    icon: "🤖",
+  },
+  {
     href: "/admin/configuracion",
     label: "Configuración",
     icon: "⚙️",

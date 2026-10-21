@@ -251,7 +251,7 @@ export function LeadCaptureFloatingWidget() {
   // TEMPLATE 3: CORNER TOAST CARD (Tarjeta Flotante Inferior Derecha)
   // ---------------------------------------------------------------------------
   return (
-    <div className="fixed bottom-6 right-5 sm:right-6 z-40 max-w-xs bg-white dark:bg-[#12131A] text-stone-900 dark:text-white p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl space-y-3 animate-in slide-in-from-bottom-6">
+    <div className="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-40 max-w-xs bg-white dark:bg-[#12131A] text-stone-900 dark:text-white p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl space-y-3 animate-in slide-in-from-bottom-6">
       <div className="flex justify-between items-start">
         <span className="text-[10px] font-black uppercase tracking-wider text-[#163422] dark:text-[#5EEAD4] flex items-center gap-1">
           <Gift size={12} /> Regalo Especial

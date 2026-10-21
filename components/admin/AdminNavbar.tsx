@@ -84,6 +84,12 @@ const NAV_ITEMS = [
     badgeColor: "bg-rose-100 dark:bg-rose-950/80 text-rose-950 dark:text-rose-200 border-rose-300 dark:border-rose-800/80 hover:bg-rose-200"
   },
   {
+    href: "/admin/configuracion?tab=chatbot",
+    label: "Chatbot IA",
+    icon: "🤖",
+    badgeColor: "bg-purple-100 dark:bg-purple-950/80 text-purple-950 dark:text-purple-200 border-purple-300 dark:border-purple-800/80 hover:bg-purple-200"
+  },
+  {
     href: "/admin/configuracion",
     label: "Configuración",
     icon: "⚙️",

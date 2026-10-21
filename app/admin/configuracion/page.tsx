@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import { useSearchParams } from "next/navigation";
 import { getSiteConfig, updateSiteConfig } from "@/lib/actions/siteConfig";
 import { getAdminProductsList } from "@/lib/actions/product";
 import { generateTotpSecretAction, getOrCreateTotpSecretAction, update2FASettingsAction, test2FACodeAction } from "@/lib/actions/admin2fa";
@@ -14,6 +15,14 @@ export default function AdminConfiguracionPage() {
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<"grid" | "branding" | "heroProduct" | "social" | "reviews" | "iframe" | "chatbot" | "security">("grid");
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const tabParam = searchParams.get("tab");
+    if (tabParam && ["grid", "branding", "heroProduct", "social", "reviews", "iframe", "chatbot", "security"].includes(tabParam)) {
+      setActiveTab(tabParam as any);
+    }
+  }, [searchParams]);
 
   // Estados para gestión de Producto Destacado Hero
   const [adminProducts, setAdminProducts] = useState<any[]>([]);
@@ -1124,6 +1133,69 @@ export default function AdminConfiguracionPage() {
                 />
                 <input type="hidden" name="enableChatbot" value={config.enableChatbot !== false ? "true" : "false"} />
               </label>
+            </div>
+
+            {/* SECCIÓN NUEVA: MODO VISUAL Y COMPORTAMIENTO MÓVIL */}
+            <div className="p-5 rounded-2xl bg-white dark:bg-[#181922] border border-gray-200 dark:border-gray-800 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b pb-3 border-gray-100 dark:border-gray-800">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-[#FF97A4]" />
+                  <h3 className="font-bold text-sm text-gray-900 dark:text-white">
+                    Apariencia de la Burbuja Solapada (Colapsada)
+                  </h3>
+                </div>
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                  Draggable Activo Siempre
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Opción 1: Modo Mini */}
+                <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/50 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1.5 cursor-pointer">
+                      <span>Modo Mini / Ultra-Discreto (Solo Avatar)</span>
+                    </label>
+                    <input
+                      type="checkbox"
+                      checked={config.chatbotMiniMode === true}
+                      onChange={(e) => setConfig({ ...config, chatbotMiniMode: e.target.checked })}
+                      className="w-4 h-4 accent-[#FF97A4] rounded cursor-pointer"
+                    />
+                    <input type="hidden" name="chatbotMiniMode" value={config.chatbotMiniMode ? "true" : "false"} />
+                  </div>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    Oculta las frases y tickers de texto cuando el chat está cerrado. Muestra únicamente una burbuja circular dorada compacta para no obstruir botones ni elementos de la tienda.
+                  </p>
+                </div>
+
+                {/* Opción 2: Posición Inicial */}
+                <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50/70 dark:bg-gray-900/50 space-y-2">
+                  <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block">
+                    Posición Inicial por Defecto
+                  </label>
+                  <select
+                    name="chatbotInitialPosition"
+                    value={config.chatbotInitialPosition || "bottom-right"}
+                    onChange={(e) => setConfig({ ...config, chatbotInitialPosition: e.target.value })}
+                    className="w-full p-2.5 border rounded-xl text-xs bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 font-semibold"
+                  >
+                    <option value="bottom-right">Esquina Inferior Derecha (Por defecto)</option>
+                    <option value="bottom-left">Esquina Inferior Izquierda</option>
+                  </select>
+                  <p className="text-[11px] text-gray-500 dark:text-gray-400">
+                    Lugar donde aparece la burbuja al cargar la página por primera vez.
+                  </p>
+                </div>
+              </div>
+
+              {/* Callout de Comportamiento Draggable */}
+              <div className="p-3.5 rounded-xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-100 dark:border-purple-900/40 text-xs text-purple-900 dark:text-purple-300 flex items-start gap-2.5">
+                <span className="text-base">🖐️</span>
+                <div className="leading-relaxed">
+                  <strong>Arrastre Libre (Draggable) en Móviles y Desktop:</strong> El cliente puede tocar y arrastrar la burbuja en cualquier momento a cualquier lado de la pantalla si se atraviesa con el botón de &quot;Añadir al carrito&quot; o el pop-up de bonus de $10. La posición se recuerda mientras navega la tienda.
+                </div>
+              </div>
             </div>
 
             <div className="p-4 rounded-2xl bg-pink-50/50 dark:bg-pink-950/20 border border-pink-100 dark:border-pink-900/40 text-xs text-slate-700 dark:text-gray-300 space-y-2">
