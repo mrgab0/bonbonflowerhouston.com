@@ -635,7 +635,7 @@ export function DeliveryMapPicker({
                 handleForwardGeocode();
               }
             }}
-            placeholder="Ej: 10827 Kyler Oaks Pl, Houston, TX 77043 o Galleria Mall"
+            placeholder="Ej: 5085 Westheimer Rd, Houston, TX 77056 o The Galleria"
             className="w-full p-3.5 pr-28 border border-gray-300 dark:border-gray-700 rounded-2xl text-sm font-semibold text-gray-900 dark:text-white bg-white dark:bg-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF97A4] shadow-sm"
             required
             autoComplete="off"
