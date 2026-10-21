@@ -1,5 +1,5 @@
 import { EmailCenterClient } from "@/components/admin/EmailCenterClient";
-import { getEmailsAction, getEmailStatsAction } from "@/lib/actions/emails";
+import { getEmailsAction, getEmailStatsAction, getCorporateAccountsAction } from "@/lib/actions/emails";
 import { getAbandonedCartsAction } from "@/lib/actions/abandonedCart";
 import {
   getNewsletterLeadsAction,
@@ -24,6 +24,7 @@ export default async function AdminCorreosPage() {
     audienceRes,
     leadConfigRes,
     corporateConfig,
+    accountsRes,
   ] = await Promise.all([
     getEmailsAction({ folder: "inbox" }),
     getEmailStatsAction(),
@@ -32,11 +33,13 @@ export default async function AdminCorreosPage() {
     getAudienceCountsAction(),
     getLeadCaptureConfigAction(),
     getCorporateEmailConfig(),
+    getCorporateAccountsAction(),
   ]);
 
   return (
     <div className="space-y-6">
       <EmailCenterClient
+        initialAccounts={accountsRes.accounts || []}
         initialEmails={emailsRes.success ? emailsRes.data || [] : []}
         initialTotal={emailsRes.success ? emailsRes.total || 0 : 0}
         initialUnread={statsRes.unreadInbox || 0}

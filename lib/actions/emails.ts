@@ -2,7 +2,7 @@
 
 import dbConnect from "@/lib/db";
 import { EmailMessage } from "@/lib/models/EmailMessage";
-import { SiteConfig } from "@/lib/models/SiteConfig";
+import { SiteConfig, ICorporateAccount } from "@/lib/models/SiteConfig";
 import {
   sendEmail,
   getCorporateEmailConfig,
@@ -10,10 +10,41 @@ import {
 } from "@/lib/email";
 import { revalidatePath } from "next/cache";
 
+export const DEFAULT_CORPORATE_ACCOUNTS: ICorporateAccount[] = [
+  {
+    id: "contacto",
+    email: "contacto@bonbonflowershouston.com",
+    name: "Bonbon Flowers Houston",
+    role: "Atención al Cliente",
+    color: "#163422",
+    isDefault: true,
+    signature: "Bonbon Flowers Houston • Boutique Digital de Flores de Lujo",
+  },
+  {
+    id: "sales",
+    email: "sales@bonbonflowershouston.com",
+    name: "Ventas & Pedidos VIP",
+    role: "Ventas y Cotizaciones",
+    color: "#C5A059",
+    isDefault: false,
+    signature: "Equipo de Ventas • Bonbon Flowers Houston",
+  },
+  {
+    id: "ceo",
+    email: "ceo@bonbonflowershouston.com",
+    name: "Dirección Ejecutiva",
+    role: "Gerencia General",
+    color: "#0F1210",
+    isDefault: false,
+    signature: "Dirección Ejecutiva • Bonbon Flowers Houston",
+  },
+];
+
 export async function getEmailsAction(params?: {
   folder?: "inbox" | "sent" | "all";
   type?: string;
   search?: string;
+  accountEmail?: string;
   page?: number;
   limit?: number;
 }) {
@@ -21,39 +52,61 @@ export async function getEmailsAction(params?: {
     await dbConnect();
     const folder = params?.folder || "inbox";
     const search = params?.search?.trim() || "";
+    const accountEmail = params?.accountEmail?.trim()?.toLowerCase() || "";
     const page = params?.page || 1;
     const limit = params?.limit || 50;
 
-    const query: any = {};
+    const andConditions: any[] = [];
 
     if (folder === "inbox") {
-      query.direction = "inbound";
+      andConditions.push({ direction: "inbound" });
     } else if (folder === "sent") {
-      query.direction = "outbound";
+      andConditions.push({ direction: "outbound" });
     }
 
     if (params?.type && params.type !== "all") {
-      query.type = params.type;
+      andConditions.push({ type: params.type });
+    }
+
+    if (accountEmail && accountEmail !== "all") {
+      const emailRegex = new RegExp(accountEmail, "i");
+      andConditions.push({
+        $or: [
+          { mailboxEmail: emailRegex },
+          { from: emailRegex },
+          { to: emailRegex },
+        ],
+      });
     }
 
     if (search) {
       const regex = new RegExp(search, "i");
-      query.$or = [
-        { subject: regex },
-        { customerName: regex },
-        { customerEmail: regex },
-        { customerPhone: regex },
-        { from: regex },
-        { to: regex },
-        { orderId: regex },
-      ];
+      andConditions.push({
+        $or: [
+          { subject: regex },
+          { customerName: regex },
+          { customerEmail: regex },
+          { customerPhone: regex },
+          { from: regex },
+          { to: regex },
+          { orderId: regex },
+        ],
+      });
     }
 
+    const query = andConditions.length > 0 ? { $and: andConditions } : {};
+
     const total = await EmailMessage.countDocuments(query);
-    const unreadCount = await EmailMessage.countDocuments({
-      direction: "inbound",
-      isRead: false,
-    });
+
+    let unreadQuery: any = { direction: "inbound", isRead: false };
+    if (accountEmail && accountEmail !== "all") {
+      const emailRegex = new RegExp(accountEmail, "i");
+      unreadQuery.$or = [
+        { mailboxEmail: emailRegex },
+        { to: emailRegex },
+      ];
+    }
+    const unreadCount = await EmailMessage.countDocuments(unreadQuery);
 
     const messages = await EmailMessage.find(query)
       .sort({ createdAt: -1 })
@@ -202,11 +255,17 @@ export async function sendCustomEmailAction(data: {
       return { success: false, error: sendRes.error || "No se pudo entregar el correo." };
     }
 
+    // Determinar remitente final y mailboxEmail
+    const fromStr = data.from || sendRes.sender || emailCfg.senderFormatted;
+    const emailMatch = fromStr.match(/<([^>]+)>/);
+    const mailboxEmail = (emailMatch ? emailMatch[1] : fromStr).trim().toLowerCase();
+
     // Registrar en MongoDB
     const logged = await EmailMessage.create({
       direction: "outbound",
       type: data.type || "direct_email",
-      from: sendRes.sender || emailCfg.senderFormatted,
+      from: fromStr,
+      mailboxEmail,
       to: toRecipients,
       replyTo: emailCfg.replyTo,
       subject: data.subject.trim(),
@@ -321,5 +380,93 @@ export async function saveEmailSettingsAction(settings: {
     return { success: true, message: "Configuración guardada correctamente." };
   } catch (error: any) {
     return { success: false, error: error?.message || "Error al guardar configuración." };
+  }
+}
+
+export async function getCorporateAccountsAction(): Promise<{
+  success: boolean;
+  accounts: (ICorporateAccount & { unreadCount?: number })[];
+  defaultAccount?: ICorporateAccount;
+  error?: string;
+}> {
+  try {
+    await dbConnect();
+    const cfg: any = await SiteConfig.findOne({ key: "global" }).lean();
+    let accounts: (ICorporateAccount & { unreadCount?: number })[] = [];
+
+    if (cfg?.corporateAccounts && Array.isArray(cfg.corporateAccounts) && cfg.corporateAccounts.length > 0) {
+      accounts = JSON.parse(JSON.stringify(cfg.corporateAccounts));
+    } else {
+      accounts = JSON.parse(JSON.stringify(DEFAULT_CORPORATE_ACCOUNTS));
+    }
+
+    // Calcular no leídos por cada cuenta
+    for (const acc of accounts) {
+      const emailRegex = new RegExp(acc.email, "i");
+      acc.unreadCount = await EmailMessage.countDocuments({
+        direction: "inbound",
+        isRead: false,
+        $or: [
+          { mailboxEmail: emailRegex },
+          { to: emailRegex },
+        ],
+      });
+    }
+
+    const defaultAcc = accounts.find((a) => a.isDefault) || accounts[0];
+
+    return {
+      success: true,
+      accounts,
+      defaultAccount: defaultAcc,
+    };
+  } catch (error: any) {
+    console.error("Error al obtener cuentas corporativas:", error);
+    return {
+      success: false,
+      accounts: DEFAULT_CORPORATE_ACCOUNTS,
+      defaultAccount: DEFAULT_CORPORATE_ACCOUNTS[0],
+      error: error?.message,
+    };
+  }
+}
+
+export async function saveCorporateAccountsAction(accounts: ICorporateAccount[]) {
+  try {
+    if (!accounts || accounts.length === 0) {
+      return { success: false, error: "Debe existir al menos una cuenta corporativa." };
+    }
+    const cleanAccounts = accounts.map((acc, index) => {
+      const email = (acc.email || "").trim().toLowerCase();
+      const name = (acc.name || "").trim() || email.split("@")[0] || "Cuenta";
+      const id = acc.id || email.split("@")[0] || `acct-${index}`;
+      return {
+        ...acc,
+        id,
+        email,
+        name,
+        role: acc.role?.trim() || "General",
+        color: acc.color || "#163422",
+        isDefault: Boolean(acc.isDefault),
+        signature: acc.signature || "",
+      };
+    });
+
+    if (!cleanAccounts.some((a) => a.isDefault)) {
+      cleanAccounts[0].isDefault = true;
+    }
+
+    await dbConnect();
+    await SiteConfig.findOneAndUpdate(
+      { key: "global" },
+      { $set: { corporateAccounts: cleanAccounts, updatedAt: new Date() } },
+      { upsert: true }
+    );
+
+    revalidatePath("/admin/correos");
+    return { success: true, message: "Cuentas corporativas guardadas correctamente." };
+  } catch (error: any) {
+    console.error("Error guardando cuentas corporativas:", error);
+    return { success: false, error: error?.message || "Error al guardar cuentas." };
   }
 }

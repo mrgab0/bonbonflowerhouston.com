@@ -24,6 +24,7 @@ export interface IEmailMessage extends Document {
   customerName?: string;
   customerPhone?: string;
   customerEmail?: string;
+  mailboxEmail?: string;
   orderId?: string;
   resendMessageId?: string;
   bccAdmins?: boolean;
@@ -66,6 +67,12 @@ const EmailMessageSchema: Schema = new Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    mailboxEmail: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      index: true,
     },
     to: {
       type: [String],

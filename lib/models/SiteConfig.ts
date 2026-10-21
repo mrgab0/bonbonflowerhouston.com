@@ -1,5 +1,15 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export interface ICorporateAccount {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  color?: string;
+  isDefault?: boolean;
+  signature?: string;
+}
+
 export interface ISiteConfig extends Document {
   key: string; // "global"
   heroTitle: string;
@@ -91,6 +101,7 @@ export interface ISiteConfig extends Document {
   corporateReplyToEmail?: string;
   resendApiKey?: string;
   adminNotifyEmails?: string[];
+  corporateAccounts?: ICorporateAccount[];
 
   // Widget Flotante de Captación de Leads (Pop-up Newsletter)
   leadCaptureActive?: boolean;
@@ -192,6 +203,48 @@ const SiteConfigSchema: Schema = new Schema({
   corporateReplyToEmail: { type: String, default: "contact@bonbonflowerhouston.com" },
   resendApiKey: { type: String, default: "" },
   adminNotifyEmails: { type: [String], default: ["orders@bonbonflowerhouston.com", "iirockalonso@gmail.com"] },
+  corporateAccounts: {
+    type: [
+      {
+        id: { type: String, required: true },
+        email: { type: String, required: true },
+        name: { type: String, required: true },
+        role: { type: String, default: "General" },
+        color: { type: String, default: "#163422" },
+        isDefault: { type: Boolean, default: false },
+        signature: { type: String, default: "" },
+      },
+    ],
+    default: [
+      {
+        id: "contacto",
+        email: "contacto@bonbonflowershouston.com",
+        name: "Bonbon Flowers Houston",
+        role: "Atención al Cliente",
+        color: "#163422",
+        isDefault: true,
+        signature: "Bonbon Flowers Houston • Boutique Digital de Flores de Lujo",
+      },
+      {
+        id: "sales",
+        email: "sales@bonbonflowershouston.com",
+        name: "Ventas & Pedidos VIP",
+        role: "Ventas y Cotizaciones",
+        color: "#C5A059",
+        isDefault: false,
+        signature: "Equipo de Ventas • Bonbon Flowers Houston",
+      },
+      {
+        id: "ceo",
+        email: "ceo@bonbonflowershouston.com",
+        name: "Dirección Ejecutiva",
+        role: "Gerencia General",
+        color: "#0F1210",
+        isDefault: false,
+        signature: "Dirección Ejecutiva • Bonbon Flowers Houston",
+      },
+    ],
+  },
 
   // Widget Flotante de Captación de Leads (Pop-up Newsletter)
   leadCaptureActive: { type: Boolean, default: true },

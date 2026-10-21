@@ -36,6 +36,10 @@ import {
   Phone,
   User,
   ShieldCheck,
+  ChevronDown,
+  Plus,
+  Globe,
+  AtSign,
 } from "lucide-react";
 import {
   getEmailsAction,
@@ -45,7 +49,9 @@ import {
   deleteEmailAction,
   bulkDeleteEmailsAction,
   saveEmailSettingsAction,
+  saveCorporateAccountsAction,
 } from "@/lib/actions/emails";
+import { ICorporateAccount } from "@/lib/models/SiteConfig";
 import {
   getAbandonedCartsAction,
   sendAbandonedCartRecoveryAction,
@@ -131,6 +137,7 @@ const COPILOT_LEAD_PRESETS = [
 ];
 
 interface EmailCenterClientProps {
+  initialAccounts?: (ICorporateAccount & { unreadCount?: number })[];
   initialEmails: any[];
   initialTotal: number;
   initialUnread: number;
@@ -144,6 +151,7 @@ interface EmailCenterClientProps {
 }
 
 export function EmailCenterClient({
+  initialAccounts = [],
   initialEmails,
   initialTotal,
   initialUnread,
@@ -156,6 +164,24 @@ export function EmailCenterClient({
   initialSettings,
 }: EmailCenterClientProps) {
   const [isPending, startTransition] = useTransition();
+
+  // Estado de Cuentas Corporativas & Selector de Mailbox
+  const [accounts, setAccounts] = useState<(ICorporateAccount & { unreadCount?: number })[]>(initialAccounts);
+  const [selectedAccount, setSelectedAccount] = useState<string>("all");
+  const [isAccountDropdownOpen, setIsAccountDropdownOpen] = useState(false);
+  const [isAddAccountModalOpen, setIsAddAccountModalOpen] = useState(false);
+  const [newAccountForm, setNewAccountForm] = useState({
+    name: "",
+    email: "",
+    role: "Ventas",
+    color: "#163422",
+    signature: "",
+    isDefault: false,
+  });
+
+  const activeAccountObj = accounts.find(
+    (a) => a.email.toLowerCase() === selectedAccount.toLowerCase()
+  );
 
   // Navegación principal estilo Gmail
   const [activeTab, setActiveTab] = useState<
@@ -174,6 +200,7 @@ export function EmailCenterClient({
   const [isComposerOpen, setIsComposerOpen] = useState(false);
   const [isComposerMinimized, setIsComposerMinimized] = useState(false);
   const [composerForm, setComposerForm] = useState({
+    from: "",
     to: "",
     subject: "",
     bodyHtml: "",
@@ -212,15 +239,150 @@ export function EmailCenterClient({
   const [senderConfig, setSenderConfig] = useState(initialSettings.sender);
 
   // ---------------------------------------------------------------------------
-  // MANEJADORES DE CORREOS
+  // MANEJADORES DE CORREOS & CUENTAS CORPORATIVAS
   // ---------------------------------------------------------------------------
-  const refreshEmails = (folder: "inbox" | "sent" = activeTab === "sent" ? "sent" : "inbox", query = searchQuery) => {
+  const refreshEmails = (
+    folder: "inbox" | "sent" = activeTab === "sent" ? "sent" : "inbox",
+    query = searchQuery,
+    account = selectedAccount
+  ) => {
     startTransition(async () => {
-      const res = await getEmailsAction({ folder, search: query });
+      const res = await getEmailsAction({
+        folder,
+        search: query,
+        accountEmail: account !== "all" ? account : undefined,
+      });
       if (res.success && res.data) {
         setEmails(res.data);
         setTotalEmails(res.total || 0);
         if (res.unreadCount !== undefined) setUnreadCount(res.unreadCount);
+      }
+    });
+  };
+
+  const handleSelectAccount = (accountEmail: string) => {
+    setSelectedAccount(accountEmail);
+    setIsAccountDropdownOpen(false);
+    refreshEmails(activeTab === "sent" ? "sent" : "inbox", searchQuery, accountEmail);
+  };
+
+  const handleOpenComposer = () => {
+    let initialFrom = "";
+    if (selectedAccount !== "all") {
+      const matching = accounts.find((a) => a.email.toLowerCase() === selectedAccount.toLowerCase());
+      if (matching) {
+        initialFrom = `${matching.name} <${matching.email}>`;
+      }
+    }
+    if (!initialFrom) {
+      const def = accounts.find((a) => a.isDefault) || accounts[0];
+      if (def) {
+        initialFrom = `${def.name} <${def.email}>`;
+      }
+    }
+
+    setComposerForm((prev) => ({
+      ...prev,
+      from: initialFrom,
+    }));
+    setIsComposerOpen(true);
+    setIsComposerMinimized(false);
+  };
+
+  const handleCreateAccount = () => {
+    if (!newAccountForm.email.trim() || !newAccountForm.email.includes("@")) {
+      setFeedbackMsg({ type: "error", text: "Por favor ingresa un correo corporativo válido." });
+      return;
+    }
+    const cleanEmail = newAccountForm.email.trim().toLowerCase();
+    const existing = accounts.some((a) => a.email.toLowerCase() === cleanEmail);
+    if (existing) {
+      setFeedbackMsg({ type: "error", text: "Esta cuenta de correo ya se encuentra registrada." });
+      return;
+    }
+
+    const newAcc: ICorporateAccount = {
+      id: cleanEmail.split("@")[0] || `acc-${Date.now()}`,
+      email: cleanEmail,
+      name: newAccountForm.name.trim() || cleanEmail.split("@")[0],
+      role: newAccountForm.role.trim() || "Ventas",
+      color: newAccountForm.color || "#163422",
+      signature: newAccountForm.signature.trim(),
+      isDefault: newAccountForm.isDefault,
+    };
+
+    let updated = [...accounts];
+    if (newAcc.isDefault) {
+      updated = updated.map((a) => ({ ...a, isDefault: false }));
+    }
+    updated.push(newAcc);
+
+    startTransition(async () => {
+      const res = await saveCorporateAccountsAction(updated);
+      if (res.success) {
+        setAccounts(updated);
+        setSelectedAccount(cleanEmail);
+        setIsAddAccountModalOpen(false);
+        setNewAccountForm({
+          name: "",
+          email: "",
+          role: "Ventas",
+          color: "#163422",
+          signature: "",
+          isDefault: false,
+        });
+        setFeedbackMsg({
+          type: "success",
+          text: `✨ Cuenta ${cleanEmail} creada y seleccionada en el Webmail.`,
+        });
+        refreshEmails(activeTab === "sent" ? "sent" : "inbox", searchQuery, cleanEmail);
+      } else {
+        setFeedbackMsg({ type: "error", text: res.error || "Error al crear cuenta corporativa." });
+      }
+    });
+  };
+
+  const handleDeleteAccount = (accountEmail: string) => {
+    if (accounts.length <= 1) {
+      setFeedbackMsg({ type: "error", text: "Debes conservar al menos una cuenta corporativa activa." });
+      return;
+    }
+    const updated = accounts.filter((a) => a.email.toLowerCase() !== accountEmail.toLowerCase());
+    if (!updated.some((a) => a.isDefault)) {
+      updated[0].isDefault = true;
+    }
+
+    startTransition(async () => {
+      const res = await saveCorporateAccountsAction(updated);
+      if (res.success) {
+        setAccounts(updated);
+        if (selectedAccount.toLowerCase() === accountEmail.toLowerCase()) {
+          setSelectedAccount("all");
+          refreshEmails(activeTab === "sent" ? "sent" : "inbox", searchQuery, "all");
+        }
+        setFeedbackMsg({ type: "success", text: `Cuenta ${accountEmail} eliminada.` });
+      } else {
+        setFeedbackMsg({ type: "error", text: res.error || "Error al eliminar cuenta." });
+      }
+    });
+  };
+
+  const handleSetDefaultAccount = (accountEmail: string) => {
+    const updated = accounts.map((a) => ({
+      ...a,
+      isDefault: a.email.toLowerCase() === accountEmail.toLowerCase(),
+    }));
+
+    startTransition(async () => {
+      const res = await saveCorporateAccountsAction(updated);
+      if (res.success) {
+        setAccounts(updated);
+        setFeedbackMsg({
+          type: "success",
+          text: `Cuenta ${accountEmail} fijada como predeterminada.`,
+        });
+      } else {
+        setFeedbackMsg({ type: "error", text: res.error || "Error al actualizar cuenta predeterminada." });
       }
     });
   };
@@ -321,6 +483,7 @@ export function EmailCenterClient({
     startTransition(async () => {
       const res = await sendCustomEmailAction({
         to: composerForm.to,
+        from: composerForm.from || undefined,
         subject: composerForm.subject,
         bodyHtml: composerForm.bodyHtml,
         customerName: composerForm.customerName,
@@ -333,6 +496,7 @@ export function EmailCenterClient({
         setFeedbackMsg({ type: "success", text: res.message || "¡Correo enviado exitosamente!" });
         setIsComposerOpen(false);
         setComposerForm({
+          from: "",
           to: "",
           subject: "",
           bodyHtml: "",
@@ -341,7 +505,7 @@ export function EmailCenterClient({
           ctaText: "",
           ctaUrl: "",
         });
-        if (activeTab === "sent") refreshEmails("sent");
+        if (activeTab === "sent" || activeTab === "inbox") refreshEmails(activeTab);
       } else {
         setFeedbackMsg({ type: "error", text: res.error || "Error al enviar correo." });
       }
@@ -350,7 +514,29 @@ export function EmailCenterClient({
 
   const handleReplyToCurrentEmail = () => {
     if (!viewingEmail) return;
+
+    // Detectar cuenta correspondiente para responder desde el mismo buzón
+    let replyFrom = "";
+    if (viewingEmail.mailboxEmail) {
+      const matching = accounts.find((a) => a.email.toLowerCase() === viewingEmail.mailboxEmail.toLowerCase());
+      if (matching) replyFrom = `${matching.name} <${matching.email}>`;
+    }
+    if (!replyFrom && Array.isArray(viewingEmail.to)) {
+      for (const t of viewingEmail.to) {
+        const match = accounts.find((a) => a.email.toLowerCase() === t.toLowerCase());
+        if (match) {
+          replyFrom = `${match.name} <${match.email}>`;
+          break;
+        }
+      }
+    }
+    if (!replyFrom) {
+      const def = accounts.find((a) => a.isDefault) || accounts[0];
+      if (def) replyFrom = `${def.name} <${def.email}>`;
+    }
+
     setComposerForm({
+      from: replyFrom,
       to: viewingEmail.customerEmail || (Array.isArray(viewingEmail.to) ? viewingEmail.to[0] : viewingEmail.to) || viewingEmail.from,
       subject: viewingEmail.subject.startsWith("Re:") ? viewingEmail.subject : `Re: ${viewingEmail.subject}`,
       bodyHtml: `<br/><br/><blockquote style="border-left: 2px solid #C5A059; padding-left: 10px; color: #666; margin: 10px 0;">--- Mensaje original ---<br/>${viewingEmail.bodyHtml || ""}</blockquote>`,
@@ -549,11 +735,8 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
         {/* Botón Principal "+ Redactar" */}
         <div className="flex items-center gap-3 w-full md:w-auto">
           <button
-            onClick={() => {
-              setIsComposerOpen(true);
-              setIsComposerMinimized(false);
-            }}
-            className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-6 py-3 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all"
+            onClick={handleOpenComposer}
+            className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-6 py-3 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-lg hover:scale-105 active:scale-95 transition-all cursor-pointer"
           >
             <PenSquare size={16} />
             <span>Redactar</span>
@@ -564,7 +747,149 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
       {/* Contenedor Principal Estilo Gmail (Layout 2 Columnas) */}
       <div className="grid grid-cols-12 gap-6 mt-6">
         {/* Barra Lateral Izquierda (Tabs & Carpetas) */}
-        <div className="col-span-12 lg:col-span-3 space-y-2">
+        <div className="col-span-12 lg:col-span-3 space-y-3">
+          {/* SELECTOR DE CUENTAS CORPORATIVAS (ACCOUNT SWITCHER) */}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setIsAccountDropdownOpen(!isAccountDropdownOpen)}
+              className="w-full bg-white dark:bg-[#12131A] p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xs hover:border-[#C5A059] transition-all flex items-center justify-between text-left group cursor-pointer"
+            >
+              <div className="flex items-center gap-2.5 min-w-0">
+                {selectedAccount === "all" ? (
+                  <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#163422] to-[#1F452E] text-white flex items-center justify-center font-bold text-xs shadow-xs flex-shrink-0">
+                    <Globe size={18} className="text-[#E6C98B]" />
+                  </div>
+                ) : (
+                  <div
+                    className="w-9 h-9 rounded-xl text-white flex items-center justify-center font-serif font-black text-xs shadow-xs flex-shrink-0"
+                    style={{ backgroundColor: activeAccountObj?.color || "#163422" }}
+                  >
+                    {activeAccountObj?.name?.charAt(0)?.toUpperCase() || "B"}
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-bold text-xs text-stone-900 dark:text-white truncate block">
+                      {selectedAccount === "all" ? "Bandeja Unificada" : activeAccountObj?.name}
+                    </span>
+                    {activeAccountObj?.isDefault && selectedAccount !== "all" && (
+                      <span className="text-[9px] bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300 px-1.5 py-0.2 rounded font-bold">
+                        Default
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[11px] text-stone-400 dark:text-stone-500 truncate block">
+                    {selectedAccount === "all" ? "Todas las cuentas corporativas" : activeAccountObj?.email}
+                  </span>
+                </div>
+              </div>
+              <ChevronDown
+                size={16}
+                className={`text-stone-400 group-hover:text-stone-700 dark:group-hover:text-white transition-transform duration-200 flex-shrink-0 ml-1 ${
+                  isAccountDropdownOpen ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+
+            {/* Menu Dropdown Flotante */}
+            {isAccountDropdownOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setIsAccountDropdownOpen(false)}
+                />
+                <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-white dark:bg-[#181922] rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 py-2 divide-y divide-gray-100 dark:divide-gray-800 animate-in fade-in zoom-in-95 duration-150">
+                  <div className="px-3.5 py-1.5 text-[10px] uppercase font-black tracking-wider text-stone-400 dark:text-[#76C7B2]">
+                    Buzones Corporativos
+                  </div>
+
+                  <div className="py-1">
+                    {/* Opción 1: Bandeja Unificada */}
+                    <button
+                      type="button"
+                      onClick={() => handleSelectAccount("all")}
+                      className={`w-full px-3.5 py-2.5 flex items-center justify-between text-left hover:bg-stone-50 dark:hover:bg-gray-800/60 transition-colors cursor-pointer ${
+                        selectedAccount === "all" ? "bg-stone-100/90 dark:bg-gray-800/80 font-bold" : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-stone-800 text-white flex items-center justify-center text-xs flex-shrink-0">
+                          <Globe size={14} className="text-[#C5A059]" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-xs font-bold block text-stone-900 dark:text-white">
+                            Todas las Cuentas
+                          </span>
+                          <span className="text-[10px] text-stone-400 block truncate">
+                            Bandeja unificada global
+                          </span>
+                        </div>
+                      </div>
+                      {unreadCount > 0 && (
+                        <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Cuentas configuradas */}
+                  <div className="py-1 max-h-56 overflow-y-auto">
+                    {accounts.map((acc) => (
+                      <button
+                        key={acc.id || acc.email}
+                        type="button"
+                        onClick={() => handleSelectAccount(acc.email)}
+                        className={`w-full px-3.5 py-2.5 flex items-center justify-between text-left hover:bg-stone-50 dark:hover:bg-gray-800/60 transition-colors cursor-pointer ${
+                          selectedAccount.toLowerCase() === acc.email.toLowerCase()
+                            ? "bg-stone-100/90 dark:bg-gray-800/80 font-bold"
+                            : ""
+                        }`}
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div
+                            className="w-7 h-7 rounded-lg text-white flex items-center justify-center font-bold text-xs flex-shrink-0"
+                            style={{ backgroundColor: acc.color || "#163422" }}
+                          >
+                            {acc.name?.charAt(0)?.toUpperCase()}
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-xs font-bold block text-stone-900 dark:text-white truncate">
+                              {acc.name}
+                            </span>
+                            <span className="text-[10px] text-stone-400 block truncate font-mono">
+                              {acc.email}
+                            </span>
+                          </div>
+                        </div>
+                        {acc.unreadCount && acc.unreadCount > 0 ? (
+                          <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-[#C5A059] text-stone-950">
+                            {acc.unreadCount}
+                          </span>
+                        ) : null}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Botón rápido para agregar cuenta */}
+                  <div className="p-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAccountDropdownOpen(false);
+                        setIsAddAccountModalOpen(true);
+                      }}
+                      className="w-full py-2 px-3 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-800 dark:text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      <Plus size={14} />
+                      <span>+ Crear Nueva Cuenta</span>
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
           <div className="bg-white dark:bg-[#12131A] p-3 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-xs space-y-1">
             <button
               onClick={() => handleSelectTab("inbox")}
@@ -1377,10 +1702,98 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
                 <button
                   onClick={handleSaveSenderConfig}
                   disabled={isPending}
-                  className="px-6 py-2.5 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 rounded-xl font-bold transition-all"
+                  className="px-6 py-2.5 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 rounded-xl font-bold transition-all cursor-pointer"
                 >
                   Guardar Ajustes
                 </button>
+              </div>
+
+              {/* GESTOR MULTI-MAILBOX: CUENTAS CORPORATIVAS */}
+              <div className="pt-6 border-t border-gray-200 dark:border-gray-800 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <h4 className="font-bold text-sm text-[#163422] dark:text-[#E6F7F0] flex items-center gap-2">
+                      <AtSign size={16} className="text-[#C5A059]" />
+                      Buzones & Cuentas Corporativas ({accounts.length})
+                    </h4>
+                    <p className="text-xs text-stone-500">
+                      Administra todas las cuentas desde las que puedes recibir y emitir correos oficiales en Houston.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddAccountModalOpen(true)}
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-[#163422] text-white dark:bg-[#5EEAD4] dark:text-stone-950 rounded-xl text-xs font-bold hover:opacity-90 transition-all shadow-xs cursor-pointer self-start sm:self-auto"
+                  >
+                    <Plus size={14} />
+                    <span>Añadir Nueva Cuenta</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
+                  {accounts.map((acc) => (
+                    <div
+                      key={acc.id || acc.email}
+                      className="p-4 rounded-2xl border border-gray-200 dark:border-gray-800 bg-stone-50/70 dark:bg-stone-900/50 space-y-3 relative group shadow-xs hover:border-[#C5A059]/50 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <div
+                            className="w-9 h-9 rounded-xl text-white flex items-center justify-center font-serif font-black text-xs shadow-xs flex-shrink-0"
+                            style={{ backgroundColor: acc.color || "#163422" }}
+                          >
+                            {acc.name?.charAt(0)?.toUpperCase()}
+                          </div>
+                          <div className="min-w-0">
+                            <span className="font-bold text-xs text-stone-900 dark:text-white block truncate">
+                              {acc.name}
+                            </span>
+                            <span className="text-[11px] text-stone-500 dark:text-stone-400 font-mono block truncate">
+                              {acc.email}
+                            </span>
+                          </div>
+                        </div>
+
+                        {acc.isDefault ? (
+                          <span className="text-[9px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 px-2 py-0.5 rounded-full font-bold flex-shrink-0">
+                            Default
+                          </span>
+                        ) : null}
+                      </div>
+
+                      {acc.signature && (
+                        <p className="text-[10px] text-stone-500 dark:text-stone-400 italic line-clamp-2 bg-white/60 dark:bg-black/20 p-2 rounded-lg">
+                          Firma: &ldquo;{acc.signature}&rdquo;
+                        </p>
+                      )}
+
+                      <div className="text-[11px] text-stone-500 flex justify-between items-center pt-2 border-t border-gray-100 dark:border-gray-800">
+                        <span className="font-medium text-stone-400 text-[10px]">Rol: {acc.role}</span>
+                        <div className="flex items-center gap-2">
+                          {!acc.isDefault && (
+                            <button
+                              type="button"
+                              onClick={() => handleSetDefaultAccount(acc.email)}
+                              className="text-[10px] text-[#163422] dark:text-[#5EEAD4] hover:underline font-bold cursor-pointer"
+                            >
+                              Hacer Default
+                            </button>
+                          )}
+                          {accounts.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteAccount(acc.email)}
+                              className="text-red-500 hover:text-red-700 p-1 cursor-pointer"
+                              title="Eliminar cuenta"
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -1431,6 +1844,22 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
                 </select>
               </div>
 
+              {/* Selector de Remitente "De:" */}
+              <div className="flex items-center gap-2 pb-2 border-b border-gray-100 dark:border-gray-800">
+                <span className="text-[10px] uppercase font-bold text-stone-400 w-8 flex-shrink-0">De:</span>
+                <select
+                  value={composerForm.from}
+                  onChange={(e) => setComposerForm({ ...composerForm, from: e.target.value })}
+                  className="flex-1 p-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs bg-stone-50 dark:bg-stone-900 font-bold text-[#163422] dark:text-[#5EEAD4]"
+                >
+                  {accounts.map((acc) => (
+                    <option key={acc.id || acc.email} value={`${acc.name} <${acc.email}>`}>
+                      {acc.name} ({acc.email}) • {acc.role}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Destinatario y Asunto */}
               <div className="space-y-2">
                 <input
@@ -1463,7 +1892,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
                 <button
                   onClick={handleSendCustomEmail}
                   disabled={isPending}
-                  className="inline-flex items-center gap-2 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-6 py-2.5 rounded-full text-xs font-bold shadow-md active:scale-95 transition-all"
+                  className="inline-flex items-center gap-2 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 px-6 py-2.5 rounded-full text-xs font-bold shadow-md active:scale-95 transition-all cursor-pointer"
                 >
                   {isPending ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
                   <span>Enviar</span>
@@ -1475,6 +1904,135 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* MODAL PARA AGREGAR NUEVA CUENTA CORPORATIVA */}
+      {isAddAccountModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-[#181922] w-full max-w-md rounded-3xl border border-gray-200 dark:border-gray-700 shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-[#163422] text-white flex items-center justify-center">
+                  <AtSign size={16} className="text-[#C5A059]" />
+                </div>
+                <h3 className="font-bold text-sm text-stone-900 dark:text-white">
+                  Nueva Cuenta de Correo
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddAccountModalOpen(false)}
+                className="text-stone-400 hover:text-stone-700 dark:hover:text-white cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="font-bold text-stone-700 dark:text-stone-300 block mb-1">
+                  Correo Electrónico Corporativo:
+                </label>
+                <input
+                  type="email"
+                  value={newAccountForm.email}
+                  onChange={(e) => setNewAccountForm({ ...newAccountForm, email: e.target.value.toLowerCase() })}
+                  placeholder="ej: sales@bonbonflowershouston.com"
+                  className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-stone-50 dark:bg-stone-900 font-mono text-stone-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-stone-700 dark:text-stone-300 block mb-1">
+                  Nombre Visible del Remitente:
+                </label>
+                <input
+                  type="text"
+                  value={newAccountForm.name}
+                  onChange={(e) => setNewAccountForm({ ...newAccountForm, name: e.target.value })}
+                  placeholder="ej: Ventas & Pedidos VIP"
+                  className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-stone-50 dark:bg-stone-900 font-medium text-stone-900 dark:text-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="font-bold text-stone-700 dark:text-stone-300 block mb-1">
+                    Rol o Departamento:
+                  </label>
+                  <input
+                    type="text"
+                    value={newAccountForm.role}
+                    onChange={(e) => setNewAccountForm({ ...newAccountForm, role: e.target.value })}
+                    placeholder="ej: Ventas, Soporte, CEO"
+                    className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-stone-700 dark:text-stone-300 block mb-1">
+                    Color Distintivo:
+                  </label>
+                  <div className="flex items-center gap-1.5 pt-1">
+                    {["#163422", "#C5A059", "#0F1210", "#2563EB", "#8B5CF6", "#FF97A4", "#0D9488"].map((c) => (
+                      <button
+                        key={c}
+                        type="button"
+                        onClick={() => setNewAccountForm({ ...newAccountForm, color: c })}
+                        className={`w-6 h-6 rounded-full transition-transform cursor-pointer ${
+                          newAccountForm.color === c ? "scale-125 ring-2 ring-offset-2 ring-stone-900 dark:ring-white" : "hover:scale-110"
+                        }`}
+                        style={{ backgroundColor: c }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="font-bold text-stone-700 dark:text-stone-300 block mb-1">
+                  Firma al Pie del Correo (Opcional):
+                </label>
+                <input
+                  type="text"
+                  value={newAccountForm.signature}
+                  onChange={(e) => setNewAccountForm({ ...newAccountForm, signature: e.target.value })}
+                  placeholder="ej: Equipo de Ventas VIP • Bonbon Flowers Houston"
+                  className="w-full p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-stone-50 dark:bg-stone-900 text-stone-900 dark:text-white"
+                />
+              </div>
+
+              <label className="flex items-center gap-2 pt-1 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={newAccountForm.isDefault}
+                  onChange={(e) => setNewAccountForm({ ...newAccountForm, isDefault: e.target.checked })}
+                  className="w-4 h-4 rounded text-[#163422]"
+                />
+                <span className="font-medium text-stone-600 dark:text-stone-300">
+                  Establecer como cuenta predeterminada para envíos
+                </span>
+              </label>
+
+              <div className="flex gap-2 pt-3 border-t border-gray-100 dark:border-gray-800">
+                <button
+                  type="button"
+                  onClick={() => setIsAddAccountModalOpen(false)}
+                  className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 font-bold hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleCreateAccount}
+                  disabled={isPending}
+                  className="flex-1 py-2.5 rounded-xl bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+                >
+                  Crear Cuenta
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
