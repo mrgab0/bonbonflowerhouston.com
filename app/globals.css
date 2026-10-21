@@ -262,7 +262,7 @@ html.dark h6:not(.preserve-color) {
 }
 
 /* Tipografía script cursiva ("feel loved ♡") */
-html.dark .font-script-custom {
+html.dark .font-script-custom:not(.preserve-color) {
   color: #5EEAD4 !important;
   text-shadow: 0 0 24px rgba(94, 234, 212, 0.4);
 }

@@ -35,7 +35,9 @@ export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
           </div>
           <div className="flex items-center space-x-2">
             <Clock className="w-4 h-4 text-stone-900 shrink-0" />
-            <span className="tracking-[0.18em] sm:tracking-[0.22em]">ORDER BEFORE 1 PM FOR SAME-DAY DELIVERY</span>
+            <span className="font-script-custom preserve-color text-stone-900 dark:text-stone-900 text-sm sm:text-base normal-case tracking-normal italic font-normal">
+              Order before 1 PM for same-day delivery
+            </span>
           </div>
           <div className="flex items-center space-x-2">
             <MapPin className="w-4 h-4 text-stone-900 shrink-0" />
