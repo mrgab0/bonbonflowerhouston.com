@@ -28,6 +28,11 @@ export interface IThemeConfig {
   footerText?: string;
   footerAccent?: string;
   pageBg?: string;
+  cardBg?: string;
+  cardBorder?: string;
+  priceColor?: string;
+  badgeBg?: string;
+  badgeText?: string;
 }
 
 export interface ISiteConfig extends Document {
@@ -296,6 +301,11 @@ const SiteConfigSchema: Schema = new Schema({
     footerText: { type: String, default: "#1c1917" },
     footerAccent: { type: String, default: "#163422" },
     pageBg: { type: String, default: "#FDFBF7" },
+    cardBg: { type: String, default: "#ffffff" },
+    cardBorder: { type: String, default: "#f3f4f6" },
+    priceColor: { type: String, default: "#163422" },
+    badgeBg: { type: String, default: "#FF97A4" },
+    badgeText: { type: String, default: "#ffffff" },
   },
 
   updatedAt: { type: Date, default: Date.now }

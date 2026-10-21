@@ -22,6 +22,11 @@ export const DEFAULT_THEME_CONFIG: IThemeConfig = {
   footerText: "#1c1917",
   footerAccent: "#163422",
   pageBg: "#FDFBF7",
+  cardBg: "#ffffff",
+  cardBorder: "#f3f4f6",
+  priceColor: "#163422",
+  badgeBg: "#FF97A4",
+  badgeText: "#ffffff",
 };
 
 export const THEME_PRESETS: Array<{
@@ -63,6 +68,11 @@ export const THEME_PRESETS: Array<{
       footerText: "#E6F7F0",
       footerAccent: "#5EEAD4",
       pageBg: "#0B0C10",
+      cardBg: "#12131A",
+      cardBorder: "rgba(94, 234, 212, 0.18)",
+      priceColor: "#5EEAD4",
+      badgeBg: "#5EEAD4",
+      badgeText: "#0B0C10",
     },
   },
   {
@@ -88,6 +98,11 @@ export const THEME_PRESETS: Array<{
       footerText: "#2B0002",
       footerAccent: "#2B0002",
       pageBg: "#FFFDFD",
+      cardBg: "#FFFFFF",
+      cardBorder: "#FFE4E6",
+      priceColor: "#2B0002",
+      badgeBg: "#FF97A4",
+      badgeText: "#FFFFFF",
     },
   },
   {
@@ -113,6 +128,11 @@ export const THEME_PRESETS: Array<{
       footerText: "#1A1C1C",
       footerAccent: "#C5A059",
       pageBg: "#FAFAF9",
+      cardBg: "#FFFFFF",
+      cardBorder: "#E5E7EB",
+      priceColor: "#1A1C1C",
+      badgeBg: "#E6C98B",
+      badgeText: "#1A1A1A",
     },
   },
   {
@@ -138,6 +158,11 @@ export const THEME_PRESETS: Array<{
       footerText: "#FFFFFF",
       footerAccent: "#E6C98B",
       pageBg: "#0F1210",
+      cardBg: "#181922",
+      cardBorder: "#2A2B36",
+      priceColor: "#E6C98B",
+      badgeBg: "#C5A059",
+      badgeText: "#0F1210",
     },
   },
 ];

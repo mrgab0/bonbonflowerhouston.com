@@ -36,7 +36,7 @@ export function ThemeEditorClient({ initialTheme }: ThemeEditorClientProps) {
     ...DEFAULT_THEME_CONFIG,
     ...initialTheme,
   });
-  const [activeTab, setActiveTab] = useState<"general" | "header" | "buttons" | "typography" | "footer">("general");
+  const [activeTab, setActiveTab] = useState<"general" | "header" | "buttons" | "cards" | "typography" | "footer">("general");
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "mobile">("desktop");
   const [isPending, startTransition] = useTransition();
   const [saveStatus, setSaveStatus] = useState<{ type: "success" | "error" | null; message: string }>({
@@ -111,6 +111,17 @@ export function ThemeEditorClient({ initialTheme }: ThemeEditorClientProps) {
 
         {/* Acciones principales de guardado */}
         <div className="flex items-center gap-3 self-start md:self-auto flex-wrap">
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 text-stone-700 dark:text-stone-300 hover:bg-stone-50 dark:hover:bg-stone-800 text-xs font-bold transition-all shadow-sm active:scale-95"
+            title="Abrir la tienda en una pestaña nueva"
+          >
+            <ExternalLink size={14} />
+            <span>Ver Tienda en Vivo</span>
+          </a>
+
           <button
             type="button"
             onClick={handleReset}
@@ -276,6 +287,17 @@ export function ThemeEditorClient({ initialTheme }: ThemeEditorClientProps) {
             </button>
             <button
               type="button"
+              onClick={() => setActiveTab("cards")}
+              className={`px-3 py-2 rounded-xl transition-all whitespace-nowrap ${
+                activeTab === "cards"
+                  ? "bg-white dark:bg-stone-900 text-stone-900 dark:text-white shadow-xs"
+                  : "text-stone-600 dark:text-stone-400 hover:text-stone-900"
+              }`}
+            >
+              Tarjetas &amp; Productos
+            </button>
+            <button
+              type="button"
               onClick={() => setActiveTab("typography")}
               className={`px-3 py-2 rounded-xl transition-all whitespace-nowrap ${
                 activeTab === "typography"
@@ -432,6 +454,66 @@ export function ThemeEditorClient({ initialTheme }: ThemeEditorClientProps) {
                       help="Bordes, estrellas, insignias de prestigio"
                       value={theme.accentColor || "#C5A059"}
                       onChange={(val) => handleColorChange("accentColor", val)}
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* PESTAÑA: TARJETAS & PRODUCTOS */}
+            {activeTab === "cards" && (
+              <div className="space-y-4">
+                <div className="border-b border-stone-100 dark:border-stone-800 pb-3">
+                  <h3 className="text-sm font-black text-stone-900 dark:text-white">
+                    Tarjetas de Producto &amp; Catálogo
+                  </h3>
+                  <p className="text-[11px] text-stone-500">
+                    Personaliza los fondos de tarjeta, bordes, colores de precios e insignias destacadas de la tienda.
+                  </p>
+                </div>
+
+                <ColorPickerRow
+                  label="Fondo de la Tarjeta de Producto"
+                  help="Color de la tarjeta donde se muestra el arreglo floral"
+                  value={theme.cardBg || "#ffffff"}
+                  onChange={(val) => handleColorChange("cardBg", val)}
+                />
+
+                <ColorPickerRow
+                  label="Borde de la Tarjeta"
+                  help="Línea perimetral de la tarjeta"
+                  value={theme.cardBorder || "#f3f4f6"}
+                  onChange={(val) => handleColorChange("cardBorder", val)}
+                />
+
+                <ColorPickerRow
+                  label="Color del Precio ($ USD)"
+                  help="Precio en números y cifras destacadas"
+                  value={theme.priceColor || "#163422"}
+                  onChange={(val) => handleColorChange("priceColor", val)}
+                />
+
+                <div className="border-t border-stone-100 dark:border-stone-800 pt-3">
+                  <h3 className="text-sm font-black text-stone-900 dark:text-white mb-1">
+                    Insignia de Producto (Badge / Bestseller)
+                  </h3>
+                  <p className="text-[11px] text-stone-500 mb-3">
+                    Etiquetas como "Bestseller Houston", "Popular", o "Nuevo".
+                  </p>
+
+                  <div className="space-y-3">
+                    <ColorPickerRow
+                      label="Fondo de la Insignia"
+                      help="Fondo del chip en la esquina superior de la foto"
+                      value={theme.badgeBg || "#FF97A4"}
+                      onChange={(val) => handleColorChange("badgeBg", val)}
+                    />
+
+                    <ColorPickerRow
+                      label="Texto de la Insignia"
+                      help="Texto dentro del chip destacado"
+                      value={theme.badgeText || "#ffffff"}
+                      onChange={(val) => handleColorChange("badgeText", val)}
                     />
                   </div>
                 </div>
@@ -660,19 +742,25 @@ export function ThemeEditorClient({ initialTheme }: ThemeEditorClientProps) {
               </div>
 
               {/* Tarjeta de Producto de Muestra */}
-              <div className="max-w-sm mx-auto bg-white dark:bg-stone-900 rounded-2xl overflow-hidden border border-stone-200 dark:border-stone-800 shadow-md">
+              <div
+                className="max-w-sm mx-auto rounded-2xl overflow-hidden border shadow-md transition-colors"
+                style={{
+                  backgroundColor: theme.cardBg || "#ffffff",
+                  borderColor: theme.cardBorder || "#f3f4f6",
+                }}
+              >
                 <div className="relative aspect-[4/3] bg-stone-100">
                   <img
                     src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=800&auto=format&fit=crop&q=80"
                     alt="Ramo Buchón 100 Rosas"
                     className="w-full h-full object-cover"
                   />
-                  {/* Badge Secundario Rosa */}
+                  {/* Badge Bestseller / Insignia de Producto */}
                   <span
                     className="absolute top-2.5 left-2.5 text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm"
                     style={{
-                      backgroundColor: theme.buttonSecondaryBg || "#FF97A4",
-                      color: theme.buttonSecondaryText || "#ffffff",
+                      backgroundColor: theme.badgeBg || theme.buttonSecondaryBg || "#FF97A4",
+                      color: theme.badgeText || theme.buttonSecondaryText || "#ffffff",
                     }}
                   >
                     Bestseller Houston
@@ -704,7 +792,7 @@ export function ThemeEditorClient({ initialTheme }: ThemeEditorClientProps) {
                     </div>
                     <span
                       className="text-sm font-black font-serif"
-                      style={{ color: theme.headingColor || "#163422" }}
+                      style={{ color: theme.priceColor || theme.headingColor || "#163422" }}
                     >
                       $290.00
                     </span>

@@ -111,6 +111,37 @@ export default async function RootLayout({
                 --theme-footer-text: ${theme.footerText || "#1c1917"};
                 --theme-footer-accent: ${theme.footerAccent || "#163422"};
                 --theme-page-bg: ${theme.pageBg || "#FDFBF7"};
+                --theme-card-bg: ${theme.cardBg || "#ffffff"};
+                --theme-card-border: ${theme.cardBorder || "#f3f4f6"};
+                --theme-price-color: ${theme.priceColor || "#163422"};
+                --theme-badge-bg: ${theme.badgeBg || "#FF97A4"};
+                --theme-badge-text: ${theme.badgeText || "#ffffff"};
+              }
+
+              /* Tipografía Cursiva en Home y Hero */
+              .font-script-custom:not(.preserve-color) {
+                color: var(--theme-script, #163422) !important;
+              }
+
+              /* Botones Primarios de Conversión */
+              .theme-btn-primary,
+              button.bg-\\[\\#163422\\],
+              a.bg-\\[\\#163422\\] {
+                background-color: var(--theme-btn-primary-bg, #163422) !important;
+                color: var(--theme-btn-primary-text, #ffffff) !important;
+              }
+              button.bg-\\[\\#163422\\]:hover,
+              a.bg-\\[\\#163422\\]:hover {
+                background-color: var(--theme-btn-primary-hover, #1F452E) !important;
+              }
+
+              /* Botones e Insignias Secundarias */
+              .theme-btn-secondary,
+              button.bg-\\[\\#FF97A4\\],
+              a.bg-\\[\\#FF97A4\\],
+              span.bg-\\[\\#FF97A4\\] {
+                background-color: var(--theme-btn-secondary-bg, #FF97A4) !important;
+                color: var(--theme-btn-secondary-text, #ffffff) !important;
               }
             `,
           }}
