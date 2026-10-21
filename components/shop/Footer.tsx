@@ -23,7 +23,13 @@ export function Footer({ siteConfig }: FooterProps) {
   const facebookUrl = siteConfig?.facebookUrl || "https://www.facebook.com/bonbon.flowers.2025";
 
   return (
-    <footer className="bg-white dark:bg-[#0B0C10] text-stone-900 dark:text-[#B9E6D3] pt-14 pb-8 border-t border-stone-200 dark:border-stone-800 text-xs transition-colors duration-300 select-none">
+    <footer
+      className="pt-14 pb-8 border-t border-stone-200 dark:border-stone-800 text-xs transition-colors duration-300 select-none"
+      style={{
+        backgroundColor: "var(--theme-footer-bg, #ffffff)",
+        color: "var(--theme-footer-text, #1c1917)",
+      }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Fila Principal: Horarios y Suscripción al Newsletter */}
@@ -37,23 +43,32 @@ export function Footer({ siteConfig }: FooterProps) {
                 alt="Bonbon Flowers Logo"
                 className="w-8 h-8 rounded-full object-cover border border-[#C5A059] dark:border-[#5EEAD4]/40"
               />
-              <h3 className="font-black text-stone-900 dark:text-[#E6F7F0] text-xs uppercase tracking-wider font-serif">
+              <h3
+                className="font-black text-xs uppercase tracking-wider font-serif"
+                style={{ color: "var(--theme-footer-accent, var(--theme-heading, #163422))" }}
+              >
                 Hours of operation
               </h3>
             </div>
-            <p className="text-stone-600 dark:text-[#B9E6D3] leading-relaxed text-xs font-medium">
+            <p className="opacity-80 leading-relaxed text-xs font-medium">
               Monday to Friday: 9 AM - 6 PM<br />
               Saturday: 10 AM - 3 PM<br />
               Sunday: Special event &amp; advance orders delivery
             </p>
-            <p className="mt-3 text-[11px] text-[#163422] dark:text-[#5EEAD4] font-bold tracking-wide">
+            <p
+              className="mt-3 text-[11px] font-bold tracking-wide"
+              style={{ color: "var(--theme-footer-accent, var(--theme-accent, #163422))" }}
+            >
               Houston, TX &amp; Metro Area • Same Day Delivery Available
             </p>
           </div>
 
           {/* Formulario de Suscripción */}
           <div>
-            <h3 className="font-black text-stone-900 dark:text-[#E6F7F0] text-xs uppercase tracking-wider mb-3 font-serif">
+            <h3
+              className="font-black text-xs uppercase tracking-wider mb-3 font-serif"
+              style={{ color: "var(--theme-footer-accent, var(--theme-heading, #163422))" }}
+            >
               Subscribe to our emails
             </h3>
             <p className="text-stone-600 dark:text-[#B9E6D3] text-xs mb-3 font-medium">

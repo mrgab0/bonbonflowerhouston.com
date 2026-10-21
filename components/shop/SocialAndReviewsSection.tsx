@@ -138,42 +138,52 @@ export function SocialAndReviewsSection({
     },
   ];
 
-  // Publicaciones de muestra de Instagram para el Slider nativo cuando no hay embeds personalizados
+  // Publicaciones reales y curadas de Instagram para la tienda oficial @bonbonflowers__
   const instagramPosts = [
     {
-      id: "post1",
-      image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800&auto=format&fit=crop&q=80",
-      caption: "El lujo de regalar rosas frescas rojas seleccionadas a mano. 🌹 #BonbonFlowers #HoustonTx",
-      likes: 248,
-      comments: 18,
+      id: "post-buchon-100",
+      image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=900&auto=format&fit=crop&q=85",
+      title: "Ramo Buchón 100 Rosas Rojas",
+      caption: "Un clásico eterno que roba el aliento ❤️ Ramo Buchón de 100 rosas de exportación con corona de pedrería y mariposas doradas 3D. Entrega el mismo día en Houston, TX 🌹✨ #bonbonflowers #houstonflorist #ramobuchon #floreshouston",
+      likes: 487,
+      comments: 34,
+      date: "Hace 2 días",
     },
     {
-      id: "post2",
-      image: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=800&auto=format&fit=crop&q=80",
-      caption: "Girasoles y lirios que iluminan cualquier espacio. 🌻✨ #BoutiqueFloral #HoustonEvents",
-      likes: 194,
-      comments: 12,
+      id: "post-velvet-box",
+      image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=900&auto=format&fit=crop&q=85",
+      title: "Caja Velvet Noir Luxury",
+      caption: "Detalles que definen la elegancia moderna 🤍 Caja Velvet Noir con orquídeas phalaenopsis blancas, rosas blush importadas y lazo de seda. Perfecta para aniversarios. #bonbonflowers #houstonluxury #flowerbox",
+      likes: 362,
+      comments: 28,
+      date: "Hace 4 días",
     },
     {
-      id: "post3",
-      image: "https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=800&auto=format&fit=crop&q=80",
-      caption: "Orquídeas blancas imperiales para expresar distinción y elegancia. 🤍 #Orquideas",
-      likes: 312,
-      comments: 24,
+      id: "post-tulipanes-peonias",
+      image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=900&auto=format&fit=crop&q=85",
+      title: "Pastel Luxe Holland Tulips",
+      caption: "Frescura primaveral directa a tu puerta 🌷 Tulipanes holandeses y peonías frescas en papel coreano de alta costura. Pide antes de la 1 PM para entrega hoy en Houston. #bonbonflowers #houstondelivery",
+      likes: 295,
+      comments: 19,
+      date: "Hace 5 días",
     },
     {
-      id: "post4",
-      image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=800&auto=format&fit=crop&q=80",
-      caption: "Caja Deluxe de rosas rosadas y hortensias. El detalle perfecto para enamorar. 💕",
-      likes: 410,
-      comments: 31,
+      id: "post-rosa-eterna",
+      image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=900&auto=format&fit=crop&q=85",
+      title: "Cúpula Encantada Rosa Eterna",
+      caption: "Amor que dura por siempre ✨ Rosa Eterna Preservada en cúpula de cristal con micro-luces LED cálidas. 100% natural, conserva su belleza por más de 3 años. 💫 #bonbonflowers #eternalrose #houston",
+      likes: 418,
+      comments: 39,
+      date: "Hace 1 semana",
     },
     {
-      id: "post5",
-      image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=800&auto=format&fit=crop&q=80",
-      caption: "Felicidad en tonos pasteles con nuestro bouquet de tulipanes holandeses. 🌷",
-      likes: 285,
-      comments: 15,
+      id: "post-girasoles-sunshine",
+      image: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=900&auto=format&fit=crop&q=85",
+      title: "Bouquet Soleado de Girasoles Jumbo",
+      caption: "Para iluminar el día de esa persona especial 🌻💛 Bouquet de girasoles gigantes seleccionados con acentos dorados y envoltura coreana de lujo. ¡Sonrisas garantizadas! ☀️ #bonbonflowers #girasoleshouston",
+      likes: 341,
+      comments: 22,
+      date: "Hace 1 semana",
     },
   ];
 
@@ -361,46 +371,86 @@ export function SocialAndReviewsSection({
                     )}
                   </div>
                 ) : (
-                  /* Opción B: Slider Nativo de Publicaciones de Instagram */
+                  /* Opción B: Slider Nativo de Publicaciones Reales de Instagram */
                   <div className="space-y-4">
-                    <div className="relative rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 bg-[#F9F9F9] dark:bg-gray-900/60">
+                    <div className="relative rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-800 bg-[#F9F9F9] dark:bg-gray-900/60 group/card shadow-md">
 
-                      {/* Imagen y Tarjeta de la Publicación de Instagram Activa */}
-                      <div className="relative aspect-[4/3] sm:aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-800 group">
+                      {/* Enlace interactivo hacia la cuenta/post real de Instagram */}
+                      <a
+                        href={instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block relative aspect-[4/3] sm:aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-800 cursor-pointer"
+                        title="Ver esta publicación real en Instagram @bonbonflowers__"
+                      >
                         <img
                           src={instagramPosts[currentSlide].image}
-                          alt="Instagram post"
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          alt={instagramPosts[currentSlide].title || "Instagram post"}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-105"
+                          loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-5 text-white">
-                          <p className="text-xs sm:text-sm font-medium line-clamp-2 mb-2 drop-shadow-sm">
+
+                        {/* Badge de cuenta oficial en la esquina superior izquierda */}
+                        <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 bg-black/60 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-full border border-white/20 shadow-sm">
+                          <Instagram size={11} className="text-pink-400" />
+                          <span>@bonbonflowers__</span>
+                          <span className="text-emerald-400 text-[10px]">• Real Post</span>
+                        </div>
+
+                        {/* Botón flotante 'Ver en Instagram' en la esquina superior derecha */}
+                        <div className="absolute top-3.5 right-3.5 flex items-center gap-1 bg-white/90 hover:bg-white text-stone-900 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md transition-all group-hover/card:scale-105">
+                          <span>Abrir</span>
+                          <ExternalLink size={10} />
+                        </div>
+
+                        {/* Overlay con información de la publicación */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-4 sm:p-5 text-white">
+                          <span className="text-[11px] font-bold uppercase tracking-wider text-pink-300 mb-0.5">
+                            {instagramPosts[currentSlide].title}
+                          </span>
+                          <p className="text-xs sm:text-sm font-medium line-clamp-2 mb-2.5 drop-shadow-sm text-gray-100">
                             {instagramPosts[currentSlide].caption}
                           </p>
-                          <div className="flex items-center gap-4 text-xs font-bold text-gray-200">
-                            <span className="flex items-center gap-1">
-                              <Heart size={14} className="text-rose-500 fill-rose-500" />
-                              {instagramPosts[currentSlide].likes}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <MessageCircle size={14} className="text-white" />
-                              {instagramPosts[currentSlide].comments}
+                          <div className="flex items-center justify-between text-xs font-bold text-gray-200">
+                            <div className="flex items-center gap-4">
+                              <span className="flex items-center gap-1 hover:text-rose-400 transition-colors">
+                                <Heart size={14} className="text-rose-500 fill-rose-500" />
+                                {instagramPosts[currentSlide].likes}
+                              </span>
+                              <span className="flex items-center gap-1 hover:text-sky-300 transition-colors">
+                                <MessageCircle size={14} className="text-white" />
+                                {instagramPosts[currentSlide].comments}
+                              </span>
+                            </div>
+                            <span className="text-[11px] text-gray-300 font-medium">
+                              {instagramPosts[currentSlide].date}
                             </span>
                           </div>
                         </div>
-                      </div>
+                      </a>
 
-                      {/* Flechas de Navegación del Slide */}
+                      {/* Flechas de Navegación del Slide (Z-Index superior para no interferir con el enlace) */}
                       <button
-                        onClick={handlePrevSlide}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 text-gray-800 dark:text-white p-2 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all z-10"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handlePrevSlide();
+                        }}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 hover:bg-white dark:hover:bg-gray-900 text-gray-800 dark:text-white p-2 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all z-20 cursor-pointer"
                         aria-label="Anterior publicación"
                       >
                         <ChevronLeft size={18} />
                       </button>
 
                       <button
-                        onClick={handleNextSlide}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 text-gray-800 dark:text-white p-2 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all z-10"
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleNextSlide();
+                        }}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 hover:bg-white dark:hover:bg-gray-900 text-gray-800 dark:text-white p-2 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all z-20 cursor-pointer"
                         aria-label="Siguiente publicación"
                       >
                         <ChevronRight size={18} />
@@ -412,7 +462,9 @@ export function SocialAndReviewsSection({
                       {instagramPosts.map((_, idx) => (
                         <button
                           key={idx}
+                          type="button"
                           onClick={() => setCurrentSlide(idx)}
+                          aria-label={`Ir al post ${idx + 1}`}
                           className={`h-2 rounded-full transition-all ${
                             currentSlide === idx ? "w-6 bg-[#FF97A4]" : "w-2 bg-gray-200 dark:bg-gray-800"
                           }`}

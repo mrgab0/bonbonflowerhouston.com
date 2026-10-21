@@ -63,6 +63,11 @@ export const ADMIN_NAV_ITEMS = [
     icon: "✉️",
   },
   {
+    href: "/admin/tema",
+    label: "Editor de Tema",
+    icon: "🎨",
+  },
+  {
     href: "/admin/qr",
     label: "Códigos QR",
     icon: "📱",

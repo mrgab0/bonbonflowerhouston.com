@@ -468,3 +468,16 @@ html:not(.dark) textarea::placeholder {
   transform: scale(0.975);
 }
 
+/* Utilidades del tema dinámico */
+.theme-btn-primary {
+  background-color: var(--theme-btn-primary-bg, #163422);
+  color: var(--theme-btn-primary-text, #ffffff);
+}
+.theme-btn-primary:hover {
+  background-color: var(--theme-btn-primary-hover, #1F452E);
+}
+.theme-btn-secondary {
+  background-color: var(--theme-btn-secondary-bg, #FF97A4);
+  color: var(--theme-btn-secondary-text, #ffffff);
+}
+

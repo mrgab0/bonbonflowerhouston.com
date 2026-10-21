@@ -8,6 +8,7 @@ import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
 import Script from "next/script";
 import dynamic from "next/dynamic";
+import { getThemeConfigAction } from "@/lib/actions/theme";
 
 const CookieConsent = dynamic(() => import("@/components/CookieConsent").then((m) => m.CookieConsent));
 const PedidoFlotante = dynamic(() => import("@/components/shop/PedidoFlotante").then((m) => m.PedidoFlotante));
@@ -67,11 +68,14 @@ export const viewport: Viewport = {
   themeColor: "#FFFFFF",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const themeRes = await getThemeConfigAction();
+  const theme = themeRes.theme;
+
   return (
     <html lang="es" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable} ${greatVibes.variable}`} suppressHydrationWarning>
       <head>
@@ -83,6 +87,34 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="trustpilot-one-time-domain-verification-id" content="e993157a-ecc6-48b6-985d-bca8eebb5fb2" />
+
+        {/* Variables dinámicas del Editor de Tema para la Home y Componentes */}
+        <style
+          id="dynamic-theme-vars"
+          dangerouslySetInnerHTML={{
+            __html: `
+              :root {
+                --theme-announcement-bg: ${theme.announcementBg || "#33cccc"};
+                --theme-announcement-text: ${theme.announcementText || "#1c1917"};
+                --theme-header-bg: ${theme.headerBg || "#ffffff"};
+                --theme-header-text: ${theme.headerText || "#163422"};
+                --theme-btn-primary-bg: ${theme.buttonPrimaryBg || "#163422"};
+                --theme-btn-primary-text: ${theme.buttonPrimaryText || "#ffffff"};
+                --theme-btn-primary-hover: ${theme.buttonPrimaryHoverBg || "#1F452E"};
+                --theme-btn-secondary-bg: ${theme.buttonSecondaryBg || "#FF97A4"};
+                --theme-btn-secondary-text: ${theme.buttonSecondaryText || "#ffffff"};
+                --theme-accent: ${theme.accentColor || "#C5A059"};
+                --theme-heading: ${theme.headingColor || "#163422"};
+                --theme-body: ${theme.bodyTextColor || "#4A5568"};
+                --theme-script: ${theme.scriptTextColor || "#163422"};
+                --theme-footer-bg: ${theme.footerBg || "#ffffff"};
+                --theme-footer-text: ${theme.footerText || "#1c1917"};
+                --theme-footer-accent: ${theme.footerAccent || "#163422"};
+                --theme-page-bg: ${theme.pageBg || "#FDFBF7"};
+              }
+            `,
+          }}
+        />
         
         {/* Script Oficial Permanente de Integración e Invitaciones de Trustpilot */}
         <Script

@@ -10,6 +10,26 @@ export interface ICorporateAccount {
   signature?: string;
 }
 
+export interface IThemeConfig {
+  announcementBg?: string;
+  announcementText?: string;
+  headerBg?: string;
+  headerText?: string;
+  buttonPrimaryBg?: string;
+  buttonPrimaryText?: string;
+  buttonPrimaryHoverBg?: string;
+  buttonSecondaryBg?: string;
+  buttonSecondaryText?: string;
+  accentColor?: string;
+  headingColor?: string;
+  bodyTextColor?: string;
+  scriptTextColor?: string;
+  footerBg?: string;
+  footerText?: string;
+  footerAccent?: string;
+  pageBg?: string;
+}
+
 export interface ISiteConfig extends Document {
   key: string; // "global"
   heroTitle: string;
@@ -110,6 +130,9 @@ export interface ISiteConfig extends Document {
   leadCaptureSubtitle?: string;
   leadCaptureCouponCode?: string;
   leadCaptureDelaySeconds?: number;
+
+  // Editor de Tema Visual de la Tienda
+  themeConfig?: IThemeConfig;
 
   updatedAt: Date;
 }
@@ -253,6 +276,27 @@ const SiteConfigSchema: Schema = new Schema({
   leadCaptureSubtitle: { type: String, default: "Suscríbete a nuestro club exclusivo y recibe un cupón de cortesía para tu próximo arreglo floral." },
   leadCaptureCouponCode: { type: String, default: "BIENVENIDO10" },
   leadCaptureDelaySeconds: { type: Number, default: 7 },
+
+  // Editor de Tema Visual (Home, Header, Botones, Textos, Footer)
+  themeConfig: {
+    announcementBg: { type: String, default: "#33cccc" },
+    announcementText: { type: String, default: "#1c1917" },
+    headerBg: { type: String, default: "#ffffff" },
+    headerText: { type: String, default: "#163422" },
+    buttonPrimaryBg: { type: String, default: "#163422" },
+    buttonPrimaryText: { type: String, default: "#ffffff" },
+    buttonPrimaryHoverBg: { type: String, default: "#1F452E" },
+    buttonSecondaryBg: { type: String, default: "#FF97A4" },
+    buttonSecondaryText: { type: String, default: "#ffffff" },
+    accentColor: { type: String, default: "#C5A059" },
+    headingColor: { type: String, default: "#163422" },
+    bodyTextColor: { type: String, default: "#4A5568" },
+    scriptTextColor: { type: String, default: "#163422" },
+    footerBg: { type: String, default: "#ffffff" },
+    footerText: { type: String, default: "#1c1917" },
+    footerAccent: { type: String, default: "#163422" },
+    pageBg: { type: String, default: "#FDFBF7" },
+  },
 
   updatedAt: { type: Date, default: Date.now }
 });

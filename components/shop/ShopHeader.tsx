@@ -26,7 +26,13 @@ export const ShopHeader = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white/90 dark:bg-[#181922]/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm transition-all">
+      <header
+        className="sticky top-0 z-40 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm transition-all"
+        style={{
+          backgroundColor: "var(--theme-header-bg, rgba(255, 255, 255, 0.95))",
+          color: "var(--theme-header-text, inherit)",
+        }}
+      >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4 xl:gap-6 relative">
           {/* Logo Presionable hacia el Home */}
           <Link href="/" className="flex items-center gap-3 group flex-shrink-0 relative z-10">
@@ -79,12 +85,19 @@ export const ShopHeader = () => {
             <div className="relative ml-1">
               <Link
                 href="/checkout"
-                className="flex items-center gap-1.5 xl:gap-2 bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950 px-2.5 xl:px-3.5 2xl:px-5 py-2 2xl:py-2.5 rounded-full font-bold text-xs hover:bg-[#1B2E22] dark:hover:bg-[#2DD4BF] transition-all shadow-md"
+                className="flex items-center gap-1.5 xl:gap-2 bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950 px-2.5 xl:px-3.5 2xl:px-5 py-2 2xl:py-2.5 rounded-full font-bold text-xs hover:opacity-90 transition-all shadow-md"
+                style={{
+                  backgroundColor: "var(--theme-btn-primary-bg, #163422)",
+                  color: "var(--theme-btn-primary-text, #ffffff)",
+                }}
               >
                 <ShoppingCart size={18} />
                 <span className="hidden 2xl:inline">Carrito</span>
                 {totalCount > 0 && (
-                  <span className="bg-[#D4AF37] text-stone-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full">
+                  <span
+                    className="text-stone-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full"
+                    style={{ backgroundColor: "var(--theme-accent, #D4AF37)" }}
+                  >
                     {totalCount}
                   </span>
                 )}
