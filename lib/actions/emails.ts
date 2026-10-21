@@ -10,7 +10,7 @@ import {
 } from "@/lib/email";
 import { revalidatePath } from "next/cache";
 
-export const DEFAULT_CORPORATE_ACCOUNTS: ICorporateAccount[] = [
+const DEFAULT_CORPORATE_ACCOUNTS: ICorporateAccount[] = [
   {
     id: "contacto",
     email: "contacto@bonbonflowershouston.com",

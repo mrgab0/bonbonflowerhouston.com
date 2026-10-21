@@ -21,11 +21,8 @@ import {
   Undo2,
 } from "lucide-react";
 import { IThemeConfig } from "@/lib/models/SiteConfig";
-import {
-  DEFAULT_THEME_CONFIG,
-  THEME_PRESETS,
-  updateThemeConfigAction,
-} from "@/lib/actions/theme";
+import { updateThemeConfigAction } from "@/lib/actions/theme";
+import { DEFAULT_THEME_CONFIG, THEME_PRESETS } from "@/lib/constants/theme";
 
 interface ThemeEditorClientProps {
   initialTheme: IThemeConfig;

@@ -5,21 +5,7 @@ import { SiteConfig, IDoorDashConfig } from "@/lib/models/SiteConfig";
 import { revalidatePath } from "next/cache";
 import fs from "fs";
 import path from "path";
-
-export const DEFAULT_DOORDASH_CONFIG: IDoorDashConfig = {
-  verificationFileName: "",
-  verificationFileContent: "",
-  scriptHtml: "",
-  scriptEnabled: false,
-  developerId: "",
-  keyId: "",
-  signingSecret: "",
-  storeId: "",
-  pickupInstructions: "Recoger arreglo floral en el mostrador. Manipular en posición vertical dentro del vehículo.",
-  leadTimeMinutes: 30,
-  environment: "production",
-  autoDispatchEnabled: false,
-};
+import { DEFAULT_DOORDASH_CONFIG } from "@/lib/constants/doordash";
 
 export async function getDoorDashConfigAction(): Promise<{
   success: boolean;
