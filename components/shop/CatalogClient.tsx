@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard/ProductCard";
 import { ShopHeader } from "@/components/shop/ShopHeader";
 import { Footer } from "@/components/shop/Footer";
@@ -16,12 +17,29 @@ interface CatalogClientProps {
 
 export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogClientProps) {
   const t = useTranslations("Catalog");
+  const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "products" | "addons">("all");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc">("featured");
   const { addToCart } = useCart();
   const [addedAddonId, setAddedAddonId] = useState<string | null>(null);
+
+  // Sincronizar filtros desde la URL (por ejemplo desde las 5 categorías de la Home)
+  useEffect(() => {
+    if (!searchParams) return;
+    const searchVal = searchParams.get("search");
+    const catVal = searchParams.get("category");
+    if (searchVal) {
+      setSearchTerm(searchVal);
+    }
+    if (catVal) {
+      setSelectedCategory(catVal);
+      if (catVal.toLowerCase().includes("adicional")) {
+        setActiveTab("addons");
+      }
+    }
+  }, [searchParams]);
 
   // Normalizar items combinados (Arreglos + Adicionales)
   const combinedItems = useMemo(() => {

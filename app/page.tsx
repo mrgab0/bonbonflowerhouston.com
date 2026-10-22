@@ -1,7 +1,5 @@
 import dynamic from 'next/dynamic';
-import { StickyNav } from "@/components/shop/StickyNav";
-import { TrustAnnouncementBar } from "@/components/shop/TrustAnnouncementBar";
-import { LuxuryHeroSection } from "@/components/shop/LuxuryHeroSection";
+import { StitchMobileHeaderAndHero } from "@/components/shop/StitchMobileHeaderAndHero";
 import { PillarsOfExcellence } from "@/components/shop/PillarsOfExcellence";
 import { HomeProductShowcase } from "@/components/shop/HomeProductShowcase";
 import { HoustonDeliveryBanner } from "@/components/shop/HoustonDeliveryBanner";
@@ -68,14 +66,8 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-white dark:bg-[#0B0C10] text-stone-800 dark:text-gray-100 transition-colors duration-300 relative overflow-x-hidden">
-      {/* Barra de anuncio superior (SAME DAY DELIVERY) y barra de confianza */}
-      <TrustAnnouncementBar phone="(346) 739-2730" />
-
-      {/* Navegación y Menú Principal */}
-      <StickyNav siteConfig={siteConfig} />
-
-      {/* Hero Section Editorial de Lujo Stitch 'Flowers that make them feel loved ♡' */}
-      <LuxuryHeroSection siteConfig={siteConfig} heroProducts={heroProducts} />
+      {/* Cabecera, Navegación, Hero 2-Columnas y 5 Categorías Circulares Stitch 1:1 */}
+      <StitchMobileHeaderAndHero siteConfig={siteConfig} />
 
       {/* 4 Pilares de Excelencia (Entrega Mismo Día, Tarjeta Caligrafiada, Rosas Ecuador, White Glove) */}
       <PillarsOfExcellence />

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
 import { getAddons } from "@/lib/actions/addon";
@@ -18,5 +19,9 @@ export default async function ProductosCatalogPage() {
   const addonsRes = await getAddons();
   const addons = addonsRes.success ? addonsRes.data : [];
 
-  return <CatalogClient initialProducts={products} initialAddons={addons} />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#F9F9F9] p-12 text-center text-stone-500">Cargando Catálogo...</div>}>
+      <CatalogClient initialProducts={products} initialAddons={addons} />
+    </Suspense>
+  );
 }
