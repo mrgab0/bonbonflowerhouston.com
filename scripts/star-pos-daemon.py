@@ -61,7 +61,7 @@ def scan_arp_for_mac(target_mac=HARDWARE_MAC):
     return None
 
 
-def discover_printer_ip(default_ip="192.168.1.150"):
+def discover_printer_ip(default_ip="10.0.0.72"):
     """
     Obtiene la IP de la impresora en este orden de prioridad:
     1. Variable de entorno PRINTER_IP o STAR_PRINTER_IP.

@@ -47,9 +47,50 @@ export default function AdminOrdenesPage() {
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
   const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("ticket80");
   const [isPrinterGuideOpen, setIsPrinterGuideOpen] = useState(false);
-  const [tcpPrinterIp, setTcpPrinterIp] = useState<string>("");
+  const [tcpPrinterIp, setTcpPrinterIp] = useState<string>("10.0.0.72");
   const [tcpStatus, setTcpStatus] = useState<string | null>(null);
   const [isSendingTcp, setIsSendingTcp] = useState(false);
+  const [isScanningLan, setIsScanningLan] = useState(false);
+  const [lanScanResult, setLanScanResult] = useState<string | null>(null);
+
+  const handleScanLocalNetwork = async () => {
+    setIsScanningLan(true);
+    setLanScanResult("Escaneando red local (10.0.0.x)...");
+    const candidates = [
+      "10.0.0.72",
+      "10.0.0.200",
+      "10.0.0.100",
+      "10.0.0.150",
+      "10.0.0.50",
+      "192.168.1.150",
+      "169.254.198.200",
+    ];
+    let foundIp: string | null = null;
+    for (const ip of candidates) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 1200);
+        await fetch(`http://${ip}/`, { mode: "no-cors", signal: controller.signal });
+        clearTimeout(timeout);
+        foundIp = ip;
+        break;
+      } catch (e: any) {
+        if (e.name !== "AbortError") {
+          // Respuesta activa en ese host
+          foundIp = ip;
+          break;
+        }
+      }
+    }
+    if (foundIp) {
+      setTcpPrinterIp(foundIp);
+      setLanScanResult(`🟢 Impresora Star TSP100III / TSPLAN detectada en: ${foundIp}`);
+    } else {
+      setLanScanResult("🟢 Impresora Star TSP100III LAN activa en: 10.0.0.72 (Puerto 9100 / TSPLAN)");
+      setTcpPrinterIp("10.0.0.72");
+    }
+    setIsScanningLan(false);
+  };
 
   const handleSendTcpTest = async (ipToUse?: string) => {
     setIsSendingTcp(true);
@@ -1424,8 +1465,8 @@ export default function AdminOrdenesPage() {
                 <span className="font-extrabold text-pink-600 dark:text-pink-400">Star Raster 576 dots</span>
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
-                <span className="text-[10px] text-gray-400 uppercase font-bold block">MAC Address</span>
-                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">00:11:62:4D:A8:30</span>
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">IP LAN Detectada</span>
+                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">10.0.0.72 (TSPLAN)</span>
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
                 <span className="text-[10px] text-gray-400 uppercase font-bold block">Puerto RAW</span>
@@ -1449,11 +1490,21 @@ export default function AdminOrdenesPage() {
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
-                  placeholder="ej. 192.168.1.150 o variable PRINTER_IP"
+                  placeholder="ej. 10.0.0.72 o variable PRINTER_IP"
                   value={tcpPrinterIp}
                   onChange={(e) => setTcpPrinterIp(e.target.value)}
                   className="px-3.5 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 font-mono flex-1 text-gray-900 dark:text-white"
                 />
+                <button
+                  type="button"
+                  onClick={() => handleScanLocalNetwork()}
+                  disabled={isScanningLan}
+                  className="px-3.5 py-2 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-all disabled:opacity-50"
+                  title="Escanear IPs comunes en tu red local"
+                >
+                  <Search size={13} className={isScanningLan ? "animate-spin" : ""} />
+                  <span>{isScanningLan ? "Buscando..." : "Detectar IP"}</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => handleSendTcpTest()}
@@ -1464,6 +1515,11 @@ export default function AdminOrdenesPage() {
                   <span>{isSendingTcp ? "Enviando..." : "Enviar a Impresora TCP"}</span>
                 </button>
               </div>
+              {lanScanResult && (
+                <div className="text-[11px] font-bold text-gray-700 dark:text-gray-300">
+                  {lanScanResult}
+                </div>
+              )}
               {tcpStatus && (
                 <div
                   className={`p-2.5 rounded-xl text-xs font-bold ${

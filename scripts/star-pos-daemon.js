@@ -51,7 +51,7 @@ function getPrinterIp() {
       if (cfg.printer_ip) return cfg.printer_ip;
     } catch (e) {}
   }
-  return "192.168.1.150";
+  return "10.0.0.72";
 }
 
 const PRINTER_IP = getPrinterIp();

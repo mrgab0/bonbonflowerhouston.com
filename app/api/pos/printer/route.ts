@@ -28,6 +28,7 @@ export async function GET(req: NextRequest) {
         py: { filename: "star-pos-daemon.py", mime: "text/x-python" },
         sh: { filename: "iniciar-impresora.sh", mime: "application/x-sh" },
         js: { filename: "star-pos-daemon.js", mime: "application/javascript" },
+        ps1: { filename: "star-pos-daemon.ps1", mime: "text/plain" },
       };
 
       const match = allowedDownloads[download];
