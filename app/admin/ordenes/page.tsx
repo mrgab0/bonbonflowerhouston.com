@@ -514,6 +514,13 @@ export default function AdminOrdenesPage() {
               <Download size={11} /> Windows (.bat)
             </a>
             <a
+              href="/api/pos/printer?download=ps1"
+              download="star-pos-daemon.ps1"
+              className="bg-black/40 hover:bg-black/70 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1 border border-white/10"
+            >
+              <Terminal size={11} /> PowerShell (.ps1)
+            </a>
+            <a
               href="/api/pos/printer?download=py"
               download="star-pos-daemon.py"
               className="bg-black/40 hover:bg-black/70 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1 border border-white/10"
