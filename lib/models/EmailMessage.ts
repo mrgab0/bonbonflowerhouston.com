@@ -35,6 +35,8 @@ export interface IEmailMessage extends Document {
     mimeType?: string;
   }>;
   metadata?: Record<string, any>;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -140,6 +142,15 @@ const EmailMessageSchema: Schema = new Schema(
     metadata: {
       type: Schema.Types.Mixed,
       default: {},
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
     },
   },
   {

@@ -48,6 +48,12 @@ const NAV_ITEMS = [
     badgeColor: "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:bg-gray-200"
   },
   {
+    href: "/admin/papelera",
+    label: "Papelera",
+    icon: "🗑️",
+    badgeColor: "bg-rose-100 dark:bg-rose-950/80 text-rose-950 dark:text-rose-200 border-rose-300 dark:border-rose-800/80 hover:bg-rose-200"
+  },
+  {
     href: "/admin/entregas",
     label: "Entregas",
     icon: "🚚",

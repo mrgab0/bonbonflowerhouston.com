@@ -56,7 +56,7 @@ export async function getEmailsAction(params?: {
     const page = params?.page || 1;
     const limit = params?.limit || 50;
 
-    const andConditions: any[] = [];
+    const andConditions: any[] = [{ isDeleted: { $ne: true } }];
 
     if (folder === "inbox") {
       andConditions.push({ direction: "inbound" });
@@ -98,7 +98,7 @@ export async function getEmailsAction(params?: {
 
     const total = await EmailMessage.countDocuments(query);
 
-    let unreadQuery: any = { direction: "inbound", isRead: false };
+    let unreadQuery: any = { direction: "inbound", isRead: false, isDeleted: { $ne: true } };
     if (accountEmail && accountEmail !== "all") {
       const emailRegex = new RegExp(accountEmail, "i");
       unreadQuery.$or = [
@@ -321,11 +321,15 @@ export async function bulkMarkEmailsAsReadAction(ids: string[], isRead: boolean 
 export async function deleteEmailAction(id: string) {
   try {
     await dbConnect();
-    await EmailMessage.findByIdAndDelete(id);
+    await EmailMessage.findByIdAndUpdate(id, {
+      isDeleted: true,
+      deletedAt: new Date(),
+    });
     revalidatePath("/admin/correos");
+    revalidatePath("/admin/papelera");
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error?.message || "Error al eliminar correo." };
+    return { success: false, error: error?.message || "Error al mover correo a la papelera." };
   }
 }
 
@@ -333,20 +337,24 @@ export async function bulkDeleteEmailsAction(ids: string[]) {
   try {
     await dbConnect();
     if (!ids || ids.length === 0) return { success: true };
-    await EmailMessage.deleteMany({ _id: { $in: ids } });
+    await EmailMessage.updateMany(
+      { _id: { $in: ids } },
+      { $set: { isDeleted: true, deletedAt: new Date() } }
+    );
     revalidatePath("/admin/correos");
+    revalidatePath("/admin/papelera");
     return { success: true };
   } catch (error: any) {
-    return { success: false, error: error?.message || "Error al eliminar correos en lote." };
+    return { success: false, error: error?.message || "Error al mover correos a la papelera." };
   }
 }
 
 export async function getEmailStatsAction() {
   try {
     await dbConnect();
-    const unreadInbox = await EmailMessage.countDocuments({ direction: "inbound", isRead: false });
-    const totalInbox = await EmailMessage.countDocuments({ direction: "inbound" });
-    const totalSent = await EmailMessage.countDocuments({ direction: "outbound" });
+    const unreadInbox = await EmailMessage.countDocuments({ direction: "inbound", isRead: false, isDeleted: { $ne: true } });
+    const totalInbox = await EmailMessage.countDocuments({ direction: "inbound", isDeleted: { $ne: true } });
+    const totalSent = await EmailMessage.countDocuments({ direction: "outbound", isDeleted: { $ne: true } });
     return { success: true, unreadInbox, totalInbox, totalSent };
   } catch (error: any) {
     return { success: false, unreadInbox: 0, totalInbox: 0, totalSent: 0 };
@@ -406,6 +414,7 @@ export async function getCorporateAccountsAction(): Promise<{
       acc.unreadCount = await EmailMessage.countDocuments({
         direction: "inbound",
         isRead: false,
+        isDeleted: { $ne: true },
         $or: [
           { mailboxEmail: emailRegex },
           { to: emailRegex },

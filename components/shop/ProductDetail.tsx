@@ -18,6 +18,21 @@ interface StemTier {
 }
 
 const COLOR_SWATCHES: Record<string, { bg: string; border?: string; text?: string }> = {
+  // Paleta oficial de rosas Bonbon Flowers
+  "Deep Purple": { bg: "#4a154b", text: "#ffffff" },
+  "deep purple": { bg: "#4a154b", text: "#ffffff" },
+  "Light Pink": { bg: "#fbcfe8", border: "#f472b6", text: "#831843" },
+  "light pink": { bg: "#fbcfe8", border: "#f472b6", text: "#831843" },
+  "White": { bg: "#ffffff", border: "#cbd5e1", text: "#0f172a" },
+  "white": { bg: "#ffffff", border: "#cbd5e1", text: "#0f172a" },
+  "Sweet Beat": { bg: "#be185d", text: "#ffffff" },
+  "sweet beat": { bg: "#be185d", text: "#ffffff" },
+  "Red": { bg: "#b91c1c", text: "#ffffff" },
+  "red": { bg: "#b91c1c", text: "#ffffff" },
+  "Hot Pink": { bg: "#ec4899", text: "#ffffff" },
+  "hot pink": { bg: "#ec4899", text: "#ffffff" },
+
+  // Preservación de variantes históricas
   "Rojo Pasión": { bg: "#991b1b", text: "#ffffff" },
   "Rojo": { bg: "#b91c1c", text: "#ffffff" },
   "Rosa Empolvado": { bg: "#fbcfe8", border: "#f472b6", text: "#831843" },
@@ -38,6 +53,15 @@ const COLOR_SWATCHES: Record<string, { bg: string; border?: string; text?: strin
   "Durazno / Peach": { bg: "#fed7aa", border: "#fb923c", text: "#7c2d12" },
 };
 
+const DEFAULT_ROSE_COLORS = [
+  "Red",
+  "Deep Purple",
+  "Light Pink",
+  "White",
+  "Sweet Beat",
+  "Hot Pink",
+];
+
 export const ProductDetail = ({ product }: { product: any }) => {
   const t = useTranslations("ProductDetail");
   const [selectedAddons, setSelectedAddons] = useState<{ addonId: string; value?: string; price?: number; name?: string; customText?: string }[]>([]);
@@ -56,10 +80,10 @@ export const ProductDetail = ({ product }: { product: any }) => {
     if (Array.isArray(product.availableColors) && product.availableColors.length > 0) {
       return product.availableColors;
     }
-    return ["Rojo Pasión", "Rosa Empolvado", "Blanco Puro", "Bicolor Romance", "Amarillo Dorado"];
+    return DEFAULT_ROSE_COLORS;
   }, [product.availableColors]);
 
-  const [selectedColor, setSelectedColor] = useState<string>(availableColors[0] || "Rojo Pasión");
+  const [selectedColor, setSelectedColor] = useState<string>(availableColors[0] || "Red");
 
   // Tiers de Volumen Floral (50, 75, 100 rosas estilo Stitch)
   const basePrice = Number(product.price || 0);

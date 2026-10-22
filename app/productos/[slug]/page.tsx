@@ -13,7 +13,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     .populate({ path: 'variants', select: 'name price images slug flowerCount bouquetType' })
     .lean();
 
-  if (!productDoc || productDoc.isActive === false) {
+  if (!productDoc || productDoc.isActive === false || productDoc.isDeleted === true) {
     notFound();
   }
 

@@ -27,6 +27,8 @@ export interface IProduct extends Document {
     title?: string;
     description?: string;
   };
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
   createdAt?: Date;
 }
 
@@ -46,6 +48,8 @@ const ProductSchema: Schema = new Schema({
   variants: [{ type: Schema.Types.ObjectId, ref: 'Product' }],
   badge: { type: String, default: "" },
   isActive: { type: Boolean, default: true },
+  isDeleted: { type: Boolean, default: false, index: true },
+  deletedAt: { type: Date, default: null },
   flowerCount: { type: Number, default: 0 },
   bouquetType: { type: String, default: "" },
   availableColors: [{ type: String }],

@@ -67,7 +67,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
             {/* Kicker y Título Principal */}
             <div className="space-y-1.5">
               <span className="text-xs font-serif uppercase tracking-[0.25em] text-[#C5A059] dark:text-[#5EEAD4] font-semibold block">
-                Haute Parfumerie &amp; Art Floral • Houston
+                Art Floral • Houston
               </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-luxury-serif text-stone-900 dark:text-[#E6F7F0] tracking-tight leading-[1.08] font-normal">
                 Flowers that make them{" "}

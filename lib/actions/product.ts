@@ -349,9 +349,14 @@ export async function toggleProductStatus(id: string, isActive: boolean) {
 export async function deleteProduct(id: string) {
   try {
     await dbConnect();
-    await Product.findByIdAndDelete(id);
+    await Product.findByIdAndUpdate(id, {
+      isDeleted: true,
+      deletedAt: new Date(),
+      isActive: false,
+    });
     revalidatePath("/", "layout");
     revalidatePath("/admin/productos");
+    revalidatePath("/admin/papelera");
     return { success: true };
   } catch (error) {
     console.error("Error al eliminar producto:", error);
@@ -362,7 +367,7 @@ export async function deleteProduct(id: string) {
 export async function getAdminProductsList() {
   try {
     await dbConnect();
-    const products = await Product.find({ isActive: { $ne: false } })
+    const products = await Product.find({ isDeleted: { $ne: true }, isActive: { $ne: false } })
       .select("_id name price images category slug badge createdAt")
       .sort({ createdAt: -1 })
       .lean();

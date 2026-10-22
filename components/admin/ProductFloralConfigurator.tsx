@@ -16,6 +16,12 @@ interface ProductFloralConfiguratorProps {
 }
 
 const PRESET_COLORS = [
+  { name: "Red", bg: "#b91c1c", text: "#ffffff" },
+  { name: "Deep Purple", bg: "#4a154b", text: "#ffffff" },
+  { name: "Light Pink", bg: "#fbcfe8", text: "#831843" },
+  { name: "White", bg: "#ffffff", border: "#cbd5e1", text: "#0f172a" },
+  { name: "Sweet Beat", bg: "#be185d", text: "#ffffff" },
+  { name: "Hot Pink", bg: "#ec4899", text: "#ffffff" },
   { name: "Rojo Pasión", bg: "#991b1b", text: "#ffffff" },
   { name: "Rosa Empolvado", bg: "#fbcfe8", text: "#831843" },
   { name: "Blanco Puro", bg: "#ffffff", border: "#cbd5e1", text: "#0f172a" },

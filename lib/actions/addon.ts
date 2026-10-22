@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export async function getAddons() {
   await dbConnect();
   try {
-    const addons = await Addon.find({ isActive: { $ne: false } }).sort({ order: 1, createdAt: -1 }).lean();
+    const addons = await Addon.find({ isActive: { $ne: false }, isDeleted: { $ne: true } }).sort({ order: 1, createdAt: -1 }).lean();
     return { success: true, data: JSON.parse(JSON.stringify(addons)) };
   } catch (error) {
     console.error("Error obteniendo adicionales:", error);
@@ -19,7 +19,7 @@ export async function getAddons() {
 export async function getAllAddonsAdmin() {
   await dbConnect();
   try {
-    const addons = await Addon.find({}).sort({ category: 1, order: 1, createdAt: -1 }).lean();
+    const addons = await Addon.find({ isDeleted: { $ne: true } }).sort({ category: 1, order: 1, createdAt: -1 }).lean();
     return { success: true, data: JSON.parse(JSON.stringify(addons)) };
   } catch (error) {
     console.error("Error obteniendo adicionales admin:", error);
@@ -93,12 +93,17 @@ export async function toggleAddonStatus(id: string, isActive: boolean) {
 export async function deleteAddon(id: string) {
   await dbConnect();
   try {
-    await Addon.findByIdAndDelete(id);
+    await Addon.findByIdAndUpdate(id, {
+      isDeleted: true,
+      deletedAt: new Date(),
+      isActive: false,
+    });
     revalidatePath("/admin/adicionales");
     revalidatePath("/admin/productos");
+    revalidatePath("/admin/papelera");
     return { success: true };
   } catch (error) {
-    return { success: false, error: "No se pudo eliminar el adicional" };
+    return { success: false, error: "No se pudo mover el adicional a la papelera" };
   }
 }
 

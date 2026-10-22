@@ -67,7 +67,7 @@ export default async function Home() {
   return (
     <main className="min-h-screen bg-white dark:bg-[#0B0C10] text-stone-800 dark:text-gray-100 transition-colors duration-300 relative overflow-x-hidden">
       {/* Cabecera, Navegación, Hero 2-Columnas y 5 Categorías Circulares Stitch 1:1 */}
-      <StitchMobileHeaderAndHero siteConfig={siteConfig} />
+      <StitchMobileHeaderAndHero siteConfig={siteConfig} heroProducts={heroProducts} />
 
       {/* 4 Pilares de Excelencia (Entrega Mismo Día, Tarjeta Caligrafiada, Rosas Ecuador, White Glove) */}
       <PillarsOfExcellence />

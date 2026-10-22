@@ -5,7 +5,7 @@ import { Addon } from "@/lib/models/Addon";
 export async function GET() {
   try {
     await dbConnect();
-    const addons = await Addon.find({}).sort({ category: 1, createdAt: -1 }).lean();
+    const addons = await Addon.find({ isDeleted: { $ne: true } }).sort({ category: 1, createdAt: -1 }).lean();
     return NextResponse.json({ addons: JSON.parse(JSON.stringify(addons)) });
   } catch (error) {
     console.error("Error obteniendo adicionales admin:", error);

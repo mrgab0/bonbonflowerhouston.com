@@ -26,11 +26,13 @@ const CustomerBiometricModal = dynamic(
 
 interface StitchMobileHeaderAndHeroProps {
   siteConfig?: any;
+  heroProducts?: any[];
   locale?: string;
 }
 
 export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps> = ({
   siteConfig,
+  heroProducts = [],
   locale = "es",
 }) => {
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
@@ -39,6 +41,12 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
 
   const phone = siteConfig?.contactPhone || "(346) 739-2730";
   const cleanPhone = phone.replace(/[^\d+]/g, "");
+
+  const prefix = locale === "en" ? "/en" : "";
+  const featuredProductLink =
+    heroProducts && heroProducts.length > 0 && heroProducts[0]?.slug
+      ? `${prefix}/productos/${heroProducts[0].slug}`
+      : "#catalogo";
 
   // 5 Categorías circulares con gradientes e imágenes originales de Stitch
   const categories = [
@@ -169,7 +177,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
               Bonbon <span className="text-[#163422] dark:text-[#d4af37]">Flowers</span>
             </span>
             <span className="text-[9.5px] tracking-[0.22em] uppercase font-bold text-[#b8335b] dark:text-[#ff8fa3]">
-              Haute Parfumerie &amp; Art Floral
+              Art Floral
             </span>
           </div>
         </div>
@@ -298,13 +306,19 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
 
           {/* Right Photographic Column: Hatbox with Roses & Teddy Bear */}
           <div className="w-[42%] sm:w-[40%] relative -mr-2 sm:mr-0 mt-1">
-            <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border border-[#f0e4db]/80 dark:border-gray-800 bg-[#fff5f5] dark:bg-stone-900">
-              <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg-YNbWRBl_e3mlLmq--dawZ8Nnux3UjLd_EO1rSpkqZrNXxelNF1qwsDWQoCLFAEJrPOtEA0lzbaXnXKioChpsj4yY1WGjPYSYs40xj7VP7FAC33v8ydmzQlkY0W11c16zfmYNk1MNUQJUzFr6_UNENshCrIM4-iMtJW5g41Ch0lb9TOKFJaz3BjcgYKK_2YfiP2vUKBcHoE3kYWq6acdNWaWSiuV9Y8AwM14U2OvidtHKuyp82PJ8Y3lUjI8JL_7dw"
-                className="w-full h-full object-cover scale-[1.7] translate-x-[16%] translate-y-[8%]"
-                alt="Sombrerera negra con rosas rojas y osito Bonbon Flowers"
-              />
-            </div>
+            <Link
+              href={featuredProductLink}
+              className="block group"
+              title="Ver colección destacada"
+            >
+              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border border-[#f0e4db]/80 dark:border-gray-800 bg-[#fff5f5] dark:bg-stone-900 group-hover:scale-[1.02] transition-transform duration-300">
+                <img
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg-YNbWRBl_e3mlLmq--dawZ8Nnux3UjLd_EO1rSpkqZrNXxelNF1qwsDWQoCLFAEJrPOtEA0lzbaXnXKioChpsj4yY1WGjPYSYs40xj7VP7FAC33v8ydmzQlkY0W11c16zfmYNk1MNUQJUzFr6_UNENshCrIM4-iMtJW5g41Ch0lb9TOKFJaz3BjcgYKK_2YfiP2vUKBcHoE3kYWq6acdNWaWSiuV9Y8AwM14U2OvidtHKuyp82PJ8Y3lUjI8JL_7dw"
+                  className="w-full h-full object-cover scale-[1.7] translate-x-[16%] translate-y-[8%]"
+                  alt="Sombrerera negra con rosas rojas y osito Bonbon Flowers"
+                />
+              </div>
+            </Link>
             {/* Decorative falling rose petals */}
             <div className="absolute -bottom-2 -left-2 w-5 h-3 bg-[#c71f37] rounded-full rotate-45 shadow-sm opacity-90 pointer-events-none" />
             <div className="absolute bottom-2 -right-1 w-4 h-2.5 bg-[#a01328] rounded-full -rotate-12 shadow-sm opacity-80 pointer-events-none" />

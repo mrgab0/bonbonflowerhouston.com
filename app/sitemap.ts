@@ -34,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let productRoutes: MetadataRoute.Sitemap = [];
   try {
     await dbConnect();
-    const products = await Product.find({}, "slug updatedAt").lean();
+    const products = await Product.find({ isDeleted: { $ne: true }, isActive: { $ne: false } }, "slug updatedAt").lean();
     
     productRoutes = products.map((prod: any) => ({
       url: `${baseUrl}/productos/${prod.slug}`,

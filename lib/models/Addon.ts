@@ -9,6 +9,8 @@ export interface IAddon extends Document {
   options?: string[]; // Para opciones de selección ej: ['Rojas', 'Rosadas', 'Blancas']
   description?: string;
   isActive: boolean;
+  isDeleted?: boolean;
+  deletedAt?: Date | null;
   order: number;
   createdAt: Date;
 }
@@ -22,6 +24,8 @@ const AddonSchema: Schema = new Schema({
   options: [{ type: String }],
   description: { type: String, default: "" },
   isActive: { type: Boolean, default: true },
+  isDeleted: { type: Boolean, default: false, index: true },
+  deletedAt: { type: Date, default: null },
   order: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });
