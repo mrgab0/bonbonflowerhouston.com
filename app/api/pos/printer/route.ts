@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db";
 import { Order } from "@/lib/models/Order";
-import { formatTicketText, buildStarPrinterPayload } from "@/lib/pos/starPrinter";
+import { formatTicketText, buildStarPrinterPayload, buildStarRasterPayload } from "@/lib/pos/starPrinter";
 import fs from "fs";
 import path from "path";
 
@@ -81,13 +81,13 @@ export async function GET(req: NextRequest) {
         status: "Pagado (Test)",
       };
 
-      if (format === "raw") {
-        const payload = buildStarPrinterPayload(testOrder);
+      if (format === "raw" || format === "star_raster") {
+        const payload = buildStarRasterPayload(testOrder);
         return new NextResponse(new Uint8Array(payload), {
           status: 200,
           headers: {
             "Content-Type": "application/octet-stream",
-            "Content-Disposition": `attachment; filename="ticket-test-star-80mm.bin"`,
+            "Content-Disposition": `attachment; filename="ticket-test-star-raster-576dots.bin"`,
           },
         });
       }
@@ -119,13 +119,13 @@ export async function GET(req: NextRequest) {
 
       const plainOrder = JSON.parse(JSON.stringify(order));
 
-      if (format === "raw") {
-        const payload = buildStarPrinterPayload(plainOrder);
+      if (format === "raw" || format === "star_raster") {
+        const payload = buildStarRasterPayload(plainOrder);
         return new NextResponse(new Uint8Array(payload), {
           status: 200,
           headers: {
             "Content-Type": "application/octet-stream",
-            "Content-Disposition": `attachment; filename="ticket-${orderId}.bin"`,
+            "Content-Disposition": `attachment; filename="ticket-${orderId}-star-raster.bin"`,
           },
         });
       }
@@ -228,6 +228,81 @@ export async function POST(req: NextRequest) {
         message: `Orden ${orderId} reseteada para reimpresión automática.`,
         order: updated,
       });
+    }
+
+    if (action === "print_tcp") {
+      const targetIp = (body.printerIp || process.env.PRINTER_IP || process.env.STAR_PRINTER_IP || "").trim();
+      if (!targetIp) {
+        return NextResponse.json(
+          { success: false, error: "IP de impresora no configurada. Define la variable de entorno PRINTER_IP o envía printerIp." },
+          { status: 400 }
+        );
+      }
+
+      let payload: Buffer;
+      if (orderId && orderId !== "TEST-STAR-80MM") {
+        const order = await Order.findOne({ orderId }).lean();
+        if (!order) {
+          return NextResponse.json({ success: false, error: "Orden no encontrada" }, { status: 404 });
+        }
+        payload = buildStarRasterPayload(JSON.parse(JSON.stringify(order)));
+      } else {
+        // Ticket de prueba calibrador
+        payload = buildStarRasterPayload({
+          orderId: "TEST-STAR-80MM",
+          customerName: "Cliente de Prueba (Bonbon Flowers)",
+          customerPhone: "+1 (346) 739-2730",
+          customerEmail: "info@bonbonflowershouston.com",
+          address: "1000 Main St, Suite 400, Houston, TX 77002",
+          deliveryMethod: "Hand Delivery (Houston)",
+          cardMessage: "¡Prueba de Impresión Star Graphic Raster 576 dots OK! 🌹",
+          items: [{ name: "Ramo de Rosas Test 80mm", price: 99.99, quantity: 1 }],
+          total: 99.99,
+          createdAt: new Date(),
+        });
+      }
+
+      try {
+        const net = await import("net");
+        await new Promise<void>((resolve, reject) => {
+          const client = new net.Socket();
+          client.setTimeout(6000);
+          client.connect(9100, targetIp, () => {
+            client.write(payload, () => {
+              setTimeout(() => {
+                client.end();
+                resolve();
+              }, 400);
+            });
+          });
+          client.on("error", (err) => reject(err));
+          client.on("timeout", () => {
+            client.destroy();
+            reject(new Error(`Timeout conectando con ${targetIp}:9100`));
+          });
+        });
+
+        if (orderId && orderId !== "TEST-STAR-80MM") {
+          await Order.findOneAndUpdate(
+            { orderId },
+            { $set: { isPrintedToPOS: true, printedAtPOS: new Date() } }
+          );
+        }
+
+        return NextResponse.json({
+          success: true,
+          message: `Ticket enviado con éxito a ${targetIp}:9100 en modo Star Graphic Raster (576 dots).`,
+        });
+      } catch (tcpErr: any) {
+        console.error("Error al conectar por TCP a la impresora:", tcpErr);
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Fallo de conexión TCP a ${targetIp}:9100 -> ${tcpErr?.message || tcpErr}`,
+          },
+          { status: 502 }
+        );
+      }
     }
 
     return NextResponse.json({ success: false, error: "Acción no reconocida" }, { status: 400 });

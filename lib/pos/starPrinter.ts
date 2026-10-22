@@ -130,11 +130,23 @@ export function formatTicketText(order: TicketOrderData, lang: "es" | "en" = "es
   return out;
 }
 
+import { buildStarRasterPayload } from "./starRaster";
+
+export { buildStarRasterPayload };
+
 /**
- * Genera el Buffer de bytes con comandos ESC/POS y Star Line Mode
- * Incluye negrita, doble tamaño para títulos y comando de corte automático.
+ * Genera el Buffer de bytes para la Star Micronics TSP100III.
+ * Por defecto genera el stream en modo Star Graphic Raster (576 dots / 203 DPI)
+ * requerido por el firmware de hardware de la TSP143IIILAN.
  */
 export function buildStarPrinterPayload(order: TicketOrderData, lang: "es" | "en" = "es"): Buffer {
+  return buildStarRasterPayload(order, lang);
+}
+
+/**
+ * Modo heredado de texto Star Line Mode / ESC/POS
+ */
+export function buildStarLineModePayload(order: TicketOrderData, lang: "es" | "en" = "es"): Buffer {
   const chunks: Buffer[] = [];
 
   const ESC = 0x1b;

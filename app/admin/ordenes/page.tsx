@@ -47,6 +47,35 @@ export default function AdminOrdenesPage() {
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
   const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("ticket80");
   const [isPrinterGuideOpen, setIsPrinterGuideOpen] = useState(false);
+  const [tcpPrinterIp, setTcpPrinterIp] = useState<string>("");
+  const [tcpStatus, setTcpStatus] = useState<string | null>(null);
+  const [isSendingTcp, setIsSendingTcp] = useState(false);
+
+  const handleSendTcpTest = async (ipToUse?: string) => {
+    setIsSendingTcp(true);
+    setTcpStatus(null);
+    try {
+      const res = await fetch("/api/pos/printer", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "print_tcp",
+          orderId: "TEST-STAR-80MM",
+          printerIp: (ipToUse || tcpPrinterIp || "").trim(),
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setTcpStatus("¡Éxito! " + data.message);
+      } else {
+        setTcpStatus("Error: " + (data.error || "No se pudo conectar a la impresora"));
+      }
+    } catch (err: any) {
+      setTcpStatus("Error de red: " + (err.message || err));
+    } finally {
+      setIsSendingTcp(false);
+    }
+  };
 
   useEffect(() => {
     setAutoPrintJs(isAutoPrintEnabled());
@@ -1384,24 +1413,68 @@ export default function AdminOrdenesPage() {
               </button>
             </div>
 
-            {/* Ficha Técnica Rápida */}
+            {/* Ficha Técnica Rápida con Hardware Real */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
-                <span className="text-[10px] text-gray-400 uppercase font-bold block">Rollo de Papel</span>
-                <span className="font-extrabold text-gray-900 dark:text-white">80 mm (3.15&quot;)</span>
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">Modelo &amp; Papel</span>
+                <span className="font-extrabold text-gray-900 dark:text-white">TSP143III (80mm)</span>
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
-                <span className="text-[10px] text-gray-400 uppercase font-bold block">Área Útil</span>
-                <span className="font-extrabold text-gray-900 dark:text-white">72 mm (48 cols)</span>
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">Modo Gráfico</span>
+                <span className="font-extrabold text-pink-600 dark:text-pink-400">Star Raster 576 dots</span>
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
-                <span className="text-[10px] text-gray-400 uppercase font-bold block">Conexión</span>
-                <span className="font-extrabold text-emerald-600 dark:text-emerald-400">Ethernet RJ45</span>
+                <span className="text-[10px] text-gray-400 uppercase font-bold block">MAC Address</span>
+                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">00:11:62:4D:A8:30</span>
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
                 <span className="text-[10px] text-gray-400 uppercase font-bold block">Puerto RAW</span>
-                <span className="font-extrabold text-gray-900 dark:text-white">9100 TCP</span>
+                <span className="font-extrabold text-gray-900 dark:text-white">TCP 9100</span>
               </div>
+            </div>
+
+            {/* Panel de Prueba Directa TCP 9100 */}
+            <div className="p-4 rounded-2xl bg-pink-50/60 dark:bg-pink-950/20 border border-pink-200/80 dark:border-pink-900/40 space-y-3">
+              <div className="flex items-center justify-between">
+                <strong className="text-xs uppercase tracking-wider text-pink-950 dark:text-pink-200 flex items-center gap-1.5 font-extrabold">
+                  <Printer size={15} /> Probar Envío TCP Socket Directo (Star Graphic Raster)
+                </strong>
+                <span className="text-[10px] font-bold bg-pink-100 dark:bg-pink-900/60 text-pink-800 dark:text-pink-300 px-2 py-0.5 rounded-full">
+                  Puerto 9100
+                </span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-gray-300">
+                Ingresa la IP local asignada por tu router (o detectada por DHCP) para disparar el ticket rasterizado a 576 dots y corte de guillotina.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <input
+                  type="text"
+                  placeholder="ej. 192.168.1.150 o variable PRINTER_IP"
+                  value={tcpPrinterIp}
+                  onChange={(e) => setTcpPrinterIp(e.target.value)}
+                  className="px-3.5 py-2 rounded-xl text-xs border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 font-mono flex-1 text-gray-900 dark:text-white"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleSendTcpTest()}
+                  disabled={isSendingTcp}
+                  className="px-4 py-2 bg-[#163422] hover:bg-[#1E432D] text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all disabled:opacity-50"
+                >
+                  <Receipt size={14} />
+                  <span>{isSendingTcp ? "Enviando..." : "Enviar a Impresora TCP"}</span>
+                </button>
+              </div>
+              {tcpStatus && (
+                <div
+                  className={`p-2.5 rounded-xl text-xs font-bold ${
+                    tcpStatus.startsWith("¡Éxito")
+                      ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-200"
+                      : "bg-red-100 dark:bg-red-950/60 text-red-900 dark:text-red-200"
+                  }`}
+                >
+                  {tcpStatus}
+                </div>
+              )}
             </div>
 
             {/* Los 4 Pasos de Puesta en Marcha */}
