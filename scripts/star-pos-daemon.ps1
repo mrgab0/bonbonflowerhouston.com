@@ -8,7 +8,7 @@ $Host.UI.RawUI.WindowTitle = "Bonbon Flowers - Star TSP100III LAN Daemon"
 
 function Get-ActivePrinterIp {
     if ($env:PRINTER_IP) { return $env:PRINTER_IP }
-    $candidates = @('10.0.0.72', '169.254.198.78', '10.0.0.200', '192.168.1.150')
+    $candidates = @('10.0.0.100', '10.0.0.72', '169.254.198.78', '10.0.0.200', '192.168.1.150')
     foreach ($cand in $candidates) {
         try {
             $t = New-Object System.Net.Sockets.TcpClient
@@ -19,7 +19,7 @@ function Get-ActivePrinterIp {
             $t.Close()
         } catch {}
     }
-    return "10.0.0.72"
+    return "10.0.0.100"
 }
 
 $PRINTER_IP = Get-ActivePrinterIp
