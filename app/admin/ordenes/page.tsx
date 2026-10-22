@@ -58,6 +58,7 @@ export default function AdminOrdenesPage() {
     setLanScanResult("Escaneando red local (10.0.0.x)...");
     const candidates = [
       "10.0.0.72",
+      "169.254.198.78",
       "10.0.0.200",
       "10.0.0.100",
       "10.0.0.150",

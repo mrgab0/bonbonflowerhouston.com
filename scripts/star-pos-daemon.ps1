@@ -6,7 +6,23 @@
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 $Host.UI.RawUI.WindowTitle = "Bonbon Flowers - Star TSP100III LAN Daemon"
 
-$PRINTER_IP = if ($env:PRINTER_IP) { $env:PRINTER_IP } else { "10.0.0.72" }
+function Get-ActivePrinterIp {
+    if ($env:PRINTER_IP) { return $env:PRINTER_IP }
+    $candidates = @('10.0.0.72', '169.254.198.78', '10.0.0.200', '192.168.1.150')
+    foreach ($cand in $candidates) {
+        try {
+            $t = New-Object System.Net.Sockets.TcpClient
+            if ($t.ConnectAsync($cand, 9100).Wait(1200)) {
+                $t.Close()
+                return $cand
+            }
+            $t.Close()
+        } catch {}
+    }
+    return "10.0.0.72"
+}
+
+$PRINTER_IP = Get-ActivePrinterIp
 $PRINTER_PORT = 9100
 $API_BASE = if ($env:STAR_API_URL) { $env:STAR_API_URL } else { "https://www.bonbonflowershouston.com/api/pos/printer" }
 $POLL_INTERVAL_SEC = 4
