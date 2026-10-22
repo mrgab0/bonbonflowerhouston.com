@@ -47,7 +47,7 @@ export default function AdminOrdenesPage() {
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
   const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("ticket80");
   const [isPrinterGuideOpen, setIsPrinterGuideOpen] = useState(false);
-  const [tcpPrinterIp, setTcpPrinterIp] = useState<string>("10.0.0.100");
+  const [tcpPrinterIp, setTcpPrinterIp] = useState<string>("10.0.0.118");
   const [tcpStatus, setTcpStatus] = useState<string | null>(null);
   const [isSendingTcp, setIsSendingTcp] = useState(false);
   const [isScanningLan, setIsScanningLan] = useState(false);
@@ -57,6 +57,7 @@ export default function AdminOrdenesPage() {
     setIsScanningLan(true);
     setLanScanResult("Escaneando red local (10.0.0.x)...");
     const candidates = [
+      "10.0.0.118",
       "10.0.0.100",
       "10.0.0.72",
       "169.254.198.78",
@@ -87,8 +88,8 @@ export default function AdminOrdenesPage() {
       setTcpPrinterIp(foundIp);
       setLanScanResult(`🟢 Impresora Star TSP100III / TSPLAN detectada en: ${foundIp}`);
     } else {
-      setLanScanResult("🟢 Impresora Star TSP100III LAN activa en: 10.0.0.100 (Puerto 9100 / TSPLAN)");
-      setTcpPrinterIp("10.0.0.100");
+      setLanScanResult("🟢 Impresora Star TSP100III LAN activa en: 10.0.0.118 (Puerto 9100 / TSPLAN)");
+      setTcpPrinterIp("10.0.0.118");
     }
     setIsScanningLan(false);
   };
@@ -1474,7 +1475,7 @@ export default function AdminOrdenesPage() {
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
                 <span className="text-[10px] text-gray-400 uppercase font-bold block">IP LAN Detectada</span>
-                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">10.0.0.100 (TSPLAN)</span>
+                <span className="font-extrabold text-emerald-600 dark:text-emerald-400 font-mono text-[11px]">10.0.0.118 (TSPLAN)</span>
               </div>
               <div className="p-3 rounded-2xl bg-gray-50 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
                 <span className="text-[10px] text-gray-400 uppercase font-bold block">Puerto RAW</span>
