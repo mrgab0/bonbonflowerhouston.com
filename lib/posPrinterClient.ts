@@ -221,15 +221,15 @@ export function generate80mmTicketHtml(order: POSOrderData, lang: "es" | "en" = 
       print-color-adjust: exact;
     }
     body {
-      font-family: 'Courier New', Courier, monospace, monospace;
-      font-size: 11px;
-      line-height: 1.3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, monospace;
+      font-size: 10px;
+      line-height: 1.18;
       color: #000;
       background: #fff;
       width: 72mm;
       max-width: 72mm;
       margin: 0 auto;
-      padding: 4mm 2mm 18mm 2mm; /* 18mm margen de corte Star Micronics */
+      padding: 1mm 1.5mm 3mm 1.5mm; /* Corte al ras del último pixel (Eco-Paper) */
     }
     .text-center { text-align: center; }
     .text-right { text-align: right; }
@@ -238,101 +238,66 @@ export function generate80mmTicketHtml(order: POSOrderData, lang: "es" | "en" = 
     .uppercase { text-transform: uppercase; }
     .border-b-dashed { border-bottom: 1px dashed #000; }
     .border-b-solid { border-bottom: 1.5px solid #000; }
-    .py-1 { padding-top: 4px; padding-bottom: 4px; }
-    .py-2 { padding-top: 6px; padding-bottom: 6px; }
+    .py-05 { padding-top: 2px; padding-bottom: 2px; }
     .flex-between { display: flex; justify-content: space-between; align-items: flex-start; }
   </style>
 </head>
 <body>
-  <!-- Encabezado Boutique -->
-  <div class="text-center py-1 border-b-dashed">
-    <div class="font-black uppercase" style="font-size: 14px; letter-spacing: 0.5px;">Bonbon Flowers</div>
-    <div class="font-bold uppercase" style="font-size: 12px; letter-spacing: 1px;">HOUSTON</div>
-    <div style="font-size: 9.5px; margin-top: 2px;">High Floral Design Boutique</div>
-    <div style="font-size: 9.5px;">Houston, Texas & Metro Areas</div>
-    <div class="font-bold" style="font-size: 10px; margin-top: 2px;">Tel / WhatsApp: +1 (346) 739-2730</div>
-    <div style="font-size: 9px;">www.bonbonflowershouston.com</div>
+  <!-- Encabezado Boutique Compacto -->
+  <div class="text-center py-05 border-b-dashed">
+    <div class="font-black uppercase" style="font-size: 13px; letter-spacing: 0.5px;">Bonbon Flowers Houston</div>
+    <div style="font-size: 8.5px; font-weight: 600;">High Floral Design • Tel: (346) 739-2730</div>
   </div>
 
-  <!-- Metadatos de Orden -->
-  <div class="py-1 border-b-dashed">
-    <div class="flex-between font-bold" style="font-size: 12px;">
-      <span>${lang === "es" ? "ORDEN:" : "ORDER:"}</span>
-      <span style="border: 1px solid #000; padding: 1px 4px;">#${order.orderId}</span>
+  <!-- Metadatos de Orden y Fecha en 1 Fila -->
+  <div class="py-05 border-b-dashed">
+    <div class="flex-between font-bold" style="font-size: 11px;">
+      <span>ORDEN #${order.orderId}</span>
+      <span style="font-size: 9.5px; font-weight: normal;">${dateFormatted}</span>
     </div>
-    <div class="flex-between" style="font-size: 10px; margin-top: 3px;">
-      <span>${lang === "es" ? "FECHA:" : "DATE:"}</span>
-      <span>${dateFormatted}</span>
+    <div style="font-size: 9.5px; margin-top: 1px;">
+      <span class="font-bold">Cliente:</span> ${order.customerName} ${order.customerPhone ? `(${order.customerPhone})` : ""}
     </div>
-    <div class="flex-between" style="font-size: 10px; margin-top: 2px;">
-      <span>${lang === "es" ? "ESTADO:" : "STATUS:"}</span>
-      <span class="font-bold uppercase">${order.status || "Confirmado"}</span>
-    </div>
+    ${order.address ? `<div style="font-size: 9px; margin-top: 1px; word-break: break-word;"><span class="font-bold">Entrega:</span> ${order.address}</div>` : ""}
   </div>
 
-  <!-- Destinatario / Cliente y Entrega -->
-  <div class="py-1 border-b-dashed" style="font-size: 10.5px;">
-    <div class="font-bold uppercase" style="font-size: 9.5px; color: #333;">
-      ${lang === "es" ? "DATOS DE ENTREGA:" : "DELIVERY INFO:"}
-    </div>
-    <div class="font-bold" style="font-size: 11.5px; margin-top: 1px;">${order.customerName}</div>
-    ${order.customerPhone ? `<div class="font-bold">Tel: ${order.customerPhone}</div>` : ""}
-    ${order.address ? `<div style="margin-top: 2px; word-break: break-word;"><span class="font-bold">Dir:</span> ${order.address}</div>` : ""}
-    <div style="font-size: 10px; margin-top: 2px;"><span class="font-bold">Método:</span> ${order.deliveryMethod || "Envío Estándar"}</div>
-  </div>
-
-  <!-- Dedicatoria -->
+  <!-- Dedicatoria Compacta -->
   ${cardMessageHtml}
 
   <!-- Detalle de Productos -->
-  <div class="py-1 border-b-dashed">
-    <div class="flex-between font-bold uppercase" style="font-size: 9.5px; padding-bottom: 3px; border-bottom: 1px solid #000;">
+  <div class="py-05 border-b-dashed">
+    <div class="flex-between font-bold uppercase" style="font-size: 9px; padding-bottom: 2px; border-bottom: 1px solid #000;">
       <span>${lang === "es" ? "DESCRIPCIÓN" : "ITEM"}</span>
       <span>${lang === "es" ? "TOTAL" : "TOTAL"}</span>
     </div>
-    <div style="margin-top: 4px;">
+    <div style="margin-top: 2px;">
       ${itemsRows}
     </div>
   </div>
 
-  <!-- Totales Financieros -->
-  <div class="py-1 border-b-dashed" style="font-size: 10.5px;">
+  <!-- Totales Financieros Compactos -->
+  <div class="py-05 border-b-dashed" style="font-size: 9.5px;">
     <div class="flex-between">
-      <span>${lang === "es" ? "Subtotal:" : "Subtotal:"}</span>
-      <span>$${itemsSubtotal.toFixed(2)}</span>
+      <span>Subtotal: $${itemsSubtotal.toFixed(2)} | Tax: +$${(order.taxAmount || 0).toFixed(2)}</span>
+      <span>Envío: ${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : "Gratis"}</span>
     </div>
     ${
       order.discountAmount
-        ? `<div class="flex-between">
-            <span>${lang === "es" ? "Descuento:" : "Discount:"}</span>
+        ? `<div class="flex-between" style="color: #000;">
+            <span>Descuento:</span>
             <span>-$${order.discountAmount.toFixed(2)}</span>
           </div>`
         : ""
     }
-    <div class="flex-between">
-      <span>Sales Tax (8.25%):</span>
-      <span>+$${(order.taxAmount || 0).toFixed(2)}</span>
-    </div>
-    <div class="flex-between">
-      <span>${lang === "es" ? "Envío / Delivery:" : "Delivery:"}</span>
-      <span>${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : lang === "es" ? "Gratis" : "Free"}</span>
-    </div>
-    <div class="flex-between font-black border-b-solid" style="font-size: 13px; margin-top: 4px; padding-top: 3px; border-top: 1.5px solid #000;">
-      <span>TOTAL:</span>
+    <div class="flex-between font-black border-b-solid" style="font-size: 12px; margin-top: 2px; padding-top: 2px; border-top: 1.5px solid #000;">
+      <span>TOTAL A PAGAR:</span>
       <span>$${(order.total || 0).toFixed(2)} USD</span>
     </div>
   </div>
 
-  <!-- Pie del Recibo y Línea de Corte Star Micronics -->
-  <div class="text-center py-2" style="font-size: 9.5px;">
-    <div class="font-bold uppercase">
-      ${lang === "es" ? "¡Gracias por su compra!" : "Thank you for your business!"}
-    </div>
-    <div style="margin-top: 2px;">Bonbon Flowers Houston</div>
-    <div style="font-size: 8.5px; color: #555; margin-top: 3px;">Star Micronics TSP100III - 80mm</div>
-    <!-- Espacio en blanco para la cuchilla automática -->
-    <div style="height: 18mm;"></div>
-    <div style="font-size: 8px; color: #999;">- - - - CORTE DE TICKET - - - -</div>
+  <!-- Pie del Recibo al Ras (Sin espacios en blanco desperdiciados) -->
+  <div class="text-center" style="font-size: 8.5px; padding-top: 3px; padding-bottom: 1px;">
+    <div class="font-bold">¡Gracias por su compra! ♡ bonbonflowershouston.com</div>
   </div>
 </body>
 </html>`;

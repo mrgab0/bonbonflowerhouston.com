@@ -248,10 +248,10 @@ export class StarRasterCanvas {
     // 4. Salir de Modo Raster
     chunks.push(Buffer.from([0x1b, 0x2a, 0x72, 0x42])); // ESC * r B (Quit raster mode)
 
-    // 5. Alimentar líneas en blanco para alcanzar el sensor de la cuchilla física
-    chunks.push(Buffer.from("\n\n\n\n", "latin1"));
+    // 5. Margen mínimo estricto al ras de la cuchilla física
+    chunks.push(Buffer.from("\n\n", "latin1"));
 
-    // 6. Corte automático de guillotina
+    // 6. Corte automático de guillotina (Corte al ras del último pixel)
     // Comando Star Line/Raster Cutter (ESC d 2 = Partial Cut)
     chunks.push(Buffer.from([0x1b, 0x64, 0x02]));
 
@@ -263,101 +263,58 @@ export class StarRasterCanvas {
 }
 
 /**
- * Convierte un objeto de orden en un payload binario completo Star Graphic Raster (576 dots / 203 DPI)
+ * Convierte un objeto de orden en un payload binario Star Graphic Raster ultra-compacto (Eco-Paper)
  */
 export function buildStarRasterPayload(order: TicketOrderData, lang: "es" | "en" = "es"): Buffer {
-  const canvas = new StarRasterCanvas(300);
-  let y = 12; // Margen superior en dots
+  const canvas = new StarRasterCanvas(200);
+  let y = 2; // Margen superior mínimo en dots
 
   const isEs = lang === "es";
 
-  // ENCABEZADO BOUTIQUE (Escala 2x para títulos prominentes)
-  y = canvas.drawCenteredText("BONBON FLOWERS", y, { scaleX: 2, scaleY: 2, bold: true }) + 2;
-  y = canvas.drawCenteredText("HOUSTON", y, { scaleX: 2, scaleY: 2, bold: true }) + 4;
-  y = canvas.drawCenteredText("High Floral Design Boutique • Houston, TX", y, { scaleX: 1, scaleY: 2 }) + 2;
-  y = canvas.drawCenteredText("Tel / WhatsApp: +1 (346) 739-2730", y, { scaleX: 1, scaleY: 2 }) + 6;
+  // ENCABEZADO BOUTIQUE ULTRA-COMPACTO
+  y = canvas.drawCenteredText("BONBON FLOWERS HOUSTON", y, { scaleX: 2, scaleY: 2, bold: true }) + 2;
+  y = canvas.drawCenteredText("High Floral Design • Tel: (346) 739-2730", y, { scaleX: 1, scaleY: 2 }) + 4;
 
-  // LÍNEA DIVISORIA DOBLE
   canvas.drawDoubleLine(y);
-  y += 10;
+  y += 5;
 
-  // ORDEN Y FECHA
-  y = canvas.drawTwoColumnRow(
-    isEs ? "ORDEN #" : "ORDER #",
-    order.orderId || "N/A",
-    y,
-    { scaleX: 1, scaleY: 2, bold: true }
-  ) + 2;
-
-  const dateStr = new Date(order.createdAt).toLocaleString(isEs ? "es-US" : "en-US", {
-    dateStyle: "medium",
-    timeStyle: "short",
+  // ORDEN Y FECHA EN 1 FILA
+  const dateStr = new Date(order.createdAt).toLocaleDateString(isEs ? "es-US" : "en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
   });
-  y = canvas.drawTwoColumnRow(isEs ? "FECHA:" : "DATE:", dateStr, y, { scaleX: 1, scaleY: 2 }) + 4;
+  y = canvas.drawTwoColumnRow(`ORDEN #${order.orderId || "N/A"}`, dateStr, y, { scaleX: 1, scaleY: 2, bold: true }) + 2;
 
-  canvas.drawDashedLine(y);
-  y += 8;
-
-  // INFORMACIÓN DEL CLIENTE
-  y = canvas.drawText(isEs ? "DATOS DE ENTREGA:" : "DELIVERY INFO:", 4, y, { scaleX: 1, scaleY: 2, bold: true }) + 2;
-  y = canvas.drawText(`  ${order.customerName}`, 4, y, { scaleX: 1, scaleY: 2, bold: true }) + 2;
-  y = canvas.drawText(`  Tel: ${order.customerPhone}`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
-  if (order.customerEmail) {
-    y = canvas.drawText(`  Email: ${order.customerEmail}`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
-  }
-  y = canvas.drawText(`  Dir: ${order.address}`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
-  if (order.deliveryMethod) {
-    y = canvas.drawTwoColumnRow(
-      isEs ? "  Metodo:" : "  Method:",
-      order.deliveryMethod,
-      y,
-      { scaleX: 1, scaleY: 2 }
-    ) + 2;
+  // CLIENTE Y DIRECCIÓN EN 2 LÍNEAS
+  y = canvas.drawText(`Cliente: ${order.customerName} ${order.customerPhone ? `(${order.customerPhone})` : ""}`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
+  if (order.address) {
+    y = canvas.drawText(`Entrega: ${order.address}`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
   }
 
-  // DEDICATORIA / TARJETA DE REGALO
+  // DEDICATORIA COMPACTA
   if (order.cardMessage && order.cardMessage.trim()) {
-    y += 4;
     canvas.drawDashedLine(y);
-    y += 8;
-    y = canvas.drawText(
-      isEs ? "💌 DEDICATORIA DE REGALO:" : "💌 GIFT CARD MESSAGE:",
-      4,
-      y,
-      { scaleX: 1, scaleY: 2, bold: true }
-    ) + 2;
-
-    // Ajustar mensaje largo en líneas
-    const words = order.cardMessage.trim().split(" ");
-    let line = "  \"";
-    for (const w of words) {
-      if ((line + w).length > 38) {
-        y = canvas.drawText(line, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
-        line = "   " + w + " ";
-      } else {
-        line += w + " ";
-      }
-    }
-    if (line.trim().length > 0) {
-      y = canvas.drawText(line.trim() + "\"", 4, y, { scaleX: 1, scaleY: 2 }) + 4;
-    }
+    y += 4;
+    y = canvas.drawText(`💌 "${order.cardMessage.trim()}"`, 4, y, { scaleX: 1, scaleY: 2, bold: true }) + 2;
   }
 
-  y += 4;
   canvas.drawDoubleLine(y);
-  y += 10;
+  y += 5;
 
   // CABECERA DE ÍTEMS
   y = canvas.drawTwoColumnRow(
-    isEs ? "DESCRIPCION" : "ITEM DESCRIPTION",
-    isEs ? "TOTAL" : "AMOUNT",
+    isEs ? "DESCRIPCION" : "ITEM",
+    isEs ? "TOTAL" : "TOTAL",
     y,
     { scaleX: 1, scaleY: 2, bold: true }
-  ) + 4;
+  ) + 2;
   canvas.drawHLine(y);
-  y += 8;
+  y += 4;
 
-  // ÍTEMS Y ADICIONALES
+  // ÍTEMS Y ADICIONALES COMPACTOS
   let itemsSubtotal = 0;
   for (const item of order.items || []) {
     const qty = item.quantity || 1;
@@ -370,84 +327,52 @@ export function buildStarRasterPayload(order: TicketOrderData, lang: "es" | "en"
       `$${sub.toFixed(2)}`,
       y,
       { scaleX: 1, scaleY: 2, bold: true }
-    ) + 2;
+    ) + 1;
 
     if (item.addons && item.addons.length > 0) {
       for (const addon of item.addons) {
         const aName = addon.name || addon.value || "";
         const aPrice = addon.price ? `(+$${addon.price.toFixed(2)})` : "";
-        y = canvas.drawText(`   + ${aName} ${aPrice}`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
-        if (addon.customText) {
-          y = canvas.drawText(`     "${addon.customText}"`, 4, y, { scaleX: 1, scaleY: 2 }) + 2;
-        }
+        y = canvas.drawText(` + ${aName} ${aPrice}`, 4, y, { scaleX: 1, scaleY: 1 }) + 1;
       }
     }
-    y += 2;
   }
 
   canvas.drawDashedLine(y);
-  y += 8;
+  y += 4;
 
-  // TOTALES Y DESGLOSE
-  y = canvas.drawTwoColumnRow(
-    isEs ? "Subtotal:" : "Subtotal:",
-    `$${itemsSubtotal.toFixed(2)}`,
-    y,
-    { scaleX: 1, scaleY: 2 }
-  ) + 2;
-
-  if (order.discountAmount && order.discountAmount > 0) {
-    y = canvas.drawTwoColumnRow(
-      isEs ? "Descuento:" : "Discount:",
-      `-$${order.discountAmount.toFixed(2)}`,
-      y,
-      { scaleX: 1, scaleY: 2 }
-    ) + 2;
-  }
-
-  y = canvas.drawTwoColumnRow(
-    "Sales Tax (8.25%):",
-    `+$${(order.taxAmount || 0).toFixed(2)}`,
-    y,
-    { scaleX: 1, scaleY: 2 }
-  ) + 2;
-
+  // TOTALES FINANCIEROS COMPACTOS
   const deliveryStr =
     (order.deliveryFee || 0) > 0
       ? `+$${order.deliveryFee?.toFixed(2)}`
       : isEs
       ? "Gratis"
       : "Free";
+
   y = canvas.drawTwoColumnRow(
-    isEs ? "Envio / Delivery:" : "Delivery:",
-    deliveryStr,
+    `Subtotal: $${itemsSubtotal.toFixed(2)} | Tax: +$${(order.taxAmount || 0).toFixed(2)}`,
+    `Envio: ${deliveryStr}`,
     y,
     { scaleX: 1, scaleY: 2 }
-  ) + 6;
+  ) + 2;
 
-  // LÍNEA TOTAL DOBLE
+  if (order.discountAmount && order.discountAmount > 0) {
+    y = canvas.drawTwoColumnRow("Descuento:", `-$${order.discountAmount.toFixed(2)}`, y, { scaleX: 1, scaleY: 2 }) + 2;
+  }
+
   canvas.drawDoubleLine(y);
-  y += 10;
+  y += 5;
 
-  // TOTAL FINAL PROMINENTE (Escala 2x)
+  // TOTAL FINAL PROMINENTE
   y = canvas.drawTwoColumnRow(
-    isEs ? "TOTAL FINAL:" : "TOTAL DUE:",
+    isEs ? "TOTAL A PAGAR:" : "TOTAL DUE:",
     `$${(order.total || 0).toFixed(2)} USD`,
     y,
     { scaleX: 1, scaleY: 2, bold: true }
-  ) + 8;
+  ) + 4;
 
-  canvas.drawDoubleLine(y);
-  y += 12;
-
-  // PIE DE RECIBO
-  y = canvas.drawCenteredText(
-    isEs ? "¡Gracias por su preferencia!" : "Thank you for your business!",
-    y,
-    { scaleX: 1, scaleY: 2, bold: true }
-  ) + 2;
-  y = canvas.drawCenteredText("www.bonbonflowershouston.com", y, { scaleX: 1, scaleY: 2 }) + 2;
-  y = canvas.drawCenteredText("Star Micronics TSP100III - 80mm Raster", y, { scaleX: 1, scaleY: 2 }) + 30;
+  // PIE DE RECIBO AL RAS DEL CORTE
+  y = canvas.drawCenteredText("¡Gracias por su compra! ♡ bonbonflowershouston.com", y, { scaleX: 1, scaleY: 2, bold: true }) + 2;
 
   return canvas.exportStarRasterBuffer();
 }
