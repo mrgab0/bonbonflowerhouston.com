@@ -85,24 +85,10 @@ export const ProductDetail = ({ product }: { product: any }) => {
 
   const [selectedColor, setSelectedColor] = useState<string>(availableColors[0] || "Red");
 
-  // Tiers de Volumen Floral (50, 75, 100 rosas estilo Stitch)
   const basePrice = Number(product.price || 0);
   const baseFlowerCount = Number(product.flowerCount) || 24;
 
-  const stemTiers: StemTier[] = useMemo(() => {
-    if (Array.isArray(product.stemTiers) && product.stemTiers.length > 0) {
-      return product.stemTiers;
-    }
-    return [
-      { label: `${baseFlowerCount} Rosas`, stems: baseFlowerCount, price: basePrice },
-      { label: `${Math.round(baseFlowerCount * 1.5)} Rosas`, stems: Math.round(baseFlowerCount * 1.5), price: Math.round(basePrice * 1.45) },
-      { label: `${baseFlowerCount * 2} Rosas`, stems: baseFlowerCount * 2, price: Math.round(basePrice * 1.85) },
-    ];
-  }, [product.stemTiers, baseFlowerCount, basePrice]);
-
-  const [selectedTier, setSelectedTier] = useState<StemTier>(stemTiers[0]);
-
-  // Rosas Adicionales Individuales (+1, +6, +12 rosas)
+  // Rosas Adicionales en el Bouquet (+25, +50, +75, +100 rosas)
   const [extraRoses, setExtraRoses] = useState<number>(0);
   const pricePerExtraRose = Number(product.pricePerExtraRose) > 0 ? Number(product.pricePerExtraRose) : 3.50;
   const extraRosesTotal = extraRoses * pricePerExtraRose;
@@ -115,16 +101,14 @@ export const ProductDetail = ({ product }: { product: any }) => {
       .filter((line: string) => line.length > 0)
   ), [product.description]);
 
-  // Cálculo Dinámico del Precio Combinado Total (Base/Tier + Rosas Extras + Adicionales)
-  const currentTierBasePrice = selectedTier ? selectedTier.price : basePrice;
-
+  // Cálculo Dinámico del Precio Combinado Total (Base + Rosas Extras + Adicionales)
   const { addonsTotalPrice, combinedTotalPrice } = useMemo(() => {
     const addonsTotal = selectedAddons.reduce((acc, curr) => acc + (curr.price || 0), 0);
     return {
       addonsTotalPrice: addonsTotal + extraRosesTotal,
-      combinedTotalPrice: currentTierBasePrice + extraRosesTotal + addonsTotal,
+      combinedTotalPrice: basePrice + extraRosesTotal + addonsTotal,
     };
-  }, [selectedAddons, currentTierBasePrice, extraRosesTotal]);
+  }, [selectedAddons, basePrice, extraRosesTotal]);
 
   const handleSelectionChange = useCallback((newSelection: { addonId: string; value?: string; price?: number; name?: string; customText?: string }[]) => {
     setSelectedAddons(newSelection);
@@ -157,31 +141,21 @@ export const ProductDetail = ({ product }: { product: any }) => {
       });
     }
 
-    // 2. Nivel de Volumen Floral Seleccionado (si difiere del precio base original)
-    if (selectedTier && selectedTier.price !== basePrice) {
-      list.unshift({
-        addonId: "stem-tier",
-        name: `Volumen: ${selectedTier.label}`,
-        value: selectedTier.label,
-        price: selectedTier.price - basePrice,
-      });
-    }
-
-    // 3. Rosas Adicionales Individuales
+    // 2. Rosas Adicionales en el Bouquet
     if (extraRoses > 0) {
       list.push({
         addonId: "extra-roses",
-        name: `+${extraRoses} Rosas Adicionales (${selectedColor})`,
+        name: `+${extraRoses} Rosas en Bouquet (${selectedColor})`,
         value: `${extraRoses} rosas`,
         price: extraRosesTotal,
       });
     }
 
     return list;
-  }, [selectedAddons, selectedColor, selectedTier, basePrice, extraRoses, extraRosesTotal]);
+  }, [selectedAddons, selectedColor, extraRoses, extraRosesTotal]);
 
   // Conteo total de flores visible
-  const totalRosesDisplay = (selectedTier ? selectedTier.stems : baseFlowerCount) + extraRoses;
+  const totalRosesDisplay = baseFlowerCount + extraRoses;
 
   return (
     <div className="min-h-screen bg-[#F9F9F9] dark:bg-[#0F1015] flex flex-col font-sans">
@@ -322,119 +296,82 @@ export const ProductDetail = ({ product }: { product: any }) => {
                 </div>
               </div>
 
-              {/* CONFIGURADOR 2: VOLUMEN FLORAL (TIERS ESTILO STITCH) */}
+              {/* CONFIGURADOR: AUMENTA LA CANTIDAD DE ROSAS EN TU BOUQUET */}
               <div className="bg-gray-50/80 dark:bg-[#12131A] p-4 sm:p-5 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-3">
-                <div className="flex justify-between items-center text-xs">
-                  <span className="font-bold uppercase tracking-wider text-gray-700 dark:text-[#76C7B2] flex items-center gap-1.5">
-                    <Layers size={14} className="text-[#FF97A4]" /> Selecciona el Volumen Floral
-                  </span>
-                  <span className="text-primary font-bold text-gray-900 dark:text-white">
-                    {selectedTier?.label || `${baseFlowerCount} Rosas`}
-                  </span>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
+                      <Plus size={14} className="text-[#FF97A4]" /> Aumenta la cantidad de rosas en tu bouquet
+                    </span>
+                    <span className="text-[10px] text-gray-400 block">
+                      Aumenta el volumen y opulencia del bouquet
+                    </span>
+                  </div>
+
+                  {extraRoses > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setExtraRoses(0)}
+                      className="text-[11px] font-bold text-red-500 hover:text-red-700 dark:text-red-400 underline transition-colors"
+                    >
+                      Quitar extras (0)
+                    </button>
+                  )}
                 </div>
 
-                <div className="grid grid-cols-3 gap-2.5">
-                  {stemTiers.map((tier) => {
-                    const isSelected = selectedTier?.label === tier.label;
+                {/* Los 4 Botones de Incremento: +25, +50, +75, +100 Rosas */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[25, 50, 75, 100].map((amount) => {
+                    const isSelected = extraRoses === amount;
+                    const addedCost = amount * pricePerExtraRose;
                     return (
                       <button
-                        key={tier.label}
+                        key={amount}
                         type="button"
-                        onClick={() => setSelectedTier(tier)}
-                        className={`p-3 rounded-xl border text-center transition-all flex flex-col items-center justify-center select-none ${
+                        onClick={() => setExtraRoses((prev) => (prev === amount ? 0 : amount))}
+                        className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center justify-center select-none ${
                           isSelected
-                            ? "bg-[#163422] text-white border-[#163422] shadow-md ring-2 ring-[#5EEAD4]/40 scale-102"
-                            : "bg-white dark:bg-[#181922] text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-800 hover:border-gray-300"
+                            ? "bg-[#163422] text-white border-[#163422] shadow-sm ring-2 ring-[#5EEAD4]/50 scale-102"
+                            : "bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:border-[#FF97A4]/60"
                         }`}
                       >
-                        <span className={`font-black text-xs block ${isSelected ? "text-white" : "text-gray-900 dark:text-white"}`}>
-                          {tier.label}
+                        <span className={`text-xs font-black ${isSelected ? "text-white" : "text-gray-900 dark:text-white"}`}>
+                          +{amount} Rosas
                         </span>
-                        <span className={`text-[11px] font-bold mt-0.5 ${isSelected ? "text-[#5EEAD4]" : "text-gray-500 dark:text-gray-400"}`}>
-                          ${tier.price.toFixed(2)}
+                        <span className={`text-[10px] font-bold ${isSelected ? "text-[#5EEAD4]" : "text-gray-500 dark:text-gray-400"}`}>
+                          +${addedCost.toFixed(2)}
                         </span>
                       </button>
                     );
                   })}
                 </div>
 
-                {/* BOTONES PARA SUMAR ROSAS ADICIONALES: PRESETS +25, +50, +75 Y MICRO-STEPPER */}
-                <div className="pt-3 border-t border-gray-200/60 dark:border-gray-800 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className="text-xs font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
-                        <Plus size={14} className="text-[#FF97A4]" /> Sumar Rosas Extra (+${pricePerExtraRose.toFixed(2)} c/u)
-                      </span>
-                      <span className="text-[10px] text-gray-400 block">
-                        Aumenta el volumen y opulencia del domo central
-                      </span>
-                    </div>
-
-                    {extraRoses > 0 && (
-                      <button
-                        type="button"
-                        onClick={() => setExtraRoses(0)}
-                        className="text-[11px] font-bold text-red-500 hover:text-red-700 dark:text-red-400 underline transition-colors"
-                      >
-                        Quitar extras (0)
-                      </button>
-                    )}
-                  </div>
-
-                  {/* Los 3 Botones de Incremento Rápido: +25, +50, +75 Rosas */}
-                  <div className="grid grid-cols-3 gap-2">
-                    {[25, 50, 75].map((amount) => {
-                      const isSelected = extraRoses === amount;
-                      const addedCost = amount * pricePerExtraRose;
-                      return (
-                        <button
-                          key={amount}
-                          type="button"
-                          onClick={() => setExtraRoses((prev) => (prev === amount ? 0 : amount))}
-                          className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center justify-center select-none ${
-                            isSelected
-                              ? "bg-[#163422] text-white border-[#163422] shadow-sm ring-2 ring-[#5EEAD4]/50 scale-102"
-                              : "bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-700 hover:border-[#FF97A4]/60"
-                          }`}
-                        >
-                          <span className={`text-xs font-black ${isSelected ? "text-white" : "text-gray-900 dark:text-white"}`}>
-                            +{amount} Rosas
-                          </span>
-                          <span className={`text-[10px] font-bold ${isSelected ? "text-[#5EEAD4]" : "text-gray-500 dark:text-gray-400"}`}>
-                            +${addedCost.toFixed(2)}
-                          </span>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Micro-Stepper para ajuste fino individual */}
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
-                      Ajuste fino unidad por unidad:
+                {/* Micro-Stepper para ajuste fino individual */}
+                <div className="flex items-center justify-between pt-1 border-t border-gray-200/60 dark:border-gray-800">
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                    Ajuste fino unidad por unidad:
+                  </span>
+                  <div className="flex items-center border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl p-1 shadow-xs">
+                    <button
+                      type="button"
+                      onClick={() => setExtraRoses((prev) => Math.max(0, prev - 1))}
+                      disabled={extraRoses === 0}
+                      className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white disabled:opacity-30 rounded-lg transition-colors"
+                      title="Quitar 1 rosa"
+                    >
+                      <Minus size={13} />
+                    </button>
+                    <span className="w-10 text-center font-black text-xs text-gray-900 dark:text-white">
+                      +{extraRoses}
                     </span>
-                    <div className="flex items-center border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl p-1 shadow-xs">
-                      <button
-                        type="button"
-                        onClick={() => setExtraRoses((prev) => Math.max(0, prev - 1))}
-                        disabled={extraRoses === 0}
-                        className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white disabled:opacity-30 rounded-lg transition-colors"
-                        title="Quitar 1 rosa"
-                      >
-                        <Minus size={13} />
-                      </button>
-                      <span className="w-10 text-center font-black text-xs text-gray-900 dark:text-white">
-                        +{extraRoses}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setExtraRoses((prev) => prev + 1)}
-                        className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white rounded-lg transition-colors"
-                        title="Sumar 1 rosa"
-                      >
-                        <Plus size={13} />
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setExtraRoses((prev) => prev + 1)}
+                      className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white rounded-lg transition-colors"
+                      title="Sumar 1 rosa"
+                    >
+                      <Plus size={13} />
+                    </button>
                   </div>
                 </div>
               </div>
