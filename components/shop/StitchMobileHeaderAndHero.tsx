@@ -43,19 +43,38 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
   const prefix = locale === "en" ? "/en" : "";
-  const featuredProductLink =
-    heroProducts && heroProducts.length > 0 && heroProducts[0]?.slug
-      ? `${prefix}/productos/${heroProducts[0].slug}`
-      : "#catalogo";
 
-  // 5 Categorías circulares con gradientes e imágenes originales de Stitch
+  // Producto destacado dinámico de Hero
+  const fallbackProduct = {
+    name: "Pink & Sunshine Bouquet Yellow and Pink Roses",
+    slug: "pink-sunshine-bouquet-yellow-and-pink-roses-100",
+    images: ["https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_378_BlXSezTsB.png"],
+  };
+
+  const activeProduct =
+    heroProducts && heroProducts.length > 0 && heroProducts[0]
+      ? heroProducts[0]
+      : fallbackProduct;
+
+  const featuredProductLink = activeProduct?.slug
+    ? `${prefix}/productos/${activeProduct.slug}`
+    : "#catalogo";
+
+  const featuredProductImage =
+    activeProduct?.images && activeProduct.images.length > 0 && activeProduct.images[0]
+      ? activeProduct.images[0]
+      : "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_378_BlXSezTsB.png";
+
+  const featuredProductTitle =
+    activeProduct?.name || "Colección Destacada Bonbon Flowers Houston";
+
+  // 5 Categorías circulares con gradientes e imágenes permanentes optimizadas desde ImageKit
   const categories = [
     {
       id: "love-romance",
       name: "LOVE & ROMANCE",
       ringGradient: "from-[#fbc2cb] to-[#f9e2e6]",
-      image:
-        "https://lh3.googleusercontent.com/aida/AEtjO1VQsvg9wSzahJY5PeDPeVRC4hYALvTwt7Wqs45r9pxii39nEZJ1C5-HQme2fqubqSTkw0R4OvtZV0ROLe8Duaz2BfCoxv8a7D2KH7-nuyvCiUM5XwL-5MqbHNvBZGgzH3rXUzPkglpuRbmf5jCvOa2s1rlSIXtjiGnT7fJsdS7QPLHzoRKyGRvHaVa5hyl5KofvOBlOgwwoPv2UqncMkptoxNodThsfiI8hjizuTUThhbwBOqUjf61cGJA",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_280_2OeW7r1QZa.png",
       href: "/productos?search=romance",
       twoLines: ["LOVE &", "ROMANCE"],
     },
@@ -63,8 +82,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       id: "birthday",
       name: "BIRTHDAY",
       ringGradient: "from-[#fde68a] to-[#fef3c7]",
-      image:
-        "https://lh3.googleusercontent.com/aida/AEtjO1X8Gq7sCV_2pAeEO9Tce4a4AfbuwL3i_HfJkAWG1C572FH68cUpY3ImqzFcMQmQTYoYvnCwfMQIx2SvxNcgigr5evWEU0Z4HNrB9hCq3RKcNevn_mWeRPe3SHgqVoDUTKpZjSk0sqwfoUBgFeAdOxzoc_yw_X_UJLUSgnAhjUHVrE1mvNUn4W0t1_lCYLgvyX4Yx-3VVUyvwJQyguJ_0nBdy9WjzaMHsoTKI3AEZscBY8usvZ0XVMZL9Wg",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_330_o3LDIGwS_.png",
       href: "/productos?search=cumpleaños",
       twoLines: ["BIRTHDAY"],
     },
@@ -72,8 +90,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       id: "graduation",
       name: "GRADUATION",
       ringGradient: "from-[#fbc2cb] to-[#fce7f3]",
-      image:
-        "https://lh3.googleusercontent.com/aida/AEtjO1Vfcn3W6zKtT58YDbLzclAFYM0vOtb9NFWzPe2XPnbhai6rusvo9HuXvfkIRQLtkR8jG0ouSKe-7ZC5erV3xCyfwYaGdxNyixcAKly3FJDomlC-oJgFR4m7f7QJey0ViTw4o01Mcs5AFN_MWZTD6DWCswO4NYXzbLqF3nf6PGZy_ZmhTTP8cBlossAO_k-Nf5OpcLLlJZmrha838Yac7Ii6wcNDw8AQtBpcUdqWF5hnvSYZB3_FP02ahk8",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_348_LvvLdITtU.png",
       href: "/productos?search=graduacion",
       twoLines: ["GRADUATION"],
     },
@@ -81,8 +98,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       id: "flowers-gifts",
       name: "FLOWERS + GIFTS",
       ringGradient: "from-[#fed7aa] to-[#ffedd5]",
-      image:
-        "https://lh3.googleusercontent.com/aida/AEtjO1WQsfajV22-ETvtoD62pCUB1B_c-99a2hInmXDtVkv6vO9XgM5uKp01dq4i3UXd26VZC4PzLowbx4DiL6hpLfy9n1wX3f71ldNUU8933TLEC0D_1Pa-NZ5fpwFtJ28x5ipj5jL2jBZaD6bz6uOEcgapn1Bpj5vOdIqNXVRhSfa60UFRRtKDc7x7-Y3YeB8icTfVaKycW6KaJqWUNOjvLf5mrLbCJUw8CsAU5HZ-rOkDX7RYxCykGtWRVWI",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_282_cUXpPUEqd.png",
       href: "/productos?category=Adicionales",
       twoLines: ["FLOWERS", "+ GIFTS"],
     },
@@ -90,8 +106,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       id: "balloons-helium",
       name: "BALLOONS WITH HELIUM",
       ringGradient: "from-[#fbc2cb] to-[#fde2e4]",
-      image:
-        "https://lh3.googleusercontent.com/aida/AEtjO1UUsklnO4yP1uRDSHZ5nIK6gp2D-__HcAA2vpyrYUVWLm7mXdkUQfqaxqUZQhiEI2cU77bxONwl_fX60-dt_gNDB-HZ807GGCYgqR3YXmoCKEEfEinLJgWwhMRzYkzb9im7kpxdf9y5YrB93Fyx2rCkXqYsG3exSrD6iaLq3ku_nw-mwY8-W1jsNH1matXeBt9ih-lR5w7YNdYOgLt4ns_Qec4T2Z6yk1zB-lKvGitNvgao12J25IiD2FM",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_375_-BXrInYiq.png",
       href: "/productos?search=globo",
       twoLines: ["BALLOONS", "WITH HELIUM"],
     },
@@ -309,13 +324,13 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
             <Link
               href={featuredProductLink}
               className="block group"
-              title="Ver colección destacada"
+              title={featuredProductTitle}
             >
               <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border border-[#f0e4db]/80 dark:border-gray-800 bg-[#fff5f5] dark:bg-stone-900 group-hover:scale-[1.02] transition-transform duration-300">
                 <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAg-YNbWRBl_e3mlLmq--dawZ8Nnux3UjLd_EO1rSpkqZrNXxelNF1qwsDWQoCLFAEJrPOtEA0lzbaXnXKioChpsj4yY1WGjPYSYs40xj7VP7FAC33v8ydmzQlkY0W11c16zfmYNk1MNUQJUzFr6_UNENshCrIM4-iMtJW5g41Ch0lb9TOKFJaz3BjcgYKK_2YfiP2vUKBcHoE3kYWq6acdNWaWSiuV9Y8AwM14U2OvidtHKuyp82PJ8Y3lUjI8JL_7dw"
-                  className="w-full h-full object-cover scale-[1.7] translate-x-[16%] translate-y-[8%]"
-                  alt="Sombrerera negra con rosas rojas y osito Bonbon Flowers"
+                  src={featuredProductImage}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  alt={featuredProductTitle}
                 />
               </div>
             </Link>

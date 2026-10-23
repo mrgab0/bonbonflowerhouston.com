@@ -76,3 +76,5 @@ Thumbs.db
 *.zip
 *.7z
 *.rar
+.vercel
+.env*
