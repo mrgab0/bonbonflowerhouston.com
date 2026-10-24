@@ -20,8 +20,8 @@ export function PillarsOfExcellence() {
       badge: "INCLUIDO",
     },
     {
-      id: "rosas-ecuador",
-      title: "Rosas Ecuatorianas",
+      id: "rosas-frescas",
+      title: "Rosas Frescas 100% Naturales",
       description: "Corte selecto de exportación con máxima apertura y aroma.",
       icon: Sparkles,
       badge: "CALIDAD VIP",

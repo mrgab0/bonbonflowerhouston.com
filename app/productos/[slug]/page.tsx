@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
-import "@/lib/models/Addon"; // Importación con efecto secundario para asegurar registro
+import { Addon } from "@/lib/models/Addon";
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/shop/ProductDetail";
 
@@ -8,13 +8,29 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   await dbConnect();
   
   const resolvedParams = await params;
-  const productDoc: any = await Product.findOne({ slug: resolvedParams.slug })
-    .populate('addons')
-    .populate({ path: 'variants', select: 'name price images slug flowerCount bouquetType' })
-    .lean();
+  const [productDocRaw, globalAddons] = await Promise.all([
+    Product.findOne({ slug: resolvedParams.slug })
+      .populate('addons')
+      .populate({ path: 'variants', select: 'name price images slug flowerCount bouquetType' })
+      .lean(),
+    Addon.find({ isActive: { $ne: false }, isDeleted: { $ne: true } })
+      .sort({ order: 1, createdAt: 1 })
+      .lean(),
+  ]);
+
+  const productDoc: any = productDocRaw;
 
   if (!productDoc || productDoc.isActive === false || productDoc.isDeleted === true) {
     notFound();
+  }
+
+  // Garantizar que todos los adicionales activos (Ferrero, peluches, globos) estén disponibles en todos los productos
+  if (!productDoc.addons || productDoc.addons.length === 0) {
+    productDoc.addons = globalAddons;
+  } else {
+    const existingIds = new Set(productDoc.addons.map((a: any) => a._id?.toString() || a.toString()));
+    const missing = (globalAddons || []).filter((a: any) => !existingIds.has(a._id?.toString()));
+    productDoc.addons = [...productDoc.addons, ...missing];
   }
 
   // Consolidar toda la familia de variantes (padre, hermanos e hijos) exclusivamente para la página individual

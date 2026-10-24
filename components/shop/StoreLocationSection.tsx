@@ -17,22 +17,17 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
   return (
-    <section className="relative w-full min-h-[480px] md:min-h-[520px] map-pattern border-t border-b border-stone-300 dark:border-gray-800 overflow-hidden select-none">
-      {/* Overlay esquemático de mapa estilizado de Houston */}
-      <div className="absolute inset-0 opacity-40 pointer-events-none">
-        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-          {/* Autopistas principales de Houston (I-10, I-610 Loop, I-45, Hwy 59) */}
-          <line stroke="#cbd5e1" strokeWidth="14" x1="0%" x2="100%" y1="50%" y2="50%" />
-          <line stroke="#cbd5e1" strokeWidth="14" x1="50%" x2="50%" y1="0%" y2="100%" />
-          <line stroke="#f1f5f9" strokeWidth="18" x1="15%" x2="85%" y1="0%" y2="100%" />
-          <line stroke="#e2e8f0" strokeWidth="12" x1="85%" x2="15%" y1="0%" y2="100%" />
-          <circle cx="50%" cy="50%" r="22%" stroke="#cbd5e1" strokeWidth="10" fill="none" />
-          
-          <text fill="#64748b" fontSize="11" fontWeight="700" letterSpacing="1.5" x="25%" y="47%">INTERSTATE 10</text>
-          <text fill="#64748b" fontSize="11" fontWeight="700" letterSpacing="1.5" x="52%" y="20%">I-45 NORTH</text>
-          <text fill="#475569" fontSize="14" fontWeight="800" letterSpacing="2" x="53%" y="46%">HOUSTON DOWNTOWN</text>
-          <text fill="#64748b" fontSize="11" fontWeight="700" letterSpacing="1.5" x="30%" y="75%">THE GALLERIA / MEMORIAL</text>
-        </svg>
+    <section className="relative w-full min-h-[480px] md:min-h-[520px] border-t border-b border-stone-300 dark:border-gray-800 overflow-hidden select-none">
+      {/* Mapa interactivo fidedigno centrado en 9546 Hammerly Blvd, Houston, TX 77080 */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden">
+        <iframe
+          title="Ubicación Bonbon Flowers Houston - 9546 Hammerly Boulevard"
+          src="https://www.openstreetmap.org/export/embed.html?bbox=-95.548%2C29.802%2C-95.518%2C29.819&amp;layer=mapnik&amp;marker=29.8105%2C-95.5323"
+          className="w-full h-full border-0 filter contrast-[1.05] brightness-[0.98] dark:invert dark:hue-rotate-180 dark:contrast-125"
+          loading="lazy"
+        />
+        {/* Gradiente ambiental superior e inferior para integración visual de alta costura */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/20 dark:from-[#0B0C10]/40 dark:via-transparent dark:to-[#0B0C10]/30 pointer-events-none" />
       </div>
 
       {/* Pin animado en Houston, TX */}
@@ -46,24 +41,28 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
       </div>
 
       {/* Marca de agua estilo mapa */}
-      <div className="absolute bottom-3 left-6 z-10 text-[11px] text-black font-sans flex items-center gap-2 select-none">
-        <span className="font-bold text-black text-sm tracking-tight">Houston Metro Map</span>
-        <span className="font-medium">• Same Day Local Floral Delivery</span>
+      <div className="absolute bottom-3 left-6 z-10 text-[11px] text-black bg-white/80 dark:bg-black/60 backdrop-blur-xs px-2.5 py-1 rounded-md font-sans flex items-center gap-2 select-none shadow-xs">
+        <span className="font-bold text-black dark:text-white text-xs tracking-tight">Houston Metro Map</span>
+        <span className="font-medium text-stone-700 dark:text-gray-300">• 9546 Hammerly Blvd</span>
       </div>
 
       {/* Tarjeta flotante de lujo con información del estudio y entregas */}
-      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white dark:bg-[#12131A] p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-300 dark:border-stone-800 text-stone-900 dark:text-[#E6F7F0]">
+      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-md p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-[#E6F7F0]">
         <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-stone-900/80 text-[#163422] dark:text-[#5EEAD4] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 border border-[#163422]/20 dark:border-[#5EEAD4]/30">
           <MapPin size={11} />
           <span>Houston Floral Studio</span>
         </div>
 
-        <h3 className="text-base font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-2 font-serif">
+        <h3 className="text-base font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-1 font-serif">
           Pick-Up &amp; Delivery Hub
         </h3>
-        <p className="text-stone-600 dark:text-[#B9E6D3] text-xs sm:text-sm leading-relaxed mb-4 font-medium">
-          Houston, Texas &amp; Greater Houston Metroplex<br />
-          <span className="text-[11px] text-stone-600 dark:text-[#76C7B2] font-semibold">Entregas a domicilio garantizadas el mismo día.</span>
+        <p className="text-stone-800 dark:text-[#B9E6D3] text-xs sm:text-sm leading-relaxed mb-4 font-medium">
+          <strong className="text-stone-950 dark:text-white font-bold block text-sm">
+            9546 Hammerly Boulevard, Houston, TX 77080
+          </strong>
+          <span className="text-[11.5px] text-stone-600 dark:text-[#76C7B2] font-semibold block mt-1">
+            Spring Branch West • Retiro en taller y entregas a domicilio el mismo día en todo Houston.
+          </span>
         </p>
 
         <div className="space-y-3 pt-3 border-t border-stone-200 dark:border-stone-800">
@@ -94,7 +93,17 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
           </div>
         </div>
 
-        <div className="mt-5 pt-4 border-t border-stone-100 dark:border-stone-800">
+        <div className="mt-5 pt-4 border-t border-stone-100 dark:border-stone-800 flex flex-col gap-2">
+          <a
+            href="https://www.google.com/maps/dir/?api=1&destination=9546+Hammerly+Boulevard+Houston+TX+77080"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full bg-[#D4AF37] hover:bg-[#C09A2E] text-stone-950 py-2.5 px-4 rounded-xl text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all"
+          >
+            <MapPin size={14} />
+            <span>Cómo Llegar en Google Maps</span>
+          </a>
+
           <a
             href={whatsappUrl}
             target="_blank"

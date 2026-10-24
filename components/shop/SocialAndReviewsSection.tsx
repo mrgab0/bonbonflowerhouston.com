@@ -34,7 +34,14 @@ const parseEmbeds = (rawHtml?: string): string[] => {
     return matches.map((m) => m.trim());
   }
 
-  return [rawHtml.trim()];
+  const trimmed = rawHtml.trim();
+  // Soporte automático para URLs directas de posts o reels de Instagram
+  const instaUrlMatch = trimmed.match(/https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)/);
+  if (instaUrlMatch) {
+    return [`<iframe src="https://www.instagram.com/p/${instaUrlMatch[1]}/embed/captioned" class="w-full min-h-[480px] sm:min-h-[520px] rounded-2xl border-0 overflow-hidden shadow-md" frameborder="0" scrolling="no" allowtransparency="true"></iframe>`];
+  }
+
+  return [trimmed];
 };
 
 export function SocialAndReviewsSection({
@@ -142,7 +149,7 @@ export function SocialAndReviewsSection({
   const instagramPosts = [
     {
       id: "post-buchon-100",
-      image: "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=900&auto=format&fit=crop&q=85",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_280_2OeW7r1QZa.png",
       title: "Ramo Buchón 100 Rosas Rojas",
       caption: "Un clásico eterno que roba el aliento ❤️ Ramo Buchón de 100 rosas de exportación con corona de pedrería y mariposas doradas 3D. Entrega el mismo día en Houston, TX 🌹✨ #bonbonflowers #houstonflorist #ramobuchon #floreshouston",
       likes: 487,
@@ -151,36 +158,36 @@ export function SocialAndReviewsSection({
     },
     {
       id: "post-velvet-box",
-      image: "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=900&auto=format&fit=crop&q=85",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_282_cUXpPUEqd.png",
       title: "Caja Velvet Noir Luxury",
-      caption: "Detalles que definen la elegancia moderna 🤍 Caja Velvet Noir con orquídeas phalaenopsis blancas, rosas blush importadas y lazo de seda. Perfecta para aniversarios. #bonbonflowers #houstonluxury #flowerbox",
+      caption: "Detalles que definen la elegancia moderna 🤍 Sombrerera de lujo con osito, rosas blush importadas y lazo de seda. Perfecta para aniversarios. #bonbonflowers #houstonluxury #flowerbox",
       likes: 362,
       comments: 28,
       date: "Hace 4 días",
     },
     {
       id: "post-tulipanes-peonias",
-      image: "https://images.unsplash.com/photo-1520763185298-1b434c919102?w=900&auto=format&fit=crop&q=85",
-      title: "Pastel Luxe Holland Tulips",
-      caption: "Frescura primaveral directa a tu puerta 🌷 Tulipanes holandeses y peonías frescas en papel coreano de alta costura. Pide antes de la 1 PM para entrega hoy en Houston. #bonbonflowers #houstondelivery",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_330_o3LDIGwS_.png",
+      title: "Queen’s Birthday Bouquet Deluxe",
+      caption: "Frescura y volumen directo a su puerta 👑 Rosas selectas en papel coreano de alta costura. Pide antes de la 1 PM para entrega hoy en Houston. #bonbonflowers #houstondelivery",
       likes: 295,
       comments: 19,
       date: "Hace 5 días",
     },
     {
       id: "post-rosa-eterna",
-      image: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=900&auto=format&fit=crop&q=85",
-      title: "Cúpula Encantada Rosa Eterna",
-      caption: "Amor que dura por siempre ✨ Rosa Eterna Preservada en cúpula de cristal con micro-luces LED cálidas. 100% natural, conserva su belleza por más de 3 años. 💫 #bonbonflowers #eternalrose #houston",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_348_LvvLdITtU.png",
+      title: "Golden Bloom Bouquet",
+      caption: "Amor que dura por siempre ✨ Diseño floral con follaje aromático y toque dorado exclusivo. 100% natural. 💫 #bonbonflowers #houston",
       likes: 418,
       comments: 39,
       date: "Hace 1 semana",
     },
     {
       id: "post-girasoles-sunshine",
-      image: "https://images.unsplash.com/photo-1597848212624-a19eb35e2651?w=900&auto=format&fit=crop&q=85",
-      title: "Bouquet Soleado de Girasoles Jumbo",
-      caption: "Para iluminar el día de esa persona especial 🌻💛 Bouquet de girasoles gigantes seleccionados con acentos dorados y envoltura coreana de lujo. ¡Sonrisas garantizadas! ☀️ #bonbonflowers #girasoleshouston",
+      image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_378_BlXSezTsB.png",
+      title: "Pink & Sunshine Bouquet",
+      caption: "Para iluminar el día de esa persona especial 💛 Bouquet de rosas amarillas y rosas con acentos de opulencia y envoltura de lujo. ¡Sonrisas garantizadas! ☀️ #bonbonflowers #floreshouston",
       likes: 341,
       comments: 22,
       date: "Hace 1 semana",
