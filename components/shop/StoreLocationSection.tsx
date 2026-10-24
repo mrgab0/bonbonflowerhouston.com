@@ -17,37 +17,38 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
   return (
-    <section className="relative w-full min-h-[480px] md:min-h-[520px] border-t border-b border-stone-300 dark:border-gray-800 overflow-hidden select-none">
-      {/* Mapa interactivo fidedigno centrado en 9546 Hammerly Blvd, Houston, TX 77080 */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden">
+    <section className="relative w-full flex flex-col md:block md:min-h-[540px] border-t border-b border-stone-300 dark:border-gray-800 overflow-hidden select-none bg-stone-50 dark:bg-[#0c0d12]">
+      {/* 1. Contenedor del Mapa: en móvil va primero (arriba) con altura fija; en desktop es absoluto llenando toda la sección */}
+      <div className="relative w-full h-[320px] sm:h-[380px] md:h-full md:absolute md:inset-0 overflow-hidden">
         <iframe
           title="Ubicación Bonbon Flowers Houston - 9546 Hammerly Boulevard"
           src="https://www.openstreetmap.org/export/embed.html?bbox=-95.548%2C29.802%2C-95.518%2C29.819&amp;layer=mapnik&amp;marker=29.8105%2C-95.5323"
           className="w-full h-full border-0 filter contrast-[1.05] brightness-[0.98] dark:invert dark:hue-rotate-180 dark:contrast-125"
           loading="lazy"
         />
-        {/* Gradiente ambiental superior e inferior para integración visual de alta costura */}
+
+        {/* Gradiente ambiental superior e inferior para integración visual */}
         <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-transparent to-white/20 dark:from-[#0B0C10]/40 dark:via-transparent dark:to-[#0B0C10]/30 pointer-events-none" />
-      </div>
 
-      {/* Pin animado en Houston, TX */}
-      <div className="absolute left-[50%] md:left-[55%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
-        <div className="text-[#163422] animate-bounce drop-shadow-lg">
-          <MapPin size={42} fill="#163422" className="text-white" />
+        {/* Pin animado en Houston, TX */}
+        <div className="absolute left-[50%] md:left-[55%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
+          <div className="text-[#163422] animate-bounce drop-shadow-lg">
+            <MapPin size={38} fill="#163422" className="text-white" />
+          </div>
+          <span className="bg-white text-black text-[10px] sm:text-[11px] font-black px-3 py-0.5 rounded-full shadow-md border-2 border-[#163422] uppercase tracking-wider -mt-1 whitespace-nowrap">
+            Bonbon Flowers Houston
+          </span>
         </div>
-        <span className="bg-white text-black text-[11px] font-black px-3.5 py-1 rounded-full shadow-md border-2 border-[#163422] uppercase tracking-wider -mt-1">
-          Bonbon Flowers Houston
-        </span>
+
+        {/* Marca de agua informativa en el mapa */}
+        <div className="absolute bottom-3 left-3 sm:left-6 z-10 text-[10px] sm:text-[11px] text-black bg-white/85 dark:bg-black/70 backdrop-blur-xs px-2.5 py-1 rounded-md font-sans flex items-center gap-1.5 sm:gap-2 select-none shadow-xs">
+          <span className="font-bold text-black dark:text-white tracking-tight">Houston Metro Map</span>
+          <span className="font-medium text-stone-700 dark:text-gray-300">• 9546 Hammerly Blvd</span>
+        </div>
       </div>
 
-      {/* Marca de agua estilo mapa */}
-      <div className="absolute bottom-3 left-6 z-10 text-[11px] text-black bg-white/80 dark:bg-black/60 backdrop-blur-xs px-2.5 py-1 rounded-md font-sans flex items-center gap-2 select-none shadow-xs">
-        <span className="font-bold text-black dark:text-white text-xs tracking-tight">Houston Metro Map</span>
-        <span className="font-medium text-stone-700 dark:text-gray-300">• 9546 Hammerly Blvd</span>
-      </div>
-
-      {/* Tarjeta flotante de lujo con información del estudio y entregas */}
-      <div className="relative md:absolute top-8 left-4 right-4 md:right-auto md:left-12 z-20 max-w-sm w-auto md:w-full bg-white/95 dark:bg-[#12131A]/95 backdrop-blur-md p-6 sm:p-7 shadow-2xl rounded-2xl border border-stone-200 dark:border-stone-800 text-stone-900 dark:text-[#E6F7F0]">
+      {/* 2. Tarjeta con información del estudio: en móvil se ubica abajo del mapa sin taparlo; en desktop flota en la esquina izquierda */}
+      <div className="relative z-20 w-full p-5 sm:p-6 md:p-7 md:absolute md:top-8 md:left-12 md:max-w-sm md:w-full bg-white dark:bg-[#12131A] md:bg-white/95 md:dark:bg-[#12131A]/95 md:backdrop-blur-md md:rounded-2xl border-t md:border border-stone-200 dark:border-stone-800 md:shadow-2xl text-stone-900 dark:text-[#E6F7F0]">
         <div className="inline-flex items-center gap-1.5 bg-stone-100 dark:bg-stone-900/80 text-[#163422] dark:text-[#5EEAD4] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider mb-3 border border-[#163422]/20 dark:border-[#5EEAD4]/30">
           <MapPin size={11} />
           <span>Houston Floral Studio</span>
@@ -98,7 +99,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
             href="https://www.google.com/maps/dir/?api=1&destination=9546+Hammerly+Boulevard+Houston+TX+77080"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-[#D4AF37] hover:bg-[#C09A2E] text-stone-950 py-2.5 px-4 rounded-xl text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all"
+            className="w-full bg-[#D4AF37] hover:bg-[#C09A2E] text-stone-950 py-2.5 px-4 rounded-xl text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-95"
           >
             <MapPin size={14} />
             <span>Cómo Llegar en Google Maps</span>
@@ -108,7 +109,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-2.5 px-4 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all"
+            className="w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-2.5 px-4 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95"
           >
             <MessageCircle size={15} />
             <span>Consultar por WhatsApp</span>

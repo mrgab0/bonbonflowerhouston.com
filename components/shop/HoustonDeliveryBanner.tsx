@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Truck, Phone, MessageCircle, MapPin, Sparkles } from "lucide-react";
+import { Phone, MessageCircle, MapPin } from "lucide-react";
 
 interface HoustonDeliveryBannerProps {
   phone?: string;
@@ -27,46 +27,48 @@ export function HoustonDeliveryBanner({
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 select-none">
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-stone-900 via-[#15161E] to-stone-900 border border-stone-800 text-white p-6 sm:p-10 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#122419] via-[#163422] to-[#0c1811] dark:from-[#0d1711] dark:via-[#111915] dark:to-[#090e0b] border-2 border-[#2b593b]/70 dark:border-emerald-900/60 text-white p-6 sm:p-10 shadow-2xl">
         {/* Glow decorativo de fondo */}
-        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#FF97A4]/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-[#5EEAD4]/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -left-20 -top-20 w-80 h-80 bg-[#FF97A4]/15 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
           <div className="space-y-4 max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            {/* Tag destacado con contraste */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#5EEAD4]/20 border border-[#5EEAD4]/60 text-[#5EEAD4] text-xs font-black uppercase tracking-wider shadow-sm">
+              <span className="w-2.5 h-2.5 rounded-full bg-[#5EEAD4] animate-pulse" />
               <span>Entregas Rápidas y Garantizadas en Houston</span>
             </div>
 
-            <h3 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black tracking-tight text-white leading-tight drop-shadow-sm">
               ¿Necesitas una entrega hoy mismo en tu vecindario?
             </h3>
 
-            <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
+            <p className="text-sm sm:text-base text-emerald-100/90 dark:text-stone-200 font-medium leading-relaxed">
               Llevamos tus arreglos en vehículos climatizados directamente a la puerta de tu ser querido con atención de guante blanco y confirmación por fotografía.
             </p>
 
-            {/* Chips de vecindarios */}
+            {/* Chips de vecindarios con contraste AAA */}
             <div className="flex flex-wrap gap-2 pt-2">
               {neighborhoods.map((zone) => (
                 <span
                   key={zone}
-                  className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] font-medium text-stone-300 flex items-center gap-1 hover:border-[#FF97A4]/40 transition-colors"
+                  className="px-3.5 py-1.5 rounded-full bg-white/15 dark:bg-white/10 hover:bg-white/25 border border-white/30 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-colors backdrop-blur-xs"
                 >
-                  <MapPin size={10} className="text-[#FF97A4]" />
-                  {zone}
+                  <MapPin size={12} className="text-[#FF97A4] shrink-0" />
+                  <span>{zone}</span>
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Acciones directas */}
+          {/* Acciones directas con máxima legibilidad */}
           <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
             <a
               href={`tel:${phone.replace(/\D/g, "")}`}
-              className="flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-sm"
+              className="flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white hover:bg-stone-100 text-[#163422] font-black text-xs uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-md border border-white"
             >
-              <Phone size={16} className="text-[#FF97A4]" />
+              <Phone size={16} className="text-[#163422]" />
               <span>{phone}</span>
             </a>
 
@@ -74,7 +76,7 @@ export function HoustonDeliveryBanner({
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FF97A4] hover:bg-[#ff8090] text-stone-950 font-extrabold text-xs uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-lg hover:shadow-[#FF97A4]/25"
+              className="flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FF97A4] hover:bg-[#ff8090] text-stone-950 font-black text-xs uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-lg hover:shadow-[#FF97A4]/30"
             >
               <MessageCircle size={16} />
               <span>Chatear por WhatsApp</span>
