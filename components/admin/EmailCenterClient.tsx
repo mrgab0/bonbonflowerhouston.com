@@ -726,7 +726,7 @@ IMPORTANTE: Responde ÚNICAMENTE con un objeto JSON sin texto introductorio ni e
                 Centro de Correos & Webmail
               </h1>
               <p style={{ margin: 0 }} className="text-xs text-stone-500 dark:text-[#76C7B2] font-semibold">
-                Haute Parfumerie & Art Floral • Houston, Texas
+                Art Floral • Houston, Texas
               </p>
             </div>
           </div>

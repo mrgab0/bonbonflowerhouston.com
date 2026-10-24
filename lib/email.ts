@@ -101,7 +101,7 @@ export async function getCorporateEmailConfig(): Promise<CorporateEmailConfig> {
  */
 export function wrapInBonbonEmailTemplate({
   title = "Bonbon Flowers",
-  preheader = "Haute Parfumerie & Art Floral • Houston, Texas",
+  preheader = "Art Floral • Houston, Texas",
   bodyHtml,
   ctaText,
   ctaUrl,
@@ -155,7 +155,7 @@ export function wrapInBonbonEmailTemplate({
                     Bonbon Flowers
                   </h1>
                   <p style="color: #E6C98B; margin: 4px 0 0 0; font-size: 10px; text-transform: uppercase; letter-spacing: 0.22em; font-weight: bold;">
-                    Haute Parfumerie & Art Floral • Houston
+                    Art Floral • Houston
                   </p>
                 </td>
               </tr>

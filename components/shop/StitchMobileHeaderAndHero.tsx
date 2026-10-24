@@ -287,7 +287,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
           <div className="w-[58%] sm:w-[60%] pt-2 z-10">
             {/* Eyebrow */}
             <p className="text-[8.5px] sm:text-[10px] font-bold tracking-[0.18em] text-[#786c5e] dark:text-[#d4af37] uppercase mb-1.5 flex items-center gap-1">
-              <span>HAUTE PARFUMERIE &amp; ART FLORAL • HOUSTON</span>
+              <span>ART FLORAL • HOUSTON</span>
             </p>
 
             {/* Main Title */}
