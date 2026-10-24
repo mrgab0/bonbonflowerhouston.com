@@ -60,7 +60,7 @@ export const LuxuryHeroSection: React.FC<LuxuryHeroSectionProps> = ({ siteConfig
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pink-50 dark:bg-pink-950/40 border border-[#FF97A4]/30 text-[#B0004A] dark:text-[#FF97A4] shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#FF97A4] animate-pulse" />
               <span className="text-[11px] font-bold uppercase tracking-widest font-mono">
-                Houston Couture Boutique • White-Glove
+                Houston Couture Boutique
               </span>
             </div>
 

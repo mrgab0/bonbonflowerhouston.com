@@ -272,7 +272,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       <div className="px-4 mt-1 mb-4 max-w-md mx-auto">
         <div className="bg-[#fae1df] dark:bg-pink-950/40 py-1.5 px-3 rounded-full text-center border border-[#f3d2d6] dark:border-pink-900/40 shadow-2xs">
           <span className="text-[9.5px] font-bold tracking-[0.16em] text-[#933c4f] dark:text-pink-300 uppercase">
-            • HOUSTON COUTURE BOUTIQUE • WHITE-GLOVE •
+            • HOUSTON COUTURE BOUTIQUE •
           </span>
         </div>
       </div>

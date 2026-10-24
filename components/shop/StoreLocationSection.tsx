@@ -99,7 +99,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
             href="https://www.google.com/maps/dir/?api=1&destination=9546+Hammerly+Boulevard+Houston+TX+77080"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full bg-[#D4AF37] hover:bg-[#C09A2E] text-stone-950 py-2.5 px-4 rounded-xl text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-95"
+            className="w-full bg-[#163422] hover:bg-[#1B2E22] text-white py-2.5 px-4 rounded-xl text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-95 border border-[#163422]"
           >
             <MapPin size={14} />
             <span>Cómo Llegar en Google Maps</span>
