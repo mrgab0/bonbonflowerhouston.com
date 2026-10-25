@@ -20,7 +20,7 @@ export default async function LocalizedProductosCatalogPage() {
   const addons = addonsRes.success ? addonsRes.data : [];
 
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#F9F9F9] p-12 text-center text-stone-500">Cargando Catálogo...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#F9F9F9] dark:bg-[#0B0C10] p-12 text-center text-stone-500 dark:text-stone-400">Cargando Catálogo...</div>}>
       <CatalogClient initialProducts={products} initialAddons={addons} />
     </Suspense>
   );

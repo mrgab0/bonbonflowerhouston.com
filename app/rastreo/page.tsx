@@ -51,28 +51,28 @@ export default function RastreoPedidoPage() {
         <div className="container mx-auto px-4 md:px-6 max-w-3xl space-y-8">
           {/* Header de Rastreo con Ortografía Perfecta */}
           <div className="text-center space-y-3">
-            <span className="bg-pink-100 dark:bg-pink-100 text-black dark:text-black text-xs font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full border border-pink-200 dark:border-pink-200 inline-block shadow-sm">
+            <span className="bg-pink-100 dark:bg-pink-950/60 text-[#933c4f] dark:text-[#FF97A4] text-xs font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full border border-pink-200 dark:border-pink-900/50 inline-block shadow-sm">
               Seguimiento en Tiempo Real
             </span>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-sans font-black tracking-tight !text-black dark:!text-black" style={{ color: '#000000' }}>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-sans font-black tracking-tight text-stone-900 dark:text-white">
               Rastrear Mi Envío
             </h1>
-            <p className="text-sm text-black dark:text-black font-bold max-w-lg mx-auto">
+            <p className="text-sm text-stone-600 dark:text-[#B9E6D3] font-medium max-w-lg mx-auto">
               Ingresa el ID de tu Pedido o tu número de teléfono para verificar el estado de preparación y despacho de tu regalo floral.
             </p>
           </div>
 
           {/* Formulario de Búsqueda */}
-          <form onSubmit={handleSearch} className="bg-white dark:bg-white p-4 md:p-6 rounded-3xl border border-gray-200 dark:border-gray-200 shadow-sm space-y-3">
+          <form onSubmit={handleSearch} className="bg-white dark:bg-[#12131A] p-4 md:p-6 rounded-3xl border border-gray-200 dark:border-gray-800 shadow-sm space-y-3">
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-4 top-3.5 text-gray-700" size={18} />
+                <Search className="absolute left-4 top-3.5 text-gray-400 dark:text-gray-500" size={18} />
                 <input
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Ej: FFY-94812-1 o tu número de teléfono"
-                  className="w-full pl-11 pr-4 py-3.5 border rounded-2xl text-sm font-bold text-black dark:text-black bg-white dark:bg-white placeholder:text-gray-600 dark:placeholder:text-gray-600 border-gray-300 dark:border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
+                  className="w-full pl-11 pr-4 py-3.5 border rounded-2xl text-sm font-bold text-stone-900 dark:text-white bg-white dark:bg-[#181922] placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
                   required
                 />
               </div>

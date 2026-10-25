@@ -131,23 +131,23 @@ export default async function RootLayout({
                 color: var(--theme-script, #163422) !important;
               }
 
-              /* Botones Primarios de Conversión */
-              .theme-btn-primary,
-              button.bg-\\[\\#163422\\],
-              a.bg-\\[\\#163422\\] {
+              /* Botones Primarios de Conversión en modo claro */
+              html:not(.dark) .theme-btn-primary,
+              html:not(.dark) button.bg-\\[\\#163422\\],
+              html:not(.dark) a.bg-\\[\\#163422\\] {
                 background-color: var(--theme-btn-primary-bg, #163422) !important;
                 color: var(--theme-btn-primary-text, #ffffff) !important;
               }
-              button.bg-\\[\\#163422\\]:hover,
-              a.bg-\\[\\#163422\\]:hover {
+              html:not(.dark) button.bg-\\[\\#163422\\]:hover,
+              html:not(.dark) a.bg-\\[\\#163422\\]:hover {
                 background-color: var(--theme-btn-primary-hover, #1F452E) !important;
               }
 
-              /* Botones e Insignias Secundarias */
-              .theme-btn-secondary,
-              button.bg-\\[\\#FF97A4\\],
-              a.bg-\\[\\#FF97A4\\],
-              span.bg-\\[\\#FF97A4\\] {
+              /* Botones e Insignias Secundarias en modo claro */
+              html:not(.dark) .theme-btn-secondary,
+              html:not(.dark) button.bg-\\[\\#FF97A4\\],
+              html:not(.dark) a.bg-\\[\\#FF97A4\\],
+              html:not(.dark) span.bg-\\[\\#FF97A4\\] {
                 background-color: var(--theme-btn-secondary-bg, #FF97A4) !important;
                 color: var(--theme-btn-secondary-text, #ffffff) !important;
               }

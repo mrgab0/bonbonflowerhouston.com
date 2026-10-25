@@ -34,6 +34,22 @@
   --text-accent-secondary: #2DD4BF; /* Deep Luminous Teal */
   --border-mint: rgba(94, 234, 212, 0.18);
   --border-mint-glow: rgba(94, 234, 212, 0.35);
+
+  /* Sobrescrituras para variables del Theme Editor en Modo Oscuro */
+  --theme-page-bg: #0B0C10;
+  --theme-card-bg: #12131A;
+  --theme-card-border: #262833;
+  --theme-header-bg: #12131A;
+  --theme-header-text: #E6F7F0;
+  --theme-heading: #E6F7F0;
+  --theme-body: #B9E6D3;
+  --theme-script: #5EEAD4;
+  --theme-footer-bg: #0B0C10;
+  --theme-footer-text: #E6F7F0;
+  --theme-footer-accent: #5EEAD4;
+  --theme-price-color: #5EEAD4;
+  --theme-announcement-bg: #12131A;
+  --theme-announcement-text: #5EEAD4;
 }
 
 /* Base Body Typography */

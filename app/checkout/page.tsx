@@ -338,7 +338,7 @@ function CheckoutContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] flex flex-col">
+    <div className="min-h-screen bg-[#F9F9F9] dark:bg-[#0B0C10] text-stone-900 dark:text-[#E6F7F0] flex flex-col transition-colors duration-300">
       <ShopHeader />
 
       <main className="flex-1 py-10 md:py-16">
@@ -362,12 +362,12 @@ function CheckoutContent() {
             </div>
           )}
 
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-6 gap-2">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-gray-200 dark:border-stone-800 pb-6 gap-2">
             <div>
-              <h1 className="text-3xl md:text-4xl font-serif font-black text-[#1A1C1C]">Finalizar Pedido</h1>
-              <p className="text-xs text-gray-400">Selecciona tu método de entrega y completa tus datos</p>
+              <h1 className="text-3xl md:text-4xl font-serif font-black text-stone-900 dark:text-white">Finalizar Pedido</h1>
+              <p className="text-xs text-gray-400 dark:text-stone-400">Selecciona tu método de entrega y completa tus datos</p>
             </div>
-            <span className="bg-green-50 text-green-700 text-xs font-bold px-3.5 py-1.5 rounded-full border border-green-200 flex items-center gap-1.5">
+            <span className="bg-green-50 dark:bg-emerald-950/60 text-green-700 dark:text-emerald-300 text-xs font-bold px-3.5 py-1.5 rounded-full border border-green-200 dark:border-emerald-800/60 flex items-center gap-1.5">
               <ShieldCheck size={16} /> Pago Seguro Encriptado
             </span>
           </div>
@@ -375,7 +375,7 @@ function CheckoutContent() {
           <div className="grid md:grid-cols-12 gap-8">
             
             {/* FORMULARIO DE DATOS Y SELECCIÓN DE ENTREGA */}
-            <div className="md:col-span-7 bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 space-y-8">
+            <div className="md:col-span-7 bg-white dark:bg-[#12131A] p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-stone-800 space-y-8">
               
               <form onSubmit={handleSubmit} className="space-y-6">
                 
@@ -432,7 +432,7 @@ function CheckoutContent() {
                 </div>
 
                 {/* 1.5 Mensaje para la Tarjeta de Dedicatoria Incluida */}
-                <div className="space-y-3 bg-pink-50/60 p-4 rounded-2xl border border-pink-100/80">
+                <div className="space-y-3 bg-pink-50/60 dark:bg-pink-950/20 p-4 rounded-2xl border border-pink-100/80 dark:border-pink-900/30">
                   <div className="flex justify-between items-center">
                     <h2 className="text-xs font-bold uppercase tracking-wider text-[#FF97A4] flex items-center gap-1.5">
                       <Heart size={14} className="text-[#FF97A4] fill-[#FF97A4]" /> Tarjeta de Dedicatoria Impresa (Gratis Incluida)
@@ -441,7 +441,7 @@ function CheckoutContent() {
                       Incluido 🎁
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 font-medium leading-relaxed">
+                  <p className="text-xs text-gray-500 dark:text-stone-400 font-medium leading-relaxed">
                     Escribe a continuación el mensaje especial que deseas que imprimamos en la tarjeta de regalo de tu arreglo floral:
                   </p>
                   <textarea
@@ -475,16 +475,16 @@ function CheckoutContent() {
                           className={`relative flex items-center justify-between p-4 border-2 rounded-2xl cursor-pointer transition-all ${
                             isSelected
                               ? "border-[#FF97A4] bg-[#FF97A4]/5 shadow-sm"
-                              : "border-gray-100 hover:border-gray-200 bg-white"
+                              : "border-gray-100 dark:border-stone-800 hover:border-gray-200 dark:hover:border-stone-700 bg-white dark:bg-[#181922]"
                           }`}
                         >
                           <div className="flex items-center gap-3.5">
-                            <div className={`p-2.5 rounded-xl ${isSelected ? "bg-[#FF97A4] text-white" : "bg-gray-100 text-gray-500"}`}>
+                            <div className={`p-2.5 rounded-xl ${isSelected ? "bg-[#FF97A4] text-white" : "bg-gray-100 dark:bg-stone-800 text-gray-500 dark:text-stone-300"}`}>
                               <IconComponent size={20} />
                             </div>
                             <div>
                               <div className="flex items-center gap-2">
-                                <span className="font-bold text-sm text-[#1A1C1C]">{option.title}</span>
+                                <span className="font-bold text-sm text-[#1A1C1C] dark:text-white">{option.title}</span>
                                 {option.badge && (
                                   <span className="bg-[#163422] text-white text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase shadow-sm border border-[#D4AF37]/50">
                                     {option.badge}
@@ -494,10 +494,10 @@ function CheckoutContent() {
                               <p className="text-xs text-gray-400 mt-0.5">{option.description}</p>
                               <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px]">
                                 <span className="font-bold text-gray-500">
-                                  ⏱️ <strong className="text-gray-800">{option.estimatedTimeLabel}</strong>
+                                  ⏱️ <strong className="text-gray-800 dark:text-stone-200">{option.estimatedTimeLabel}</strong>
                                 </span>
                                 {isMounted && option.id !== "pickup" && option.pricePerMile > 0 && (
-                                  <span suppressHydrationWarning className="text-purple-700 font-bold bg-purple-50 px-2 py-0.5 rounded-md border border-purple-100">
+                                  <span suppressHydrationWarning className="text-purple-700 dark:text-purple-300 font-bold bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-md border border-purple-100 dark:border-purple-900/50">
                                     📍 {deliveryLocation?.distanceMiles || 0} mi × ${option.pricePerMile.toFixed(2)}/mi
                                   </span>
                                 )}
@@ -530,7 +530,9 @@ function CheckoutContent() {
                       <label 
                         key={method.id} 
                         className={`relative flex flex-col items-center p-3.5 border-2 rounded-2xl cursor-pointer transition-all ${
-                          selectedPayment === method.id ? 'border-[#FF97A4] bg-[#FF97A4]/5 shadow-sm' : 'border-gray-100 hover:border-gray-200'
+                          selectedPayment === method.id
+                            ? 'border-[#FF97A4] bg-[#FF97A4]/5 shadow-sm'
+                            : 'border-gray-100 dark:border-stone-800 hover:border-gray-200 dark:hover:border-stone-700 bg-white dark:bg-[#181922]'
                         }`}
                       >
                         <input 
@@ -544,14 +546,14 @@ function CheckoutContent() {
                         <div className="mb-1.5">
                           {PaymentLogos[method.id as keyof typeof PaymentLogos]}
                         </div>
-                        <span className="text-xs font-bold text-gray-700 uppercase">{method.label}</span>
+                        <span className="text-xs font-bold text-gray-700 dark:text-stone-300 uppercase">{method.label}</span>
                       </label>
                     ))}
                   </div>
 
                   {/* TARJETA DESPLEGABLE CON DATOS DE PAGO Y CÓDIGO QR */}
                   {selectedPayment && (
-                    <div className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4 animate-in fade-in duration-300">
+                    <div className="bg-gray-50 dark:bg-[#181922] p-5 rounded-2xl border border-gray-200 dark:border-stone-800 space-y-4 animate-in fade-in duration-300">
                       {(() => {
                         const cfg = paymentConfigs[selectedPayment] || {};
                         const detailToCopy = cfg.accountDetail || cfg.linkUrl || "";
@@ -560,11 +562,11 @@ function CheckoutContent() {
                           <div className="space-y-4">
                             <div className="flex justify-between items-start">
                               <div>
-                                <span className="font-bold text-xs text-gray-400 uppercase tracking-wider block">
+                                <span className="font-bold text-xs text-gray-400 dark:text-stone-400 uppercase tracking-wider block">
                                   Instrucciones de Pago ({cfg.title || selectedPayment})
                                 </span>
                                 {cfg.holderName && (
-                                  <span className="font-bold text-sm text-[#1A1C1C] block mt-0.5">
+                                  <span className="font-bold text-sm text-[#1A1C1C] dark:text-white block mt-0.5">
                                     Titular: {cfg.holderName}
                                   </span>
                                 )}
@@ -574,7 +576,7 @@ function CheckoutContent() {
                                 <button
                                   type="button"
                                   onClick={() => handleCopyText(detailToCopy)}
-                                  className="bg-white border text-gray-700 hover:text-[#FF97A4] hover:border-[#FF97A4] px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
+                                  className="bg-white dark:bg-stone-800 border dark:border-stone-700 text-gray-700 dark:text-stone-200 hover:text-[#FF97A4] hover:border-[#FF97A4] px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
                                 >
                                   <Copy size={13} />
                                   <span>{copiedText === detailToCopy ? "¡Copiado! ✓" : "Copiar Datos"}</span>
@@ -583,9 +585,9 @@ function CheckoutContent() {
                             </div>
 
                             {cfg.qrImage && (
-                              <div className="flex flex-col items-center justify-center p-3 bg-white rounded-2xl border w-fit mx-auto shadow-sm">
+                              <div className="flex flex-col items-center justify-center p-3 bg-white dark:bg-stone-900 rounded-2xl border dark:border-stone-700 w-fit mx-auto shadow-sm">
                                 <img src={cfg.qrImage} alt={`QR ${cfg.title}`} className="w-44 h-44 object-contain rounded-xl" />
-                                <span className="text-[10px] text-gray-400 font-bold mt-1.5 flex items-center gap-1">
+                                <span className="text-[10px] text-gray-400 dark:text-stone-400 font-bold mt-1.5 flex items-center gap-1">
                                   <QrCode size={12} /> Escanea con la App de {cfg.title}
                                 </span>
                               </div>
@@ -597,7 +599,7 @@ function CheckoutContent() {
                                   href={cfg.linkUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 bg-[#1A1C1C] text-white px-5 py-2.5 rounded-full text-xs font-bold hover:bg-[#FF97A4] transition-colors shadow-sm"
+                                  className="inline-flex items-center gap-2 bg-[#1A1C1C] dark:bg-[#5EEAD4] text-white dark:text-stone-950 px-5 py-2.5 rounded-full text-xs font-bold hover:bg-[#FF97A4] dark:hover:bg-[#2DD4BF] transition-colors shadow-sm"
                                 >
                                   <span>Pagar vía {cfg.title}</span>
                                   <ExternalLink size={14} />
@@ -606,18 +608,18 @@ function CheckoutContent() {
                             )}
 
                             {cfg.accountDetail && (
-                              <div className="bg-white p-3 rounded-xl border text-center font-mono font-extrabold text-sm text-[#1A1C1C]">
+                              <div className="bg-white dark:bg-stone-900 p-3 rounded-xl border dark:border-stone-700 text-center font-mono font-extrabold text-sm text-[#1A1C1C] dark:text-white">
                                 {cfg.accountDetail}
                               </div>
                             )}
 
                             {cfg.instructions && (
-                              <div className="text-xs text-gray-700 bg-white p-3.5 rounded-xl border border-gray-100 space-y-1 shadow-sm">
-                                <span className="font-bold text-gray-500 uppercase text-[10px] tracking-wider block mb-1">
+                              <div className="text-xs text-gray-700 dark:text-stone-300 bg-white dark:bg-stone-900 p-3.5 rounded-xl border border-gray-100 dark:border-stone-800 space-y-1 shadow-sm">
+                                <span className="font-bold text-gray-500 dark:text-stone-400 uppercase text-[10px] tracking-wider block mb-1">
                                   📌 Paso a paso para pagar:
                                 </span>
                                 {cfg.instructions.split('\n').map((line: string, i: number) => (
-                                  <p key={i} className="font-medium text-gray-700 leading-relaxed">
+                                  <p key={i} className="font-medium text-gray-700 dark:text-stone-300 leading-relaxed">
                                     {line}
                                   </p>
                                 ))}
@@ -649,29 +651,29 @@ function CheckoutContent() {
             </div>
 
             {/* RESUMEN DE COMPRA CON DESGLOSE DINÁMICO */}
-            <div className="md:col-span-5 bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 h-fit space-y-6">
-              <h2 className="text-xl font-serif font-black text-[#1A1C1C] border-b pb-3">Resumen de Tu Pedido</h2>
+            <div className="md:col-span-5 bg-white dark:bg-[#12131A] p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-stone-800 h-fit space-y-6">
+              <h2 className="text-xl font-serif font-black text-[#1A1C1C] dark:text-white border-b border-gray-100 dark:border-stone-800 pb-3">Resumen de Tu Pedido</h2>
               
               <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1">
                 {cartItems.map((item) => (
-                  <div key={`${item.id}-${JSON.stringify(item.addons)}`} className="flex justify-between items-start text-sm border-b pb-3 border-gray-50">
+                  <div key={`${item.id}-${JSON.stringify(item.addons)}`} className="flex justify-between items-start text-sm border-b pb-3 border-gray-50 dark:border-stone-800">
                     <div className="flex items-start gap-3">
                       {item.image && (
-                        <img src={item.image} alt={item.name} className="w-12 h-12 rounded-xl object-cover border flex-shrink-0" />
+                        <img src={item.image} alt={item.name} className="w-12 h-12 rounded-xl object-cover border border-gray-200 dark:border-stone-700 flex-shrink-0" />
                       )}
                       <div>
-                        <span className="font-bold text-[#1A1C1C] block">{item.name}</span>
-                        <span className="text-xs text-gray-400 font-medium block">Cant: {item.quantity}</span>
+                        <span className="font-bold text-[#1A1C1C] dark:text-white block">{item.name}</span>
+                        <span className="text-xs text-gray-400 dark:text-stone-400 font-medium block">Cant: {item.quantity}</span>
                         
                         {item.addons && item.addons.length > 0 && (
-                          <div className="mt-1 space-y-1 border-t border-gray-100 pt-1">
+                          <div className="mt-1 space-y-1 border-t border-gray-100 dark:border-stone-800 pt-1">
                             {item.addons.map((add: any, idx: number) => (
                               <div key={idx} className="text-[10px]">
                                 <span className="block text-[#FF97A4] font-bold">
                                   ✨ {add.name || add.value} {add.price ? `(+$${add.price.toFixed(2)})` : ''}
                                 </span>
                                 {add.customText ? (
-                                  <div className="bg-pink-50 p-1.5 rounded-md text-gray-800 font-medium my-0.5 border border-pink-100 flex items-start gap-1">
+                                  <div className="bg-pink-50 dark:bg-pink-950/40 p-1.5 rounded-md text-gray-800 dark:text-stone-200 font-medium my-0.5 border border-pink-100 dark:border-pink-900/40 flex items-start gap-1">
                                     <MessageSquare size={11} className="text-[#FF97A4] flex-shrink-0 mt-0.5" />
                                     <span><em>"{add.customText}"</em></span>
                                   </div>
@@ -681,7 +683,7 @@ function CheckoutContent() {
                                       type="text"
                                       placeholder="Añadir dedicatoria para este adicional..."
                                       onChange={(e) => updateAddonCustomText(item.id, add.addonId, e.target.value)}
-                                      className="mt-0.5 p-1 text-[9px] border rounded w-full focus:outline-none focus:ring-1 focus:ring-[#FF97A4]"
+                                      className="mt-0.5 p-1 text-[9px] border rounded w-full focus:outline-none focus:ring-1 focus:ring-[#FF97A4] bg-white dark:bg-stone-900 border-gray-300 dark:border-stone-700 text-stone-900 dark:text-white"
                                     />
                                   )
                                 )}
@@ -691,13 +693,13 @@ function CheckoutContent() {
                         )}
                       </div>
                     </div>
-                    <span className="font-bold text-gray-800 flex-shrink-0 ml-2">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="font-bold text-gray-800 dark:text-stone-200 flex-shrink-0 ml-2">${(item.price * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
 
               {/* CAJA DE CUPÓN DE DESCUENTO */}
-              <div className="pt-4 border-t border-gray-100 space-y-3">
+              <div className="pt-4 border-t border-gray-100 dark:border-stone-800 space-y-3">
                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1.5">
                   <Ticket size={14} className="text-[#FF97A4]" /> ¿Tienes un Cupón de Descuento?
                 </label>
@@ -711,7 +713,7 @@ function CheckoutContent() {
 
                 {couponError && (
                   <div className="bg-red-50 text-red-700 text-xs p-3 rounded-xl border border-red-200 flex items-center gap-2">
-                    <AlertCircle size={16} className="text-red-500 flex-shrink-0" />
+                    <AlertCircle size={16} />
                     <span>{couponError}</span>
                   </div>
                 )}
@@ -727,7 +729,7 @@ function CheckoutContent() {
                   <button
                     type="button"
                     onClick={handleApplyCoupon}
-                    className="bg-[#1A1C1C] text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-[#FF97A4] transition-colors"
+                    className="bg-[#1A1C1C] dark:bg-stone-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-[#FF97A4] dark:hover:bg-[#FF97A4] transition-colors"
                   >
                     Aplicar
                   </button>
@@ -735,14 +737,14 @@ function CheckoutContent() {
               </div>
 
               {/* DESGLOSE TRANSPARENTE DE TOTALES */}
-              <div className="space-y-2.5 pt-4 border-t border-gray-100 text-sm">
-                <div className="flex justify-between text-gray-600 font-medium">
+              <div className="space-y-2.5 pt-4 border-t border-gray-100 dark:border-stone-800 text-sm">
+                <div className="flex justify-between text-gray-600 dark:text-stone-300 font-medium">
                   <span>Subtotal Arreglos & Adicionales</span>
-                  <span className="font-bold text-gray-800">${subtotal.toFixed(2)}</span>
+                  <span className="font-bold text-gray-800 dark:text-white">${subtotal.toFixed(2)}</span>
                 </div>
 
                 {appliedCoupon && (
-                  <div className="flex justify-between text-green-600 font-bold">
+                  <div className="flex justify-between text-green-600 dark:text-emerald-400 font-bold">
                     <span className="flex items-center gap-1">
                       <Tag size={14} /> Descuento Cupón ({appliedCoupon.code})
                     </span>
@@ -750,21 +752,24 @@ function CheckoutContent() {
                   </div>
                 )}
 
-                <div className="flex justify-between text-purple-700 font-medium bg-purple-50 p-2.5 rounded-xl border border-purple-100">
+                <div className="flex justify-between text-purple-700 dark:text-purple-300 font-medium bg-purple-50 dark:bg-purple-950/40 p-2.5 rounded-xl border border-purple-100 dark:border-purple-900/50">
                   <span className="font-bold flex items-center gap-1 text-xs">
                     🏛️ Impuestos de Ley (Sales Tax 8.25%)
                   </span>
-                  <span className="font-extrabold text-purple-800">+${taxAmount.toFixed(2)} USD</span>
+                  <span className="font-extrabold text-purple-800 dark:text-purple-200">+${taxAmount.toFixed(2)} USD</span>
                 </div>
 
-                <div className="flex justify-between text-gray-600 font-medium">
+                <div className="flex justify-between text-gray-600 dark:text-stone-300 font-medium">
                   <span>Entrega {selectedDelivery ? `(${selectedDelivery.title})` : "(Por seleccionar)"}</span>
-                  <span className={`font-bold ${deliveryFee > 0 ? "text-[#FF97A4]" : "text-gray-800"}`}>
+                  <span className={`font-bold ${deliveryFee > 0 ? "text-[#FF97A4]" : "text-gray-800 dark:text-white"}`}>
                     {selectedDelivery ? (deliveryFee > 0 ? `+$${deliveryFee.toFixed(2)}` : "Gratis") : "$0.00"}
                   </span>
                 </div>
 
-                <div className="border-t pt-3 flex justify-between font-extrabold text-xl text-[#1A1C1C]">
+                <div className="border-t border-gray-200 dark:border-stone-800 pt-3 flex justify-between font-extrabold text-xl text-[#1A1C1C] dark:text-white">
+                  <span>Total Final</span>
+                  <span className="text-[#FF97A4]">${finalTotal.toFixed(2)} USD</span>
+                </div>
                   <span>Total Final</span>
                   <span className="text-[#FF97A4]">${finalTotal.toFixed(2)} USD</span>
                 </div>

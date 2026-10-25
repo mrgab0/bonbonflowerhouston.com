@@ -48,7 +48,7 @@ export function ContactFormClient() {
   )}`;
 
   return (
-    <div className="min-h-screen bg-[#F9F9F9] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F9F9F9] dark:bg-[#0B0C10] text-stone-900 dark:text-[#E6F7F0] flex flex-col font-sans">
       <ShopHeader />
 
       <main className="flex-1 py-12 md:py-20">
@@ -56,13 +56,13 @@ export function ContactFormClient() {
           
           {/* Header de la Página */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-[#163422] text-xs font-black uppercase tracking-[0.25em] bg-stone-100 px-4 py-1.5 rounded-full border border-[#163422]/20 inline-block shadow-sm">
+            <span className="text-[#163422] dark:text-[#5EEAD4] text-xs font-black uppercase tracking-[0.25em] bg-stone-100 dark:bg-stone-900 px-4 py-1.5 rounded-full border border-[#163422]/20 dark:border-[#5EEAD4]/20 inline-block shadow-sm">
               🌸 Atención & Asesoría Personalizada
             </span>
-            <h1 className="text-4xl md:text-5xl font-serif font-black text-[#1A1C1C] tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-serif font-black text-[#1A1C1C] dark:text-white tracking-tight">
               Ponte en Contacto con Nosotros
             </h1>
-            <p className="text-gray-500 text-sm md:text-base font-medium leading-relaxed">
+            <p className="text-gray-500 dark:text-stone-300 text-sm md:text-base font-medium leading-relaxed">
               ¿Tienes alguna consulta sobre tu pedido, un diseño floral personalizado o una fecha especial? Estamos para ayudarte.
             </p>
           </div>
@@ -70,7 +70,7 @@ export function ContactFormClient() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             {/* Tarjeta Izquierda: Información de Contacto Directo */}
-            <div className="bg-[#1A1C1C] text-white p-8 rounded-3xl shadow-xl space-y-8 flex flex-col justify-between relative overflow-hidden">
+            <div className="bg-[#1A1C1C] dark:bg-[#12131A] dark:border dark:border-stone-800 text-white p-8 rounded-3xl shadow-xl space-y-8 flex flex-col justify-between relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#FF97A4]/10 rounded-full blur-2xl pointer-events-none" />
               
               <div className="space-y-6">
@@ -140,28 +140,28 @@ export function ContactFormClient() {
             </div>
 
             {/* Tarjeta Derecha: Formulario de Contacto Directo */}
-            <div className="lg:col-span-2 bg-white p-8 md:p-10 rounded-3xl border border-gray-100 shadow-sm relative">
+            <div className="lg:col-span-2 bg-white dark:bg-[#12131A] p-8 md:p-10 rounded-3xl border border-gray-100 dark:border-stone-800 shadow-sm relative">
               
               {/* Tooltip Verde de Confirmación */}
               {showTooltip && (
-                <div className="mb-6 p-4 bg-emerald-50 border-2 border-emerald-500/40 text-emerald-800 rounded-2xl flex items-center gap-3 animate-in slide-in-from-top-3 duration-300 shadow-sm">
+                <div className="mb-6 p-4 bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-500/40 text-emerald-800 dark:text-emerald-200 rounded-2xl flex items-center gap-3 animate-in slide-in-from-top-3 duration-300 shadow-sm">
                   <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 font-bold">
                     ✓
                   </div>
                   <div>
-                    <strong className="text-sm font-extrabold block text-emerald-900">¡Se envió tu mensaje, gracias!</strong>
-                    <span className="text-xs text-emerald-700 font-medium">Hemos enviado una copia a nuestro equipo y te responderemos de inmediato.</span>
+                    <strong className="text-sm font-extrabold block text-emerald-900 dark:text-emerald-100">¡Se envió tu mensaje, gracias!</strong>
+                    <span className="text-xs text-emerald-700 dark:text-emerald-300 font-medium">Hemos enviado una copia a nuestro equipo y te responderemos de inmediato.</span>
                   </div>
                 </div>
               )}
 
               {submitted ? (
                 <div className="py-12 text-center space-y-5 max-w-md mx-auto">
-                  <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                  <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-sm">
                     <CheckCircle2 size={36} />
                   </div>
-                  <h2 className="text-2xl font-bold text-[#1A1C1C]">¡Gracias por escribirnos!</h2>
-                  <p className="text-gray-500 text-sm font-medium leading-relaxed">
+                  <h2 className="text-2xl font-bold text-[#1A1C1C] dark:text-white">¡Gracias por escribirnos!</h2>
+                  <p className="text-gray-500 dark:text-stone-300 text-sm font-medium leading-relaxed">
                     Tu mensaje ha sido enviado exitosamente a nuestro equipo. Si deseas atención inmediata, puedes chatear directo con nosotros por WhatsApp.
                   </p>
                   
@@ -181,7 +181,7 @@ export function ContactFormClient() {
                         setShowTooltip(false);
                         setFormData({ name: "", email: "", phone: "", message: "" });
                       }}
-                      className="bg-gray-100 text-gray-700 px-6 py-3.5 rounded-full font-bold text-xs hover:bg-gray-200 transition-all"
+                      className="bg-gray-100 dark:bg-stone-800 text-gray-700 dark:text-stone-200 px-6 py-3.5 rounded-full font-bold text-xs hover:bg-gray-200 dark:hover:bg-stone-700 transition-all"
                     >
                       Enviar otro mensaje
                     </button>
@@ -190,56 +190,56 @@ export function ContactFormClient() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <h2 className="text-xl font-bold text-[#1A1C1C]">Envíanos un Mensaje</h2>
-                    <p className="text-xs text-gray-400 font-medium">Completa los campos a continuación y nos pondremos en contacto contigo.</p>
+                    <h2 className="text-xl font-bold text-[#1A1C1C] dark:text-white">Envíanos un Mensaje</h2>
+                    <p className="text-xs text-gray-400 dark:text-stone-400 font-medium">Completa los campos a continuación y nos pondremos en contacto contigo.</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-gray-700 block">Nombre Completo *</label>
+                      <label className="text-xs font-bold text-gray-700 dark:text-stone-300 block">Nombre Completo *</label>
                       <input
                         type="text"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Ej: Maria González"
-                        className="w-full p-3.5 border border-gray-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50"
+                        className="w-full p-3.5 border border-gray-200 dark:border-stone-700 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:dark:text-stone-500"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-gray-700 block">Correo Electrónico *</label>
+                      <label className="text-xs font-bold text-gray-700 dark:text-stone-300 block">Correo Electrónico *</label>
                       <input
                         type="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="maria@ejemplo.com"
-                        className="w-full p-3.5 border border-gray-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50"
+                        className="w-full p-3.5 border border-gray-200 dark:border-stone-700 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:dark:text-stone-500"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-gray-700 block">Teléfono / WhatsApp (Opcional)</label>
+                    <label className="text-xs font-bold text-gray-700 dark:text-stone-300 block">Teléfono / WhatsApp (Opcional)</label>
                     <input
                       type="tel"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+1 (555) 000-0000"
-                      className="w-full p-3.5 border border-gray-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50"
+                      className="w-full p-3.5 border border-gray-200 dark:border-stone-700 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:dark:text-stone-500"
                     />
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-bold text-gray-700 block">Mensaje o Consulta Floral *</label>
+                    <label className="text-xs font-bold text-gray-700 dark:text-stone-300 block">Mensaje o Consulta Floral *</label>
                     <textarea
                       required
                       rows={5}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       placeholder="Escribe aquí tu consulta, idea para arreglo personalizado o fecha especial..."
-                      className="w-full p-3.5 border border-gray-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50"
+                      className="w-full p-3.5 border border-gray-200 dark:border-stone-700 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] bg-gray-50/50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:dark:text-stone-500"
                     />
                   </div>
 

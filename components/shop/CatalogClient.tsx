@@ -129,13 +129,13 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
           </div>
 
           {/* TAB SWITCHER: Todos | Arreglos | Adicionales */}
-          <div className="flex justify-center gap-2 max-w-md mx-auto p-1.5 bg-gray-200/70 rounded-full">
+          <div className="flex justify-center gap-2 max-w-md mx-auto p-1.5 bg-gray-200/70 dark:bg-stone-800 rounded-full">
             <button
               onClick={() => { setActiveTab("all"); setSelectedCategory("all"); }}
               className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
                 activeTab === "all"
-                  ? "bg-black text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-black dark:bg-[#5EEAD4] text-white dark:text-stone-950 shadow-md"
+                  : "text-gray-600 dark:text-stone-300 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
               {t('allTab')} ({combinedItems.length})
@@ -144,8 +144,8 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
               onClick={() => { setActiveTab("products"); setSelectedCategory("all"); }}
               className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
                 activeTab === "products"
-                  ? "bg-[#163422] text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950 shadow-md"
+                  : "text-gray-600 dark:text-stone-300 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
               {t('flowersTab')} ({initialProducts.length})
@@ -154,8 +154,8 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
               onClick={() => { setActiveTab("addons"); setSelectedCategory("all"); }}
               className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
                 activeTab === "addons"
-                  ? "bg-purple-600 text-white shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
+                  ? "bg-purple-600 dark:bg-purple-500 text-white shadow-md"
+                  : "text-gray-600 dark:text-stone-300 hover:text-gray-900 dark:hover:text-white"
               }`}
             >
               {t('addonsTab')} ({initialAddons.length})
@@ -163,23 +163,23 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
           </div>
 
           {/* PANEL DE BÚSQUEDA Y FILTROS */}
-          <div className="bg-white p-5 md:p-6 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+          <div className="bg-white dark:bg-[#12131A] p-5 md:p-6 rounded-3xl border border-gray-100 dark:border-stone-800 shadow-sm space-y-5">
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
               
               {/* Campo de Búsqueda Sencillo */}
               <div className="relative w-full md:w-96">
-                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 dark:text-stone-500" />
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder={t('searchPlaceholder')}
-                  className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] transition-all bg-gray-50/50"
+                  className="w-full pl-11 pr-4 py-3 border border-gray-200 dark:border-stone-700 rounded-2xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#FF97A4] transition-all bg-gray-50/50 dark:bg-stone-900 text-stone-900 dark:text-white placeholder:dark:text-stone-500"
                 />
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 hover:text-gray-600 bg-gray-200 rounded-full w-5 h-5 flex items-center justify-center"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 hover:text-gray-600 dark:text-stone-400 dark:hover:text-stone-200 bg-gray-200 dark:bg-stone-800 rounded-full w-5 h-5 flex items-center justify-center"
                   >
                     ✕
                   </button>
@@ -188,13 +188,13 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
 
               {/* Ordenamiento por Precio */}
               <div className="flex items-center gap-3 w-full md:w-auto justify-end">
-                <span className="text-xs font-bold text-gray-500 flex items-center gap-1.5">
+                <span className="text-xs font-bold text-gray-500 dark:text-stone-400 flex items-center gap-1.5">
                   <ArrowUpDown size={14} className="text-[#FF97A4]" /> {t('sortBy')}
                 </span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as any)}
-                  className="p-3 border border-gray-200 rounded-2xl bg-white text-xs font-bold text-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
+                  className="p-3 border border-gray-200 dark:border-stone-700 rounded-2xl bg-white dark:bg-stone-900 text-xs font-bold text-gray-700 dark:text-stone-200 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
                 >
                   <option value="featured">{t('featured')}</option>
                   <option value="price-asc">{t('priceLowHigh')}</option>
@@ -204,13 +204,13 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
             </div>
 
             {/* Pastillas de Categorías (Pills) */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-gray-100 scrollbar-none">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-gray-100 dark:border-stone-800 scrollbar-none">
               <button
                 onClick={() => setSelectedCategory("all")}
                 className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
                   selectedCategory === "all"
                     ? "bg-[#FF97A4] text-white shadow-md"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
                 }`}
               >
                 {t('allCategories')}
@@ -227,7 +227,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                     className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
                       isSelected
                         ? "bg-[#FF97A4] text-white shadow-md"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
                     }`}
                   >
                     {cat} ({count})
@@ -240,8 +240,8 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
           {/* RESULTADOS DEL CATÁLOGO */}
           <div>
             <div className="flex justify-between items-center mb-6">
-              <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">
-                {t('showingItems')} <strong className="text-[#1A1C1C]">{filteredItems.length}</strong> {t('itemsInCatalog')}
+              <span className="text-xs font-bold text-gray-500 dark:text-stone-400 uppercase tracking-wider">
+                {t('showingItems')} <strong className="text-[#1A1C1C] dark:text-white">{filteredItems.length}</strong> {t('itemsInCatalog')}
               </span>
               {(searchTerm || selectedCategory !== "all" || activeTab !== "all") && (
                 <button
@@ -281,10 +281,10 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                   return (
                     <div
                       key={item._id}
-                      className="bg-white rounded-3xl p-5 border border-purple-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden"
+                      className="bg-white dark:bg-[#12131A] rounded-3xl p-5 border border-purple-100 dark:border-purple-900/30 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group relative overflow-hidden"
                     >
                       <div className="space-y-3">
-                        <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-purple-50">
+                        <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-purple-50 dark:bg-purple-950/20">
                           <img
                             src={item.images[0]}
                             alt={item.name}
@@ -296,25 +296,25 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                         </div>
 
                         <div>
-                          <span className="text-[11px] font-bold text-purple-600 uppercase tracking-wider block">
+                          <span className="text-[11px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider block">
                             {item.category || t('addonBadge')}
                           </span>
-                          <h3 className="font-bold text-lg text-[#1A1C1C] line-clamp-1 group-hover:text-purple-600 transition-colors">
+                          <h3 className="font-bold text-lg text-[#1A1C1C] dark:text-white line-clamp-1 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
                             {item.name}
                           </h3>
                           {item.description && (
-                            <p className="text-xs text-gray-400 line-clamp-2 mt-1 font-medium">
+                            <p className="text-xs text-gray-400 dark:text-stone-400 line-clamp-2 mt-1 font-medium">
                               {item.description}
                             </p>
                           )}
                         </div>
                       </div>
 
-                      <div className="pt-4 mt-3 border-t border-gray-100 flex items-center justify-between">
+                      <div className="pt-4 mt-3 border-t border-gray-100 dark:border-stone-800 flex items-center justify-between">
                         <div>
-                          <span className="text-[10px] text-gray-400 font-bold block uppercase">Precio</span>
-                          <span className="text-xl font-black text-[#1A1C1C]">
-                            ${item.price.toFixed(2)} <span className="text-xs font-bold text-gray-500">USD</span>
+                          <span className="text-[10px] text-gray-400 dark:text-stone-400 font-bold block uppercase">Precio</span>
+                          <span className="text-xl font-black text-[#1A1C1C] dark:text-white">
+                            ${item.price.toFixed(2)} <span className="text-xs font-bold text-gray-500 dark:text-stone-400">USD</span>
                           </span>
                         </div>
 
@@ -342,10 +342,10 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                 })}
               </div>
             ) : (
-              <div className="bg-white p-12 rounded-3xl border border-gray-100 text-center space-y-4 max-w-lg mx-auto shadow-sm">
-                <Flower2 size={48} className="mx-auto text-pink-200" />
-                <h3 className="text-xl font-bold text-[#1A1C1C]">{t('noResultsTitle')}</h3>
-                <p className="text-xs text-gray-400">
+              <div className="bg-white dark:bg-[#12131A] p-12 rounded-3xl border border-gray-100 dark:border-stone-800 text-center space-y-4 max-w-lg mx-auto shadow-sm">
+                <Flower2 size={48} className="mx-auto text-pink-200 dark:text-pink-400/40" />
+                <h3 className="text-xl font-bold text-[#1A1C1C] dark:text-white">{t('noResultsTitle')}</h3>
+                <p className="text-xs text-gray-400 dark:text-stone-400">
                   {t('noResultsDesc')}
                 </p>
                 <button

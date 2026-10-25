@@ -32,16 +32,16 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
 
         {/* Pin animado en Houston, TX */}
         <div className="absolute left-[50%] md:left-[55%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center pointer-events-none">
-          <div className="text-[#163422] animate-bounce drop-shadow-lg">
-            <MapPin size={38} fill="#163422" className="text-white" />
+          <div className="text-[#163422] dark:text-[#5EEAD4] animate-bounce drop-shadow-lg">
+            <MapPin size={38} fill="currentColor" className="text-white dark:text-stone-950" />
           </div>
-          <span className="bg-white text-black text-[10px] sm:text-[11px] font-black px-3 py-0.5 rounded-full shadow-md border-2 border-[#163422] uppercase tracking-wider -mt-1 whitespace-nowrap">
+          <span className="bg-white dark:bg-stone-900 text-black dark:text-white text-[10px] sm:text-[11px] font-black px-3 py-0.5 rounded-full shadow-md border-2 border-[#163422] dark:border-[#5EEAD4] uppercase tracking-wider -mt-1 whitespace-nowrap">
             Bonbon Flowers Houston
           </span>
         </div>
 
         {/* Marca de agua informativa en el mapa */}
-        <div className="absolute bottom-3 left-3 sm:left-6 z-10 text-[10px] sm:text-[11px] text-black bg-white/85 dark:bg-black/70 backdrop-blur-xs px-2.5 py-1 rounded-md font-sans flex items-center gap-1.5 sm:gap-2 select-none shadow-xs">
+        <div className="absolute bottom-3 left-3 sm:left-6 z-10 text-[10px] sm:text-[11px] text-black dark:text-white bg-white/85 dark:bg-black/80 backdrop-blur-xs px-2.5 py-1 rounded-md font-sans flex items-center gap-1.5 sm:gap-2 select-none shadow-xs">
           <span className="font-bold text-black dark:text-white tracking-tight">Houston Metro Map</span>
           <span className="font-medium text-stone-700 dark:text-gray-300">• 9546 Hammerly Blvd</span>
         </div>
