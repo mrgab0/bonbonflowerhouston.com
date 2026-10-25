@@ -54,7 +54,7 @@ const ProductSchema: Schema = new Schema({
   bouquetType: { type: String, default: "" },
   availableColors: [{ type: String }],
   stemTiers: [{ label: String, stems: Number, price: Number }],
-  pricePerExtraRose: { type: Number, default: 0 },
+  pricePerExtraRose: { type: Number, default: 3.50 },
   features: [{ label: String, value: String }],
   seo: {
     title: { type: String },

@@ -40,7 +40,8 @@ export async function createProduct(formData: FormData) {
         stemTiers = JSON.parse(stemTiersJson);
       } catch (e) {}
     }
-    const pricePerExtraRose = parseFloat((formData.get("pricePerExtraRose") as string) || "0") || 0;
+    const parsedExtraRosePrice = parseFloat((formData.get("pricePerExtraRose") as string) || "3.50");
+    const pricePerExtraRose = parsedExtraRosePrice >= 3.50 ? parsedExtraRosePrice : 3.50;
 
     // Procesar características
     const featureLabels = formData.getAll("featureLabels") as string[];
@@ -264,7 +265,8 @@ export async function updateProduct(id: string, formData: FormData) {
         stemTiers = JSON.parse(stemTiersJson);
       } catch (e) {}
     }
-    const pricePerExtraRose = parseFloat((formData.get("pricePerExtraRose") as string) || "0") || 0;
+    const parsedExtraRosePrice = parseFloat((formData.get("pricePerExtraRose") as string) || "3.50");
+    const pricePerExtraRose = parsedExtraRosePrice >= 3.50 ? parsedExtraRosePrice : 3.50;
 
     // Procesar características
     const featureLabels = formData.getAll("featureLabels") as string[];

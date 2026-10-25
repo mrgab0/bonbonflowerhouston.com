@@ -88,9 +88,9 @@ export const ProductDetail = ({ product }: { product: any }) => {
   const basePrice = Number(product.price || 0);
   const baseFlowerCount = Number(product.flowerCount) || 24;
 
-  // Rosas Adicionales en el Bouquet (+25, +50, +75, +100 rosas)
+  // Rosas Adicionales en el Bouquet (+25, +50, +75, +100 rosas a $3.50 c/u)
   const [extraRoses, setExtraRoses] = useState<number>(0);
-  const pricePerExtraRose = Number(product.pricePerExtraRose) > 0 ? Number(product.pricePerExtraRose) : 3.50;
+  const pricePerExtraRose = Number(product.pricePerExtraRose) >= 3.50 ? Number(product.pricePerExtraRose) : 3.50;
   const extraRosesTotal = extraRoses * pricePerExtraRose;
 
   // Formateador de viñetas para la descripción
