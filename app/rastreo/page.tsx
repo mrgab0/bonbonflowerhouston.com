@@ -71,7 +71,7 @@ export default function RastreoPedidoPage() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ej: FFY-94812-1 o tu número de teléfono"
+                  placeholder="Ej: BNBNFH-94812-1 o tu número de teléfono"
                   className="w-full pl-11 pr-4 py-3.5 border rounded-2xl text-sm font-bold text-stone-900 dark:text-white bg-white dark:bg-[#181922] placeholder:text-gray-400 dark:placeholder:text-gray-500 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
                   required
                 />

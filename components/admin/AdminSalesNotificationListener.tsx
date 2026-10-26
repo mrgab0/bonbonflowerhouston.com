@@ -332,7 +332,7 @@ export function AdminSalesNotificationListener() {
           title="Probar envío directo de ticket 80mm a la Star Micronics (100% JavaScript)"
         >
           <Receipt size={13} className="text-emerald-500" />
-          <span className="hidden md:inline">Test Star 80mm</span>
+          <span className="hidden md:inline">Test Comanda 70mm</span>
         </button>
 
         {notificationPermission !== "granted" && (
@@ -405,7 +405,7 @@ export function AdminSalesNotificationListener() {
                 className="rounded text-pink-600 focus:ring-pink-500 w-4 h-4 cursor-pointer"
               />
               <label htmlFor="modal-autoprint-checkbox" className="cursor-pointer">
-                Auto-imprimir ticket Star 80mm al detectar venta
+                Auto-imprimir comanda 70mm al detectar venta
               </label>
             </div>
 
@@ -421,7 +421,7 @@ export function AdminSalesNotificationListener() {
                   title="Disparar impresión de ticket Star 80mm de inmediato en este equipo"
                 >
                   <Receipt size={16} />
-                  <span>Imprimir Ticket (80mm)</span>
+                  <span>Imprimir Comanda (70mm)</span>
                 </button>
 
                 <button

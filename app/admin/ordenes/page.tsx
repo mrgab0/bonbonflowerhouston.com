@@ -42,7 +42,7 @@ export default function AdminOrdenesPage() {
   const [printingOrderId, setPrintingOrderId] = useState<string | null>(null);
   const [showAdvancedScripts, setShowAdvancedScripts] = useState(false);
 
-  // Estado para Modal e Impresión de Factura (A4 o Ticket 80mm Star TSP100)
+  // Estado para Modal e Impresión de Factura (A4 o Comanda 70mm Star TSP100)
   const [invoiceOrder, setInvoiceOrder] = useState<any | null>(null);
   const [invoiceLang, setInvoiceLang] = useState<"es" | "en">("es");
   const [invoiceFormat, setInvoiceFormat] = useState<"a4" | "ticket80">("ticket80");
@@ -362,7 +362,7 @@ export default function AdminOrdenesPage() {
       <style jsx global>{`
         @media print {
           @page {
-            size: ${invoiceFormat === "ticket80" ? "80mm auto" : "portrait letter"};
+            size: ${invoiceFormat === "ticket80" ? "auto" : "portrait letter"};
             margin: ${invoiceFormat === "ticket80" ? "0mm" : "10mm"};
           }
           body * {
@@ -375,11 +375,11 @@ export default function AdminOrdenesPage() {
             position: absolute;
             left: 0;
             top: 0;
-            width: ${invoiceFormat === "ticket80" ? "72mm !important" : "100% !important"};
-            max-width: ${invoiceFormat === "ticket80" ? "72mm !important" : "none !important"};
+            width: ${invoiceFormat === "ticket80" ? "68mm !important" : "100% !important"};
+            max-width: ${invoiceFormat === "ticket80" ? "70mm !important" : "none !important"};
             background: white !important;
             color: black !important;
-            padding: ${invoiceFormat === "ticket80" ? "2mm 2mm !important" : "20px !important"};
+            padding: ${invoiceFormat === "ticket80" ? "1mm 1mm !important" : "20px !important"};
             margin: 0 auto !important;
             box-shadow: none !important;
             border: none !important;
@@ -466,10 +466,10 @@ export default function AdminOrdenesPage() {
               onClick={handleTestTicketDirect}
               disabled={printingOrderId === "TEST-STAR-80MM"}
               className="bg-white/15 hover:bg-white/25 text-white px-3.5 py-2 rounded-xl font-bold transition-all flex items-center gap-1.5 border border-white/20 cursor-pointer shadow-sm"
-              title="Probar ticket 80mm de inmediato en tu impresora Star Micronics (100% JavaScript)"
+              title="Probar comanda 70mm de inmediato en tu impresora de matriz de punto / térmica (100% JavaScript)"
             >
               <Receipt size={14} className="text-pink-300" />
-              <span>Probar Ticket 80mm</span>
+              <span>Probar Comanda 70mm</span>
             </button>
 
             {/* Test A4 Directo */}
@@ -549,7 +549,7 @@ export default function AdminOrdenesPage() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Buscar por ID de Pedido (ej. FFY-...), Nombre del Cliente o Teléfono..."
+            placeholder="Buscar por ID de Pedido (ej. BNBNFH-...), Nombre del Cliente o Teléfono..."
             className="w-full pl-10 pr-4 py-2.5 border rounded-2xl text-xs font-medium dark:bg-gray-900 dark:border-gray-800 focus:outline-none focus:ring-2 focus:ring-[#FF97A4]"
           />
         </div>
@@ -730,10 +730,10 @@ export default function AdminOrdenesPage() {
                       onClick={() => handleDirectPrint80mm(order)}
                       disabled={printingOrderId === order.orderId}
                       className="bg-[#163422] hover:bg-black text-white px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-sm transition-all border border-emerald-700/50 hover:scale-102 cursor-pointer"
-                      title="Imprimir Ticket 80mm en Star Micronics directamente (JavaScript nativo)"
+                      title="Imprimir Comanda 70mm directamente (JavaScript nativo)"
                     >
                       <Receipt size={13} className="text-[#5EEAD4]" />
-                      <span>{printingOrderId === order.orderId ? "Imprimiendo..." : "Matriz 80mm"}</span>
+                      <span>{printingOrderId === order.orderId ? "Imprimiendo..." : "Comanda 70mm"}</span>
                     </button>
 
                     {/* Botón 3: Vista Previa en Pantalla */}
@@ -1110,10 +1110,10 @@ export default function AdminOrdenesPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white">
-                    {invoiceFormat === "ticket80" ? "Ticket Térmico POS (80mm)" : "Imprimir Factura / Invoice"}
+                    {invoiceFormat === "ticket80" ? "Comanda de Taller (70mm)" : "Imprimir Factura / Invoice"}
                   </h3>
                   <p className="text-xs text-gray-400">
-                    {invoiceFormat === "ticket80" ? "Optimizado para Star Micronics TSP143IIILAN" : "Formato estándar para cliente o archivo"}
+                    {invoiceFormat === "ticket80" ? "Comanda de Producción & Floristería (70mm)" : "Formato estándar para cliente o archivo"}
                   </p>
                 </div>
               </div>
@@ -1319,12 +1319,12 @@ export default function AdminOrdenesPage() {
               /* FORMATO TICKET TÉRMICO 80mm STAR MICRONICS TSP143III */
               <div
                 id="invoice-print-area"
-                className="bg-white text-black p-4 rounded-xl border border-gray-300 max-w-[76mm] mx-auto font-mono text-[11px] leading-tight select-text shadow-sm space-y-3"
+                className="bg-white text-black p-4 rounded-xl border border-gray-300 max-w-[70mm] mx-auto font-mono text-[11px] leading-tight select-text shadow-sm space-y-3"
               >
                 {/* Encabezado Star Micronics 80mm */}
                 <div className="text-center pb-2 border-b border-dashed border-gray-400 space-y-0.5">
                   <p className="font-extrabold text-sm uppercase tracking-wide">Bonbon Flowers</p>
-                  <p className="font-bold text-xs uppercase tracking-wider">HOUSTON</p>
+                  <p className="font-black text-[10px] uppercase tracking-wider bg-black text-white px-1 py-0.5">*** COMANDA DE TALLER & PRODUCCIÓN (70mm) ***</p>
                   <p className="text-[10px] text-gray-700">High Floral Design Boutique</p>
                   <p className="text-[10px] text-gray-700">Houston, Texas & Metro Areas</p>
                   <p className="text-[10px] font-bold text-gray-900">Tel/WhatsApp: +1 (346) 739-2730</p>

@@ -56,7 +56,7 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
   if (!savedOrder) {
     savedOrder = new Order({
       ...orderData,
-      orderId: "FFY-" + Math.floor(Math.random() * 100000) + "-1",
+      orderId: `BNBNFH-${String(Math.floor(10000 + Math.random() * 90000))}-1`,
       items: orderData.items,
       total: orderData.total,
       createdAt: new Date(),

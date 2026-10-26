@@ -139,7 +139,13 @@ export function getPosTestOrder(): POSOrderData {
  * Genera el documento HTML completo y estilizado para el Ticket Térmico / Matriz de 80mm
  * Ancho útil: 72mm (Star TSP100III 576 dots / 48 columnas)
  */
-export function generate80mmTicketHtml(order: POSOrderData, lang: "es" | "en" = "es"): string {
+/**
+ * Genera el documento HTML para la COMANDA DE TALLER & PREPARACIÓN (70mm)
+ * Diseñada para floristas: desglose de papel, color/conteo de rosas, corona,
+ * listón con texto, tarjeta de dedicatoria e indicador de tarjeta adicional.
+ * Ancho calibrado: 68mm - 70mm (sin desborde ni avance de 2m de papel).
+ */
+export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" = "es"): string {
   const dateFormatted = order.createdAt
     ? new Date(order.createdAt).toLocaleDateString(lang === "es" ? "es-MX" : "en-US", {
         year: "numeric",
@@ -155,64 +161,191 @@ export function generate80mmTicketHtml(order: POSOrderData, lang: "es" | "en" = 
     order.subtotal ??
     items.reduce((acc, it) => acc + (it.price || 0) * (it.quantity || 1), 0);
 
-  const itemsRows = items
-    .map((item) => {
-      const addonsHtml =
-        item.addons && item.addons.length > 0
-          ? `<div style="padding-left: 8px; font-size: 10px; color: #333;">
-              ${item.addons
-                .map(
-                  (a) =>
-                    `<div>+ ${a.name || a.value || ""}${
-                      a.price ? ` (+$${a.price.toFixed(2)})` : ""
-                    }${a.customText ? `<div style="font-style: italic; padding-left: 6px;">"${a.customText}"</div>` : ""}</div>`
-                )
-                .join("")}
-            </div>`
-          : "";
+  // Detección de tarjeta adicional en addons
+  const hasAdditionalCard = items.some((it) =>
+    (it.addons || []).some((a) => {
+      const txt = (a.name || a.value || "").toLowerCase();
+      return txt.includes("tarjeta") || txt.includes("card") || txt.includes("dedicatoria extra");
+    })
+  );
+
+  // Desglose técnico de productos para floristería
+  const itemsHtml = items
+    .map((item, idx) => {
+      const addons = item.addons || [];
+
+      // Categorización inteligente de adicionales
+      const roseSpecs = addons.filter((a) => {
+        const t = (a.name || a.value || "").toLowerCase();
+        return t.includes("rosa") || t.includes("color") || t.includes("flower");
+      });
+
+      const paperSpecs = addons.filter((a) => {
+        const t = (a.name || a.value || "").toLowerCase();
+        return t.includes("papel") || t.includes("envoltura") || t.includes("wrap");
+      });
+
+      const ribbonSpecs = addons.filter((a) => {
+        const t = (a.name || a.value || "").toLowerCase();
+        return t.includes("liston") || t.includes("listón") || t.includes("lazo") || t.includes("ribbon") || a.customText;
+      });
+
+      const accessoriesSpecs = addons.filter((a) => {
+        const t = (a.name || a.value || "").toLowerCase();
+        return (
+          t.includes("corona") ||
+          t.includes("tiara") ||
+          t.includes("mariposa") ||
+          t.includes("luz") ||
+          t.includes("led") ||
+          t.includes("perla") ||
+          t.includes("pin")
+        );
+      });
+
+      const sweetsAndPlush = addons.filter((a) => {
+        const t = (a.name || a.value || "").toLowerCase();
+        return (
+          t.includes("chocolate") ||
+          t.includes("ferrero") ||
+          t.includes("dulce") ||
+          t.includes("peluche") ||
+          t.includes("globo") ||
+          t.includes("balloon")
+        );
+      });
+
+      const otherAddons = addons.filter(
+        (a) =>
+          !roseSpecs.includes(a) &&
+          !paperSpecs.includes(a) &&
+          !ribbonSpecs.includes(a) &&
+          !accessoriesSpecs.includes(a) &&
+          !sweetsAndPlush.includes(a)
+      );
 
       return `
-        <div style="padding: 3px 0; border-bottom: 1px dotted #ccc;">
-          <div style="display: flex; justify-content: space-between; font-weight: bold;">
-            <span style="flex: 1; padding-right: 4px;">${item.quantity || 1}x ${item.name}</span>
-            <span style="white-space: nowrap;">$${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</span>
+        <div style="margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1.5px dashed #000;">
+          <div style="font-size: 11.5px; font-weight: 900; background: #000; color: #fff; padding: 2px 4px; text-transform: uppercase;">
+            ARREGLO #${idx + 1}: ${item.quantity || 1}x ${item.name}
           </div>
-          ${addonsHtml}
+
+          <!-- Ficha Técnica de Preparación -->
+          <div style="padding: 3px 2px; font-size: 10px; line-height: 1.25;">
+            ${
+              roseSpecs.length > 0
+                ? `<div style="margin-top: 2px;">
+                    <strong style="text-decoration: underline;">🌹 ROSAS & COLOR:</strong>
+                    ${roseSpecs
+                      .map((r) => `<div style="padding-left: 6px; font-weight: bold;">• ${r.name || ""}: ${r.value || ""}${r.price ? ` (+$${r.price.toFixed(2)})` : ""}</div>`)
+                      .join("")}
+                  </div>`
+                : ""
+            }
+
+            ${
+              paperSpecs.length > 0
+                ? `<div style="margin-top: 2px;">
+                    <strong style="text-decoration: underline;">📜 PAPEL / ENVOLTURA:</strong>
+                    ${paperSpecs
+                      .map((p) => `<div style="padding-left: 6px; font-weight: bold;">• ${p.value || p.name}</div>`)
+                      .join("")}
+                  </div>`
+                : ""
+            }
+
+            ${
+              ribbonSpecs.length > 0
+                ? `<div style="margin-top: 2px;">
+                    <strong style="text-decoration: underline;">🎀 LISTÓN PERSONALIZADO:</strong>
+                    ${ribbonSpecs
+                      .map(
+                        (rb) => `<div style="padding-left: 6px;">
+                          • ${rb.value || rb.name}
+                          ${rb.customText ? `<div style="font-weight: 900; background: #e5e5e5; padding: 1px 4px; margin-top: 1px; border: 1px solid #000;">GRABAR: "${rb.customText}"</div>` : ""}
+                        </div>`
+                      )
+                      .join("")}
+                  </div>`
+                : ""
+            }
+
+            ${
+              accessoriesSpecs.length > 0
+                ? `<div style="margin-top: 2px;">
+                    <strong style="text-decoration: underline;">👑 CORONA & ACCESORIOS:</strong>
+                    ${accessoriesSpecs
+                      .map((ac) => `<div style="padding-left: 6px; font-weight: bold;">• ${ac.value || ac.name}</div>`)
+                      .join("")}
+                  </div>`
+                : ""
+            }
+
+            ${
+              sweetsAndPlush.length > 0
+                ? `<div style="margin-top: 2px;">
+                    <strong style="text-decoration: underline;">🍫 CHOCOLATES / EXTRAS:</strong>
+                    ${sweetsAndPlush
+                      .map((sw) => `<div style="padding-left: 6px; font-weight: bold;">• ${sw.value || sw.name}</div>`)
+                      .join("")}
+                  </div>`
+                : ""
+            }
+
+            ${
+              otherAddons.length > 0
+                ? `<div style="margin-top: 2px;">
+                    <strong>✨ OTROS DETALLES:</strong>
+                    ${otherAddons
+                      .map((ot) => `<div style="padding-left: 6px;">• ${ot.value || ot.name}</div>`)
+                      .join("")}
+                  </div>`
+                : ""
+            }
+          </div>
+
+          <div style="text-align: right; font-weight: bold; font-size: 9.5px; margin-top: 2px;">
+            Subtotal Arreglo: $${((item.price || 0) * (item.quantity || 1)).toFixed(2)} USD
+          </div>
         </div>
       `;
     })
     .join("");
 
-  const cardMessageHtml = order.cardMessage
-    ? `
-      <div style="margin: 6px 0; padding: 6px; border: 1.5px dashed #000; background: #fafafa; border-radius: 4px;">
-        <div style="font-weight: bold; font-size: 10px; text-transform: uppercase;">
-          💌 ${lang === "es" ? "TARJETA DE REGALO:" : "GIFT CARD MESSAGE:"}
-        </div>
-        <div style="font-style: italic; font-weight: bold; font-size: 11px; margin-top: 2px; word-break: break-word;">
-          "${order.cardMessage}"
-        </div>
-      </div>
-    `
-    : "";
-
   return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ticket Star TSP100 - #${order.orderId}</title>
+  <title>Comanda 70mm - #${order.orderId}</title>
   <style>
     @page {
-      size: 80mm auto;
-      margin: 0;
+      size: auto;
+      margin: 0mm !important;
     }
     @media print {
       html, body {
-        width: 80mm !important;
+        width: 68mm !important;
+        max-width: 70mm !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #fff !important;
         color: #000 !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: fit-content !important;
+        overflow: hidden !important;
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        break-after: avoid !important;
+        break-before: avoid !important;
+      }
+      #comanda-root {
+        width: 68mm !important;
+        max-width: 70mm !important;
+        margin: 0 auto !important;
+        padding: 1mm 1mm 2mm 1mm !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
     * {
@@ -222,90 +355,124 @@ export function generate80mmTicketHtml(order: POSOrderData, lang: "es" | "en" = 
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, monospace;
-      font-size: 10px;
-      line-height: 1.18;
+      font-size: 9.5px;
+      line-height: 1.2;
       color: #000;
       background: #fff;
-      width: 72mm;
-      max-width: 72mm;
+      width: 68mm;
+      max-width: 70mm;
       margin: 0 auto;
-      padding: 1mm 1.5mm 3mm 1.5mm; /* Corte al ras del último pixel (Eco-Paper) */
+      padding: 1mm 1mm 2mm 1mm;
     }
     .text-center { text-align: center; }
     .text-right { text-align: right; }
     .font-bold { font-weight: bold; }
     .font-black { font-weight: 900; }
     .uppercase { text-transform: uppercase; }
-    .border-b-dashed { border-bottom: 1px dashed #000; }
-    .border-b-solid { border-bottom: 1.5px solid #000; }
+    .border-b-dashed { border-bottom: 1.5px dashed #000; }
+    .border-b-solid { border-bottom: 2px solid #000; }
     .py-05 { padding-top: 2px; padding-bottom: 2px; }
     .flex-between { display: flex; justify-content: space-between; align-items: flex-start; }
+    .highlight-box {
+      border: 1.5px solid #000;
+      padding: 4px;
+      margin: 4px 0;
+      background: #fafafa;
+    }
   </style>
 </head>
 <body>
-  <!-- Encabezado Boutique Compacto -->
-  <div class="text-center py-05 border-b-dashed">
-    <div class="font-black uppercase" style="font-size: 13px; letter-spacing: 0.5px;">Bonbon Flowers Houston</div>
-    <div style="font-size: 8.5px; font-weight: 600;">High Floral Design • Tel: (346) 739-2730</div>
-  </div>
+  <div id="comanda-root">
+    <!-- Encabezado de Comanda -->
+    <div class="text-center py-05 border-b-dashed">
+      <div class="font-black uppercase" style="font-size: 13px; letter-spacing: 0.5px;">BONBON FLOWERS</div>
+      <div class="font-black uppercase" style="font-size: 10px; background: #000; color: #fff; padding: 1px 0; margin-top: 1px;">
+        *** COMANDA DE TALLER & PRODUCCIÓN ***
+      </div>
+      <div style="font-size: 8.5px; font-weight: bold; margin-top: 2px;">Houston Boutique • Tel: (346) 739-2730</div>
+    </div>
 
-  <!-- Metadatos de Orden y Fecha en 1 Fila -->
-  <div class="py-05 border-b-dashed">
-    <div class="flex-between font-bold" style="font-size: 11px;">
-      <span>ORDEN #${order.orderId}</span>
-      <span style="font-size: 9.5px; font-weight: normal;">${dateFormatted}</span>
+    <!-- Metadatos de la Orden -->
+    <div class="py-05 border-b-dashed" style="font-size: 10px;">
+      <div class="flex-between font-black" style="font-size: 11px;">
+        <span>ORDEN: #${order.orderId}</span>
+        <span style="font-size: 9px; font-weight: bold;">${dateFormatted}</span>
+      </div>
+      <div style="margin-top: 2px;">
+        <span class="font-bold">CLIENTE:</span> ${order.customerName}
+      </div>
+      <div style="margin-top: 1px;">
+        <span class="font-bold">TELÉFONO:</span> ${order.customerPhone || "N/A"}
+      </div>
+      <div style="margin-top: 1px; word-break: break-word;">
+        <span class="font-bold">MODALIDAD:</span> ${order.deliveryMethod || "Entrega Estándar"}
+      </div>
+      ${
+        order.address
+          ? `<div style="margin-top: 1px; word-break: break-word; background: #f0f0f0; padding: 2px; border: 1px solid #ccc;">
+              <strong style="text-decoration: underline;">DIRECCIÓN DE ENTREGA:</strong>
+              <div>${order.address}</div>
+            </div>`
+          : ""
+      }
     </div>
-    <div style="font-size: 9.5px; margin-top: 1px;">
-      <span class="font-bold">Cliente:</span> ${order.customerName} ${order.customerPhone ? `(${order.customerPhone})` : ""}
-    </div>
-    ${order.address ? `<div style="font-size: 9px; margin-top: 1px; word-break: break-word;"><span class="font-bold">Entrega:</span> ${order.address}</div>` : ""}
-  </div>
 
-  <!-- Dedicatoria Compacta -->
-  ${cardMessageHtml}
+    <!-- Tarjeta de Dedicatoria Impresa -->
+    <div class="highlight-box">
+      <div style="font-weight: 900; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px;">
+        💌 MENSAJE PARA TARJETA DE REGALO:
+      </div>
+      <div style="font-style: italic; font-weight: bold; font-size: 10.5px; margin: 3px 0; word-break: break-word; line-height: 1.25;">
+        ${order.cardMessage ? `"${order.cardMessage}"` : "(Sin mensaje personalizado para tarjeta)"}
+      </div>
+      <div style="font-size: 9px; font-weight: 900; border-top: 1px dashed #000; padding-top: 2px; margin-top: 2px;">
+        ¿TARJETA ADICIONAL?: ${hasAdditionalCard ? "✅ SÍ (COLOCAR TARJETA EXTRA)" : "❌ NO (Solo tarjeta regular)"}
+      </div>
+    </div>
 
-  <!-- Detalle de Productos -->
-  <div class="py-05 border-b-dashed">
-    <div class="flex-between font-bold uppercase" style="font-size: 9px; padding-bottom: 2px; border-bottom: 1px solid #000;">
-      <span>${lang === "es" ? "DESCRIPCIÓN" : "ITEM"}</span>
-      <span>${lang === "es" ? "TOTAL" : "TOTAL"}</span>
+    <!-- Desglose de Producción Floral -->
+    <div class="py-05">
+      <div style="font-weight: 900; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid #000; margin-bottom: 3px;">
+        🌸 ESPECIFICACIONES TÉCNICAS DEL ARREGLO:
+      </div>
+      ${itemsHtml}
     </div>
-    <div style="margin-top: 2px;">
-      ${itemsRows}
-    </div>
-  </div>
 
-  <!-- Totales Financieros Compactos -->
-  <div class="py-05 border-b-dashed" style="font-size: 9.5px;">
-    <div class="flex-between">
-      <span>Subtotal: $${itemsSubtotal.toFixed(2)} | Tax: +$${(order.taxAmount || 0).toFixed(2)}</span>
-      <span>Envío: ${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : "Gratis"}</span>
+    <!-- Totales y Pago Interno -->
+    <div class="py-05 border-b-dashed" style="font-size: 9.5px;">
+      <div class="flex-between">
+        <span>Subtotal: $${itemsSubtotal.toFixed(2)}</span>
+        <span>Tax: +$${(order.taxAmount || 0).toFixed(2)}</span>
+      </div>
+      <div class="flex-between">
+        <span>Envío: ${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : "Gratis"}</span>
+        ${order.discountAmount ? `<span>Desc: -$${order.discountAmount.toFixed(2)}</span>` : "<span></span>"}
+      </div>
+      <div class="flex-between font-black border-b-solid" style="font-size: 11px; margin-top: 2px; padding-top: 2px; border-top: 1px solid #000;">
+        <span>TOTAL COBRADO:</span>
+        <span>$${(order.total || 0).toFixed(2)} USD</span>
+      </div>
+      <div style="font-size: 8.5px; margin-top: 2px;" class="flex-between">
+        <span>Método: ${order.paymentMethod || "Zelle / Efectivo"}</span>
+        <span>Ref: ${order.paymentRef || "N/A"}</span>
+      </div>
     </div>
-    ${
-      order.discountAmount
-        ? `<div class="flex-between" style="color: #000;">
-            <span>Descuento:</span>
-            <span>-$${order.discountAmount.toFixed(2)}</span>
-          </div>`
-        : ""
-    }
-    <div class="flex-between font-black border-b-solid" style="font-size: 12px; margin-top: 2px; padding-top: 2px; border-top: 1.5px solid #000;">
-      <span>TOTAL A PAGAR:</span>
-      <span>$${(order.total || 0).toFixed(2)} USD</span>
-    </div>
-  </div>
 
-  <!-- Pie del Recibo al Ras (Sin espacios en blanco desperdiciados) -->
-  <div class="text-center" style="font-size: 8.5px; padding-top: 3px; padding-bottom: 1px;">
-    <div class="font-bold">¡Gracias por su compra! ♡ bonbonflowershouston.com</div>
+    <!-- Pie de Comanda al Ras -->
+    <div class="text-center" style="font-size: 8.5px; padding-top: 3px; font-weight: bold;">
+      <div>¡Preparar con amor y máxima frescura floral! ♡</div>
+      <div style="font-size: 7.5px; color: #555;">Bonbon Flowers Houston • Taller de Arte Floral</div>
+    </div>
   </div>
 </body>
 </html>`;
 }
 
+// Mantener alias para compatibilidad total:
+export const generate80mmTicketHtml = generate70mmComandaHtml;
+
+
 /**
- * Genera el documento HTML completo para Factura Estándar A4 / Carta
- */
 export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "es"): string {
   const dateFormatted = order.createdAt
     ? new Date(order.createdAt).toLocaleDateString(lang === "es" ? "es-MX" : "en-US", {
@@ -520,7 +687,7 @@ function printHtmlInHiddenIframe(htmlContent: string): Promise<boolean> {
 
     try {
       const iframe = document.createElement("iframe");
-      iframe.setAttribute("style", "position: fixed; right: -9999px; bottom: -9999px; width: 0; height: 0; border: none; opacity: 0; visibility: hidden; pointer-events: none;");
+      iframe.setAttribute("style", "position: fixed; top: 0; left: 0; width: 70mm; height: 100vh; border: none; opacity: 0; z-index: -9999; pointer-events: none;");
       iframe.setAttribute("aria-hidden", "true");
       document.body.appendChild(iframe);
 
