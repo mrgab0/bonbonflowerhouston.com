@@ -770,9 +770,6 @@ function CheckoutContent() {
                   <span>Total Final</span>
                   <span className="text-[#FF97A4]">${finalTotal.toFixed(2)} USD</span>
                 </div>
-                  <span>Total Final</span>
-                  <span className="text-[#FF97A4]">${finalTotal.toFixed(2)} USD</span>
-                </div>
               </div>
             </div>
 
