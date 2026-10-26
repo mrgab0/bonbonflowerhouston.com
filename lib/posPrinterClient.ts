@@ -473,8 +473,9 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 // Mantener alias para compatibilidad total:
 export const generate80mmTicketHtml = generate70mmComandaHtml;
 
-
 /**
+ * Genera el documento HTML completo para Factura Estándar A4 / Carta
+ */
 export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "es"): string {
   const dateFormatted = order.createdAt
     ? new Date(order.createdAt).toLocaleDateString(lang === "es" ? "es-MX" : "en-US", {
