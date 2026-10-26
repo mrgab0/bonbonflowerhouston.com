@@ -24,6 +24,84 @@ import {
   POSOrderData,
 } from "@/lib/posPrinterClient";
 
+// Helper de voces en caché para Web Speech API
+let cachedVoices: SpeechSynthesisVoice[] = [];
+
+function getAvailableVoices(): SpeechSynthesisVoice[] {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return [];
+  if (cachedVoices.length > 0) return cachedVoices;
+  cachedVoices = window.speechSynthesis.getVoices();
+  return cachedVoices;
+}
+
+if (typeof window !== "undefined" && "speechSynthesis" in window) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    cachedVoices = window.speechSynthesis.getVoices();
+  };
+}
+
+/**
+ * Síntesis de voz nativa del Asistente Flor Co-Pilot
+ * Habla anunciando que se acaba de vender una orden en Bonbon Flowers.
+ */
+export function speakFlorSaleAnnouncement(text: string): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      resolve();
+      return;
+    }
+
+    try {
+      window.speechSynthesis.cancel();
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+      }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = getAvailableVoices();
+
+      // Priorizar voces en español naturales, mexicanas o estadounidenses (Paulina, Sabina, Monica, Google, etc.)
+      const esVoice =
+        voices.find(
+          (v) =>
+            (v.lang.toLowerCase().startsWith("es") || v.lang.toLowerCase().includes("spanish")) &&
+            (v.name.includes("Natural") ||
+              v.name.includes("Google") ||
+              v.name.includes("Paulina") ||
+              v.name.includes("Sabina") ||
+              v.name.includes("Monica") ||
+              v.name.includes("Helena") ||
+              v.name.includes("Dalia"))
+        ) ||
+        voices.find(
+          (v) =>
+            v.lang.toLowerCase().startsWith("es") ||
+            v.lang.toLowerCase().includes("es-")
+        ) ||
+        voices[0];
+
+      if (esVoice) {
+        utterance.voice = esVoice;
+        utterance.lang = esVoice.lang || "es-US";
+      } else {
+        utterance.lang = "es-US";
+      }
+
+      utterance.rate = 1.0;
+      utterance.pitch = 1.05;
+      utterance.volume = 1.0;
+
+      utterance.onend = () => resolve();
+      utterance.onerror = () => resolve();
+
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {
+      console.warn("Error en locución por voz del chatbot Flor:", e);
+      resolve();
+    }
+  });
+}
+
 export function AdminSalesNotificationListener() {
   const [activeAlertOrder, setActiveAlertOrder] = useState<POSOrderData | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -36,6 +114,33 @@ export function AdminSalesNotificationListener() {
   const isInitializedRef = useRef<boolean>(false);
   const audioContextRef = useRef<AudioContext | null>(null);
   const alarmIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Desbloquear AudioContext y SpeechSynthesis con el primer toque o clic del administrador
+  useEffect(() => {
+    const unlockAudioAndSpeech = () => {
+      try {
+        if (!audioContextRef.current && typeof window !== "undefined") {
+          const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+          if (AudioCtx) audioContextRef.current = new AudioCtx();
+        }
+        if (audioContextRef.current && audioContextRef.current.state === "suspended") {
+          audioContextRef.current.resume();
+        }
+        if (typeof window !== "undefined" && "speechSynthesis" in window) {
+          if (window.speechSynthesis.paused) {
+            window.speechSynthesis.resume();
+          }
+        }
+      } catch (e) {}
+    };
+
+    window.addEventListener("click", unlockAudioAndSpeech, { once: true });
+    window.addEventListener("touchstart", unlockAudioAndSpeech, { once: true });
+    return () => {
+      window.removeEventListener("click", unlockAudioAndSpeech);
+      window.removeEventListener("touchstart", unlockAudioAndSpeech);
+    };
+  }, []);
 
   // Inicializar estado de Auto-Impresión desde localStorage
   useEffect(() => {
@@ -162,21 +267,52 @@ export function AdminSalesNotificationListener() {
     }
   }, [getAudioContext]);
 
-  // Iniciar Bucle Continuo de Alarma Sonora
-  const startAlarmLoop = useCallback(() => {
+  // Iniciar Bucle Continuo de Alarma Sonora + Locución por Voz del Chatbot Flor
+  const startAlarmLoop = useCallback((order?: POSOrderData, isTest: boolean = false) => {
     if (!soundEnabled) return;
     setIsAlarmPlaying(true);
+
+    // 1. Acorde de caja registradora inicial
     playCashRegisterChime();
 
+    // 2. Chatbot Flor empieza a hablar de inmediato diciendo que acabas de vender
+    const customer = order?.customerName || "un cliente";
+    const totalAmount = order ? Math.round(order.total) : 95;
+    const spokenText = isTest
+      ? "¡Atención! Acabas de vender en Bonbon Flowers. Esta es una prueba de sonido de tu asistente Flor Co-Pilot. Sistema de alertas de ventas en línea activo."
+      : `¡Atención equipo! Acabas de vender en Bonbon Flowers. Tienes una nueva orden confirmada por ${totalAmount} dólares de ${customer}. Por favor verificar comanda en pantalla.`;
+
+    // Retardo breve para que el Ka-Ching inicial suene con claridad antes de la voz
+    setTimeout(() => {
+      speakFlorSaleAnnouncement(spokenText);
+    }, 400);
+
+    // 3. Recordatorio periódico si la alarma no es silenciada
     if (alarmIntervalRef.current) clearInterval(alarmIntervalRef.current);
+    let iteration = 0;
     alarmIntervalRef.current = setInterval(() => {
-      playCashRegisterChime();
-    }, 2200);
+      iteration++;
+      if (iteration % 3 === 0) {
+        // Cada ~18s, Flor vuelve a recordar la venta pendiente
+        const reminderText = isTest
+          ? "Alerta de prueba activa en Bonbon Flowers."
+          : `Recordatorio: Tienes una nueva venta de ${totalAmount} dólares pendiente por despachar.`;
+        speakFlorSaleAnnouncement(reminderText);
+      } else {
+        // En los descansos intermedios, un sutil tono de alerta
+        playCashRegisterChime();
+      }
+    }, 6000);
   }, [soundEnabled, playCashRegisterChime]);
 
-  // Detener la Alarma Sonora
+  // Detener la Alarma Sonora y la Locución por Voz
   const stopAlarmLoop = useCallback(() => {
     setIsAlarmPlaying(false);
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+      try {
+        window.speechSynthesis.cancel();
+      } catch (e) {}
+    }
     if (alarmIntervalRef.current) {
       clearInterval(alarmIntervalRef.current);
       alarmIntervalRef.current = null;
@@ -190,7 +326,7 @@ export function AdminSalesNotificationListener() {
     if (Notification.permission === "granted") {
       try {
         const notif = new Notification("🚨 ¡VENDISTE! NUEVA VENTA CONFIRMADA 🎉", {
-          body: `Orden #${order.orderId} • $${order.total.toFixed(2)} USD\nCliente: ${order.customerName}`,
+          body: `Orden #${order.orderId} • $${order.total.toFixed(2)} USD\nCliente: ${order.customerName}\n🗣️ Flor Co-Pilot está avisando en el panel`,
           icon: "https://bonbonflowershouston.com/logo.png",
           tag: `order-${order.orderId}`,
           requireInteraction: true,
@@ -231,8 +367,15 @@ export function AdminSalesNotificationListener() {
           if (lastSeenOrderIdRef.current && order.orderId !== lastSeenOrderIdRef.current) {
             lastSeenOrderIdRef.current = order.orderId;
             setActiveAlertOrder(order);
-            startAlarmLoop();
+            startAlarmLoop(order, false);
             triggerPushNotification(order);
+
+            // Notificar al Chatbot Flor Co-Pilot para agregar la venta a su historial
+            if (typeof window !== "undefined") {
+              window.dispatchEvent(
+                new CustomEvent("bonbon:new-sale-chatbot-alert", { detail: order })
+              );
+            }
 
             // Auto-impresión 100% nativa en JavaScript para Star Micronics 80mm
             if (isAutoPrintEnabled()) {
@@ -254,13 +397,17 @@ export function AdminSalesNotificationListener() {
     };
   }, [startAlarmLoop, stopAlarmLoop, triggerPushNotification]);
 
-  // Botón manual para probar la alarma sonora
+  // Botón manual para probar la alarma sonora y locución de voz
   const handleTestSound = () => {
+    if (isAlarmPlaying) {
+      stopAlarmLoop();
+      return;
+    }
     getAudioContext();
-    startAlarmLoop();
+    startAlarmLoop(undefined, true);
     setTimeout(() => {
       stopAlarmLoop();
-    }, 4500);
+    }, 8500);
   };
 
   // Botón para probar la impresora Star Micronics 80mm en 1 clic
@@ -284,7 +431,7 @@ export function AdminSalesNotificationListener() {
     <>
       {/* Botones Flotantes / Indicadores de Estado en Admin (Inferior Izquierda) */}
       <div className="fixed bottom-4 left-4 z-40 flex flex-wrap items-center gap-2 no-print">
-        {/* Botón Alarma */}
+        {/* Botón Alarma & Voz */}
         <button
           type="button"
           onClick={handleTestSound}
@@ -293,17 +440,17 @@ export function AdminSalesNotificationListener() {
               ? "bg-red-600 text-white animate-pulse border-red-700"
               : "bg-white/95 dark:bg-[#181922]/95 text-gray-800 dark:text-gray-200 border-gray-200 dark:border-gray-800 hover:border-[#FF97A4]"
           }`}
-          title="Probar sonido de alarma de ventas"
+          title="Probar alarma sonora y locución hablada de Flor Co-Pilot"
         >
           {isAlarmPlaying ? (
             <>
               <Volume2 size={13} className="animate-bounce" />
-              <span>¡Sonando Alarma!</span>
+              <span>¡Sonando y Hablando! (Detener)</span>
             </>
           ) : (
             <>
-              <Bell size={13} className="text-[#FF97A4]" />
-              <span className="hidden sm:inline">Probar Alarma</span>
+              <Volume2 size={13} className="text-[#FF97A4]" />
+              <span className="hidden sm:inline">Probar Alarma & Voz</span>
             </>
           )}
         </button>
@@ -367,6 +514,12 @@ export function AdminSalesNotificationListener() {
               <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
                 Orden #{activeAlertOrder.orderId}
               </p>
+              <div className="pt-1 flex items-center justify-center">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold border border-emerald-500/20">
+                  <Volume2 size={13} className="animate-pulse" />
+                  Flor Co-Pilot anunciando por voz en vivo
+                </span>
+              </div>
             </div>
 
             {/* Datos del Cliente y Productos */}

@@ -408,6 +408,27 @@ export const ChatbotModal = () => {
     return () => window.removeEventListener("open-bonbon-chat", handleOpenChat);
   }, []);
 
+  // Escuchar alertas de nuevas ventas en vivo para que Flor Co-Pilot registre el evento en el chat
+  useEffect(() => {
+    const handleSaleAlert = (e: Event) => {
+      const custom = e as CustomEvent<any>;
+      const order = custom.detail;
+      if (!order) return;
+
+      const saleMessage: Message = {
+        id: `sale-alert-${order.orderId || Date.now()}`,
+        role: "model",
+        text: `🚨 **¡VENDISTE! NUEVA VENTA CONFIRMADA** 🎉\n\nAcabas de recibir una nueva orden en Bonbon Flowers:\n\n- 📦 **Orden:** \`#${order.orderId}\`\n- 👤 **Cliente:** ${order.customerName || "Cliente"}\n- 💵 **Total:** $${Number(order.total || 0).toFixed(2)} USD\n- 📍 **Entrega:** ${order.address || "Por coordinar"}\n\n👉 [Ver todas las órdenes](/admin/ordenes)`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+
+      setMessages((prev) => [...prev, saleMessage]);
+    };
+
+    window.addEventListener("bonbon:new-sale-chatbot-alert", handleSaleAlert);
+    return () => window.removeEventListener("bonbon:new-sale-chatbot-alert", handleSaleAlert);
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
