@@ -38,6 +38,8 @@ export interface POSOrderData {
   createdAt?: string | Date;
   status?: string;
   isPrintedToPOS?: boolean;
+  paymentMethod?: string;
+  paymentRef?: string;
 }
 
 const AUTOPRINT_STORAGE_KEY = "bonbon_pos_autoprint_enabled";
