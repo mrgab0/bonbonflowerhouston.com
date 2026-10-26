@@ -227,16 +227,16 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
       );
 
       return `
-        <div style="margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1.5px dashed #000;">
-          <div style="font-size: 11.5px; font-weight: 900; background: #000; color: #fff; padding: 2px 4px; text-transform: uppercase;">
-            ARREGLO #${idx + 1}: ${item.quantity || 1}x ${item.name}
+        <div style="margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #000;">
+          <div style="font-size: 11px; font-weight: 900; border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 1px 2px; text-transform: uppercase;">
+            >> ARREGLO #${idx + 1}: ${item.quantity || 1}x ${item.name}
           </div>
 
           <!-- Ficha Técnica de Preparación -->
-          <div style="padding: 3px 2px; font-size: 10px; line-height: 1.25;">
+          <div style="padding: 2px 1px; font-size: 9.5px; line-height: 1.2;">
             ${
               roseSpecs.length > 0
-                ? `<div style="margin-top: 2px;">
+                ? `<div style="margin-top: 1px;">
                     <strong style="text-decoration: underline;">🌹 ROSAS & COLOR:</strong>
                     ${roseSpecs
                       .map((r) => `<div style="padding-left: 6px; font-weight: bold;">• ${r.name || ""}: ${r.value || ""}${r.price ? ` (+$${r.price.toFixed(2)})` : ""}</div>`)
@@ -247,7 +247,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 
             ${
               paperSpecs.length > 0
-                ? `<div style="margin-top: 2px;">
+                ? `<div style="margin-top: 1px;">
                     <strong style="text-decoration: underline;">📜 PAPEL / ENVOLTURA:</strong>
                     ${paperSpecs
                       .map((p) => `<div style="padding-left: 6px; font-weight: bold;">• ${p.value || p.name}</div>`)
@@ -258,13 +258,13 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 
             ${
               ribbonSpecs.length > 0
-                ? `<div style="margin-top: 2px;">
+                ? `<div style="margin-top: 1px;">
                     <strong style="text-decoration: underline;">🎀 LISTÓN PERSONALIZADO:</strong>
                     ${ribbonSpecs
                       .map(
                         (rb) => `<div style="padding-left: 6px;">
                           • ${rb.value || rb.name}
-                          ${rb.customText ? `<div style="font-weight: 900; background: #e5e5e5; padding: 1px 4px; margin-top: 1px; border: 1px solid #000;">GRABAR: "${rb.customText}"</div>` : ""}
+                          ${rb.customText ? `<div style="font-weight: 900; border: 1px solid #000; padding: 1px 3px; margin-top: 1px;">GRABAR: "${rb.customText}"</div>` : ""}
                         </div>`
                       )
                       .join("")}
@@ -274,7 +274,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 
             ${
               accessoriesSpecs.length > 0
-                ? `<div style="margin-top: 2px;">
+                ? `<div style="margin-top: 1px;">
                     <strong style="text-decoration: underline;">👑 CORONA & ACCESORIOS:</strong>
                     ${accessoriesSpecs
                       .map((ac) => `<div style="padding-left: 6px; font-weight: bold;">• ${ac.value || ac.name}</div>`)
@@ -285,7 +285,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 
             ${
               sweetsAndPlush.length > 0
-                ? `<div style="margin-top: 2px;">
+                ? `<div style="margin-top: 1px;">
                     <strong style="text-decoration: underline;">🍫 CHOCOLATES / EXTRAS:</strong>
                     ${sweetsAndPlush
                       .map((sw) => `<div style="padding-left: 6px; font-weight: bold;">• ${sw.value || sw.name}</div>`)
@@ -296,7 +296,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 
             ${
               otherAddons.length > 0
-                ? `<div style="margin-top: 2px;">
+                ? `<div style="margin-top: 1px;">
                     <strong>✨ OTROS DETALLES:</strong>
                     ${otherAddons
                       .map((ot) => `<div style="padding-left: 6px;">• ${ot.value || ot.name}</div>`)
@@ -306,7 +306,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             }
           </div>
 
-          <div style="text-align: right; font-weight: bold; font-size: 9.5px; margin-top: 2px;">
+          <div style="text-align: right; font-weight: bold; font-size: 9px; margin-top: 1px;">
             Subtotal Arreglo: $${((item.price || 0) * (item.quantity || 1)).toFixed(2)} USD
           </div>
         </div>
@@ -321,7 +321,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
   <title>Comanda 70mm - #${order.orderId}</title>
   <style>
     @page {
-      size: auto;
+      size: 70mm auto;
       margin: 0mm !important;
     }
     @media print {
@@ -334,8 +334,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
         color: #000 !important;
         height: auto !important;
         min-height: 0 !important;
-        max-height: fit-content !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         page-break-after: avoid !important;
         page-break-before: avoid !important;
         break-after: avoid !important;
@@ -345,7 +344,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
         width: 68mm !important;
         max-width: 70mm !important;
         margin: 0 auto !important;
-        padding: 1mm 1mm 2mm 1mm !important;
+        padding: 1mm !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
@@ -356,62 +355,61 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
       print-color-adjust: exact;
     }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, monospace;
-      font-size: 9.5px;
-      line-height: 1.2;
+      font-family: 'Consolas', 'Courier New', 'Lucida Console', monospace, sans-serif;
+      font-size: 9px;
+      line-height: 1.15;
       color: #000;
       background: #fff;
       width: 68mm;
       max-width: 70mm;
       margin: 0 auto;
-      padding: 1mm 1mm 2mm 1mm;
+      padding: 1mm;
     }
     .text-center { text-align: center; }
     .text-right { text-align: right; }
     .font-bold { font-weight: bold; }
     .font-black { font-weight: 900; }
     .uppercase { text-transform: uppercase; }
-    .border-b-dashed { border-bottom: 1.5px dashed #000; }
-    .border-b-solid { border-bottom: 2px solid #000; }
-    .py-05 { padding-top: 2px; padding-bottom: 2px; }
+    .border-b-dashed { border-bottom: 1px dashed #000; }
+    .border-b-solid { border-bottom: 1.5px solid #000; }
+    .py-05 { padding-top: 1px; padding-bottom: 1px; }
     .flex-between { display: flex; justify-content: space-between; align-items: flex-start; }
     .highlight-box {
-      border: 1.5px solid #000;
-      padding: 4px;
-      margin: 4px 0;
-      background: #fafafa;
+      border: 1px solid #000;
+      padding: 3px 2px;
+      margin: 2px 0;
     }
   </style>
 </head>
 <body>
   <div id="comanda-root">
     <!-- Encabezado de Comanda -->
-    <div class="text-center py-05 border-b-dashed">
+    <div class="text-center" style="border-bottom: 1.5px solid #000; padding-bottom: 2px; margin-bottom: 2px;">
       <div class="font-black uppercase" style="font-size: 13px; letter-spacing: 0.5px;">BONBON FLOWERS</div>
-      <div class="font-black uppercase" style="font-size: 10px; background: #000; color: #fff; padding: 1px 0; margin-top: 1px;">
-        *** COMANDA DE TALLER & PRODUCCIÓN ***
+      <div class="font-black uppercase" style="font-size: 9.5px; border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 1px 0; margin: 1px 0;">
+        *** COMANDA DE TALLER (ECO-PAPEL) ***
       </div>
-      <div style="font-size: 8.5px; font-weight: bold; margin-top: 2px;">Houston Boutique • Tel: (346) 739-2730</div>
+      <div style="font-size: 8px; font-weight: bold;">Houston, TX • Tel: (346) 739-2730</div>
     </div>
 
     <!-- Metadatos de la Orden -->
-    <div class="py-05 border-b-dashed" style="font-size: 10px;">
-      <div class="flex-between font-black" style="font-size: 11px;">
+    <div class="py-05 border-b-dashed" style="font-size: 9.5px;">
+      <div class="flex-between font-black" style="font-size: 10.5px;">
         <span>ORDEN: #${order.orderId}</span>
-        <span style="font-size: 9px; font-weight: bold;">${dateFormatted}</span>
+        <span style="font-size: 8.5px; font-weight: bold;">${dateFormatted}</span>
       </div>
-      <div style="margin-top: 2px;">
+      <div style="margin-top: 1px;">
         <span class="font-bold">CLIENTE:</span> ${order.customerName}
       </div>
       <div style="margin-top: 1px;">
-        <span class="font-bold">TELÉFONO:</span> ${order.customerPhone || "N/A"}
+        <span class="font-bold">TEL:</span> ${order.customerPhone || "N/A"}
       </div>
       <div style="margin-top: 1px; word-break: break-word;">
         <span class="font-bold">MODALIDAD:</span> ${order.deliveryMethod || "Entrega Estándar"}
       </div>
       ${
         order.address
-          ? `<div style="margin-top: 1px; word-break: break-word; background: #f0f0f0; padding: 2px; border: 1px solid #ccc;">
+          ? `<div style="margin-top: 1px; word-break: break-word; border: 1px dashed #000; padding: 2px;">
               <strong style="text-decoration: underline;">DIRECCIÓN DE ENTREGA:</strong>
               <div>${order.address}</div>
             </div>`
@@ -421,27 +419,27 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
 
     <!-- Tarjeta de Dedicatoria Impresa -->
     <div class="highlight-box">
-      <div style="font-weight: 900; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px;">
-        💌 MENSAJE PARA TARJETA DE REGALO:
+      <div style="font-weight: 900; font-size: 9.5px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 1px;">
+        💌 DEDICATORIA PARA TARJETA DE REGALO:
       </div>
-      <div style="font-style: italic; font-weight: bold; font-size: 10.5px; margin: 3px 0; word-break: break-word; line-height: 1.25;">
-        ${order.cardMessage ? `"${order.cardMessage}"` : "(Sin mensaje personalizado para tarjeta)"}
+      <div style="font-style: italic; font-weight: bold; font-size: 10px; margin: 2px 0; word-break: break-word; line-height: 1.2;">
+        ${order.cardMessage ? `"${order.cardMessage}"` : "(Sin mensaje personalizado)"}
       </div>
-      <div style="font-size: 9px; font-weight: 900; border-top: 1px dashed #000; padding-top: 2px; margin-top: 2px;">
-        ¿TARJETA ADICIONAL?: ${hasAdditionalCard ? "✅ SÍ (COLOCAR TARJETA EXTRA)" : "❌ NO (Solo tarjeta regular)"}
+      <div style="font-size: 8.5px; font-weight: 900; border-top: 1px dashed #000; padding-top: 1px;">
+        TARJETA ADICIONAL: ${hasAdditionalCard ? "✅ SÍ (COLOCAR TARJETA EXTRA)" : "❌ NO"}
       </div>
     </div>
 
     <!-- Desglose de Producción Floral -->
     <div class="py-05">
-      <div style="font-weight: 900; font-size: 10px; text-transform: uppercase; border-bottom: 1px solid #000; margin-bottom: 3px;">
+      <div style="font-weight: 900; font-size: 9.5px; text-transform: uppercase; border-bottom: 1px solid #000; margin-bottom: 2px;">
         🌸 ESPECIFICACIONES TÉCNICAS DEL ARREGLO:
       </div>
       ${itemsHtml}
     </div>
 
     <!-- Totales y Pago Interno -->
-    <div class="py-05 border-b-dashed" style="font-size: 9.5px;">
+    <div class="py-05 border-b-dashed" style="font-size: 9px;">
       <div class="flex-between">
         <span>Subtotal: $${itemsSubtotal.toFixed(2)}</span>
         <span>Tax: +$${(order.taxAmount || 0).toFixed(2)}</span>
@@ -450,20 +448,19 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
         <span>Envío: ${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : "Gratis"}</span>
         ${order.discountAmount ? `<span>Desc: -$${order.discountAmount.toFixed(2)}</span>` : "<span></span>"}
       </div>
-      <div class="flex-between font-black border-b-solid" style="font-size: 11px; margin-top: 2px; padding-top: 2px; border-top: 1px solid #000;">
+      <div class="flex-between font-black border-b-solid" style="font-size: 10.5px; margin-top: 1px; padding-top: 1px; border-top: 1px solid #000;">
         <span>TOTAL COBRADO:</span>
         <span>$${(order.total || 0).toFixed(2)} USD</span>
       </div>
-      <div style="font-size: 8.5px; margin-top: 2px;" class="flex-between">
+      <div style="font-size: 8px; margin-top: 1px;" class="flex-between">
         <span>Método: ${order.paymentMethod || "Zelle / Efectivo"}</span>
         <span>Ref: ${order.paymentRef || "N/A"}</span>
       </div>
     </div>
 
     <!-- Pie de Comanda al Ras -->
-    <div class="text-center" style="font-size: 8.5px; padding-top: 3px; font-weight: bold;">
-      <div>¡Preparar con amor y máxima frescura floral! ♡</div>
-      <div style="font-size: 7.5px; color: #555;">Bonbon Flowers Houston • Taller de Arte Floral</div>
+    <div class="text-center" style="font-size: 8px; padding-top: 2px; font-weight: bold;">
+      *** FIN DE COMANDA • BONBON FLOWERS ***
     </div>
   </div>
 </body>
@@ -680,8 +677,11 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
  * Dispara la impresión de forma 100% nativa en JavaScript usando un iframe invisible efímero.
  * No navega, no abre popups molestos y funciona directamente en la máquina del cliente
  * sin requerir Node, Python ni scripts externos.
+ *
+ * Incluye calibración de altura milimétrica dinámica para evitar que Chromium o Windows
+ * asuman tamaño Carta/A4 (279mm) y malgasten metros de papel en matriz de punto o térmicas.
  */
-function printHtmlInHiddenIframe(htmlContent: string): Promise<boolean> {
+function printHtmlInHiddenIframe(htmlContent: string, isComanda70mm: boolean = true): Promise<boolean> {
   return new Promise((resolve) => {
     if (typeof window === "undefined" || typeof document === "undefined") {
       resolve(false);
@@ -690,7 +690,11 @@ function printHtmlInHiddenIframe(htmlContent: string): Promise<boolean> {
 
     try {
       const iframe = document.createElement("iframe");
-      iframe.setAttribute("style", "position: fixed; top: 0; left: 0; width: 70mm; height: 100vh; border: none; opacity: 0; z-index: -9999; pointer-events: none;");
+      // Inicializar con dimensiones exactas sin usar 100vh para evitar inflar el viewport
+      iframe.setAttribute(
+        "style",
+        "position: fixed; top: 0; left: 0; width: 70mm; height: 100px; border: none; opacity: 0; z-index: -9999; pointer-events: none;"
+      );
       iframe.setAttribute("aria-hidden", "true");
       document.body.appendChild(iframe);
 
@@ -707,6 +711,45 @@ function printHtmlInHiddenIframe(htmlContent: string): Promise<boolean> {
 
       const triggerPrint = () => {
         try {
+          if (isComanda70mm) {
+            // Medir la altura real exacta del contenido renderizado en el DOM
+            const root = iframeDoc.getElementById("comanda-root") || iframeDoc.body;
+            const scrollH = root ? root.scrollHeight : 350;
+            // 96 DPI estándar: 1px = 25.4 / 96 mm. Margen de tolerancia de 3mm al ras
+            const calculatedMm = Math.max(45, Math.ceil((scrollH * 25.4) / 96) + 3);
+
+            // Inyectar regla @page con la altura milimétrica exacta calculada
+            // Esto le indica a Chrome y al spooler de Windows el corte milimétrico exacto,
+            // impidiendo el avance excesivo de papel en blanco.
+            const pageStyle = iframeDoc.createElement("style");
+            pageStyle.id = "dynamic-comanda-page-size";
+            pageStyle.textContent = `
+              @page {
+                size: 70mm ${calculatedMm}mm !important;
+                margin: 0mm !important;
+              }
+              @media print {
+                @page {
+                  size: 70mm ${calculatedMm}mm !important;
+                  margin: 0mm !important;
+                }
+                html, body {
+                  width: 68mm !important;
+                  max-width: 70mm !important;
+                  height: ${calculatedMm}mm !important;
+                  max-height: ${calculatedMm}mm !important;
+                  overflow: visible !important;
+                  margin: 0 !important;
+                  padding: 0 !important;
+                }
+              }
+            `;
+            iframeDoc.head.appendChild(pageStyle);
+
+            // Ajustar el alto del iframe a la dimensión exacta
+            iframe.style.height = `${calculatedMm}mm`;
+          }
+
           iframe.contentWindow?.focus();
           iframe.contentWindow?.print();
 
@@ -718,7 +761,7 @@ function printHtmlInHiddenIframe(htmlContent: string): Promise<boolean> {
               }
             } catch (_) {}
             resolve(true);
-          }, 1500);
+          }, 2000);
         } catch (printErr) {
           console.warn("Fallo al invocar print() en iframe:", printErr);
           try {
@@ -730,9 +773,9 @@ function printHtmlInHiddenIframe(htmlContent: string): Promise<boolean> {
 
       // Dar margen para que renderice el DOM del iframe
       if (iframe.contentWindow.document.readyState === "complete") {
-        setTimeout(triggerPrint, 150);
+        setTimeout(triggerPrint, 180);
       } else {
-        iframe.onload = () => setTimeout(triggerPrint, 150);
+        iframe.onload = () => setTimeout(triggerPrint, 180);
       }
     } catch (e) {
       console.warn("Error creando iframe de impresión:", e);
@@ -758,21 +801,24 @@ async function ackOrderPrinted(orderId: string): Promise<void> {
 }
 
 /**
- * Imprime el Ticket Térmico 80mm en la impresora Star TSP100 de forma directa en JavaScript
+ * Imprime el Ticket Térmico / Comanda 70mm de forma directa en JavaScript
+ * Calibrada para matriz de punto y Star Micronics con cero desperdicio de papel.
  */
 export async function printTicket80mmDirect(order: POSOrderData, lang: "es" | "en" = "es"): Promise<boolean> {
   const html = generate80mmTicketHtml(order, lang);
-  const success = await printHtmlInHiddenIframe(html);
+  const success = await printHtmlInHiddenIframe(html, true);
   if (success && order.orderId) {
     ackOrderPrinted(order.orderId);
   }
   return success;
 }
 
+export const printComanda70mmDirect = printTicket80mmDirect;
+
 /**
  * Imprime la Factura Estándar A4 / Carta de forma directa en JavaScript
  */
 export async function printInvoiceA4Direct(order: POSOrderData, lang: "es" | "en" = "es"): Promise<boolean> {
   const html = generateA4InvoiceHtml(order, lang);
-  return await printHtmlInHiddenIframe(html);
+  return await printHtmlInHiddenIframe(html, false);
 }

@@ -455,7 +455,7 @@ export function AdminSalesNotificationListener() {
           )}
         </button>
 
-        {/* Toggle Auto-Impresión Star Micronics */}
+        {/* Toggle Auto-Impresión Matriz de Punto / Térmica */}
         <button
           type="button"
           onClick={toggleAutoPrint}
@@ -464,22 +464,22 @@ export function AdminSalesNotificationListener() {
               ? "bg-emerald-600 text-white border-emerald-700"
               : "bg-white/95 dark:bg-[#181922]/95 text-gray-500 border-gray-200 dark:border-gray-800"
           }`}
-          title="Activa o desactiva la impresión automática de tickets al registrarse una venta"
+          title="Activa o desactiva la impresión automática de comandas 70mm Eco al registrarse una venta"
         >
           <Printer size={13} />
-          <span>Auto-Print: {autoPrint ? "ON" : "OFF"}</span>
+          <span>Auto-Print: {autoPrint ? "ON (70mm Eco)" : "OFF"}</span>
         </button>
 
-        {/* Probar Impresión Star TSP100 80mm en 1 Clic */}
+        {/* Probar Impresión Comanda 70mm Eco en 1 Clic */}
         <button
           type="button"
           onClick={handleTestPrintStar}
           disabled={isPrintingDirect}
           className="bg-white/95 dark:bg-[#181922]/95 text-stone-800 dark:text-stone-200 border border-gray-200 dark:border-gray-800 hover:border-emerald-500 px-3 py-1.5 rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-1.5"
-          title="Probar envío directo de ticket 80mm a la Star Micronics (100% JavaScript)"
+          title="Probar comanda 70mm Eco calibrada al milímetro para matriz de punto y térmica sin malgastar papel"
         >
           <Receipt size={13} className="text-emerald-500" />
-          <span className="hidden md:inline">Test Comanda 70mm</span>
+          <span className="hidden md:inline">Test Comanda 70mm Eco</span>
         </button>
 
         {notificationPermission !== "granted" && (
@@ -558,7 +558,7 @@ export function AdminSalesNotificationListener() {
                 className="rounded text-pink-600 focus:ring-pink-500 w-4 h-4 cursor-pointer"
               />
               <label htmlFor="modal-autoprint-checkbox" className="cursor-pointer">
-                Auto-imprimir comanda 70mm al detectar venta
+                Auto-imprimir comanda 70mm Eco (cero desperdicio de papel)
               </label>
             </div>
 
@@ -571,10 +571,10 @@ export function AdminSalesNotificationListener() {
                     printTicket80mmDirect(activeAlertOrder);
                   }}
                   className="bg-pink-600 hover:bg-pink-700 text-white py-3 px-4 rounded-2xl font-black text-xs flex items-center justify-center gap-1.5 shadow-md transition-all hover:scale-102 cursor-pointer"
-                  title="Disparar impresión de ticket Star 80mm de inmediato en este equipo"
+                  title="Disparar comanda 70mm Eco calibrada al milímetro para matriz de punto o térmica"
                 >
                   <Receipt size={16} />
-                  <span>Imprimir Comanda (70mm)</span>
+                  <span>Imprimir Comanda (70mm Eco)</span>
                 </button>
 
                 <button
