@@ -11,7 +11,7 @@
   "dependencies": {
     "@auth/mongodb-adapter": "^3.11.2",
     "@imagekit/react": "^5.0.2",
-    "@sentry/nextjs": "^10.72.0",
+    "@sentry/nextjs": "^10.75.2",
     "@simplewebauthn/browser": "^9.0.1",
     "@simplewebauthn/server": "^9.0.3",
     "@types/nodemailer": "^8.0.1",
