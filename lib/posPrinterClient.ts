@@ -103,6 +103,95 @@ export function listenToPosPrintEvents(
 }
 
 /**
+ * Detecta el idioma preferido del cliente ("es" | "en") evaluando:
+ * 1. Ruta actual en el navegador (si contiene /en/ o termina en /en)
+ * 2. Preferencia guardada en localStorage ('bonbon_preferred_lang' o 'locale')
+ * 3. Idioma nativo del navegador del usuario (navigator.language)
+ */
+export function getClientPreferredLanguage(): "es" | "en" {
+  if (typeof window === "undefined") return "es";
+
+  try {
+    const pathname = window.location.pathname || "";
+    if (pathname.startsWith("/en/") || pathname === "/en") {
+      return "en";
+    }
+    if (pathname.startsWith("/es/") || pathname === "/es") {
+      return "es";
+    }
+
+    const saved = localStorage.getItem("bonbon_preferred_lang") || localStorage.getItem("locale");
+    if (saved === "en" || saved === "es") {
+      return saved;
+    }
+
+    const navLang = (navigator.language || (navigator as any).userLanguage || "").toLowerCase();
+    if (navLang.startsWith("en")) {
+      return "en";
+    }
+  } catch (_) {}
+
+  return "es";
+}
+
+/**
+ * Traduce el estado del pedido al idioma objetivo
+ */
+export function translateOrderStatus(status?: string, lang: "es" | "en" = "es"): string {
+  if (!status) return lang === "en" ? "Confirmed" : "Confirmado";
+  if (lang === "es") return status;
+
+  const s = status.toLowerCase();
+  if (s.includes("entregado") || s.includes("delivered")) return "Delivered";
+  if (s.includes("retirado") || s.includes("picked up")) return "Picked Up";
+  if (s.includes("en camino") || s.includes("out for delivery") || s.includes("in transit")) return "Out for Delivery";
+  if (s.includes("listo en boutique") || s.includes("listo para retirar") || s.includes("ready for pickup")) return "Ready for Pickup";
+  if (s.includes("en espera despacho") || s.includes("espera de despacho")) return "Awaiting Dispatch";
+  if (s.includes("en armado") || s.includes("en diseño") || s.includes("preparando") || s.includes("in design")) return "In Floral Design";
+  if (s.includes("completado") || s.includes("completed")) return "Completed";
+  if (s.includes("cancelado") || s.includes("cancelled")) return "Cancelled";
+  if (s.includes("confirmado") || s.includes("confirmed") || s.includes("pagado")) return "Confirmed";
+  return status;
+}
+
+/**
+ * Traduce la modalidad de entrega
+ */
+export function translateDeliveryMethod(method?: string, lang: "es" | "en" = "es"): string {
+  if (!method) return lang === "en" ? "Standard Home Delivery" : "Entrega Estándar a Domicilio";
+  if (lang === "es") return method;
+
+  const m = method.toLowerCase();
+  if (m.includes("pickup") || m.includes("retiro") || m.includes("tienda") || m.includes("boutique")) {
+    return "Boutique Pickup (Houston, TX)";
+  }
+  if (m.includes("express") || m.includes("urgente") || m.includes("mismo día") || m.includes("same day")) {
+    return "Same-Day Priority Delivery";
+  }
+  if (m.includes("gratis") || m.includes("free")) {
+    return "Free Standard Delivery";
+  }
+  return "Standard Home Delivery";
+}
+
+/**
+ * Traduce el método de pago
+ */
+export function translatePaymentMethod(pm?: string, lang: "es" | "en" = "es"): string {
+  if (!pm) return lang === "en" ? "Zelle / Card / Cash" : "Zelle / Tarjeta / Efectivo";
+  if (lang === "es") return pm;
+
+  const p = pm.toLowerCase();
+  if (p.includes("efectivo") || p.includes("cash")) return "Cash on Delivery / Pickup";
+  if (p.includes("tarjeta") || p.includes("card") || p.includes("stripe")) return "Credit / Debit Card";
+  if (p.includes("zelle")) return "Zelle QuickPay";
+  if (p.includes("paypal")) return "PayPal Express";
+  if (p.includes("apple") || p.includes("pay") || p.includes("gpay") || p.includes("google")) return "Apple Pay / Google Pay";
+  if (p.includes("venmo")) return "Venmo";
+  return pm;
+}
+
+/**
  * Retorna una orden de prueba para calibrar y verificar la impresora Star Micronics 80mm
  */
 export function getPosTestOrder(): POSOrderData {
@@ -148,8 +237,9 @@ export function getPosTestOrder(): POSOrderData {
  * Ancho calibrado: 68mm - 70mm (sin desborde ni avance de 2m de papel).
  */
 export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" = "es"): string {
+  const isEn = lang === "en";
   const dateFormatted = order.createdAt
-    ? new Date(order.createdAt).toLocaleDateString(lang === "es" ? "es-MX" : "en-US", {
+    ? new Date(order.createdAt).toLocaleDateString(isEn ? "en-US" : "es-MX", {
         year: "numeric",
         month: "short",
         day: "numeric",
@@ -229,7 +319,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
       return `
         <div style="margin-bottom: 4px; padding-bottom: 3px; border-bottom: 1px dashed #000;">
           <div style="font-size: 11px; font-weight: 900; border-top: 1px solid #000; border-bottom: 1px solid #000; padding: 1px 2px; text-transform: uppercase;">
-            >> ARREGLO #${idx + 1}: ${item.quantity || 1}x ${item.name}
+            >> ${isEn ? "ARRANGEMENT" : "ARREGLO"} #${idx + 1}: ${item.quantity || 1}x ${item.name}
           </div>
 
           <!-- Ficha Técnica de Preparación -->
@@ -237,7 +327,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             ${
               roseSpecs.length > 0
                 ? `<div style="margin-top: 1px;">
-                    <strong style="text-decoration: underline;">🌹 ROSAS & COLOR:</strong>
+                    <strong style="text-decoration: underline;">🌹 ${isEn ? "ROSES & COLOR:" : "ROSAS & COLOR:"}</strong>
                     ${roseSpecs
                       .map((r) => `<div style="padding-left: 6px; font-weight: bold;">• ${r.name || ""}: ${r.value || ""}${r.price ? ` (+$${r.price.toFixed(2)})` : ""}</div>`)
                       .join("")}
@@ -248,7 +338,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             ${
               paperSpecs.length > 0
                 ? `<div style="margin-top: 1px;">
-                    <strong style="text-decoration: underline;">📜 PAPEL / ENVOLTURA:</strong>
+                    <strong style="text-decoration: underline;">📜 ${isEn ? "WRAPPING PAPER:" : "PAPEL / ENVOLTURA:"}</strong>
                     ${paperSpecs
                       .map((p) => `<div style="padding-left: 6px; font-weight: bold;">• ${p.value || p.name}</div>`)
                       .join("")}
@@ -259,12 +349,12 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             ${
               ribbonSpecs.length > 0
                 ? `<div style="margin-top: 1px;">
-                    <strong style="text-decoration: underline;">🎀 LISTÓN PERSONALIZADO:</strong>
+                    <strong style="text-decoration: underline;">🎀 ${isEn ? "CUSTOM RIBBON:" : "LISTÓN PERSONALIZADO:"}</strong>
                     ${ribbonSpecs
                       .map(
                         (rb) => `<div style="padding-left: 6px;">
                           • ${rb.value || rb.name}
-                          ${rb.customText ? `<div style="font-weight: 900; border: 1px solid #000; padding: 1px 3px; margin-top: 1px;">GRABAR: "${rb.customText}"</div>` : ""}
+                          ${rb.customText ? `<div style="font-weight: 900; border: 1px solid #000; padding: 1px 3px; margin-top: 1px;">${isEn ? "ENGRAVE:" : "GRABAR:"} "${rb.customText}"</div>` : ""}
                         </div>`
                       )
                       .join("")}
@@ -275,7 +365,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             ${
               accessoriesSpecs.length > 0
                 ? `<div style="margin-top: 1px;">
-                    <strong style="text-decoration: underline;">👑 CORONA & ACCESORIOS:</strong>
+                    <strong style="text-decoration: underline;">👑 ${isEn ? "CROWN & ACCESSORIES:" : "CORONA & ACCESORIOS:"}</strong>
                     ${accessoriesSpecs
                       .map((ac) => `<div style="padding-left: 6px; font-weight: bold;">• ${ac.value || ac.name}</div>`)
                       .join("")}
@@ -286,7 +376,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             ${
               sweetsAndPlush.length > 0
                 ? `<div style="margin-top: 1px;">
-                    <strong style="text-decoration: underline;">🍫 CHOCOLATES / EXTRAS:</strong>
+                    <strong style="text-decoration: underline;">🍫 ${isEn ? "CHOCOLATES / EXTRAS:" : "CHOCOLATES / EXTRAS:"}</strong>
                     ${sweetsAndPlush
                       .map((sw) => `<div style="padding-left: 6px; font-weight: bold;">• ${sw.value || sw.name}</div>`)
                       .join("")}
@@ -297,7 +387,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
             ${
               otherAddons.length > 0
                 ? `<div style="margin-top: 1px;">
-                    <strong>✨ OTROS DETALLES:</strong>
+                    <strong>✨ ${isEn ? "OTHER DETAILS:" : "OTROS DETALLES:"}</strong>
                     ${otherAddons
                       .map((ot) => `<div style="padding-left: 6px;">• ${ot.value || ot.name}</div>`)
                       .join("")}
@@ -307,7 +397,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
           </div>
 
           <div style="text-align: right; font-weight: bold; font-size: 9px; margin-top: 1px;">
-            Subtotal Arreglo: $${((item.price || 0) * (item.quantity || 1)).toFixed(2)} USD
+            ${isEn ? "Arrangement Subtotal:" : "Subtotal Arreglo:"} $${((item.price || 0) * (item.quantity || 1)).toFixed(2)} USD
           </div>
         </div>
       `;
@@ -387,7 +477,7 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
     <div class="text-center" style="border-bottom: 1.5px solid #000; padding-bottom: 2px; margin-bottom: 2px;">
       <div class="font-black uppercase" style="font-size: 13px; letter-spacing: 0.5px;">BONBON FLOWERS</div>
       <div class="font-black uppercase" style="font-size: 9.5px; border-top: 1px dashed #000; border-bottom: 1px dashed #000; padding: 1px 0; margin: 1px 0;">
-        *** COMANDA DE TALLER (ECO-PAPEL) ***
+        ${isEn ? "*** WORKSHOP ORDER TICKET (ECO) ***" : "*** COMANDA DE TALLER (ECO-PAPEL) ***"}
       </div>
       <div style="font-size: 8px; font-weight: bold;">Houston, TX • Tel: (346) 739-2730</div>
     </div>
@@ -395,22 +485,25 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
     <!-- Metadatos de la Orden -->
     <div class="py-05 border-b-dashed" style="font-size: 9.5px;">
       <div class="flex-between font-black" style="font-size: 10.5px;">
-        <span>ORDEN: #${order.orderId}</span>
+        <span>${isEn ? "ORDER:" : "ORDEN:"} #${order.orderId}</span>
         <span style="font-size: 8.5px; font-weight: bold;">${dateFormatted}</span>
       </div>
       <div style="margin-top: 1px;">
-        <span class="font-bold">CLIENTE:</span> ${order.customerName}
+        <span class="font-bold">${isEn ? "CUSTOMER:" : "CLIENTE:"}</span> ${order.customerName}
       </div>
       <div style="margin-top: 1px;">
-        <span class="font-bold">TEL:</span> ${order.customerPhone || "N/A"}
+        <span class="font-bold">${isEn ? "PHONE:" : "TEL:"}</span> ${order.customerPhone || "N/A"}
       </div>
       <div style="margin-top: 1px; word-break: break-word;">
-        <span class="font-bold">MODALIDAD:</span> ${order.deliveryMethod || "Entrega Estándar"}
+        <span class="font-bold">${isEn ? "DELIVERY:" : "MODALIDAD:"}</span> ${translateDeliveryMethod(order.deliveryMethod, lang)}
+      </div>
+      <div style="margin-top: 1px;">
+        <span class="font-bold">${isEn ? "STATUS:" : "ESTADO:"}</span> ${translateOrderStatus(order.status, lang)}
       </div>
       ${
         order.address
           ? `<div style="margin-top: 1px; word-break: break-word; border: 1px dashed #000; padding: 2px;">
-              <strong style="text-decoration: underline;">DIRECCIÓN DE ENTREGA:</strong>
+              <strong style="text-decoration: underline;">${isEn ? "DELIVERY ADDRESS:" : "DIRECCIÓN DE ENTREGA:"}</strong>
               <div>${order.address}</div>
             </div>`
           : ""
@@ -420,20 +513,20 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
     <!-- Tarjeta de Dedicatoria Impresa -->
     <div class="highlight-box">
       <div style="font-weight: 900; font-size: 9.5px; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 1px;">
-        💌 DEDICATORIA PARA TARJETA DE REGALO:
+        ${isEn ? "💌 GIFT CARD DEDICATION MESSAGE:" : "💌 DEDICATORIA PARA TARJETA DE REGALO:"}
       </div>
       <div style="font-style: italic; font-weight: bold; font-size: 10px; margin: 2px 0; word-break: break-word; line-height: 1.2;">
-        ${order.cardMessage ? `"${order.cardMessage}"` : "(Sin mensaje personalizado)"}
+        ${order.cardMessage ? `"${order.cardMessage}"` : (isEn ? "(No custom message)" : "(Sin mensaje personalizado)")}
       </div>
       <div style="font-size: 8.5px; font-weight: 900; border-top: 1px dashed #000; padding-top: 1px;">
-        TARJETA ADICIONAL: ${hasAdditionalCard ? "✅ SÍ (COLOCAR TARJETA EXTRA)" : "❌ NO"}
+        ${isEn ? `ADDITIONAL CARD: ${hasAdditionalCard ? "✅ YES (ADD EXTRA CARD)" : "❌ NO"}` : `TARJETA ADICIONAL: ${hasAdditionalCard ? "✅ SÍ (COLOCAR TARJETA EXTRA)" : "❌ NO"}`}
       </div>
     </div>
 
     <!-- Desglose de Producción Floral -->
     <div class="py-05">
       <div style="font-weight: 900; font-size: 9.5px; text-transform: uppercase; border-bottom: 1px solid #000; margin-bottom: 2px;">
-        🌸 ESPECIFICACIONES TÉCNICAS DEL ARREGLO:
+        ${isEn ? "🌸 FLORAL ARRANGEMENT SPECIFICATIONS:" : "🌸 ESPECIFICACIONES TÉCNICAS DEL ARREGLO:"}
       </div>
       ${itemsHtml}
     </div>
@@ -445,22 +538,22 @@ export function generate70mmComandaHtml(order: POSOrderData, lang: "es" | "en" =
         <span>Tax: +$${(order.taxAmount || 0).toFixed(2)}</span>
       </div>
       <div class="flex-between">
-        <span>Envío: ${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : "Gratis"}</span>
-        ${order.discountAmount ? `<span>Desc: -$${order.discountAmount.toFixed(2)}</span>` : "<span></span>"}
+        <span>${isEn ? "Shipping:" : "Envío:"} ${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : (isEn ? "Free" : "Gratis")}</span>
+        ${order.discountAmount ? `<span>${isEn ? "Disc:" : "Desc:"} -$${order.discountAmount.toFixed(2)}</span>` : "<span></span>"}
       </div>
       <div class="flex-between font-black border-b-solid" style="font-size: 10.5px; margin-top: 1px; padding-top: 1px; border-top: 1px solid #000;">
-        <span>TOTAL COBRADO:</span>
+        <span>${isEn ? "TOTAL CHARGED:" : "TOTAL COBRADO:"}</span>
         <span>$${(order.total || 0).toFixed(2)} USD</span>
       </div>
       <div style="font-size: 8px; margin-top: 1px;" class="flex-between">
-        <span>Método: ${order.paymentMethod || "Zelle / Efectivo"}</span>
+        <span>${isEn ? "Method:" : "Método:"} ${translatePaymentMethod(order.paymentMethod, lang)}</span>
         <span>Ref: ${order.paymentRef || "N/A"}</span>
       </div>
     </div>
 
     <!-- Pie de Comanda al Ras -->
     <div class="text-center" style="font-size: 8px; padding-top: 2px; font-weight: bold;">
-      *** FIN DE COMANDA • BONBON FLOWERS ***
+      ${isEn ? "*** END OF ORDER TICKET • BONBON FLOWERS ***" : "*** FIN DE COMANDA • BONBON FLOWERS ***"}
     </div>
   </div>
 </body>
@@ -474,8 +567,9 @@ export const generate80mmTicketHtml = generate70mmComandaHtml;
  * Genera el documento HTML completo para Factura Estándar A4 / Carta
  */
 export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "es"): string {
+  const isEn = lang === "en";
   const dateFormatted = order.createdAt
-    ? new Date(order.createdAt).toLocaleDateString(lang === "es" ? "es-MX" : "en-US", {
+    ? new Date(order.createdAt).toLocaleDateString(isEn ? "en-US" : "es-MX", {
         year: "numeric",
         month: "long",
         day: "numeric",
@@ -521,7 +615,7 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Factura A4 #${order.orderId} - Bonbon Flowers</title>
+  <title>${isEn ? "Invoice A4" : "Factura A4"} #${order.orderId} - Bonbon Flowers</title>
   <style>
     @page {
       size: letter portrait;
@@ -570,13 +664,13 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
 
     <div style="text-align: right;">
       <div style="display: inline-block; background: #fdf2f8; border: 1px solid #fbcfe8; padding: 6px 14px; border-radius: 12px; color: #db2777; font-family: monospace; font-size: 15px; font-weight: bold;">
-        ${lang === "es" ? "FACTURA #" : "INVOICE #"} ${order.orderId}
+        ${isEn ? "INVOICE #" : "FACTURA #"} ${order.orderId}
       </div>
       <p style="font-size: 11px; color: #6b7280; margin: 8px 0 0 0;">
-        <strong>${lang === "es" ? "Fecha:" : "Date:"}</strong> ${dateFormatted}
+        <strong>${isEn ? "Date:" : "Fecha:"}</strong> ${dateFormatted}
       </p>
       <p style="font-size: 11px; color: #6b7280; margin: 2px 0 0 0;">
-        <strong>${lang === "es" ? "Estado:" : "Status:"}</strong> ${order.status || "Confirmado"}
+        <strong>${isEn ? "Status:" : "Estado:"}</strong> ${translateOrderStatus(order.status, lang)}
       </p>
     </div>
   </div>
@@ -585,7 +679,7 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
   <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; margin-top: 20px;">
     <div>
       <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #9ca3af; letter-spacing: 0.5px;">
-        ${lang === "es" ? "DATOS DEL CLIENTE" : "CUSTOMER DETAILS"}
+        ${isEn ? "CUSTOMER DETAILS" : "DATOS DEL CLIENTE"}
       </div>
       <div style="font-size: 14px; font-weight: bold; color: #111827; margin-top: 4px;">${order.customerName}</div>
       ${order.customerPhone ? `<div style="font-family: monospace; color: #374151; margin-top: 2px;">${order.customerPhone}</div>` : ""}
@@ -594,11 +688,14 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
 
     <div>
       <div style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #9ca3af; letter-spacing: 0.5px;">
-        ${lang === "es" ? "DIRECCIÓN DE ENTREGA" : "DELIVERY ADDRESS"}
+        ${isEn ? "DELIVERY & PAYMENT" : "DIRECCIÓN & ENTREGA"}
       </div>
-      <div style="font-size: 13px; font-weight: 600; color: #111827; margin-top: 4px;">${order.address || "Recoger en Tienda / Boutique"}</div>
+      <div style="font-size: 13px; font-weight: 600; color: #111827; margin-top: 4px;">${order.address || (isEn ? "Boutique Pickup (Houston, TX)" : "Recoger en Tienda / Boutique")}</div>
       <div style="font-size: 11px; color: #6b7280; margin-top: 4px;">
-        <strong>${lang === "es" ? "Método:" : "Method:"}</strong> ${order.deliveryMethod || "Standard Delivery"}
+        <strong>${isEn ? "Method:" : "Método:"}</strong> ${translateDeliveryMethod(order.deliveryMethod, lang)}
+      </div>
+      <div style="font-size: 11px; color: #6b7280; margin-top: 2px;">
+        <strong>${isEn ? "Payment:" : "Pago:"}</strong> ${translatePaymentMethod(order.paymentMethod, lang)}
       </div>
     </div>
   </div>
@@ -608,7 +705,7 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
       ? `
     <div style="background: #fdf2f8; border: 1px solid #fbcfe8; border-radius: 12px; padding: 14px; margin-top: 16px;">
       <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: #db2777; letter-spacing: 0.5px;">
-        ${lang === "es" ? "💌 TARJETA DE DEDICATORIA IMPRESA" : "💌 PRINTED CARD MESSAGE"}
+        ${isEn ? "💌 PRINTED CARD MESSAGE" : "💌 TARJETA DE DEDICATORIA IMPRESA"}
       </div>
       <div style="font-style: italic; font-weight: 600; color: #1f2937; margin-top: 4px; font-size: 13px;">
         "${order.cardMessage}"
@@ -622,10 +719,10 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
   <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
     <thead>
       <tr style="background: #f3f4f6; border-bottom: 2px solid #e5e7eb; font-size: 10px; text-transform: uppercase; font-weight: bold; color: #4b5563; text-align: left;">
-        <th style="padding: 8px 12px;">${lang === "es" ? "Descripción de Arreglo / Ítem" : "Item Description"}</th>
-        <th style="padding: 8px 12px; text-align: center;">${lang === "es" ? "Cant." : "Qty"}</th>
-        <th style="padding: 8px 12px; text-align: right;">${lang === "es" ? "Precio Unit." : "Unit Price"}</th>
-        <th style="padding: 8px 12px; text-align: right;">${lang === "es" ? "Subtotal" : "Subtotal"}</th>
+        <th style="padding: 8px 12px;">${isEn ? "Item Description" : "Descripción de Arreglo / Ítem"}</th>
+        <th style="padding: 8px 12px; text-align: center;">${isEn ? "Qty" : "Cant."}</th>
+        <th style="padding: 8px 12px; text-align: right;">${isEn ? "Unit Price" : "Precio Unit."}</th>
+        <th style="padding: 8px 12px; text-align: right;">${isEn ? "Subtotal" : "Subtotal"}</th>
       </tr>
     </thead>
     <tbody>
@@ -637,13 +734,13 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
   <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
     <div style="width: 280px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 14px; font-size: 12px;">
       <div style="display: flex; justify-content: space-between; color: #4b5563; margin-bottom: 6px;">
-        <span>${lang === "es" ? "Subtotal Ítems:" : "Items Subtotal:"}</span>
+        <span>${isEn ? "Items Subtotal:" : "Subtotal Ítems:"}</span>
         <span style="font-weight: bold;">$${itemsSubtotal.toFixed(2)}</span>
       </div>
       ${
         order.discountAmount
           ? `<div style="display: flex; justify-content: space-between; color: #059669; margin-bottom: 6px; font-weight: 600;">
-              <span>${lang === "es" ? "Descuento:" : "Discount:"}</span>
+              <span>${isEn ? "Discount:" : "Descuento:"}</span>
               <span>-$${order.discountAmount.toFixed(2)}</span>
             </div>`
           : ""
@@ -653,11 +750,11 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
         <span>+$${(order.taxAmount || 0).toFixed(2)}</span>
       </div>
       <div style="display: flex; justify-content: space-between; color: #4b5563; margin-bottom: 8px;">
-        <span>${lang === "es" ? "Envío / Delivery:" : "Delivery Fee:"}</span>
-        <span>${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : lang === "es" ? "Gratis" : "Free"}</span>
+        <span>${isEn ? "Delivery Fee:" : "Envío / Delivery:"}</span>
+        <span>${(order.deliveryFee || 0) > 0 ? `+$${(order.deliveryFee || 0).toFixed(2)}` : (isEn ? "Free" : "Gratis")}</span>
       </div>
       <div style="display: flex; justify-content: space-between; border-top: 1.5px solid #d1d5db; padding-top: 8px; font-size: 15px; font-weight: 900; color: #111827;">
-        <span>${lang === "es" ? "TOTAL FINAL:" : "TOTAL DUE:"}</span>
+        <span>${isEn ? "TOTAL DUE:" : "TOTAL FINAL:"}</span>
         <span style="color: #047857;">$${(order.total || 0).toFixed(2)} USD</span>
       </div>
     </div>
@@ -665,7 +762,7 @@ export function generateA4InvoiceHtml(order: POSOrderData, lang: "es" | "en" = "
 
   <div style="border-top: 1px solid #e5e7eb; margin-top: 30px; padding-top: 16px; text-align: center; font-size: 11px; color: #9ca3af;">
     <p style="font-weight: bold; color: #4b5563; margin: 0;">
-      ${lang === "es" ? "¡Gracias por elegir a Bonbon Flowers Houston para sus momentos especiales!" : "Thank you for choosing Bonbon Flowers Houston for your special moments!"}
+      ${isEn ? "Thank you for choosing Bonbon Flowers Houston for your special moments!" : "¡Gracias por elegir a Bonbon Flowers Houston para sus momentos especiales!"}
     </p>
     <p style="margin: 4px 0 0 0;">Bonbon Flowers Houston • Houston, Texas • www.bonbonflowershouston.com</p>
   </div>
@@ -804,8 +901,9 @@ async function ackOrderPrinted(orderId: string): Promise<void> {
  * Imprime el Ticket Térmico / Comanda 70mm de forma directa en JavaScript
  * Calibrada para matriz de punto y Star Micronics con cero desperdicio de papel.
  */
-export async function printTicket80mmDirect(order: POSOrderData, lang: "es" | "en" = "es"): Promise<boolean> {
-  const html = generate80mmTicketHtml(order, lang);
+export async function printTicket80mmDirect(order: POSOrderData, lang?: "es" | "en"): Promise<boolean> {
+  const activeLang = lang || getClientPreferredLanguage();
+  const html = generate80mmTicketHtml(order, activeLang);
   const success = await printHtmlInHiddenIframe(html, true);
   if (success && order.orderId) {
     ackOrderPrinted(order.orderId);
@@ -818,7 +916,8 @@ export const printComanda70mmDirect = printTicket80mmDirect;
 /**
  * Imprime la Factura Estándar A4 / Carta de forma directa en JavaScript
  */
-export async function printInvoiceA4Direct(order: POSOrderData, lang: "es" | "en" = "es"): Promise<boolean> {
-  const html = generateA4InvoiceHtml(order, lang);
+export async function printInvoiceA4Direct(order: POSOrderData, lang?: "es" | "en"): Promise<boolean> {
+  const activeLang = lang || getClientPreferredLanguage();
+  const html = generateA4InvoiceHtml(order, activeLang);
   return await printHtmlInHiddenIframe(html, false);
 }

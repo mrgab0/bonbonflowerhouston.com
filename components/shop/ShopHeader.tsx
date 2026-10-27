@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import { ShoppingCart, ArrowLeft, Fingerprint, Menu, X } from "lucide-react";
 import { useCart } from "@/components/shop/Cart/CartContext";
 import { LanguageSwitcher } from "@/components/shop/LanguageSwitcher";
@@ -10,6 +11,10 @@ import { CustomerBiometricModal } from "@/components/auth/CustomerBiometricModal
 import { useTranslations } from "next-intl";
 
 export const ShopHeader = () => {
+  const pathname = usePathname();
+  const isEn = pathname ? pathname.startsWith("/en") : false;
+  const langPrefix = isEn ? "/en" : "";
+
   const { cartItems } = useCart();
   const totalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
@@ -17,11 +22,11 @@ export const ShopHeader = () => {
   const t = useTranslations("nav");
 
   const navLinks = [
-    { href: "/", label: t('home') },
-    { href: "/productos", label: t('catalog') },
-    { href: "/rastreo", label: t('tracking') },
-    { href: "/nosotros", label: t('about') },
-    { href: "/contacto", label: t('contact') }
+    { href: isEn ? "/en" : "/", label: t('home') },
+    { href: `${langPrefix}/productos`, label: t('catalog') },
+    { href: `${langPrefix}/rastreo`, label: t('tracking') },
+    { href: `${langPrefix}/nosotros`, label: t('about') },
+    { href: `${langPrefix}/contacto`, label: t('contact') }
   ];
 
   return (
@@ -35,7 +40,7 @@ export const ShopHeader = () => {
       >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4 xl:gap-6 relative">
           {/* Logo Presionable hacia el Home */}
-          <Link href="/" className="flex items-center gap-3 group flex-shrink-0 relative z-10">
+          <Link href={isEn ? "/en" : "/"} className="flex items-center gap-3 group flex-shrink-0 relative z-10">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 shadow-md group-hover:scale-105 group-active:scale-95 transition-transform bg-white p-0.5 flex-shrink-0">
               <img src="https://bonbonflowershouston.com/logo.png" alt="Bonbon Flowers Logo" className="w-full h-full object-cover rounded-full" />
             </div>
@@ -84,7 +89,7 @@ export const ShopHeader = () => {
             {/* Cart Button indicator */}
             <div className="relative ml-1">
               <Link
-                href="/checkout"
+                href={isEn ? "/en/checkout" : "/checkout"}
                 className="flex items-center gap-1.5 xl:gap-2 bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950 px-2.5 xl:px-3.5 2xl:px-5 py-2 2xl:py-2.5 rounded-full font-bold text-xs hover:opacity-90 transition-all shadow-md"
                 style={{
                   backgroundColor: "var(--theme-btn-primary-bg, #163422)",
@@ -92,7 +97,7 @@ export const ShopHeader = () => {
                 }}
               >
                 <ShoppingCart size={18} />
-                <span className="hidden 2xl:inline">Carrito</span>
+                <span className="hidden 2xl:inline">{isEn ? "Cart" : "Carrito"}</span>
                 {totalCount > 0 && (
                   <span
                     className="text-stone-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full"

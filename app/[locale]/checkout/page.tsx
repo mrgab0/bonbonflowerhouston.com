@@ -157,7 +157,8 @@ export default function CheckoutPage() {
       localStorage.setItem("customerPhone", orderData.customerPhone);
       localStorage.setItem("customerAddress", orderData.address);
 
-      router.push(`/checkout/confirmacion?orderId=${result.orderId}`);
+      const isEn = typeof window !== "undefined" && window.location.pathname.startsWith("/en");
+      router.push(isEn ? `/en/checkout/confirmacion?orderId=${result.orderId}` : `/checkout/confirmacion?orderId=${result.orderId}`);
     } else {
       alert("Error al procesar pedido");
       setLoading(false);

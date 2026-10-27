@@ -10,6 +10,11 @@ export function LanguageSwitcher() {
   const isEnglish = pathname.startsWith("/en");
 
   const toggleLanguage = (targetLocale: "es" | "en") => {
+    try {
+      localStorage.setItem("bonbon_preferred_lang", targetLocale);
+      document.cookie = `bonbon_lang=${targetLocale}; path=/; max-age=31536000; SameSite=Lax`;
+    } catch (_) {}
+
     let newPath = pathname;
 
     if (pathname.startsWith("/es") || pathname.startsWith("/en")) {
