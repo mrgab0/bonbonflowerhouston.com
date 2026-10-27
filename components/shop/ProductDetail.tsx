@@ -25,6 +25,8 @@ const COLOR_SWATCHES: Record<string, { bg: string; border?: string; text?: strin
   "light pink": { bg: "#fbcfe8", border: "#f472b6", text: "#831843" },
   "White": { bg: "#ffffff", border: "#cbd5e1", text: "#0f172a" },
   "white": { bg: "#ffffff", border: "#cbd5e1", text: "#0f172a" },
+  "Be Sweet": { bg: "#be185d", text: "#ffffff" },
+  "be sweet": { bg: "#be185d", text: "#ffffff" },
   "Sweet Beat": { bg: "#be185d", text: "#ffffff" },
   "sweet beat": { bg: "#be185d", text: "#ffffff" },
   "Red": { bg: "#b91c1c", text: "#ffffff" },
@@ -58,7 +60,7 @@ const DEFAULT_ROSE_COLORS = [
   "Deep Purple",
   "Light Pink",
   "White",
-  "Sweet Beat",
+  "Be Sweet",
   "Hot Pink",
 ];
 
@@ -77,10 +79,16 @@ export const ProductDetail = ({ product }: { product: any }) => {
 
   // Colores de Rosas Disponibles (Configurados o Predefinidos de la Boutique)
   const availableColors: string[] = useMemo(() => {
+    let rawList: string[] = [];
     if (Array.isArray(product.availableColors) && product.availableColors.length > 0) {
-      return product.availableColors;
+      rawList = product.availableColors;
+    } else {
+      rawList = DEFAULT_ROSE_COLORS;
     }
-    return DEFAULT_ROSE_COLORS;
+    // Normalizar automáticamente cualquier "Sweet Beat" histórico a "Be Sweet"
+    return rawList.map((c) =>
+      typeof c === "string" && c.trim().toLowerCase() === "sweet beat" ? "Be Sweet" : c
+    );
   }, [product.availableColors]);
 
   const [selectedColor, setSelectedColor] = useState<string>(availableColors[0] || "Red");

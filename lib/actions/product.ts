@@ -32,7 +32,8 @@ export async function createProduct(formData: FormData) {
     const availableColors = availableColorsRaw
       .split(",")
       .map((c) => c.trim())
-      .filter((c) => c.length > 0);
+      .filter((c) => c.length > 0)
+      .map((c) => (c.toLowerCase() === "sweet beat" ? "Be Sweet" : c));
     const stemTiersJson = (formData.get("stemTiers") as string) || "";
     let stemTiers: any[] = [];
     if (stemTiersJson) {
@@ -257,7 +258,8 @@ export async function updateProduct(id: string, formData: FormData) {
     const availableColors = availableColorsRaw
       .split(",")
       .map((c) => c.trim())
-      .filter((c) => c.length > 0);
+      .filter((c) => c.length > 0)
+      .map((c) => (c.toLowerCase() === "sweet beat" ? "Be Sweet" : c));
     const stemTiersJson = (formData.get("stemTiers") as string) || "";
     let stemTiers: any[] = [];
     if (stemTiersJson) {
