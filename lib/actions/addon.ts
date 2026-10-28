@@ -10,7 +10,7 @@ export async function getAddons() {
   await dbConnect();
   try {
     const addons = await Addon.find({ isActive: { $ne: false }, isDeleted: { $ne: true } }).sort({ order: 1, createdAt: -1 }).lean();
-    const normalized = (addons || []).filter(Boolean).map(normalizeAddon);
+    const normalized = (addons || []).filter(Boolean).map((a: any) => normalizeAddon(a));
     return { success: true, data: JSON.parse(JSON.stringify(normalized)) };
   } catch (error) {
     console.error("Error obteniendo adicionales:", error);
@@ -22,7 +22,7 @@ export async function getAllAddonsAdmin() {
   await dbConnect();
   try {
     const addons = await Addon.find({ isDeleted: { $ne: true } }).sort({ category: 1, order: 1, createdAt: -1 }).lean();
-    const normalized = (addons || []).filter(Boolean).map(normalizeAddon);
+    const normalized = (addons || []).filter(Boolean).map((a: any) => normalizeAddon(a));
     return { success: true, data: JSON.parse(JSON.stringify(normalized)) };
   } catch (error) {
     console.error("Error obteniendo adicionales admin:", error);
@@ -35,7 +35,7 @@ export async function getAddonById(id: string) {
   try {
     const addon = await Addon.findById(id).lean();
     if (!addon) return { success: false, error: "Adicional no encontrado" };
-    return { success: true, data: JSON.parse(JSON.stringify(normalizeAddon(addon))) };
+    return { success: true, data: JSON.parse(JSON.stringify(normalizeAddon(addon as any))) };
   } catch (error) {
     return { success: false, error: "Error al cargar adicional" };
   }

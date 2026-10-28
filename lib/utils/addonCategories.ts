@@ -12,10 +12,10 @@ export const ADDON_CATEGORIES_ORDER = [
   "Otros Adicionales",
 ] as const;
 
-export function normalizeAddonCategory(addon: { name?: string; category?: string }): string {
+export function normalizeAddonCategory(addon: any): string {
   if (!addon) return "Otros Adicionales";
-  const name = (addon.name || "").toLowerCase();
-  const rawCat = (addon.category || "").toLowerCase();
+  const name = String(addon.name || "").toLowerCase();
+  const rawCat = String(addon.category || "").toLowerCase();
 
   // 1. Globos con Helio (debe verificarse primero porque existen globos como 'Helium Balloons Teddy Brown Bear')
   if (
@@ -80,13 +80,14 @@ export function normalizeAddonCategory(addon: { name?: string; category?: string
     return "Personalización & Lazos";
   }
 
-  return addon.category && addon.category !== "Otros" ? addon.category : "Otros Adicionales";
+  return addon.category && addon.category !== "Otros" ? String(addon.category) : "Otros Adicionales";
 }
 
-export function normalizeAddon<T extends { name?: string; category?: string }>(addon: T): T {
+export function normalizeAddon<T = any>(addon: T): T {
   if (!addon) return addon;
+  const a = addon as any;
   return {
-    ...addon,
-    category: normalizeAddonCategory(addon),
+    ...a,
+    category: normalizeAddonCategory(a),
   };
 }
