@@ -87,7 +87,17 @@ export default function CheckoutPage() {
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  const deliveryFee = selectedDelivery ? selectedDelivery.extraPrice : 0;
+
+  // Cálculo dinámico de tarifa por milla según la opción seleccionada (Millas × $/milla, sin precio base)
+  const calcOptionFee = (opt: DeliveryOption) => {
+    if (opt.id === "pickup") return 0;
+    const miles = 0;
+    const perMile = Number(opt.pricePerMile || 0);
+    const totalFee = miles * perMile;
+    return Math.round(totalFee * 100) / 100;
+  };
+
+  const deliveryFee = selectedDelivery ? calcOptionFee(selectedDelivery) : 0;
 
   let discountAmount = 0;
   if (appliedCoupon) {
@@ -229,6 +239,7 @@ export default function CheckoutPage() {
                     {deliveryOptionsList.map((option, index) => {
                       const IconComponent = iconMap[option.iconName] || Truck;
                       const isSelected = (selectedDelivery.id && selectedDelivery.id === option.id) || selectedDelivery.title === option.title;
+                      const optionPrice = calcOptionFee(option);
 
                       return (
                         <label
@@ -254,15 +265,26 @@ export default function CheckoutPage() {
                                 )}
                               </div>
                               <p className="text-xs text-gray-400 mt-0.5">{option.description}</p>
-                              <span className="text-[11px] font-bold text-gray-500 dark:text-stone-400 block mt-1">
-                                ⏱️ Tiempo estimado: <strong className="text-gray-800 dark:text-stone-200">{option.estimatedTimeLabel}</strong>
-                              </span>
+                              <div className="flex flex-wrap items-center gap-2 mt-1 text-[11px]">
+                                <span className="font-bold text-gray-500 dark:text-stone-400">
+                                  ⏱️ Tiempo estimado: <strong className="text-gray-800 dark:text-stone-200">{option.estimatedTimeLabel}</strong>
+                                </span>
+                                {option.id !== "pickup" && (
+                                  <span className="text-purple-700 dark:text-purple-300 font-bold bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-md border border-purple-100 dark:border-purple-900/50">
+                                    📍 0 mi × ${Number(option.pricePerMile || 0).toFixed(2)}/mi = ${optionPrice.toFixed(2)}
+                                  </span>
+                                )}
+                              </div>
                             </div>
                           </div>
 
                           <div className="text-right flex-shrink-0 ml-3">
-                            <span className={`text-sm font-extrabold block ${option.extraPrice > 0 ? "text-[#FF97A4]" : "text-green-600"}`}>
-                              {option.extraPrice > 0 ? `+$${option.extraPrice.toFixed(2)} USD` : "Gratis"}
+                            <span className={`text-sm font-extrabold block ${optionPrice > 0 ? "text-[#FF97A4]" : "text-green-600"}`}>
+                              {option.id === "pickup"
+                                ? "Gratis"
+                                : optionPrice > 0
+                                  ? `+$${optionPrice.toFixed(2)} USD`
+                                  : "$0.00 USD"}
                             </span>
                             {isSelected && (
                               <CheckCircle2 size={18} className="text-[#FF97A4] ml-auto mt-1" />

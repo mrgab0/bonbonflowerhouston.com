@@ -4,7 +4,7 @@ export interface DeliveryOption {
   description: string;
   estimatedTimeMinutes: number; // Para calculo o orden
   estimatedTimeLabel: string;
-  extraPrice: number; // Precio adicional base en $ USD
+  extraPrice: number; // Obsoleto: siempre 0 (calculado exclusivamente por milla)
   pricePerMile: number; // Costo por milla en $ USD
   badge?: string;
   iconName: string;
@@ -18,7 +18,7 @@ export const DEFAULT_DELIVERY_OPTIONS: DeliveryOption[] = [
     description: "Entrega prioritaria directa en menos de 30 a 45 minutos.",
     estimatedTimeMinutes: 30,
     estimatedTimeLabel: "30 - 45 Minutos",
-    extraPrice: 15.00,
+    extraPrice: 0.00,
     pricePerMile: 3.00,
     badge: "Ultra Rápido ⚡",
     iconName: "Zap",
@@ -30,7 +30,7 @@ export const DEFAULT_DELIVERY_OPTIONS: DeliveryOption[] = [
     description: "Despacho prioritario en 1 hora aproximadamente.",
     estimatedTimeMinutes: 60,
     estimatedTimeLabel: "1 Hora",
-    extraPrice: 10.00,
+    extraPrice: 0.00,
     pricePerMile: 2.00,
     badge: "Recomendado 🔥",
     iconName: "Rocket",
@@ -42,7 +42,7 @@ export const DEFAULT_DELIVERY_OPTIONS: DeliveryOption[] = [
     description: "Envío regular garantizado en un rango de 3 horas.",
     estimatedTimeMinutes: 180,
     estimatedTimeLabel: "3 Horas",
-    extraPrice: 5.00,
+    extraPrice: 0.00,
     pricePerMile: 1.25,
     badge: "Popular",
     iconName: "Truck",
@@ -78,7 +78,7 @@ export const DEFAULT_DELIVERY_OPTIONS: DeliveryOption[] = [
     description: "Despacho especial nocturno para sorpresas (8:00 PM - 10:00 PM).",
     estimatedTimeMinutes: 1200,
     estimatedTimeLabel: "Nocturno (8pm - 10pm)",
-    extraPrice: 12.00,
+    extraPrice: 0.00,
     pricePerMile: 2.50,
     badge: "Especial 🎁",
     iconName: "Moon",

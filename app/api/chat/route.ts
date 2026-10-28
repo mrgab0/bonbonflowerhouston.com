@@ -53,7 +53,7 @@ export async function POST(req: Request) {
       : (isEn ? "There are currently no products listed in the online catalog." : "No hay productos listados actualmente en el catálogo online.");
 
     const deliveryOptionsSummary = (deliveryRes?.data && deliveryRes.data.length > 0)
-      ? deliveryRes.data.map((d: any) => `- ${d.title}: Base $${d.extraPrice} + $${d.pricePerMile}/milla (${d.estimatedTimeLabel})`).join('\n')
+      ? deliveryRes.data.map((d: any) => `- ${d.title}: $${d.pricePerMile}/milla (${d.estimatedTimeLabel})`).join('\n')
       : "- Same-Day Delivery across Houston, TX and metropolitan areas.";
 
     const whatsappPhone = "+1 346 739 2730";
@@ -74,7 +74,7 @@ Módulos del Administrador y Enlaces Directos:
    - Adicionales: Peluches, globos de helio, chocolates, coronas y lazos dorados.
    - Variantes anidadas: Los productos secundarios (ej. 75 rosas, 100 rosas) se anidan bajo un producto padre (ej. 50 rosas). Al anidarse, las variantes quedan agrupadas bajo el padre y se seleccionan en la ficha de producto sin saturar la página principal.
 4. Tarifas de Entrega: [Opciones de Entrega](/admin/entregas)
-   - Configuración de tarifas base y costo por milla en Houston (River Oaks, Galleria, Katy, The Woodlands, Downtown, Pearland, Cypress, Sugar Land).
+   - Configuración de costo por milla en Houston (cobro por milla recorrida sin precio base: River Oaks, Galleria, Katy, The Woodlands, Downtown, Pearland, Cypress, Sugar Land).
    - Recogida en tienda (Pickup) gratuita ($0.00).
 5. Métricas y Recuperación: [Estadísticas & Carritos](/admin/estadisticas)
    - Resumen de ingresos, tasa de conversión y carritos abandonados con botón de contacto directo por WhatsApp.

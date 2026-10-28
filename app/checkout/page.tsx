@@ -190,16 +190,12 @@ function CheckoutContent() {
   // Impuestos de Ley (Sales Tax 8.25%) sumados Adicionalmente al Subtotal Imponible
   const taxAmount = Math.round(taxableSubtotal * 0.0825 * 100) / 100;
 
-  // Cálculo dinámico de tarifa por milla según la opción seleccionada
+  // Cálculo dinámico de tarifa por milla según la opción seleccionada (Millas × $/milla, sin precio base)
   const calcOptionFee = (opt: DeliveryOption) => {
     if (opt.id === "pickup") return 0;
     const miles = deliveryLocation?.distanceMiles || 0;
-    const perMile = opt.pricePerMile || 0;
-    const base = opt.extraPrice || 0;
-    
-    if (perMile > 0 && miles === 0) return base;
-
-    const totalFee = perMile > 0 ? (miles * perMile) + base : base;
+    const perMile = Number(opt.pricePerMile || 0);
+    const totalFee = miles * perMile;
     return Math.round(totalFee * 100) / 100;
   };
 
@@ -497,9 +493,9 @@ function CheckoutContent() {
                                 <span className="font-bold text-gray-500">
                                   ⏱️ <strong className="text-gray-800 dark:text-stone-200">{option.estimatedTimeLabel}</strong>
                                 </span>
-                                {isMounted && option.id !== "pickup" && option.pricePerMile > 0 && (
+                                {isMounted && option.id !== "pickup" && (
                                   <span suppressHydrationWarning className="text-purple-700 dark:text-purple-300 font-bold bg-purple-50 dark:bg-purple-950/40 px-2 py-0.5 rounded-md border border-purple-100 dark:border-purple-900/50">
-                                    📍 {deliveryLocation?.distanceMiles || 0} mi × ${option.pricePerMile.toFixed(2)}/mi
+                                    📍 {deliveryLocation?.distanceMiles || 0} mi × ${Number(option.pricePerMile || 0).toFixed(2)}/mi = ${optionPrice.toFixed(2)}
                                   </span>
                                 )}
                               </div>
@@ -508,7 +504,13 @@ function CheckoutContent() {
 
                           <div className="text-right flex-shrink-0 ml-3">
                             <span suppressHydrationWarning className={`text-sm font-extrabold block ${optionPrice > 0 ? "text-[#FF97A4]" : "text-green-600"}`}>
-                              {optionPrice > 0 ? `+$${optionPrice.toFixed(2)} USD` : "Gratis"}
+                              {option.id === "pickup"
+                                ? "Gratis"
+                                : optionPrice > 0
+                                  ? `+$${optionPrice.toFixed(2)} USD`
+                                  : (deliveryLocation?.distanceMiles || 0) > 0
+                                    ? "Gratis"
+                                    : "$0.00 USD"}
                             </span>
                             {isSelected && (
                               <CheckCircle2 size={18} className="text-[#FF97A4] ml-auto mt-1" />
