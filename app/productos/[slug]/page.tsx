@@ -1,48 +1,14 @@
-import { Suspense } from "react";
 import dbConnect from "@/lib/db";
 import { Product } from "@/lib/models/Product";
 import { Addon } from "@/lib/models/Addon";
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/shop/ProductDetail";
-import { CatalogClient } from "@/components/shop/CatalogClient";
-import { filterUniqueVariantProducts } from "@/lib/utils/variantFilter";
 import { normalizeAddon } from "@/lib/utils/addonCategories";
-
-export const dynamic = "force-dynamic";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   await dbConnect();
   
   const resolvedParams = await params;
-
-  // Interceptar ruta virtual /productos/adicionales y mostrar el catálogo filtrado en Adicionales
-  if (resolvedParams.slug === "adicionales" || resolvedParams.slug === "addons") {
-    const [rawProducts, rawAddons] = await Promise.all([
-      Product.find({ isActive: { $ne: false }, isDeleted: { $ne: true } })
-        .sort({ isFeatured: -1, createdAt: -1 })
-        .lean(),
-      Addon.find({ isActive: { $ne: false }, isDeleted: { $ne: true } })
-        .sort({ order: 1, createdAt: 1 })
-        .lean(),
-    ]);
-
-    const plainProducts = JSON.parse(JSON.stringify(rawProducts || []));
-    const products = filterUniqueVariantProducts(plainProducts);
-    const addons = (rawAddons || []).filter(Boolean).map(normalizeAddon);
-
-    return (
-      <Suspense
-        fallback={
-          <div className="min-h-screen bg-[#F9F9F9] dark:bg-[#0B0C10] p-12 text-center text-stone-500 dark:text-stone-400">
-            Cargando Adicionales...
-          </div>
-        }
-      >
-        <CatalogClient initialProducts={products} initialAddons={addons} initialTab="addons" />
-      </Suspense>
-    );
-  }
-
   const [productDocRaw, globalAddons] = await Promise.all([
     Product.findOne({ slug: resolvedParams.slug })
       .populate('addons')

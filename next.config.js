@@ -90,6 +90,16 @@ const nextConfig = {
         destination: '/:locale/productos/:slug*',
         permanent: true,
       },
+      {
+        source: '/productos/adicionales',
+        destination: '/productos?cat=adicionales',
+        permanent: true,
+      },
+      {
+        source: '/:locale(es|en)/productos/adicionales',
+        destination: '/:locale/productos?cat=adicionales',
+        permanent: true,
+      },
     ];
   },
 };
