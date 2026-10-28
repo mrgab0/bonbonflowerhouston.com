@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
-import { IAddon } from "@/lib/models/Addon";
+import type { IAddon } from "@/lib/models/Addon";
 import { normalizeAddon, ADDON_CATEGORIES_ORDER } from "@/lib/utils/addonCategories";
 import {
   Sparkles,
@@ -24,7 +24,7 @@ export interface SelectedAddonState {
 }
 
 interface AddonSelectionProps {
-  addons: IAddon[];
+  addons: any[];
   onSelectionChange: (selectedAddons: SelectedAddonState[]) => void;
 }
 
@@ -37,13 +37,20 @@ const categoryIcons: Record<string, any> = {
   "Otros Adicionales": Plus,
 };
 
+function getAddonId(addon: any): string {
+  if (!addon) return "";
+  if (addon._id) return addon._id.toString();
+  if (addon.id) return String(addon.id);
+  return "";
+}
+
 export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSelectionProps) => {
   const [selected, setSelected] = useState<SelectedAddonState[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
   // Normalizar los adicionales para garantizar que Ferrero, Peluches y Globos estén en su categoría exacta
   const normalizedAddons = useMemo(() => {
-    return (addons || []).map((a) => normalizeAddon(a));
+    return (addons || []).filter(Boolean).map((a) => normalizeAddon(a));
   }, [addons]);
 
   // Extraer categorías únicas ordenadas de forma lógica y premium
@@ -55,8 +62,8 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
 
     const list = Array.from(set);
     return list.sort((a, b) => {
-      const idxA = ADDON_CATEGORIES_ORDER.indexOf(a as any);
-      const idxB = ADDON_CATEGORIES_ORDER.indexOf(b as any);
+      const idxA = (ADDON_CATEGORIES_ORDER as readonly string[]).indexOf(a);
+      const idxB = (ADDON_CATEGORIES_ORDER as readonly string[]).indexOf(b);
       if (idxA !== -1 && idxB !== -1) return idxA - idxB;
       if (idxA !== -1) return -1;
       if (idxB !== -1) return 1;
@@ -80,8 +87,10 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
     return normalizedAddons.filter((a) => a.category?.trim().toLowerCase() === activeCategory.toLowerCase());
   }, [normalizedAddons, activeCategory]);
 
-  const toggleAddon = useCallback((addon: IAddon) => {
-    const addonIdStr = addon._id.toString();
+  const toggleAddon = useCallback((addon: any) => {
+    const addonIdStr = getAddonId(addon);
+    if (!addonIdStr) return;
+
     setSelected((prev) => {
       const exists = prev.find((s) => s.addonId === addonIdStr);
       const nextSelection = exists
@@ -100,8 +109,10 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
     onSelectionChange(nextSelection);
   };
 
-  const handleSelectOption = (addon: IAddon, val: string) => {
-    const addonIdStr = addon._id.toString();
+  const handleSelectOption = (addon: any, val: string) => {
+    const addonIdStr = getAddonId(addon);
+    if (!addonIdStr) return;
+
     const existing = selected.find((s) => s.addonId === addonIdStr);
     const filtered = selected.filter((s) => s.addonId !== addonIdStr);
     const nextSelection = val 
@@ -121,13 +132,13 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
   };
 
   const renderAddonCard = (addon: any) => {
-    const addonIdStr = addon._id.toString();
+    const addonIdStr = getAddonId(addon);
     const selectedObj = selected.find((s) => s.addonId === addonIdStr);
     const isSelected = !!selectedObj;
 
     return (
       <div
-        key={addonIdStr}
+        key={addonIdStr || addon.name}
         onClick={() => {
           if (addon.type !== "select" && addon.type !== "text") {
             toggleAddon(addon);
@@ -143,7 +154,7 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
         <div className="relative aspect-square w-full bg-gray-50 dark:bg-gray-900/60 overflow-hidden">
           <img
             src={optimizeImageUrl(addon.image)}
-            alt={addon.name}
+            alt={addon.name || "Adicional"}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
 
@@ -156,7 +167,7 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
 
           {/* Badge de Precio Flotante */}
           <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-white/95 dark:bg-gray-900/90 text-stone-900 dark:text-stone-100 text-[10px] font-extrabold shadow-sm border border-black/5">
-            {addon.price > 0 ? `+$${addon.price.toFixed(2)}` : "Incluido"}
+            {addon.price > 0 ? `+$${Number(addon.price).toFixed(2)}` : "Incluido"}
           </div>
         </div>
 

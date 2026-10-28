@@ -10,7 +10,7 @@ export async function getAddons() {
   await dbConnect();
   try {
     const addons = await Addon.find({ isActive: { $ne: false }, isDeleted: { $ne: true } }).sort({ order: 1, createdAt: -1 }).lean();
-    const normalized = (addons || []).map(normalizeAddon);
+    const normalized = (addons || []).filter(Boolean).map(normalizeAddon);
     return { success: true, data: JSON.parse(JSON.stringify(normalized)) };
   } catch (error) {
     console.error("Error obteniendo adicionales:", error);
@@ -22,7 +22,7 @@ export async function getAllAddonsAdmin() {
   await dbConnect();
   try {
     const addons = await Addon.find({ isDeleted: { $ne: true } }).sort({ category: 1, order: 1, createdAt: -1 }).lean();
-    const normalized = (addons || []).map(normalizeAddon);
+    const normalized = (addons || []).filter(Boolean).map(normalizeAddon);
     return { success: true, data: JSON.parse(JSON.stringify(normalized)) };
   } catch (error) {
     console.error("Error obteniendo adicionales admin:", error);
