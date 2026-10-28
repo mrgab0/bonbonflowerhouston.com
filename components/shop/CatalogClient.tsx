@@ -9,52 +9,85 @@ import { Search, ArrowUpDown, Sparkles, Flower2, RefreshCw, Gift, Check, Tag } f
 import { useCart } from "@/components/shop/Cart/CartContext";
 import { useTranslations } from "next-intl";
 import { WhatsAppButton } from "@/components/shop/WhatsAppButton";
+import { normalizeAddon } from "@/lib/utils/addonCategories";
 
 interface CatalogClientProps {
   initialProducts: any[];
   initialAddons?: any[];
+  initialTab?: "all" | "products" | "addons";
+  initialCategory?: string;
 }
 
-export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogClientProps) {
+export function CatalogClient({
+  initialProducts,
+  initialAddons = [],
+  initialTab = "all",
+  initialCategory = "all",
+}: CatalogClientProps) {
   const t = useTranslations("Catalog");
   const searchParams = useSearchParams();
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeTab, setActiveTab] = useState<"all" | "products" | "addons">("all");
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [activeTab, setActiveTab] = useState<"all" | "products" | "addons">(initialTab);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [sortBy, setSortBy] = useState<"featured" | "price-asc" | "price-desc">("featured");
   const { addToCart } = useCart();
   const [addedAddonId, setAddedAddonId] = useState<string | null>(null);
 
-  // Sincronizar filtros desde la URL (por ejemplo desde las 5 categorías de la Home)
+  // Sincronizar filtros desde la URL (soporta ?cat=, ?category= y ?tab=)
   useEffect(() => {
     if (!searchParams) return;
     const searchVal = searchParams.get("search");
-    const catVal = searchParams.get("category");
+    const catVal = searchParams.get("cat") || searchParams.get("category");
+    const tabVal = searchParams.get("tab");
+
     if (searchVal) {
       setSearchTerm(searchVal);
     }
+
+    if (tabVal === "addons" || tabVal === "adicionales") {
+      setActiveTab("addons");
+    }
+
     if (catVal) {
-      setSelectedCategory(catVal);
-      if (catVal.toLowerCase().includes("adicional")) {
+      const c = catVal.toLowerCase();
+      if (c.includes("adicional") || c === "addons") {
         setActiveTab("addons");
+        setSelectedCategory("all");
+      } else if (c.includes("chocolate") || c.includes("dulce")) {
+        setActiveTab("addons");
+        setSelectedCategory("Adicional: Chocolates & Dulces");
+      } else if (c.includes("peluche") || c.includes("oso") || c.includes("teddy")) {
+        setActiveTab("addons");
+        setSelectedCategory("Adicional: Peluches");
+      } else if (c.includes("globo") || c.includes("balloon") || c.includes("helio")) {
+        setActiveTab("addons");
+        setSelectedCategory("Adicional: Globos con Helio");
+      } else if (c.includes("corona") || c.includes("crown")) {
+        setActiveTab("addons");
+        setSelectedCategory("Adicional: Coronas & Joyería");
+      } else {
+        setSelectedCategory(catVal);
       }
     }
   }, [searchParams]);
 
-  // Normalizar items combinados (Arreglos + Adicionales)
+  // Normalizar items combinados (Arreglos + Adicionales con categorías consistentes)
   const combinedItems = useMemo(() => {
-    const productsFormatted = initialProducts.map((p) => ({
+    const productsFormatted = (initialProducts || []).map((p) => ({
       ...p,
       itemType: "product",
       displayCategory: p.category || "Flores",
     }));
 
-    const addonsFormatted = initialAddons.map((a) => ({
-      ...a,
-      itemType: "addon",
-      images: [a.image || "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600"],
-      displayCategory: a.category ? `Adicional: ${a.category}` : "Adicionales",
-    }));
+    const addonsFormatted = (initialAddons || []).map((raw) => {
+      const a = normalizeAddon(raw);
+      return {
+        ...a,
+        itemType: "addon",
+        images: [a.image || "https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600"],
+        displayCategory: a.category ? `Adicional: ${a.category}` : "Adicionales",
+      };
+    });
 
     return [...productsFormatted, ...addonsFormatted];
   }, [initialProducts, initialAddons]);
@@ -83,10 +116,39 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
           item.displayCategory?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           item.flowerType?.toLowerCase().includes(searchTerm.toLowerCase());
 
-        // Filtro por Categoría
-        const matchCategory =
-          selectedCategory === "all" ||
-          item.displayCategory?.toLowerCase() === selectedCategory.toLowerCase();
+        // Filtro Inteligente por Categoría
+        const selLower = selectedCategory.toLowerCase();
+        let matchCategory = selectedCategory === "all";
+
+        if (!matchCategory) {
+          if (selLower.includes("adicional") && item.itemType === "addon") {
+            matchCategory = true;
+          } else if (item.displayCategory?.toLowerCase() === selLower) {
+            matchCategory = true;
+          } else if (
+            selLower.includes("chocolate") &&
+            (item.category?.toLowerCase().includes("chocolate") ||
+              item.name?.toLowerCase().includes("ferrero") ||
+              item.name?.toLowerCase().includes("chocolate"))
+          ) {
+            matchCategory = true;
+          } else if (
+            selLower.includes("peluche") &&
+            (item.category?.toLowerCase().includes("peluche") ||
+              item.name?.toLowerCase().includes("teddy") ||
+              item.name?.toLowerCase().includes("peluche") ||
+              item.name?.toLowerCase().includes("bear"))
+          ) {
+            matchCategory = true;
+          } else if (
+            selLower.includes("globo") &&
+            (item.category?.toLowerCase().includes("globo") ||
+              item.name?.toLowerCase().includes("balloon") ||
+              item.name?.toLowerCase().includes("helium"))
+          ) {
+            matchCategory = true;
+          }
+        }
 
         return matchSearch && matchCategory;
       })
@@ -132,7 +194,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
           <div className="flex justify-center gap-2 max-w-md mx-auto p-1.5 bg-gray-200/70 dark:bg-stone-800 rounded-full">
             <button
               onClick={() => { setActiveTab("all"); setSelectedCategory("all"); }}
-              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
+              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center cursor-pointer ${
                 activeTab === "all"
                   ? "bg-black dark:bg-[#5EEAD4] text-white dark:text-stone-950 shadow-md"
                   : "text-gray-600 dark:text-stone-300 hover:text-gray-900 dark:hover:text-white"
@@ -142,7 +204,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
             </button>
             <button
               onClick={() => { setActiveTab("products"); setSelectedCategory("all"); }}
-              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
+              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center cursor-pointer ${
                 activeTab === "products"
                   ? "bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950 shadow-md"
                   : "text-gray-600 dark:text-stone-300 hover:text-gray-900 dark:hover:text-white"
@@ -152,7 +214,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
             </button>
             <button
               onClick={() => { setActiveTab("addons"); setSelectedCategory("all"); }}
-              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center ${
+              className={`flex-1 py-2.5 px-4 rounded-full text-xs font-extrabold transition-all text-center cursor-pointer ${
                 activeTab === "addons"
                   ? "bg-purple-600 dark:bg-purple-500 text-white shadow-md"
                   : "text-gray-600 dark:text-stone-300 hover:text-gray-900 dark:hover:text-white"
@@ -179,7 +241,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                 {searchTerm && (
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 hover:text-gray-600 dark:text-stone-400 dark:hover:text-stone-200 bg-gray-200 dark:bg-stone-800 rounded-full w-5 h-5 flex items-center justify-center"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-gray-400 hover:text-gray-600 dark:text-stone-400 dark:hover:text-stone-200 bg-gray-200 dark:bg-stone-800 rounded-full w-5 h-5 flex items-center justify-center cursor-pointer"
                   >
                     ✕
                   </button>
@@ -207,7 +269,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
             <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-2 border-t border-gray-100 dark:border-stone-800 scrollbar-none">
               <button
                 onClick={() => setSelectedCategory("all")}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   selectedCategory === "all"
                     ? "bg-[#FF97A4] text-white shadow-md"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
@@ -224,7 +286,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+                    className={`px-4 py-2 rounded-full text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                       isSelected
                         ? "bg-[#FF97A4] text-white shadow-md"
                         : "bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700"
@@ -250,7 +312,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                     setSelectedCategory("all");
                     setActiveTab("all");
                   }}
-                  className="text-xs font-bold text-[#FF97A4] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-[#FF97A4] hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <RefreshCw size={12} /> {t('clearFilters')}
                 </button>
@@ -320,7 +382,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
 
                         <button
                           onClick={() => handleAddAddonToCart(item)}
-                          className={`px-4 py-2.5 rounded-full font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm ${
+                          className={`px-4 py-2.5 rounded-full font-bold text-xs transition-all flex items-center gap-1.5 shadow-sm cursor-pointer ${
                             isAdded
                               ? "bg-green-600 text-white"
                               : "bg-purple-600 hover:bg-purple-700 text-white"
@@ -354,7 +416,7 @@ export function CatalogClient({ initialProducts, initialAddons = [] }: CatalogCl
                     setSelectedCategory("all");
                     setActiveTab("all");
                   }}
-                  className="bg-[#FF97A4] text-white px-6 py-2.5 rounded-full font-bold text-xs hover:bg-[#B0004A] transition-colors"
+                  className="bg-[#FF97A4] text-white px-6 py-2.5 rounded-full font-bold text-xs hover:bg-[#B0004A] transition-colors cursor-pointer"
                 >
                   {t('viewAllBtn')}
                 </button>

@@ -29,10 +29,10 @@ export function MegaMenuDropdown({ isOpen, onClose }: MegaMenuDropdownProps) {
   ];
 
   const addOns = [
-    { name: "Chocolates Gourmet", href: "/productos?cat=adicionales", tag: "Dulce" },
-    { name: "Globos con Helio Personalizados", href: "/productos?cat=adicionales", tag: "Nuevo" },
-    { name: "Peluches Gigantes", href: "/productos?cat=adicionales" },
-    { name: "Tarjetas Caligrafiadas", href: "/productos?cat=adicionales", tag: "Gratis" },
+    { name: "Chocolates Gourmet", href: "/productos?cat=chocolates", tag: "Dulce" },
+    { name: "Globos con Helio Personalizados", href: "/productos?cat=globos", tag: "Nuevo" },
+    { name: "Peluches Gigantes", href: "/productos?cat=peluches" },
+    { name: "Todos los Adicionales", href: "/productos/adicionales", tag: "Ver Todos" },
   ];
 
   return (

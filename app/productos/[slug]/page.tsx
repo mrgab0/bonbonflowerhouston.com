@@ -3,6 +3,7 @@ import { Product } from "@/lib/models/Product";
 import { Addon } from "@/lib/models/Addon";
 import { notFound } from "next/navigation";
 import { ProductDetail } from "@/components/shop/ProductDetail";
+import { normalizeAddon } from "@/lib/utils/addonCategories";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   await dbConnect();
@@ -32,6 +33,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     const missing = (globalAddons || []).filter((a: any) => !existingIds.has(a._id?.toString()));
     productDoc.addons = [...productDoc.addons, ...missing];
   }
+  productDoc.addons = (productDoc.addons || []).map(normalizeAddon);
 
   // Consolidar toda la familia de variantes (padre, hermanos e hijos) exclusivamente para la página individual
   const currentIdStr = productDoc._id.toString();

@@ -99,7 +99,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "FLOWERS + GIFTS",
       ringGradient: "from-[#fed7aa] to-[#ffedd5]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_282_cUXpPUEqd.png",
-      href: "/productos?category=Adicionales",
+      href: "/productos/adicionales",
       twoLines: ["FLOWERS", "+ GIFTS"],
     },
     {
@@ -107,7 +107,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "BALLOONS WITH HELIUM",
       ringGradient: "from-[#fbc2cb] to-[#fde2e4]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_375_-BXrInYiq.png",
-      href: "/productos?search=globo",
+      href: "/productos?cat=globos",
       twoLines: ["BALLOONS", "WITH HELIUM"],
     },
   ];
