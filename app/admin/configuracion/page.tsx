@@ -1451,7 +1451,7 @@ function TwoFactorConfigSection({ config, onSaveSuccess }: { config: any; onSave
   }
 
   async function handleSave2FA(e?: React.FormEvent | React.MouseEvent) {
-    e.preventDefault();
+    e?.preventDefault();
     setSaving2FA(true);
     setErrorMsg("");
     setSuccessMsg("");
