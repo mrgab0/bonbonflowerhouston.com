@@ -2,36 +2,48 @@
 
 import React from "react";
 import { Clock, PenTool, Sparkles, UserCheck } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export function PillarsOfExcellence() {
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
+
   const pillars = [
     {
       id: "mismo-dia",
-      title: "Entrega Mismo Día",
-      description: "Ordenando antes de la 1:00 PM con ventana garantizada.",
+      title: isSpanish ? "Entrega Mismo Día" : "Same-Day Delivery",
+      description: isSpanish
+        ? "Ordenando antes de la 1:00 PM con ventana garantizada."
+        : "Order before 1:00 PM with guaranteed window.",
       icon: Clock,
       badge: "SAME DAY",
     },
     {
       id: "tarjeta-lujo",
-      title: "Tarjeta de Lujo",
-      description: "Mensaje personalizado caligrafiado sin costo adicional.",
+      title: isSpanish ? "Tarjeta de Lujo" : "Luxury Gift Card",
+      description: isSpanish
+        ? "Mensaje personalizado caligrafiado sin costo adicional."
+        : "Complimentary handwritten custom message.",
       icon: PenTool,
-      badge: "INCLUIDO",
+      badge: isSpanish ? "INCLUIDO" : "INCLUDED",
     },
     {
       id: "rosas-frescas",
-      title: "Rosas Frescas 100% Naturales",
-      description: "Corte selecto de exportación con máxima apertura y aroma.",
+      title: isSpanish ? "Rosas Frescas 100% Naturales" : "100% Natural Fresh Roses",
+      description: isSpanish
+        ? "Corte selecto de exportación con máxima apertura y aroma."
+        : "Select export-grade cut with maximum bloom and fragrance.",
       icon: Sparkles,
-      badge: "CALIDAD VIP",
+      badge: isSpanish ? "CALIDAD VIP" : "VIP QUALITY",
     },
     {
       id: "white-glove",
       title: "White-Glove Service",
-      description: "Entrega presencial con chofer capacitado y confirmación.",
+      description: isSpanish
+        ? "Entrega presencial con chofer capacitado y confirmación."
+        : "Hand delivery with trained driver and photo confirmation.",
       icon: UserCheck,
-      badge: "HOUSTON CHOFER",
+      badge: isSpanish ? "HOUSTON CHOFER" : "HOUSTON DRIVER",
     },
   ];
 

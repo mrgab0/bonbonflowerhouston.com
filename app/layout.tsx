@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { CartProvider } from "@/components/shop/Cart/CartContext";
 import { NextIntlClientProvider } from 'next-intl';
-import esMessages from '@/messages/es.json';
+import enMessages from '@/messages/en.json';
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { AnalyticsTracker } from "@/components/analytics/AnalyticsTracker";
@@ -52,7 +52,7 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: "Bonbon Flowers Houston",
-  description: "Boutique floral de lujo en Houston, TX con envíos a domicilio",
+  description: "Luxury floral boutique in Houston, TX with same-day hand delivery",
   manifest: "/manifest.json",
   icons: {
     icon: "https://bonbonflowershouston.com/logo.png",
@@ -77,7 +77,7 @@ export default async function RootLayout({
   const doordashConfig = doorDashRes.config;
 
   return (
-    <html lang="es" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable} ${greatVibes.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable} ${greatVibes.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="https://bonbonflowershouston.com/logo.png" />
         <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="anonymous" />
@@ -171,7 +171,7 @@ export default async function RootLayout({
       </head>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <NextIntlClientProvider locale="es" messages={esMessages}>
+          <NextIntlClientProvider locale="en" messages={enMessages}>
             <CartProvider>
               <PedidoFlotante />
               <ShoppingCartComponent />

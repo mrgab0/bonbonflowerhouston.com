@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Star, ShieldCheck, CheckCircle2, Quote, Instagram, Heart, MessageCircle, ExternalLink, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 interface SocialAndReviewsSectionProps {
   // Configuración de Reseñas
@@ -56,6 +57,8 @@ export function SocialAndReviewsSection({
   instagramUrl = "https://www.instagram.com/bonbonflowers__?stkn=MXBnc3hsbHVlM3psMQ==",
 }: SocialAndReviewsSectionProps) {
   const t = useTranslations("Reviews");
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const sectionRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
   const [isSectionVisible, setIsSectionVisible] = useState(false);
@@ -277,7 +280,7 @@ export function SocialAndReviewsSection({
                           <span className="flex items-center gap-1 text-stone-900 dark:text-white review-author">
                             {rev.name}
                             <span className="text-[10px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded-md">
-                              <CheckCircle2 size={10} className="inline mr-0.5" /> Verificado
+                              <CheckCircle2 size={10} className="inline mr-0.5" /> {isSpanish ? "Verificado" : "Verified"}
                             </span>
                           </span>
                           <span className="text-slate-400 dark:text-gray-400 review-date">{rev.date}</span>
@@ -291,7 +294,7 @@ export function SocialAndReviewsSection({
               {/* Pie con Nota de Confianza */}
               <div className="pt-2 text-center border-t border-gray-100 dark:border-gray-800">
                 <span className="text-xs font-bold text-gray-600 dark:text-gray-300">
-                  ⭐⭐⭐⭐⭐ Calificación promedio de 4.9 basada en clientes de Houston & alrededores.
+                  ⭐⭐⭐⭐⭐ {isSpanish ? "Calificación promedio de 4.9 basada en clientes de Houston & alrededores." : "Average rating of 4.9 based on Houston & surrounding area customers."}
                 </span>
               </div>
             </div>
@@ -322,7 +325,7 @@ export function SocialAndReviewsSection({
                     rel="noopener noreferrer"
                     className="bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 border border-stone-300 dark:border-stone-700 hover:bg-[#163422] hover:text-white px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 shadow-sm"
                   >
-                    <span>Seguir</span>
+                    <span>{isSpanish ? "Seguir" : "Follow"}</span>
                     <ExternalLink size={12} />
                   </a>
                 </div>
@@ -347,14 +350,14 @@ export function SocialAndReviewsSection({
                           <button
                             onClick={handlePrevSlide}
                             className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 text-gray-800 dark:text-white p-2 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all z-20"
-                            aria-label="Anterior publicación"
+                            aria-label={isSpanish ? "Anterior publicación" : "Previous post"}
                           >
                             <ChevronLeft size={18} />
                           </button>
                           <button
                             onClick={handleNextSlide}
                             className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/90 dark:bg-gray-900/90 text-gray-800 dark:text-white p-2 rounded-full shadow-lg hover:scale-110 active:scale-95 transition-all z-20"
-                            aria-label="Siguiente publicación"
+                            aria-label={isSpanish ? "Siguiente publicación" : "Next post"}
                           >
                             <ChevronRight size={18} />
                           </button>
@@ -406,7 +409,7 @@ export function SocialAndReviewsSection({
 
                         {/* Botón flotante 'Ver en Instagram' en la esquina superior derecha */}
                         <div className="absolute top-3.5 right-3.5 flex items-center gap-1 bg-white/90 hover:bg-white text-stone-900 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-md transition-all group-hover/card:scale-105">
-                          <span>Abrir</span>
+                          <span>{isSpanish ? "Abrir" : "Open"}</span>
                           <ExternalLink size={10} />
                         </div>
 

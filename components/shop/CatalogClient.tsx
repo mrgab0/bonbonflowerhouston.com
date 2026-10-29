@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard/ProductCard";
 import { ShopHeader } from "@/components/shop/ShopHeader";
 import { Footer } from "@/components/shop/Footer";
@@ -26,6 +26,8 @@ export function CatalogClient({
 }: CatalogClientProps) {
   const t = useTranslations("Catalog");
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeTab, setActiveTab] = useState<"all" | "products" | "addons">(initialTab);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
@@ -374,7 +376,7 @@ export function CatalogClient({
 
                       <div className="pt-4 mt-3 border-t border-gray-100 dark:border-stone-800 flex items-center justify-between">
                         <div>
-                          <span className="text-[10px] text-gray-400 dark:text-stone-400 font-bold block uppercase">Precio</span>
+                          <span className="text-[10px] text-gray-400 dark:text-stone-400 font-bold block uppercase">{isSpanish ? "Precio" : "Price"}</span>
                           <span className="text-xl font-black text-[#1A1C1C] dark:text-white">
                             ${item.price.toFixed(2)} <span className="text-xs font-bold text-gray-500 dark:text-stone-400">USD</span>
                           </span>

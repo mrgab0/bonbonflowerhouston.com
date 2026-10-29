@@ -124,7 +124,7 @@ export const ChatbotModal = () => {
   const pathname = usePathname();
   const isAdmin = Boolean(pathname?.startsWith("/admin"));
 
-  let currentLocale = "es";
+  let currentLocale = "en";
   try {
     const intlLocale = useLocale();
     if (intlLocale === "en" || intlLocale === "es") {
@@ -132,8 +132,8 @@ export const ChatbotModal = () => {
     }
   } catch (e) {}
 
-  if (pathname?.startsWith("/en")) {
-    currentLocale = "en";
+  if (pathname?.startsWith("/es")) {
+    currentLocale = "es";
   }
 
   const content = isAdmin
@@ -789,8 +789,8 @@ export const ChatbotModal = () => {
                         <div className="space-y-2">
                           {m.products.map((prod) => {
                             const isAdded = Boolean(addedItemIds[prod.id]);
-                            const productUrl = (currentLocale === 'en' && pathname?.startsWith('/en'))
-                              ? `/en/productos/${prod.slug}`
+                            const productUrl = (currentLocale === 'es' || pathname?.startsWith('/es'))
+                              ? `/es/productos/${prod.slug}`
                               : `/productos/${prod.slug}`;
                             return (
                               <div

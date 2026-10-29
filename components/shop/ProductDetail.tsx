@@ -9,6 +9,12 @@ import {
   ArrowDown, Palette, Layers, Plus, Minus, Check, Heart
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
+import {
+  translateProductDescription,
+  translateFeatureLabel,
+  translateFloralSentence,
+} from "@/lib/utils/productTranslator";
 
 interface StemTier {
   label: string;
@@ -65,6 +71,8 @@ const DEFAULT_ROSE_COLORS = [
 
 export const ProductDetail = ({ product }: { product: any }) => {
   const t = useTranslations("ProductDetail");
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const [selectedAddons, setSelectedAddons] = useState<{ addonId: string; value?: string; price?: number; name?: string; customText?: string }[]>([]);
   const [lastAddonToast, setLastAddonToast] = useState<{ name: string; price: number } | null>(null);
 
@@ -100,13 +108,20 @@ export const ProductDetail = ({ product }: { product: any }) => {
   const pricePerExtraRose = Number(product.pricePerExtraRose) >= 3.50 ? Number(product.pricePerExtraRose) : 3.50;
   const extraRosesTotal = extraRoses * pricePerExtraRose;
 
-  // Formateador de viñetas para la descripción
+  // Formateador de viñetas para la descripción (con soporte bilingüe e inglés por defecto)
+  const effectiveDescription = useMemo(() => {
+    if (isSpanish) {
+      return product.description || "";
+    }
+    return product.description_en || translateProductDescription(product.description || "", false);
+  }, [isSpanish, product.description, product.description_en]);
+
   const descriptionBullets = useMemo(() => (
-    (product.description || "")
+    effectiveDescription
       .split("\n")
       .map((line: string) => line.trim())
       .filter((line: string) => line.length > 0)
-  ), [product.description]);
+  ), [effectiveDescription]);
 
   // Cálculo Dinámico del Precio Combinado Total (Base + Rosas Extras + Adicionales)
   const { addonsTotalPrice, combinedTotalPrice } = useMemo(() => {
@@ -142,7 +157,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
     if (selectedColor) {
       list.unshift({
         addonId: "rose-color",
-        name: `Color de Rosas: ${selectedColor}`,
+        name: isSpanish ? `Color de Rosas: ${selectedColor}` : `Rose Color: ${selectedColor}`,
         value: selectedColor,
         price: 0,
       });
@@ -152,8 +167,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
     if (extraRoses > 0) {
       list.push({
         addonId: "extra-roses",
-        name: `+${extraRoses} Rosas en Bouquet (${selectedColor})`,
-        value: `${extraRoses} rosas`,
+        name: isSpanish ? `+${extraRoses} Rosas en Bouquet (${selectedColor})` : `+${extraRoses} Roses in Bouquet (${selectedColor})`,
+        value: isSpanish ? `${extraRoses} rosas` : `${extraRoses} roses`,
         price: extraRosesTotal,
       });
     }
@@ -220,9 +235,9 @@ export const ProductDetail = ({ product }: { product: any }) => {
                 <div className="space-y-3 pt-4 border-t border-gray-100 dark:border-gray-800">
                   <div className="flex items-center justify-between pb-1">
                     <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 flex items-center gap-2">
-                      <Sparkles size={14} className="text-[#FF97A4]" /> Adicionales Concierge (Personaliza tu Ramo)
+                      <Sparkles size={14} className="text-[#FF97A4]" /> {isSpanish ? "Adicionales Concierge (Personaliza tu Ramo)" : "Concierge Addons (Customize your Bouquet)"}
                     </h3>
-                    <span className="text-[11px] font-medium text-gray-400">Click para equipar</span>
+                    <span className="text-[11px] font-medium text-gray-400">{isSpanish ? "Click para equipar" : "Click to add"}</span>
                   </div>
                   <AddonSelection addons={product.addons} onSelectionChange={handleSelectionChange} />
                 </div>
@@ -255,7 +270,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
 
                   {addonsTotalPrice > 0 && (
                     <span className="bg-stone-100 dark:bg-stone-800 text-[#163422] dark:text-[#5EEAD4] text-xs font-black px-3 py-1 rounded-full border border-[#163422]/20 dark:border-[#5EEAD4]/30 flex items-center gap-1 shadow-sm">
-                      <Sparkles size={13} className="text-[#5EEAD4]" /> +${addonsTotalPrice.toFixed(2)} en extras y personalización
+                      <Sparkles size={13} className="text-[#5EEAD4]" /> +${addonsTotalPrice.toFixed(2)} {isSpanish ? "en extras y personalización" : "in extras & customization"}
                     </span>
                   )}
                 </div>
@@ -265,7 +280,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
               <div className="bg-gray-50/80 dark:bg-[#12131A] p-4 sm:p-5 rounded-2xl border border-gray-100 dark:border-gray-800 space-y-3">
                 <div className="flex justify-between items-center text-xs">
                   <span className="font-bold uppercase tracking-wider text-gray-700 dark:text-[#76C7B2] flex items-center gap-1.5">
-                    <Palette size={14} className="text-[#FF97A4]" /> Color de Rosas
+                    <Palette size={14} className="text-[#FF97A4]" /> {isSpanish ? "Color de Rosas" : "Rose Color"}
                   </span>
                   <span className="font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-900 px-2.5 py-0.5 rounded-full border border-gray-200 dark:border-gray-700">
                     {selectedColor}
@@ -308,10 +323,10 @@ export const ProductDetail = ({ product }: { product: any }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="text-xs font-bold text-gray-800 dark:text-white flex items-center gap-1.5">
-                      <Plus size={14} className="text-[#FF97A4]" /> Aumenta la cantidad de rosas en tu bouquet
+                      <Plus size={14} className="text-[#FF97A4]" /> {isSpanish ? "Aumenta la cantidad de rosas en tu bouquet" : "Increase the number of roses in your bouquet"}
                     </span>
                     <span className="text-[10px] text-gray-400 block">
-                      Aumenta el volumen y opulencia del bouquet
+                      {isSpanish ? "Aumenta el volumen y opulencia del bouquet" : "Increase the volume and opulence of the bouquet"}
                     </span>
                   </div>
 
@@ -321,7 +336,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       onClick={() => setExtraRoses(0)}
                       className="text-[11px] font-bold text-red-500 hover:text-red-700 dark:text-red-400 underline transition-colors"
                     >
-                      Quitar extras (0)
+                      {isSpanish ? "Quitar extras (0)" : "Remove extras (0)"}
                     </button>
                   )}
                 </div>
@@ -343,7 +358,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                         }`}
                       >
                         <span className={`text-xs font-black ${isSelected ? "text-white" : "text-gray-900 dark:text-white"}`}>
-                          +{amount} Rosas
+                          +{amount} {isSpanish ? "Rosas" : "Roses"}
                         </span>
                         <span className={`text-[10px] font-bold ${isSelected ? "text-[#5EEAD4]" : "text-gray-500 dark:text-gray-400"}`}>
                           +${addedCost.toFixed(2)}
@@ -356,7 +371,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                 {/* Micro-Stepper para ajuste fino individual */}
                 <div className="flex items-center justify-between pt-1 border-t border-gray-200/60 dark:border-gray-800">
                   <span className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
-                    Ajuste fino unidad por unidad:
+                    {isSpanish ? "Ajuste fino unidad por unidad:" : "Fine adjustment unit by unit:"}
                   </span>
                   <div className="flex items-center border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 rounded-xl p-1 shadow-xs">
                     <button
@@ -364,7 +379,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       onClick={() => setExtraRoses((prev) => Math.max(0, prev - 1))}
                       disabled={extraRoses === 0}
                       className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white disabled:opacity-30 rounded-lg transition-colors"
-                      title="Quitar 1 rosa"
+                      title={isSpanish ? "Quitar 1 rosa" : "Remove 1 rose"}
                     >
                       <Minus size={13} />
                     </button>
@@ -375,7 +390,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       type="button"
                       onClick={() => setExtraRoses((prev) => prev + 1)}
                       className="p-1.5 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white rounded-lg transition-colors"
-                      title="Sumar 1 rosa"
+                      title={isSpanish ? "Sumar 1 rosa" : "Add 1 rose"}
                     >
                       <Plus size={13} />
                     </button>
@@ -386,7 +401,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
               {/* CAJA VISUAL DE ESPECIFICACIONES DINÁMICAS */}
               <div className="bg-gray-50/80 dark:bg-[#12131A] rounded-2xl p-5 border border-gray-100 dark:border-gray-800 space-y-3">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-[#76C7B2] flex items-center gap-2">
-                  <Sparkles size={14} className="text-[#5EEAD4]" /> Especificaciones del Diseño
+                  <Sparkles size={14} className="text-[#5EEAD4]" /> {isSpanish ? "Especificaciones del Diseño" : "Design Specifications"}
                 </h3>
 
                 <div className="grid grid-cols-2 gap-3 text-xs">
@@ -395,8 +410,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <Flower2 size={16} />
                     </div>
                     <div>
-                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Flores en Total</span>
-                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">{totalRosesDisplay} Rosas Frescas</span>
+                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">{isSpanish ? "Flores en Total" : "Total Flowers"}</span>
+                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">{totalRosesDisplay} {isSpanish ? "Rosas Frescas" : "Fresh Roses"}</span>
                     </div>
                   </div>
 
@@ -405,8 +420,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <Package size={16} />
                     </div>
                     <div>
-                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Presentación</span>
-                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3] capitalize">{product.bouquetType || "Ramo de Alta Costura"}</span>
+                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">{isSpanish ? "Presentación" : "Presentation"}</span>
+                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3] capitalize">{product.bouquetType ? (isSpanish ? product.bouquetType : translateFeatureLabel(product.bouquetType)) : (isSpanish ? "Ramo de Alta Costura" : "Haute Couture Bouquet")}</span>
                     </div>
                   </div>
 
@@ -415,8 +430,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <Truck size={16} />
                     </div>
                     <div>
-                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Entrega</span>
-                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">Mismo Día en Houston</span>
+                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">{isSpanish ? "Entrega" : "Delivery"}</span>
+                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">{isSpanish ? "Mismo Día en Houston" : "Same Day in Houston"}</span>
                     </div>
                   </div>
 
@@ -425,8 +440,8 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <ShieldCheck size={16} />
                     </div>
                     <div>
-                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">Garantía</span>
-                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">Flores 100% Frescas</span>
+                      <span className="text-gray-400 dark:text-[#76C7B2] block text-[10px] uppercase font-bold">{isSpanish ? "Garantía" : "Guarantee"}</span>
+                      <span className="font-bold text-gray-800 dark:text-[#B9E6D3]">{isSpanish ? "Flores 100% Frescas" : "100% Fresh Flowers"}</span>
                     </div>
                   </div>
                 </div>
@@ -441,7 +456,7 @@ export const ProductDetail = ({ product }: { product: any }) => {
                       <div key={index} className="flex items-center gap-2 text-xs bg-white dark:bg-[#181922] p-2.5 rounded-xl border border-gray-100 dark:border-gray-800">
                         <CheckCircle2 size={16} className="text-[#5EEAD4] flex-shrink-0" />
                         <span className="font-medium text-gray-700 dark:text-[#B9E6D3]">
-                          <strong className="text-gray-900 dark:text-[#E6F7F0]">{feature.label}:</strong> {feature.value}
+                          <strong className="text-gray-900 dark:text-[#E6F7F0]">{isSpanish ? feature.label : translateFeatureLabel(feature.label)}:</strong> {isSpanish ? feature.value : translateFloralSentence(feature.value)}
                         </span>
                       </div>
                     ))}
@@ -474,8 +489,12 @@ export const ProductDetail = ({ product }: { product: any }) => {
                         <Sparkles size={16} />
                       </div>
                       <div>
-                        <span className="text-xs font-extrabold block text-white">¡+1 {lastAddonToast.name} añadido al regalo!</span>
-                        <span className="text-[10px] text-pink-300 font-medium">Sumado al total: ${combinedTotalPrice.toFixed(2)} USD</span>
+                        <span className="text-xs font-extrabold block text-white">
+                          {isSpanish ? `¡+1 ${lastAddonToast.name} añadido al regalo!` : `+1 ${lastAddonToast.name} added to the gift!`}
+                        </span>
+                        <span className="text-[10px] text-pink-300 font-medium">
+                          {isSpanish ? `Sumado al total: $${combinedTotalPrice.toFixed(2)} USD` : `Added to total: $${combinedTotalPrice.toFixed(2)} USD`}
+                        </span>
                       </div>
                     </div>
                     <span className="text-xs font-black text-white bg-white/20 px-2.5 py-1 rounded-full">
@@ -490,7 +509,9 @@ export const ProductDetail = ({ product }: { product: any }) => {
                     <div className="flex items-center gap-2.5">
                       <Flower2 size={20} className="text-pink-200 animate-spin duration-1000" />
                       <span className="text-xs font-black tracking-wide">
-                        🌸 ¡Tu ramo con {selectedColor} ({totalRosesDisplay} rosas) está configurado! 🌸
+                        {isSpanish
+                          ? `🌸 ¡Tu ramo con ${selectedColor} (${totalRosesDisplay} rosas) está configurado! 🌸`
+                          : `🌸 Your bouquet with ${selectedColor} (${totalRosesDisplay} roses) is configured! 🌸`}
                       </span>
                     </div>
                     <ArrowDown size={20} className="text-white animate-pulse" />

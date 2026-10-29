@@ -207,6 +207,7 @@ export async function createPost(data: any) {
     });
 
     revalidatePath("/nosotros");
+    revalidatePath("/es/nosotros");
     revalidatePath("/en/nosotros");
     revalidatePath("/admin/blog");
     return { success: true, data: JSON.parse(JSON.stringify(newPost)) };
@@ -230,6 +231,7 @@ export async function updatePost(id: string, data: any) {
 
     const updated = await Post.findByIdAndUpdate(id, data, { new: true });
     revalidatePath("/nosotros");
+    revalidatePath("/es/nosotros");
     revalidatePath("/en/nosotros");
     revalidatePath("/admin/blog");
     return { success: true, data: JSON.parse(JSON.stringify(updated)) };
@@ -244,6 +246,7 @@ export async function deletePost(id: string) {
   try {
     await Post.findByIdAndDelete(id);
     revalidatePath("/nosotros");
+    revalidatePath("/es/nosotros");
     revalidatePath("/en/nosotros");
     revalidatePath("/admin/blog");
     return { success: true };

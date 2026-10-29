@@ -12,8 +12,8 @@ import { useTranslations } from "next-intl";
 
 export const ShopHeader = () => {
   const pathname = usePathname();
-  const isEn = pathname ? pathname.startsWith("/en") : false;
-  const langPrefix = isEn ? "/en" : "";
+  const isSpanish = pathname?.startsWith("/es");
+  const langPrefix = isSpanish ? "/es" : "";
 
   const { cartItems } = useCart();
   const totalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -22,7 +22,7 @@ export const ShopHeader = () => {
   const t = useTranslations("nav");
 
   const navLinks = [
-    { href: isEn ? "/en" : "/", label: t('home') },
+    { href: isSpanish ? "/es" : "/", label: t('home') },
     { href: `${langPrefix}/productos`, label: t('catalog') },
     { href: `${langPrefix}/rastreo`, label: t('tracking') },
     { href: `${langPrefix}/nosotros`, label: t('about') },
@@ -40,7 +40,7 @@ export const ShopHeader = () => {
       >
         <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-2 sm:gap-4 xl:gap-6 relative">
           {/* Logo Presionable hacia el Home */}
-          <Link href={isEn ? "/en" : "/"} className="flex items-center gap-3 group flex-shrink-0 relative z-10">
+          <Link href={isSpanish ? "/es" : "/"} className="flex items-center gap-3 group flex-shrink-0 relative z-10">
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border-2 border-[#D4AF37]/50 shadow-md group-hover:scale-105 group-active:scale-95 transition-transform bg-white p-0.5 flex-shrink-0">
               <img src="https://bonbonflowershouston.com/logo.png" alt="Bonbon Flowers Logo" className="w-full h-full object-cover rounded-full" />
             </div>
@@ -73,10 +73,10 @@ export const ShopHeader = () => {
             <button
               onClick={() => setIsBioModalOpen(true)}
               className="flex items-center gap-1.5 bg-stone-100 dark:bg-stone-900/80 text-stone-800 dark:text-[#B9E6D3] border border-stone-200 dark:border-stone-800 px-2.5 xl:px-3 py-2 rounded-full text-xs font-bold shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-[0_6px_16px_rgba(0,0,0,0.08)] hover:text-[#163422] dark:hover:text-[#5EEAD4] hover:-translate-y-0.5 active:scale-95 transition-all duration-300"
-              title="Acceso con Huella / Face ID"
+              title={isSpanish ? "Acceso con Huella / Face ID" : "Biometric Access / Face ID"}
             >
               <Fingerprint size={16} />
-              <span className="hidden 2xl:inline text-[11px]">Huella 👆</span>
+              <span className="hidden 2xl:inline text-[11px]">{isSpanish ? "Huella 👆" : "Passkey 👆"}</span>
             </button>
 
             <div className="hover:-translate-y-0.5 active:scale-95 transition-all duration-300">
@@ -89,7 +89,7 @@ export const ShopHeader = () => {
             {/* Cart Button indicator */}
             <div className="relative ml-1">
               <Link
-                href={isEn ? "/en/checkout" : "/checkout"}
+                href={isSpanish ? "/es/checkout" : "/checkout"}
                 className="flex items-center gap-1.5 xl:gap-2 bg-[#163422] dark:bg-[#5EEAD4] text-white dark:text-stone-950 px-2.5 xl:px-3.5 2xl:px-5 py-2 2xl:py-2.5 rounded-full font-bold text-xs hover:opacity-90 transition-all shadow-md"
                 style={{
                   backgroundColor: "var(--theme-btn-primary-bg, #163422)",
@@ -97,7 +97,7 @@ export const ShopHeader = () => {
                 }}
               >
                 <ShoppingCart size={18} />
-                <span className="hidden 2xl:inline">{isEn ? "Cart" : "Carrito"}</span>
+                <span className="hidden 2xl:inline">{isSpanish ? "Carrito" : "Cart"}</span>
                 {totalCount > 0 && (
                   <span
                     className="text-stone-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full"
@@ -113,7 +113,7 @@ export const ShopHeader = () => {
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="lg:hidden p-2 rounded-full bg-slate-100 dark:bg-stone-900/80 text-stone-900 dark:text-[#B9E6D3] border border-gray-200 dark:border-stone-800 hover:bg-slate-200 dark:hover:bg-stone-800 active:scale-95 transition-all"
-              aria-label={isMobileMenuOpen ? "Contraer menú" : "Desplegar menú"}
+              aria-label={isMobileMenuOpen ? (isSpanish ? "Contraer menú" : "Close menu") : (isSpanish ? "Desplegar menú" : "Open menu")}
             >
               {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>

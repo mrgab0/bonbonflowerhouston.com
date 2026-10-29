@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { Truck, Clock, MapPin, Phone } from "lucide-react";
 
 interface TrustAnnouncementBarProps {
@@ -10,6 +11,8 @@ interface TrustAnnouncementBarProps {
 export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
   phone = "(346) 739-2730"
 }) => {
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
   return (
@@ -27,7 +30,7 @@ export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
           href={`tel:${cleanPhone || "+13467392730"}`}
         >
           <Phone size={13} className="inline-block animate-pulse" />
-          <span>SAME DAY DELIVERY HOUSTON • {phone}</span>
+          <span>{isSpanish ? `ENTREGA EL MISMO DÍA EN HOUSTON • ${phone}` : `SAME DAY DELIVERY HOUSTON • ${phone}`}</span>
           <span className="inline-block transition-transform group-hover:translate-x-1 font-bold">→</span>
         </a>
       </aside>
@@ -43,17 +46,17 @@ export const TrustAnnouncementBar: React.FC<TrustAnnouncementBarProps> = ({
         <div className="max-w-7xl mx-auto flex flex-wrap justify-center sm:justify-around items-center gap-y-2 gap-x-6 text-[10px] sm:text-xs">
           <div className="flex items-center space-x-2">
             <Truck className="w-4 h-4 shrink-0" />
-            <span className="tracking-[0.18em] sm:tracking-[0.22em]">SAME DAY DELIVERY HOUSTON</span>
+            <span className="tracking-[0.18em] sm:tracking-[0.22em]">{isSpanish ? "ENTREGA EL MISMO DÍA EN HOUSTON" : "SAME DAY DELIVERY HOUSTON"}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Clock className="w-4 h-4 shrink-0" />
             <span className="font-script-custom preserve-color text-sm sm:text-base normal-case tracking-normal italic font-normal" style={{ color: "var(--theme-announcement-text, inherit)" }}>
-              Order before 1 PM for same-day delivery
+              {isSpanish ? "Ordena antes de la 1 PM para entrega el mismo día" : "Order before 1 PM for same-day delivery"}
             </span>
           </div>
           <div className="flex items-center space-x-2">
             <MapPin className="w-4 h-4 shrink-0" />
-            <span className="tracking-[0.18em] sm:tracking-[0.22em]">PROUDLY SERVING HOUSTON METROPLEX</span>
+            <span className="tracking-[0.18em] sm:tracking-[0.22em]">{isSpanish ? "ORGULLOSAMENTE SIRVIENDO AL METROPLEX DE HOUSTON" : "PROUDLY SERVING HOUSTON METROPLEX"}</span>
           </div>
         </div>
       </section>

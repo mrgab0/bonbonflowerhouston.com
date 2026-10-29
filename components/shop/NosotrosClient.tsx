@@ -218,7 +218,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                     className="bg-white dark:bg-[#181922] rounded-3xl border border-stone-200 dark:border-stone-800 shadow-sm overflow-hidden flex flex-col hover:shadow-xl hover:border-[#5EEAD4]/40 hover:-translate-y-1 transition-all duration-300 group"
                   >
                     {/* Imagen del Post */}
-                    <Link href={isEn ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`} className="relative h-56 overflow-hidden block bg-stone-100 dark:bg-stone-800">
+                    <Link href={isEn ? `/nosotros/${post.slug}` : `/es/nosotros/${post.slug}`} className="relative h-56 overflow-hidden block bg-stone-100 dark:bg-stone-800">
                       <img
                         src={post.mainImage || "https://images.unsplash.com/photo-1563241527-3004b7be0ffd?w=800"}
                         alt={post.title}
@@ -242,7 +242,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                           <span>{isEn ? "3 min read" : "3 min de lectura"}</span>
                         </div>
 
-                        <Link href={isEn ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`}>
+                        <Link href={isEn ? `/nosotros/${post.slug}` : `/es/nosotros/${post.slug}`}>
                           <h3 className="font-serif font-black text-lg text-stone-900 dark:text-[#E6F7F0] group-hover:text-[#163422] dark:group-hover:text-[#5EEAD4] transition-colors line-clamp-2 leading-snug">
                             {post.title}
                           </h3>
@@ -256,7 +256,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
                       {/* Botón Leer Más */}
                       <div className="pt-3 border-t border-stone-100 dark:border-stone-800">
                         <Link
-                          href={isEn ? `/en/nosotros/${post.slug}` : `/nosotros/${post.slug}`}
+                          href={isEn ? `/nosotros/${post.slug}` : `/es/nosotros/${post.slug}`}
                           className="inline-flex items-center gap-1.5 text-xs font-black text-stone-800 dark:text-[#5EEAD4] hover:text-[#163422] dark:hover:text-[#2DD4BF] group-hover:translate-x-1 transition-transform"
                         >
                           <span>{isEn ? "Read Full Article" : "Leer Artículo Completo"}</span>
@@ -285,7 +285,7 @@ export function NosotrosClient({ initialPosts = [], locale = "es" }: NosotrosCli
             </p>
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link
-                href={isEn ? "/en/productos" : "/productos"}
+                href={isEn ? "/productos" : "/es/productos"}
                 className="bg-[#163422] hover:bg-[#1B2E22] text-white px-7 py-3.5 rounded-full font-black text-xs shadow-md transition-all active:scale-95 flex items-center gap-2"
               >
                 <Gift size={16} />

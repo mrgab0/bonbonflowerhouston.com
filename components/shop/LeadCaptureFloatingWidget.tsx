@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 export function LeadCaptureFloatingWidget() {
   const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const [config, setConfig] = useState<any>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -91,10 +92,10 @@ export function LeadCaptureFloatingWidget() {
             </span>
             <div className="text-left pr-1">
               <span className="block text-[10px] font-black uppercase tracking-wider text-[#E6C98B]">
-                Regalo de Bienvenida
+                {isSpanish ? "Regalo de Bienvenida" : "Welcome Gift"}
               </span>
               <span className="block text-xs font-bold leading-tight">
-                10% OFF en tu primer pedido
+                {isSpanish ? "10% OFF en tu primer pedido" : "10% OFF your first order"}
               </span>
             </div>
             <button
@@ -133,7 +134,7 @@ export function LeadCaptureFloatingWidget() {
             {successCoupon ? (
               <div className="p-3.5 bg-white/10 rounded-2xl border border-white/20 text-center space-y-2">
                 <span className="text-[10px] font-bold text-[#E6C98B] uppercase tracking-wider block">
-                  ¡Cupón Activado!
+                  {isSpanish ? "¡Cupón Activado!" : "Coupon Activated!"}
                 </span>
                 <strong className="text-xl font-mono text-white tracking-widest block">
                   {successCoupon}
@@ -143,7 +144,7 @@ export function LeadCaptureFloatingWidget() {
                   className="w-full py-2 bg-[#C5A059] text-stone-950 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 active:scale-95 transition-all"
                 >
                   {copied ? <Check size={14} /> : null}
-                  <span>{copied ? "¡Copiado!" : "Copiar Cupón"}</span>
+                  <span>{copied ? (isSpanish ? "¡Copiado!" : "Copied!") : (isSpanish ? "Copiar Cupón" : "Copy Coupon")}</span>
                 </button>
               </div>
             ) : (
@@ -153,7 +154,7 @@ export function LeadCaptureFloatingWidget() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Escribe tu correo..."
+                    placeholder={isSpanish ? "Escribe tu correo..." : "Enter your email..."}
                     required
                     className="flex-1 px-3.5 py-2.5 rounded-xl text-xs bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
                   />
@@ -162,11 +163,11 @@ export function LeadCaptureFloatingWidget() {
                     disabled={loading}
                     className="px-4 py-2.5 bg-[#C5A059] hover:bg-[#d8b568] text-stone-950 font-extrabold text-xs rounded-xl transition-all disabled:opacity-50"
                   >
-                    {loading ? <Loader2 size={14} className="animate-spin" /> : "Reclamar"}
+                    {loading ? <Loader2 size={14} className="animate-spin" /> : (isSpanish ? "Reclamar" : "Claim")}
                   </button>
                 </div>
                 <span className="text-[9px] text-[#A3B8AD] block text-center">
-                  Sin spam. Puedes desuscribirte en cualquier momento.
+                  {isSpanish ? "Sin spam. Puedes desuscribirte en cualquier momento." : "No spam. Unsubscribe anytime."}
                 </span>
               </form>
             )}
@@ -198,7 +199,7 @@ export function LeadCaptureFloatingWidget() {
 
           <div>
             <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-[#C5A059] block mb-1">
-              Club Exclusivo • Houston
+              {isSpanish ? "Club Exclusivo • Houston" : "Exclusive Club • Houston"}
             </span>
             <h3 className="font-serif font-black text-xl text-[#FFFFFF]">
               {config.leadCaptureTitle}
@@ -211,7 +212,7 @@ export function LeadCaptureFloatingWidget() {
           {successCoupon ? (
             <div className="p-4 bg-white/5 rounded-2xl border border-[#C5A059]/40 space-y-3">
               <span className="text-xs font-bold text-[#E6C98B] block">
-                Tu cupón exclusivo está listo:
+                {isSpanish ? "Tu cupón exclusivo está listo:" : "Your exclusive coupon is ready:"}
               </span>
               <strong className="text-2xl font-mono text-[#5EEAD4] tracking-widest block">
                 {successCoupon}
@@ -220,7 +221,7 @@ export function LeadCaptureFloatingWidget() {
                 onClick={handleCopyCoupon}
                 className="w-full py-3 bg-[#163422] text-white border border-[#C5A059] rounded-xl font-bold text-xs uppercase tracking-wider"
               >
-                {copied ? "✓ Copiado al portapapeles" : "Copiar Cupón y Comprar"}
+                {copied ? (isSpanish ? "✓ Copiado al portapapeles" : "✓ Copied to clipboard") : (isSpanish ? "Copiar Cupón y Comprar" : "Copy Coupon & Shop")}
               </button>
             </div>
           ) : (
@@ -229,7 +230,7 @@ export function LeadCaptureFloatingWidget() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Ingresa tu correo electrónico..."
+                placeholder={isSpanish ? "Ingresa tu correo electrónico..." : "Enter your email address..."}
                 required
                 className="w-full p-3.5 rounded-xl text-xs bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
               />
@@ -238,7 +239,7 @@ export function LeadCaptureFloatingWidget() {
                 disabled={loading}
                 className="w-full py-3.5 bg-[#163422] hover:bg-[#1B2E22] text-white border border-[#C5A059] rounded-xl font-bold text-xs uppercase tracking-wider shadow-lg transition-all"
               >
-                {loading ? "Generando Cupón..." : "Obtener 10% de Regalo Ahora"}
+                {loading ? (isSpanish ? "Generando Cupón..." : "Generating Coupon...") : (isSpanish ? "Obtener 10% de Regalo Ahora" : "Get 10% Gift Now")}
               </button>
             </form>
           )}
@@ -254,7 +255,7 @@ export function LeadCaptureFloatingWidget() {
     <div className="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-40 max-w-xs bg-white dark:bg-[#12131A] text-stone-900 dark:text-white p-5 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-2xl space-y-3 animate-in slide-in-from-bottom-6">
       <div className="flex justify-between items-start">
         <span className="text-[10px] font-black uppercase tracking-wider text-[#163422] dark:text-[#5EEAD4] flex items-center gap-1">
-          <Gift size={12} /> Regalo Especial
+          <Gift size={12} /> {isSpanish ? "Regalo Especial" : "Special Gift"}
         </span>
         <button onClick={handleClose} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
           <X size={14} />
@@ -266,13 +267,13 @@ export function LeadCaptureFloatingWidget() {
 
       {successCoupon ? (
         <div className="p-3 bg-stone-50 dark:bg-stone-900 rounded-xl text-center space-y-1.5 border border-gray-200 dark:border-gray-700">
-          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 block">¡Cupón Activo!</span>
+          <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 block">{isSpanish ? "¡Cupón Activo!" : "Active Coupon!"}</span>
           <strong className="text-lg font-mono tracking-wider">{successCoupon}</strong>
           <button
             onClick={handleCopyCoupon}
             className="w-full py-1.5 bg-[#163422] text-white rounded-lg text-xs font-bold"
           >
-            {copied ? "Copiado" : "Copiar"}
+            {copied ? (isSpanish ? "Copiado" : "Copied") : (isSpanish ? "Copiar" : "Copy")}
           </button>
         </div>
       ) : (
@@ -281,7 +282,7 @@ export function LeadCaptureFloatingWidget() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Tu email..."
+            placeholder={isSpanish ? "Tu email..." : "Your email..."}
             required
             className="flex-1 p-2 text-xs border rounded-lg dark:bg-gray-900 dark:border-gray-700"
           />
@@ -290,7 +291,7 @@ export function LeadCaptureFloatingWidget() {
             disabled={loading}
             className="px-3 py-2 bg-[#163422] hover:bg-[#1B2E22] text-white rounded-lg text-xs font-bold whitespace-nowrap"
           >
-            {loading ? "..." : "Obtener"}
+            {loading ? "..." : (isSpanish ? "Obtener" : "Get")}
           </button>
         </form>
       )}

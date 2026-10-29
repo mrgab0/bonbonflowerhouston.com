@@ -385,7 +385,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
           {/* Navegación de Regreso */}
           <div className="flex items-center justify-between gap-3">
             <Link
-              href={isEn ? "/en/nosotros" : "/nosotros"}
+              href={isEn ? "/nosotros" : "/es/nosotros"}
               className="inline-flex items-center gap-2 text-xs font-black text-stone-700 dark:text-[#5EEAD4] hover:text-[#163422] dark:hover:text-[#2DD4BF] transition-colors"
             >
               <ArrowLeft size={14} />
@@ -482,7 +482,7 @@ export function BlogPostDetail({ post, locale = "es" }: BlogPostDetailProps) {
             </p>
             <div className="flex flex-wrap justify-center items-center gap-3 pt-2">
               <Link
-                href={isEn ? "/en/productos" : "/productos"}
+                href={isEn ? "/productos" : "/es/productos"}
                 className="px-6 py-3 rounded-full bg-[#163422] hover:bg-[#1B2E22] text-white font-black text-xs shadow-md transition-all active:scale-95"
               >
                 {isEn ? "Explore Flower Catalog" : "Ver Catálogo de Flores"}

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ProductCard } from "@/components/shop/ProductCard/ProductCard";
 import { Sparkles, ArrowRight } from "lucide-react";
 
@@ -10,7 +11,11 @@ interface HomeProductShowcaseProps {
 }
 
 export function HomeProductShowcase({ products }: HomeProductShowcaseProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("TODOS");
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
+  const allLabel = isSpanish ? "TODOS" : "ALL";
+
+  const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
 
   // Obtener categorías únicas dinámicas de los productos + opciones sugeridas
   const filterCategories = useMemo(() => {
@@ -20,12 +25,12 @@ export function HomeProductShowcase({ products }: HomeProductShowcaseProps) {
         set.add(p.category.trim());
       }
     });
-    return ["TODOS", ...Array.from(set)];
-  }, [products]);
+    return [allLabel, ...Array.from(set)];
+  }, [products, allLabel]);
 
   // Filtrar productos de acuerdo a la selección
   const filteredProducts = useMemo(() => {
-    if (selectedCategory === "TODOS") {
+    if (selectedCategory === "ALL" || selectedCategory === "TODOS") {
       return products;
     }
     return products.filter((p) => p.category?.trim().toLowerCase() === selectedCategory.toLowerCase());
@@ -48,20 +53,22 @@ export function HomeProductShowcase({ products }: HomeProductShowcaseProps) {
           </div>
 
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-stone-900 dark:text-white tracking-tight">
-            Composiciones Esculturales
+            {isSpanish ? "Composiciones Esculturales" : "Sculptural Arrangements"}
           </h2>
 
           <p className="text-xs sm:text-sm text-stone-500 dark:text-gray-400 max-w-2xl leading-relaxed font-medium">
-            Bouquets monumentales y cajas couture preparadas a mano por nuestros floristas principales en Houston.
+            {isSpanish
+              ? "Bouquets monumentales y cajas couture preparadas a mano por nuestros floristas principales en Houston."
+              : "Monumental bouquets and couture boxes handcrafted by our master florists in Houston."}
           </p>
         </div>
 
         {/* Chip de Disponibilidad en Línea */}
         <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold shrink-0 self-start md:self-auto">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
-          <span className="font-mono">{filteredProducts.length}/{products.length} EN LÍNEA</span>
+          <span className="font-mono">{filteredProducts.length}/{products.length} {isSpanish ? "EN LÍNEA" : "ONLINE"}</span>
           <span className="text-stone-400 dark:text-gray-500">•</span>
-          <span className="hidden sm:inline">Disponibilidad Inmediata</span>
+          <span className="hidden sm:inline">{isSpanish ? "Disponibilidad Inmediata" : "Immediate Availability"}</span>
         </div>
       </div>
 
@@ -108,13 +115,13 @@ export function HomeProductShowcase({ products }: HomeProductShowcaseProps) {
           <div className="col-span-full text-center py-16 bg-stone-50 dark:bg-[#12131A] rounded-3xl border border-stone-200/60 dark:border-gray-800 p-8">
             <Sparkles className="w-10 h-10 text-stone-300 dark:text-gray-600 mx-auto mb-3" />
             <p className="text-stone-600 dark:text-gray-400 font-semibold text-sm">
-              No hay arreglos en esta categoría por el momento.
+              {isSpanish ? "No hay arreglos en esta categoría por el momento." : "No arrangements in this category at the moment."}
             </p>
             <button
-              onClick={() => setSelectedCategory("TODOS")}
+              onClick={() => setSelectedCategory(allLabel)}
               className="mt-4 px-4 py-2 rounded-full bg-stone-900 text-white text-xs font-bold uppercase tracking-wider hover:bg-black transition-colors"
             >
-              Ver Todas las Colecciones
+              {isSpanish ? "Ver Todas las Colecciones" : "View All Collections"}
             </button>
           </div>
         )}
@@ -123,10 +130,14 @@ export function HomeProductShowcase({ products }: HomeProductShowcaseProps) {
       {/* Botón Ver Todo el Catálogo */}
       <div className="mt-14 text-center">
         <Link
-          href="/productos"
+          href={isSpanish ? "/es/productos" : "/productos"}
           className="inline-flex items-center gap-2 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#C5A059] dark:hover:bg-[#d8b56f] text-white dark:text-stone-950 text-xs font-bold tracking-widest uppercase px-10 py-4 transition-all duration-300 rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 group"
         >
-          <span>VER TODAS LAS COLECCIONES ({products.length} ARREGLOS)</span>
+          <span>
+            {isSpanish
+              ? `VER TODAS LAS COLECCIONES (${products.length} ARREGLOS)`
+              : `VIEW ALL COLLECTIONS (${products.length} ARRANGEMENTS)`}
+          </span>
           <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>

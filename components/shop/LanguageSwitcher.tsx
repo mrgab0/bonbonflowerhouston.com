@@ -7,7 +7,8 @@ export function LanguageSwitcher() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const isEnglish = pathname.startsWith("/en");
+  const isSpanish = pathname.startsWith("/es");
+  const isEnglish = !isSpanish;
 
   const toggleLanguage = (targetLocale: "es" | "en") => {
     try {
@@ -17,10 +18,19 @@ export function LanguageSwitcher() {
 
     let newPath = pathname;
 
-    if (pathname.startsWith("/es") || pathname.startsWith("/en")) {
-      newPath = pathname.replace(/^\/(es|en)/, `/${targetLocale}`);
+    if (targetLocale === "es") {
+      if (pathname.startsWith("/en")) {
+        newPath = pathname.replace(/^\/en/, "/es");
+      } else if (!pathname.startsWith("/es")) {
+        newPath = pathname === "/" ? "/es" : `/es${pathname}`;
+      }
     } else {
-      newPath = `/${targetLocale}${pathname}`;
+      // Target English: navigate to clean root path
+      if (pathname.startsWith("/es")) {
+        newPath = pathname.replace(/^\/es/, "") || "/";
+      } else if (pathname.startsWith("/en")) {
+        newPath = pathname.replace(/^\/en/, "") || "/";
+      }
     }
 
     router.push(newPath);

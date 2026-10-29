@@ -19,7 +19,7 @@ export function CheckoutConfirmationClient({
   locale,
 }: CheckoutConfirmationClientProps) {
   const [lang, setLang] = useState<"es" | "en">(
-    locale === "en" ? "en" : "es"
+    locale === "es" ? "es" : "en"
   );
 
   useEffect(() => {
@@ -87,7 +87,7 @@ export function CheckoutConfirmationClient({
           </a>
 
           <Link
-            href={isEn ? "/en/rastreo" : "/rastreo"}
+            href={isEn ? "/rastreo" : "/es/rastreo"}
             className="flex items-center justify-center gap-2 bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-800 dark:text-stone-200 px-6 py-3.5 rounded-2xl font-bold text-sm transition-all"
           >
             <Truck size={18} className="text-[#FF97A4]" />
@@ -95,7 +95,7 @@ export function CheckoutConfirmationClient({
           </Link>
 
           <Link
-            href={isEn ? "/en" : "/"}
+            href={isEn ? "/" : "/es"}
             className="flex items-center justify-center gap-2 bg-[#1A1C1C] dark:bg-black hover:bg-black text-white px-6 py-3.5 rounded-2xl font-bold text-sm transition-all"
           >
             <Home size={18} />

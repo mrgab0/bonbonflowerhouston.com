@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { Phone, MessageCircle, MapPin } from "lucide-react";
 
 interface HoustonDeliveryBannerProps {
@@ -12,6 +13,8 @@ export function HoustonDeliveryBanner({
   phone = "(346) 739-2730",
   whatsappUrl = "https://wa.me/13467392730?text=Hola!%20Quisiera%20pedir%20flores%20en%20Houston.",
 }: HoustonDeliveryBannerProps) {
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const neighborhoods = [
     "River Oaks",
     "The Galleria",
@@ -37,15 +40,17 @@ export function HoustonDeliveryBanner({
             {/* Tag destacado con contraste */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#5EEAD4]/20 border border-[#5EEAD4]/60 text-[#5EEAD4] text-xs font-black uppercase tracking-wider shadow-sm">
               <span className="w-2.5 h-2.5 rounded-full bg-[#5EEAD4] animate-pulse" />
-              <span>Entregas Rápidas y Garantizadas en Houston</span>
+              <span>{isSpanish ? "Entregas Rápidas y Garantizadas en Houston" : "Fast & Guaranteed Delivery Across Houston"}</span>
             </div>
 
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-black tracking-tight text-white leading-tight drop-shadow-sm">
-              ¿Necesitas una entrega hoy mismo en tu vecindario?
+              {isSpanish ? "¿Necesitas una entrega hoy mismo en tu vecindario?" : "Need a same-day delivery to your neighborhood?"}
             </h3>
 
             <p className="text-sm sm:text-base text-emerald-100/90 dark:text-stone-200 font-medium leading-relaxed">
-              Llevamos tus arreglos en vehículos climatizados directamente a la puerta de tu ser querido con atención de guante blanco y confirmación por fotografía.
+              {isSpanish
+                ? "Llevamos tus arreglos en vehículos climatizados directamente a la puerta de tu ser querido con atención de guante blanco y confirmación por fotografía."
+                : "We deliver your floral designs in climate-controlled vehicles directly to your loved one's door with white-glove service and photo confirmation."}
             </p>
 
             {/* Chips de vecindarios con contraste AAA */}
@@ -79,7 +84,7 @@ export function HoustonDeliveryBanner({
               className="flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-2xl bg-[#FF97A4] hover:bg-[#ff8090] text-stone-950 font-black text-xs uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-lg hover:shadow-[#FF97A4]/30"
             >
               <MessageCircle size={16} />
-              <span>Chatear por WhatsApp</span>
+              <span>{isSpanish ? "Chatear por WhatsApp" : "Chat on WhatsApp"}</span>
             </a>
           </div>
         </div>

@@ -109,7 +109,7 @@ export function listenToPosPrintEvents(
  * 3. Idioma nativo del navegador del usuario (navigator.language)
  */
 export function getClientPreferredLanguage(): "es" | "en" {
-  if (typeof window === "undefined") return "es";
+  if (typeof window === "undefined") return "en";
 
   try {
     const pathname = window.location.pathname || "";
@@ -126,12 +126,12 @@ export function getClientPreferredLanguage(): "es" | "en" {
     }
 
     const navLang = (navigator.language || (navigator as any).userLanguage || "").toLowerCase();
-    if (navLang.startsWith("en")) {
-      return "en";
+    if (navLang.startsWith("es")) {
+      return "es";
     }
   } catch (_) {}
 
-  return "es";
+  return "en";
 }
 
 /**

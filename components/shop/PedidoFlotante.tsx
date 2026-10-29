@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 export const PedidoFlotante = () => {
   const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const [hasOrder, setHasOrder] = useState(false);
   const [orderId, setOrderId] = useState<string | null>(null);
 
@@ -23,11 +24,11 @@ export const PedidoFlotante = () => {
 
   return (
     <Link 
-      href={`/checkout/confirmacion?orderId=${orderId}`}
+      href={isSpanish ? `/es/checkout/confirmacion?orderId=${orderId}` : `/checkout/confirmacion?orderId=${orderId}`}
       className="fixed top-20 left-4 z-[100] flex items-center gap-2 bg-[#1A1C1C] text-white px-4 py-2 rounded-full shadow-lg hover:bg-black transition-all animate-bounce"
     >
       <Truck size={16} className="text-[#FF97A4]" />
-      <span className="text-xs font-bold uppercase tracking-widest">Pedido en camino</span>
+      <span className="text-xs font-bold uppercase tracking-widest">{isSpanish ? "Pedido en camino" : "Order on the way"}</span>
     </Link>
   );
 };

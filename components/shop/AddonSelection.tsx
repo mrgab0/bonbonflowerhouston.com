@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import type { IAddon } from "@/lib/models/Addon";
 import { normalizeAddon, ADDON_CATEGORIES_ORDER } from "@/lib/utils/addonCategories";
 import {
@@ -44,7 +45,29 @@ function getAddonId(addon: any): string {
   return "";
 }
 
+function translateAddonCategory(cat: string, isEs: boolean): string {
+  if (isEs || !cat) return cat;
+  switch (cat.trim()) {
+    case "Globos con Helio":
+      return "Helium Balloons";
+    case "Chocolates & Dulces":
+      return "Chocolates & Sweets";
+    case "Peluches":
+      return "Teddy Bears & Plushies";
+    case "Coronas & Joyería":
+      return "Crowns & Jewelry";
+    case "Personalización & Lazos":
+      return "Custom Ribbons & Cards";
+    case "Otros Adicionales":
+      return "Other Addons";
+    default:
+      return cat;
+  }
+}
+
 export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSelectionProps) => {
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const [selected, setSelected] = useState<SelectedAddonState[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>("all");
 
@@ -167,14 +190,14 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
 
           {/* Badge de Precio Flotante */}
           <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded-full bg-white/95 dark:bg-gray-900/90 text-stone-900 dark:text-stone-100 text-[10px] font-extrabold shadow-sm border border-black/5">
-            {addon.price > 0 ? `+$${Number(addon.price).toFixed(2)}` : "Incluido"}
+            {addon.price > 0 ? `+$${Number(addon.price).toFixed(2)}` : (isSpanish ? "Incluido" : "Included")}
           </div>
         </div>
 
         {/* Información y Explicación */}
         <div className="p-3 space-y-1">
           <span className="text-[9px] font-bold uppercase tracking-wider text-[#FF97A4] block">
-            {addon.category}
+            {translateAddonCategory(addon.category, !!isSpanish)}
           </span>
           <h4 className="font-bold text-xs text-gray-900 dark:text-white line-clamp-1 leading-snug">
             {addon.name}
@@ -188,7 +211,7 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
           {/* Si es tipo select */}
           {addon.type === "select" && addon.options && addon.options.length > 0 && (
             <div className="pt-2 space-y-1.5" onClick={(e) => e.stopPropagation()}>
-              <span className="text-[10px] uppercase font-bold text-gray-400 block">Opción:</span>
+              <span className="text-[10px] uppercase font-bold text-gray-400 block">{isSpanish ? "Opción:" : "Option:"}</span>
               <div className="flex flex-wrap gap-1">
                 {addon.options.map((opt: string) => (
                   <button
@@ -213,13 +236,13 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
             <div className="pt-2 border-t border-gray-100 dark:border-gray-800 mt-2 space-y-1" onClick={(e) => e.stopPropagation()}>
               <label className="text-[10px] font-bold text-[#FF97A4] flex items-center gap-1">
                 <MessageSquare size={11} />
-                <span>Mensaje personalizado:</span>
+                <span>{isSpanish ? "Mensaje personalizado:" : "Custom message:"}</span>
               </label>
               <input
                 type="text"
                 value={selectedObj?.customText || ""}
                 onChange={(e) => handleCustomTextChange(addonIdStr, e.target.value)}
-                placeholder="Ej: Feliz Cumpleaños..."
+                placeholder={isSpanish ? "Ej: Feliz Cumpleaños..." : "e.g. Happy Birthday..."}
                 className="w-full p-1.5 border border-pink-200 dark:border-gray-700 rounded-lg text-[11px] dark:bg-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#FF97A4]"
               />
             </div>
@@ -228,7 +251,7 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
           {/* Estado visual Stitch */}
           <div className="pt-1 flex items-center justify-between text-[10px] font-semibold">
             <span className={isSelected ? "text-emerald-600 dark:text-[#5EEAD4] flex items-center gap-0.5" : "text-gray-400"}>
-              {isSelected ? "✓ Equipado" : "Click para equipar"}
+              {isSelected ? (isSpanish ? "✓ Equipado" : "✓ Added") : (isSpanish ? "Click para equipar" : "Click to add")}
             </span>
           </div>
         </div>
@@ -251,7 +274,7 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
             }`}
           >
             <Sparkles size={13} className={activeCategory === "all" ? "text-[#5EEAD4]" : "text-gray-400"} />
-            <span>Todos ({normalizedAddons.length})</span>
+            <span>{isSpanish ? "Todos" : "All"} ({normalizedAddons.length})</span>
           </button>
 
           {categories.map((cat) => {
@@ -271,7 +294,7 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
                 }`}
               >
                 <IconComponent size={13} className={isCatActive ? "text-[#5EEAD4]" : "text-gray-400"} />
-                <span>{cat} ({count})</span>
+                <span>{translateAddonCategory(cat, !!isSpanish)} ({count})</span>
               </button>
             );
           })}
@@ -290,11 +313,11 @@ export const AddonSelection = React.memo(({ addons, onSelectionChange }: AddonSe
                   <div className="flex items-center gap-1.5">
                     <HeaderIcon size={14} className="text-[#FF97A4]" />
                     <h4 className="text-xs font-black uppercase tracking-wider text-gray-800 dark:text-gray-200">
-                      {category}
+                      {translateAddonCategory(category, !!isSpanish)}
                     </h4>
                   </div>
                   <span className="text-[10px] font-bold text-gray-400">
-                    {items.length} {items.length === 1 ? "opción" : "opciones"}
+                    {items.length} {isSpanish ? (items.length === 1 ? "opción" : "opciones") : (items.length === 1 ? "option" : "options")}
                   </span>
                 </div>
 

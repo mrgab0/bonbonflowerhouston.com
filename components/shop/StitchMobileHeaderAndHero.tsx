@@ -33,16 +33,17 @@ interface StitchMobileHeaderAndHeroProps {
 export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps> = ({
   siteConfig,
   heroProducts = [],
-  locale = "es",
+  locale = "en",
 }) => {
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
+  const isSpanish = locale === "es";
   const phone = siteConfig?.contactPhone || "(346) 739-2730";
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
-  const prefix = locale === "en" ? "/en" : "";
+  const prefix = isSpanish ? "/es" : "";
 
   // Producto destacado dinámico de Hero
   const fallbackProduct = {
@@ -66,7 +67,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       : "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_378_BlXSezTsB.png";
 
   const featuredProductTitle =
-    activeProduct?.name || "Colección Destacada Bonbon Flowers Houston";
+    activeProduct?.name || (isSpanish ? "Colección Destacada Bonbon Flowers Houston" : "Featured Collection Bonbon Flowers Houston");
 
   // 5 Categorías circulares con gradientes e imágenes permanentes optimizadas desde ImageKit
   const categories = [
@@ -75,7 +76,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "LOVE & ROMANCE",
       ringGradient: "from-[#fbc2cb] to-[#f9e2e6]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_280_2OeW7r1QZa.png",
-      href: "/productos?search=romance",
+      href: `${prefix}/productos?search=romance`,
       twoLines: ["LOVE &", "ROMANCE"],
     },
     {
@@ -83,7 +84,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "BIRTHDAY",
       ringGradient: "from-[#fde68a] to-[#fef3c7]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_330_o3LDIGwS_.png",
-      href: "/productos?search=cumpleaños",
+      href: `${prefix}/productos?search=cumpleaños`,
       twoLines: ["BIRTHDAY"],
     },
     {
@@ -91,7 +92,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "GRADUATION",
       ringGradient: "from-[#fbc2cb] to-[#fce7f3]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_348_LvvLdITtU.png",
-      href: "/productos?search=graduacion",
+      href: `${prefix}/productos?search=graduacion`,
       twoLines: ["GRADUATION"],
     },
     {
@@ -99,7 +100,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "FLOWERS + GIFTS",
       ringGradient: "from-[#fed7aa] to-[#ffedd5]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_282_cUXpPUEqd.png",
-      href: "/productos/adicionales",
+      href: `${prefix}/productos?cat=adicionales`,
       twoLines: ["FLOWERS", "+ GIFTS"],
     },
     {
@@ -107,18 +108,18 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       name: "BALLOONS WITH HELIUM",
       ringGradient: "from-[#fbc2cb] to-[#fde2e4]",
       image: "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_375_-BXrInYiq.png",
-      href: "/productos?cat=globos",
+      href: `${prefix}/productos?cat=globos`,
       twoLines: ["BALLOONS", "WITH HELIUM"],
     },
   ];
 
   const navLinks = [
-    { href: "/", label: "Inicio" },
-    { href: "/productos", label: "Catálogo" },
-    { href: "/rastreo", label: "Rastreo" },
-    { href: "/nosotros", label: "Nosotros" },
-    { href: "/contacto", label: "Contacto" },
-    { href: "/checkout", label: "Carrito" },
+    { href: `${prefix}/`, label: isSpanish ? "Inicio" : "Home" },
+    { href: `${prefix}/productos`, label: isSpanish ? "Colección" : "Catalog" },
+    { href: `${prefix}/rastreo`, label: isSpanish ? "Rastreo" : "Tracking" },
+    { href: `${prefix}/nosotros`, label: isSpanish ? "Nosotros" : "About Us" },
+    { href: `${prefix}/contacto`, label: isSpanish ? "Contacto" : "Contact" },
+    { href: `${prefix}/checkout`, label: isSpanish ? "Carrito" : "Cart" },
   ];
 
   return (
@@ -217,8 +218,8 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
             type="button"
             onClick={() => setIsBioModalOpen(true)}
             className="w-9 h-9 rounded-full bg-[#f0ede8] dark:bg-stone-800 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-[#e6e2dc] dark:hover:bg-stone-700 transition-colors shadow-2xs"
-            title="Acceso biométrico / Registro seguro"
-            aria-label="Acceso biométrico"
+            title={isSpanish ? "Acceso biométrico / Registro seguro" : "Biometric access / Secure login"}
+            aria-label={isSpanish ? "Acceso biométrico" : "Biometric access"}
           >
             <Fingerprint className="w-4 h-4" />
           </button>
@@ -228,8 +229,8 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
             type="button"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="w-9 h-9 rounded-full bg-[#f0ede8] dark:bg-stone-800 flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-[#e6e2dc] dark:hover:bg-stone-700 transition-colors shadow-2xs"
-            title="Cambiar modo claro / oscuro"
-            aria-label="Cambiar tema"
+            title={isSpanish ? "Cambiar modo claro / oscuro" : "Toggle light / dark mode"}
+            aria-label={isSpanish ? "Cambiar tema" : "Toggle theme"}
           >
             {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4" />}
           </button>
@@ -244,7 +245,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
             type="button"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="w-9 h-9 rounded-xl bg-[#f0ede8] dark:bg-stone-800 flex items-center justify-center text-gray-800 dark:text-gray-200 hover:bg-[#e6e2dc] dark:hover:bg-stone-700 transition-colors shadow-2xs md:hidden"
-            aria-label="Menú móvil"
+            aria-label={isSpanish ? "Menú móvil" : "Mobile menu"}
           >
             {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -306,7 +307,9 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
 
             {/* Description Paragraph */}
             <p className="text-[10px] sm:text-xs leading-[1.4] text-gray-600 dark:text-gray-300 mb-4 max-w-[210px] sm:max-w-md font-medium">
-              Entrega de flores de alta costura en el mismo día en Houston, TX y área metropolitana. Composiciones de lujo para momentos inolvidables.
+              {isSpanish
+                ? "Entrega de flores de alta costura en el mismo día en Houston, TX y área metropolitana. Composiciones de lujo para momentos inolvidables."
+                : "Same-day haute couture flower delivery in Houston, TX and metropolitan area. Luxury arrangements for unforgettable moments."}
             </p>
 
             {/* CTA Button */}

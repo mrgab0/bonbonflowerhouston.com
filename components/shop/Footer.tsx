@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Instagram, Facebook, CheckCircle2 } from "lucide-react";
 
 interface FooterProps {
@@ -9,6 +10,10 @@ interface FooterProps {
 }
 
 export function Footer({ siteConfig }: FooterProps) {
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
+  const prefix = isSpanish ? "/es" : "";
+
   const [emailSubscribed, setEmailSubscribed] = useState(false);
   const [emailInput, setEmailInput] = useState("");
 
@@ -78,7 +83,7 @@ export function Footer({ siteConfig }: FooterProps) {
             {emailSubscribed ? (
               <div className="flex items-center gap-2 text-emerald-700 dark:text-[#5EEAD4] bg-emerald-50 dark:bg-emerald-950/40 p-3 rounded-lg text-xs font-bold border border-emerald-200 dark:border-[#5EEAD4]/30">
                 <CheckCircle2 size={16} />
-                <span>¡Gracias por suscribirte a Bonbon Flowers!</span>
+                <span>{isSpanish ? "¡Gracias por suscribirte a Bonbon Flowers!" : "Thank you for subscribing to Bonbon Flowers!"}</span>
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 max-w-md">
@@ -174,20 +179,20 @@ export function Footer({ siteConfig }: FooterProps) {
           </span>
           <span className="hidden sm:inline mx-2 text-stone-400">·</span>
           <div className="flex flex-wrap justify-center gap-x-2 text-stone-800 dark:text-[#B9E6D3]">
-            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href="/contacto">
-              Contact
+            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href={`${prefix}/contacto`}>
+              {isSpanish ? "Contacto" : "Contact"}
             </Link>
             <span className="text-stone-400">·</span>
-            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href="/nosotros">
-              About Us
+            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href={`${prefix}/nosotros`}>
+              {isSpanish ? "Nosotros" : "About Us"}
             </Link>
             <span className="text-stone-400">·</span>
-            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href="/productos">
-              All Flowers
+            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href={`${prefix}/productos`}>
+              {isSpanish ? "Colección" : "All Flowers"}
             </Link>
             <span className="text-stone-400">·</span>
-            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href="/rastreo">
-              Order Tracking
+            <Link className="text-stone-800 dark:text-[#B9E6D3] hover:text-[#163422] dark:hover:text-[#5EEAD4] font-semibold hover:underline" href={`${prefix}/rastreo`}>
+              {isSpanish ? "Rastreo" : "Order Tracking"}
             </Link>
           </div>
         </div>

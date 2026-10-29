@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
 import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 
 interface StoreLocationSectionProps {
@@ -14,6 +15,8 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
   email = "contacto@bonbonflowershouston.com",
   whatsappUrl = "https://wa.me/13467392730?text=Hola!%20Quisiera%20información%20sobre%20sus%20flores%20en%20Houston."
 }) => {
+  const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const cleanPhone = phone.replace(/[^\d+]/g, "");
 
   return (
@@ -62,7 +65,9 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
             9546 Hammerly Boulevard, Houston, TX 77080
           </strong>
           <span className="text-[11.5px] text-stone-600 dark:text-[#76C7B2] font-semibold block mt-1">
-            Spring Branch West • Retiro en taller y entregas a domicilio el mismo día en todo Houston.
+            {isSpanish
+              ? "Spring Branch West • Retiro en taller y entregas a domicilio el mismo día en todo Houston."
+              : "Spring Branch West • Studio pickup & same-day delivery throughout Houston."}
           </span>
         </p>
 
@@ -70,7 +75,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
           <div>
             <h4 className="text-[11px] font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
               <Phone size={12} className="text-[#163422] dark:text-[#5EEAD4]" />
-              <span>Teléfono / Pedidos</span>
+              <span>{isSpanish ? "Teléfono / Pedidos" : "Phone / Orders"}</span>
             </h4>
             <a
               href={`tel:${cleanPhone || "+13467392730"}`}
@@ -83,7 +88,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
           <div>
             <h4 className="text-[11px] font-black text-stone-900 dark:text-[#E6F7F0] uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
               <Mail size={12} className="text-[#163422] dark:text-[#5EEAD4]" />
-              <span>Correo Electrónico</span>
+              <span>{isSpanish ? "Correo Electrónico" : "Email Address"}</span>
             </h4>
             <a
               href={`mailto:${email}`}
@@ -102,7 +107,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
             className="w-full bg-[#163422] hover:bg-[#1B2E22] text-white py-2.5 px-4 rounded-xl text-xs font-black tracking-wider uppercase flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition-all active:scale-95 border border-[#163422]"
           >
             <MapPin size={14} />
-            <span>Cómo Llegar en Google Maps</span>
+            <span>{isSpanish ? "Cómo Llegar en Google Maps" : "Get Directions on Google Maps"}</span>
           </a>
 
           <a
@@ -112,7 +117,7 @@ export const StoreLocationSection: React.FC<StoreLocationSectionProps> = ({
             className="w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-2.5 px-4 rounded-xl text-xs font-bold tracking-wider uppercase flex items-center justify-center gap-2 shadow-md hover:shadow-lg transition-all active:scale-95"
           >
             <MessageCircle size={15} />
-            <span>Consultar por WhatsApp</span>
+            <span>{isSpanish ? "Consultar por WhatsApp" : "Inquire on WhatsApp"}</span>
           </a>
         </div>
       </div>

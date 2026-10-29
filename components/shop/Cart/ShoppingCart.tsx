@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 
 export const ShoppingCartComponent = () => {
   const pathname = usePathname();
+  const isSpanish = pathname?.startsWith("/es");
   const [isOpen, setIsOpen] = useState(false);
   const { cartItems, addToCart, removeFromCart, decreaseFromCart } = useCart();
 
@@ -22,7 +23,7 @@ export const ShoppingCartComponent = () => {
       {/* Botón activador sincronizado con tema claro y oscuro */}
       <button 
         onClick={() => setIsOpen(true)}
-        aria-label="Ver Carrito de Compras"
+        aria-label={isSpanish ? "Ver Carrito de Compras" : "View Shopping Cart"}
         className="fixed bottom-28 sm:bottom-32 right-5 sm:right-6 z-40 p-3.5 sm:p-4 bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 rounded-full shadow-[0px_8px_25px_rgba(22,52,34,0.35)] dark:shadow-[0px_8px_25px_rgba(94,234,212,0.35)] border-2 border-white/90 dark:border-stone-900 hover:scale-105 transition-all duration-300 active:scale-95 group"
       >
         <ShoppingCart size={22} className="group-hover:scale-110 transition-transform" />
@@ -40,7 +41,7 @@ export const ShoppingCartComponent = () => {
           
           <div className="relative w-full max-w-md bg-[#F9F9F9] dark:bg-[#12131A] h-full shadow-2xl flex flex-col animate-in slide-in-from-right duration-500">
             <div className="p-8 flex justify-between items-center border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-[#181922]">
-              <h2 className="text-2xl font-extrabold text-[#1A1C1C] dark:text-white tracking-tight">Tu Carrito</h2>
+              <h2 className="text-2xl font-extrabold text-[#1A1C1C] dark:text-white tracking-tight">{isSpanish ? "Tu Carrito" : "Your Cart"}</h2>
               <button onClick={() => setIsOpen(false)} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors text-gray-400 hover:text-black dark:hover:text-white">
                 <X size={24} />
               </button>
@@ -50,7 +51,7 @@ export const ShoppingCartComponent = () => {
               {cartItems.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-40 text-gray-400">
                   <ShoppingCart size={48} className="mb-4 opacity-20" />
-                  <p className="font-medium">El carrito está vacío</p>
+                  <p className="font-medium">{isSpanish ? "El carrito está vacío" : "Your cart is empty"}</p>
                 </div>
               ) : (
                 cartItems.map((item) => (
@@ -108,15 +109,15 @@ export const ShoppingCartComponent = () => {
 
             <div className="p-8 border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-[#181922]">
               <div className="flex justify-between items-center mb-6">
-                <span className="text-gray-400 font-bold uppercase text-xs tracking-widest">Total Estimado</span>
+                <span className="text-gray-400 font-bold uppercase text-xs tracking-widest">{isSpanish ? "Total Estimado" : "Estimated Total"}</span>
                 <span className="text-3xl font-extrabold text-[#1A1C1C] dark:text-white">${total.toFixed(2)}</span>
               </div>
               <Link 
-                href="/checkout" 
+                href={isSpanish ? "/es/checkout" : "/checkout"} 
                 onClick={() => setIsOpen(false)}
                 className={`w-full bg-[#163422] hover:bg-[#1B2E22] dark:bg-[#5EEAD4] dark:hover:bg-[#2DD4BF] text-white dark:text-stone-950 py-5 rounded-xl font-bold transition-all duration-300 shadow-lg shadow-[#163422]/20 dark:shadow-[#5EEAD4]/20 flex justify-center items-center gap-2 group ${cartItems.length === 0 ? 'pointer-events-none bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600' : ''}`}
               >
-                Tramitar Pedido
+                {isSpanish ? "Tramitar Pedido" : "Proceed to Checkout"}
                 <span className="transform group-hover:translate-x-1 transition-transform">→</span>
               </Link>
             </div>
