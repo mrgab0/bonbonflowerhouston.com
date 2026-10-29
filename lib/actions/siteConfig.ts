@@ -58,7 +58,7 @@ export async function getSiteConfig() {
   try {
     // Sincronizar nuevo secreto TOTP generado sin activar twoFactorMode
     const newTotpSecret = "P6K6MY2PKEUJ7KUJLBLTQ64UEC5REGO6";
-    let config = await SiteConfig.findOne({ key: "global" }).lean();
+    let config: any = await SiteConfig.findOne({ key: "global" }).lean();
     if (!config) {
       config = await SiteConfig.create({ ...DEFAULT_SITE_CONFIG, twoFactorSecret: newTotpSecret });
     } else if (config.twoFactorSecret !== newTotpSecret && config.twoFactorMode !== "totp") {
