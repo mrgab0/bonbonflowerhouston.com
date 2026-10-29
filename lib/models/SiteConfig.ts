@@ -217,7 +217,7 @@ const SiteConfigSchema: Schema = new Schema({
 
   // Módulo de Chatbot Inteligente Dialogflow CX & Google Gemini
   enableChatbot: { type: Boolean, default: true },
-  chatbotMiniMode: { type: Boolean, default: false },
+  chatbotMiniMode: { type: Boolean, default: true },
   chatbotInitialPosition: { type: String, default: "bottom-right" },
   geminiApiKey: { type: String, default: "" },
   dialogflowAgentId: { type: String, default: "" },

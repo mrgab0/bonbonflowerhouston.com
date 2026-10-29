@@ -43,7 +43,7 @@ const DEFAULT_SITE_CONFIG = {
   customIframeTitle: "Ubicación & Promociones Destacadas",
   customIframeHtml: "",
   enableChatbot: true,
-  chatbotMiniMode: false,
+  chatbotMiniMode: true,
   chatbotInitialPosition: "bottom-right",
   geminiApiKey: "",
   dialogflowAgentId: "",
@@ -178,7 +178,7 @@ export async function updateSiteConfig(formData: FormData) {
 
     // Módulo de Chatbot Dialogflow CX & Google Gemini (Toggle ON/OFF, Mini Mode y Posición)
     const enableChatbot = getBool("enableChatbot", true);
-    const chatbotMiniMode = getBool("chatbotMiniMode", false);
+    const chatbotMiniMode = getBool("chatbotMiniMode", true);
     const chatbotInitialPosition = getValue("chatbotInitialPosition", "bottom-right");
     const geminiApiKey = getValue("geminiApiKey", "");
     const dialogflowAgentId = getValue("dialogflowAgentId", "");

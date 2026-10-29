@@ -165,7 +165,9 @@ export const ChatbotModal = () => {
 
   // Estados de Configuración y Modo Mini
   const [siteConfig, setSiteConfig] = useState<any>(null);
-  const [isMiniMode, setIsMiniMode] = useState<boolean>(false);
+  const [isMiniMode, setIsMiniMode] = useState<boolean>(true);
+  // Del lado del cliente (!isAdmin), siempre activo en Modo Mini (burbuja circular compacta)
+  const effectiveMiniMode = !isAdmin ? true : isMiniMode;
 
   // Estados del Motor Draggable (Móvil y Escritorio)
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
@@ -190,12 +192,12 @@ export const ChatbotModal = () => {
     getSiteConfig().then((res) => {
       if (res?.success && res.data) {
         setSiteConfig(res.data);
-        if (res.data.chatbotMiniMode) {
-          setIsMiniMode(true);
+        if (isAdmin && res.data.chatbotMiniMode !== undefined) {
+          setIsMiniMode(Boolean(res.data.chatbotMiniMode));
         }
       }
     });
-  }, []);
+  }, [isAdmin]);
 
   // Restaurar posición previamente arrastrada en la sesión
   useEffect(() => {
@@ -618,7 +620,7 @@ export const ChatbotModal = () => {
             isDragging ? "cursor-grabbing scale-105 transition-none" : "cursor-grab"
           }`}
         >
-          {isMiniMode ? (
+          {effectiveMiniMode ? (
             /* MODO MINI: Burbuja circular compacta solo avatar sin textos */
             <div className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-white/95 dark:bg-[#12131a]/95 backdrop-blur-md shadow-[0px_10px_35px_rgba(22,52,34,0.35)] border-2 border-[#D4AF37] hover:border-[#FF97A4] p-1 transition-transform group-hover:scale-105 group-active:scale-95">
               <div className="relative w-full h-full rounded-full overflow-hidden border border-[#D4AF37]/50 bg-[#163422] pointer-events-none">
@@ -731,14 +733,16 @@ export const ChatbotModal = () => {
             </div>
 
             <div className="flex items-center gap-1">
-              <button
-                type="button"
-                onClick={() => setIsMiniMode((prev) => !prev)}
-                title={isMiniMode ? "Cambiar a modo extendido" : "Contraer a burbuja mini"}
-                className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-[10px] font-bold text-stone-200 hover:text-white transition-colors flex items-center gap-1"
-              >
-                <span>{isMiniMode ? "Modo Completo" : "Modo Mini"}</span>
-              </button>
+              {isAdmin && (
+                <button
+                  type="button"
+                  onClick={() => setIsMiniMode((prev) => !prev)}
+                  title={isMiniMode ? "Cambiar a modo extendido" : "Contraer a burbuja mini"}
+                  className="px-2 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-[10px] font-bold text-stone-200 hover:text-white transition-colors flex items-center gap-1"
+                >
+                  <span>{isMiniMode ? "Modo Completo" : "Modo Mini"}</span>
+                </button>
+              )}
               <button
                 onClick={handleReset}
                 title={content.ariaRestart}
