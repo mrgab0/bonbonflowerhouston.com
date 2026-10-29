@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import { getSiteConfig, updateSiteConfig } from "@/lib/actions/siteConfig";
 import { getAdminProductsList } from "@/lib/actions/product";
@@ -16,6 +16,46 @@ export default function AdminConfiguracionPage() {
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [activeTab, setActiveTab] = useState<"grid" | "branding" | "heroProduct" | "social" | "reviews" | "iframe" | "chatbot" | "security">("grid");
   const searchParams = useSearchParams();
+
+  // Auto-slider continuo suave para que todos los botones del menú (incluyendo 2FA) sean visibles
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const [isTabsPaused, setIsTabsPaused] = useState(false);
+
+  useEffect(() => {
+    const el = tabsRef.current;
+    if (!el) return;
+
+    let direction = 1;
+    let pauseUntil = 0;
+    const speed = 0.6; // Desplazamiento continuo (~36px/s)
+    let animId: number;
+
+    const loop = (timestamp: number) => {
+      if (!isTabsPaused && el) {
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        if (maxScroll > 5) {
+          if (timestamp > pauseUntil) {
+            el.scrollLeft += direction * speed;
+
+            // Al llegar al extremo derecho (muestra Seguridad 2FA), pausa 2s
+            if (el.scrollLeft >= maxScroll - 2 && direction === 1) {
+              direction = -1;
+              pauseUntil = timestamp + 2000;
+            }
+            // Al volver al inicio, pausa 2s
+            else if (el.scrollLeft <= 2 && direction === -1) {
+              direction = 1;
+              pauseUntil = timestamp + 2000;
+            }
+          }
+        }
+      }
+      animId = requestAnimationFrame(loop);
+    };
+
+    animId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(animId);
+  }, [isTabsPaused]);
 
   useEffect(() => {
     const tabParam = searchParams.get("tab");
@@ -144,7 +184,14 @@ export default function AdminConfiguracionPage() {
       </div>
 
       {/* Pestañas de Navegación del Editor */}
-      <div className="flex overflow-x-auto gap-2 bg-white dark:bg-[#12131A] p-2 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm [&::-webkit-scrollbar]:hidden">
+      <div
+        ref={tabsRef}
+        onMouseEnter={() => setIsTabsPaused(true)}
+        onMouseLeave={() => setIsTabsPaused(false)}
+        onTouchStart={() => setIsTabsPaused(true)}
+        onTouchEnd={() => setIsTabsPaused(false)}
+        className="flex overflow-x-auto gap-2 bg-white dark:bg-[#12131A] p-2 rounded-2xl border border-gray-100 dark:border-gray-800 shadow-sm [&::-webkit-scrollbar]:hidden select-none"
+      >
         <button
           type="button"
           onClick={() => setActiveTab("grid")}
@@ -1361,14 +1408,16 @@ function TwoFactorConfigSection({ config, onSaveSuccess }: { config: any; onSave
   const [testingCode, setTestingCode] = useState(false);
 
   useEffect(() => {
-    if (config.twoFactorMode) setMode(config.twoFactorMode);
-    if (config.twoFactorPin) setPin(config.twoFactorPin);
-    if (config.twoFactorSecret) setSecret(config.twoFactorSecret);
+    if (config?.twoFactorMode) setMode(config.twoFactorMode);
+    if (config?.twoFactorPin) setPin(config.twoFactorPin);
+    if (config?.twoFactorSecret) setSecret(config.twoFactorSecret);
+  }, [config?.twoFactorMode, config?.twoFactorPin, config?.twoFactorSecret]);
 
-    if (config.twoFactorMode === "totp" || mode === "totp") {
+  useEffect(() => {
+    if ((config?.twoFactorMode === "totp" || mode === "totp") && !qrCodeUrl) {
       loadTotpData(false);
     }
-  }, [config, mode]);
+  }, [config?.twoFactorMode, mode, qrCodeUrl]);
 
   async function loadTotpData(forceNew: boolean = false) {
     setGeneratingQR(true);
@@ -1401,7 +1450,7 @@ function TwoFactorConfigSection({ config, onSaveSuccess }: { config: any; onSave
     }
   }
 
-  async function handleSave2FA(e: React.FormEvent) {
+  async function handleSave2FA(e?: React.FormEvent | React.MouseEvent) {
     e.preventDefault();
     setSaving2FA(true);
     setErrorMsg("");

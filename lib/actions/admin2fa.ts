@@ -112,10 +112,12 @@ export async function update2FASettingsAction(formData: FormData) {
     await SiteConfig.findOneAndUpdate(
       { key: "global" },
       {
-        twoFactorMode: mode,
-        twoFactorPin: pin.trim(),
-        twoFactorSecret: cleanSecret,
-        updatedAt: new Date(),
+        $set: {
+          twoFactorMode: mode,
+          twoFactorPin: pin.trim(),
+          twoFactorSecret: cleanSecret,
+          updatedAt: new Date(),
+        }
       },
       { upsert: true, new: true }
     );
