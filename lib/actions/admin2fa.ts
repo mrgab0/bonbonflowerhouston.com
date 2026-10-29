@@ -58,7 +58,19 @@ export async function getOrCreateTotpSecretAction(forceNew: boolean = false) {
 
     if (forceNew || !secret || secret.trim().length < 10) {
       const generated = speakeasy.generateSecret({ length: 20 });
-      secret = generated.base32;
+      secret = generated.base32.toUpperCase();
+
+      // Guardar de inmediato en la base de datos sin activar el factor de dos pasos
+      await SiteConfig.findOneAndUpdate(
+        { key: "global" },
+        {
+          $set: {
+            twoFactorSecret: secret,
+            updatedAt: new Date(),
+          },
+        },
+        { upsert: true }
+      );
     }
 
     const { secret: cleanSecret, qrCodeUrl } = await buildTotpQrData(secret);

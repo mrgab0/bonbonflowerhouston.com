@@ -56,9 +56,17 @@ const DEFAULT_SITE_CONFIG = {
 export async function getSiteConfig() {
   await dbConnect();
   try {
+    // Sincronizar nuevo secreto TOTP generado sin activar twoFactorMode
+    const newTotpSecret = "P6K6MY2PKEUJ7KUJLBLTQ64UEC5REGO6";
     let config = await SiteConfig.findOne({ key: "global" }).lean();
     if (!config) {
-      config = await SiteConfig.create(DEFAULT_SITE_CONFIG);
+      config = await SiteConfig.create({ ...DEFAULT_SITE_CONFIG, twoFactorSecret: newTotpSecret });
+    } else if (config.twoFactorSecret !== newTotpSecret && config.twoFactorMode !== "totp") {
+      await SiteConfig.updateOne(
+        { key: "global" },
+        { $set: { twoFactorSecret: newTotpSecret } }
+      );
+      (config as any).twoFactorSecret = newTotpSecret;
     }
     return { success: true, data: JSON.parse(JSON.stringify(config)) };
   } catch (error) {
