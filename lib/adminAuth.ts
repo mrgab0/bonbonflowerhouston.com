@@ -31,19 +31,17 @@ export async function loginAdminAction(formData: FormData): Promise<{
     password.trim() === expectedPassword.trim();
 
   if (isValid) {
-    // Desactivar forzosamente cualquier residuo de 2FA en la base de datos MongoDB
-    try {
-      await dbConnect();
-      await SiteConfig.findOneAndUpdate(
-        { key: "global" },
-        { $set: { twoFactorMode: "none", twoFactorPin: "", twoFactorSecret: "" } },
-        { upsert: true }
-      );
-    } catch (e) {
-      console.error("Error al desactivar 2FA en SiteConfig:", e);
+    await dbConnect();
+    const config: any = await SiteConfig.findOne({ key: "global" }).lean();
+
+    if (config?.twoFactorMode === "totp" || config?.twoFactorMode === "pin") {
+      return {
+        success: true,
+        require2FA: true,
+        twoFactorMode: config.twoFactorMode,
+      };
     }
 
-    // Acceso directo garantizado sin OTP ni 2FA
     const cookieStore = await cookies();
     cookieStore.set(ADMIN_COOKIE_NAME, "authenticated_session_token", {
       httpOnly: true,
