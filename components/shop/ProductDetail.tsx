@@ -6,10 +6,9 @@ import { AddonSelection } from "@/components/shop/AddonSelection";
 import { ShopHeader } from "@/components/shop/ShopHeader";
 import {
   CheckCircle2, Flower2, Package, Sparkles, ShieldCheck, Truck, Tag,
-  ArrowDown, GitMerge, Palette, Layers, Plus, Minus, Check, Heart
+  ArrowDown, Palette, Layers, Plus, Minus, Check, Heart
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 interface StemTier {
   label: string;
@@ -450,37 +449,6 @@ export const ProductDetail = ({ product }: { product: any }) => {
                 </div>
               )}
 
-              {/* TIRA DE VARIANTES DEL PRODUCTO */}
-              {product.variants && product.variants.length > 0 && (
-                <div className="space-y-3 pt-2">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-gray-700 dark:text-[#76C7B2] flex items-center gap-2">
-                    <GitMerge size={14} className="text-[#5EEAD4]" /> Otras Variantes del Atelier
-                  </h3>
-                  <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none">
-                    {product.variants.map((variant: any) => (
-                      <Link
-                        key={variant._id}
-                        href={`/productos/${variant.slug}`}
-                        className="flex flex-col min-w-[120px] bg-white dark:bg-[#181922] border border-gray-100 dark:border-stone-800 hover:border-[#5EEAD4]/40 rounded-xl p-2 hover:shadow-sm transition-all group"
-                      >
-                        <div className="relative aspect-square w-full mb-2 overflow-hidden rounded-lg bg-gray-50 dark:bg-gray-900">
-                          <img
-                            src={variant.images?.[0] || "https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?auto=format&fit=crop&q=80&w=300"}
-                            alt={variant.name}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                        </div>
-                        <span className="text-[10px] font-bold text-gray-800 dark:text-[#E6F7F0] line-clamp-2 leading-tight">
-                          {variant.name}
-                        </span>
-                        <span className="text-[11px] font-black text-[#163422] dark:text-[#5EEAD4] mt-auto pt-1">
-                          ${Number(variant.price).toFixed(2)}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
 
               {/* DESCRIPCIÓN SECTORIZADA EN VIÑETAS LIMPIAS */}
               <div className="space-y-3 pt-2 border-t border-gray-100 dark:border-gray-800">
