@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -14,3 +16,19 @@ jobs:
         run: npx tsc --noEmit
       - name: Next.js Build
         run: npx next build
+      - name: Detect Visual Changes
+        id: visual_diff
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -E '^(components/|app/|.*\.css)'; then
+            echo "has_visual_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_visual_changes=false" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+      - name: Trigger Checkly Cloud Visual Watcher
+        if: steps.visual_diff.outputs.has_visual_changes == 'true'
+        env:
+          CHECKLY_ACCOUNT_ID: ${{ secrets.CHECKLY_ACCOUNT_ID || 'f2caf3ea-620a-49e2-86ef-a8cd7955ee45' }}
+          CHECKLY_API_KEY: ${{ secrets.CHECKLY_API_KEY || 'cu_e18c54f4d2fc49bd9776964803abf5e5' }}
+        run: node scripts/checkly-runner.mjs
+        continue-on-error: true

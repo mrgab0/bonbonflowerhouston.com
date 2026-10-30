@@ -30,6 +30,12 @@ const NAV_ITEMS = [
     badgeColor: "bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:bg-gray-200"
   },
   {
+    href: "/admin/catalogo",
+    label: "Catálogo PDF",
+    icon: "📖",
+    badgeColor: "bg-amber-100 dark:bg-amber-950/80 text-amber-950 dark:text-amber-200 border-amber-300 dark:border-amber-800/80 hover:bg-amber-200"
+  },
+  {
     href: "/admin/sliders",
     label: "Banners",
     icon: "🖼️",
