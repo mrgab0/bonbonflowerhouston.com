@@ -49,7 +49,7 @@ export default async function CatalogoEditorialPdfPage({ searchParams }: PagePro
   const plainProducts = JSON.parse(JSON.stringify(rawProducts));
 
   // EXCLUSIÓN ESTRICTA DE HIJOS (VARIANTES SECUNDARIAS)
-  const products = filterUniqueVariantProducts(plainProducts);
+  const products: any[] = filterUniqueVariantProducts<any>(plainProducts);
 
   // Cargar Adicionales si se solicitan
   let addons: any[] = [];

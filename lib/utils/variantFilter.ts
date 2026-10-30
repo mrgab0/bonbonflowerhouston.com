@@ -3,7 +3,7 @@
  * Si un Producto A tiene seleccionados los Productos B y C como variantes en el administrador,
  * los productos B y C se ocultan de la portada y sólo se muestra el Producto A.
  */
-export function filterUniqueVariantProducts<T extends { _id: any; variants?: any[] }>(products: T[]): T[] {
+export function filterUniqueVariantProducts<T extends { _id: any; variants?: any[] } = any>(products: T[]): T[] {
   if (!Array.isArray(products) || products.length === 0) {
     return [];
   }
