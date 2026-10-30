@@ -240,8 +240,9 @@ export default async function CatalogoEditorialPdfPage({ searchParams }: PagePro
                           <img
                             src={mainImage}
                             alt={product.name}
+                            loading="eager"
+                            decoding="sync"
                             className="w-full h-full object-contain p-2"
-                            crossOrigin="anonymous"
                           />
                         ) : (
                           <div className="text-stone-300 text-xs">Sin imagen</div>
@@ -302,6 +303,8 @@ export default async function CatalogoEditorialPdfPage({ searchParams }: PagePro
                           <img
                             src={qrUrl}
                             alt={`QR ${product.name}`}
+                            loading="eager"
+                            decoding="sync"
                             className="w-12 h-12 rounded"
                             crossOrigin="anonymous"
                           />
@@ -354,8 +357,9 @@ export default async function CatalogoEditorialPdfPage({ searchParams }: PagePro
                           <img
                             src={addonImg}
                             alt={addon.name}
+                            loading="eager"
+                            decoding="sync"
                             className="w-full h-full object-contain p-2"
-                            crossOrigin="anonymous"
                           />
                         ) : (
                           <div className="text-stone-300 text-xs">Sin imagen</div>

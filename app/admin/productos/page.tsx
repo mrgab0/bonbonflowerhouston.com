@@ -4,14 +4,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { deleteProduct, toggleProductStatus } from "@/lib/actions/product";
 import { filterUniqueVariantProducts } from "@/lib/utils/variantFilter";
-import { Plus, Search, Edit3, Copy, Trash2, Tag, Package, Image as ImageIcon, Loader2, Pause, Play, Layers, BookOpen, Eye, EyeOff } from "lucide-react";
+import { Plus, Search, Edit3, Copy, Trash2, Tag, Package, Image as ImageIcon, Loader2, Pause, Play, Layers, BookOpen } from "lucide-react";
 
 export default function InventarioAdmin() {
   const [products, setProducts] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "pre_aggregation">("all");
-  const [hideChildVariants, setHideChildVariants] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,8 +53,8 @@ export default function InventarioAdmin() {
     await toggleProductStatus(id, newStatus);
   }
 
-  // Lista base: oculta variantes secundarias/hijas por defecto
-  const displayProducts = hideChildVariants ? filterUniqueVariantProducts(products) : products;
+  // Lista base: filtra variantes secundarias/hijas de forma transparente
+  const displayProducts = filterUniqueVariantProducts(products);
 
   // Obtener lista de categorías únicas para el filtro
   const categories = ["all", ...Array.from(new Set(displayProducts.map((p) => p.category).filter(Boolean)))];
@@ -80,7 +79,6 @@ export default function InventarioAdmin() {
 
   const preAggregationCount = displayProducts.filter((p) => p.isActive === false).length;
   const activeCount = displayProducts.filter((p) => p.isActive !== false).length;
-  const hiddenChildrenCount = Math.max(0, products.length - filterUniqueVariantProducts(products).length);
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-12">
@@ -88,9 +86,7 @@ export default function InventarioAdmin() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
         <div>
           <h1 className="text-2xl font-bold text-[#1A1C1C]">Gestión de Catálogo e Inventario</h1>
-          <p className="text-xs text-gray-400">
-            Total mostrados: {displayProducts.length} productos {hideChildVariants && hiddenChildrenCount > 0 ? `(${hiddenChildrenCount} variantes secundarias ocultas)` : `(Total en BD: ${products.length})`}
-          </p>
+          <p className="text-xs text-gray-400">Total: {displayProducts.length} productos registrados</p>
         </div>
         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
           <Link
@@ -114,70 +110,42 @@ export default function InventarioAdmin() {
         </div>
       </div>
 
-      {/* Barra de Filtros por Estado y Toggle de Variantes */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
-          <button
-            onClick={() => setStatusFilter("all")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
-              statusFilter === "all"
-                ? "bg-[#1A1C1C] text-white shadow-md"
-                : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-            }`}
-          >
-            Todos ({displayProducts.length})
-          </button>
+      {/* Barra de Filtros por Estado */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-1">
+        <button
+          onClick={() => setStatusFilter("all")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            statusFilter === "all"
+              ? "bg-[#1A1C1C] text-white shadow-md"
+              : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+          }`}
+        >
+          Todos ({displayProducts.length})
+        </button>
 
-          <button
-            onClick={() => setStatusFilter("active")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              statusFilter === "active"
-                ? "bg-green-700 text-white shadow-md"
-                : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-green-500"></span>
-            En Tienda ({activeCount})
-          </button>
+        <button
+          onClick={() => setStatusFilter("active")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            statusFilter === "active"
+              ? "bg-green-700 text-white shadow-md"
+              : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-green-500"></span>
+          En Tienda ({activeCount})
+        </button>
 
-          <button
-            onClick={() => setStatusFilter("pre_aggregation")}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-              statusFilter === "pre_aggregation"
-                ? "bg-[#8B0024] text-white shadow-md"
-                : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-            Pausados ⏸️ ({preAggregationCount})
-          </button>
-        </div>
-
-        {/* Toggle para Ocultar/Mostrar Variantes Hijas */}
-        {hiddenChildrenCount > 0 && (
-          <button
-            type="button"
-            onClick={() => setHideChildVariants(!hideChildVariants)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border ${
-              hideChildVariants
-                ? "bg-emerald-50 text-emerald-800 border-emerald-300 shadow-xs"
-                : "bg-stone-100 text-stone-700 border-stone-300"
-            }`}
-            title="Oculta o muestra las variantes secundarias que ya pertenecen a un producto padre"
-          >
-            {hideChildVariants ? (
-              <>
-                <EyeOff size={14} className="text-emerald-600" />
-                <span>Ocultando {hiddenChildrenCount} hijos duplicados</span>
-              </>
-            ) : (
-              <>
-                <Eye size={14} className="text-stone-500" />
-                <span>Mostrando todas las variantes ({products.length})</span>
-              </>
-            )}
-          </button>
-        )}
+        <button
+          onClick={() => setStatusFilter("pre_aggregation")}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+            statusFilter === "pre_aggregation"
+              ? "bg-[#8B0024] text-white shadow-md"
+              : "bg-white text-gray-700 hover:bg-gray-50 border border-gray-200"
+          }`}
+        >
+          <span className="w-2 h-2 rounded-full bg-amber-400"></span>
+          Pausados ⏸️ ({preAggregationCount})
+        </button>
       </div>
 
       {/* Buscador y Filtros en Tiempo Real */}
