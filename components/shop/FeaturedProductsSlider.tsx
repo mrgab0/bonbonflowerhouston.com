@@ -200,18 +200,18 @@ export function FeaturedProductsSlider({ products }: FeaturedProductsSliderProps
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                   
                   {/* Badge de Categoría */}
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-white dark:bg-gray-900 text-[#163422] dark:text-emerald-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-stone-300 dark:border-gray-700">
+                  <div className="absolute top-3 left-3 z-10 pointer-events-none">
+                    <span className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-xs text-[#163422] dark:text-emerald-300 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-stone-300 dark:border-gray-700 max-w-[130px] sm:max-w-[150px] truncate block">
                       {product.category || "Boutique"}
                     </span>
                   </div>
 
                   {/* Badge Destacado */}
                   {product.badge && (
-                    <div className="absolute top-3 right-3">
-                      <span className="bg-[#163422] text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37] flex items-center gap-1">
-                        <Flame size={10} className="text-amber-300" />
-                        {product.badge}
+                    <div className="absolute bottom-3 right-3 z-10 pointer-events-none">
+                      <span className="bg-[#163422]/95 dark:bg-[#163422]/95 backdrop-blur-xs text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37] flex items-center gap-1 max-w-[140px] truncate">
+                        <Flame size={10} className="text-amber-300 shrink-0" />
+                        <span className="truncate">{product.badge}</span>
                       </span>
                     </div>
                   )}

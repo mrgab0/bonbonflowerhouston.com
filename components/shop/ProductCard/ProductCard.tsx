@@ -83,18 +83,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
           
           {/* Badge Flotante estilo Categoría */}
-          <div className="absolute top-3 left-3">
-            <span className="bg-white dark:bg-stone-900 text-[#163422] dark:text-[#5EEAD4] text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider border border-stone-300 dark:border-[#5EEAD4]/30 shadow-md">
+          <div className="absolute top-3 left-3 z-10 pointer-events-none">
+            <span className="bg-white/95 dark:bg-stone-900/95 backdrop-blur-xs text-[#163422] dark:text-[#5EEAD4] text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider border border-stone-300 dark:border-[#5EEAD4]/30 shadow-md max-w-[130px] sm:max-w-[150px] truncate block">
               {category}
             </span>
           </div>
 
           {/* Insignia / Badge Personalizada */}
           {badge && (
-            <div className="absolute top-3 right-3">
-              <span className="bg-[#163422] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37] flex items-center gap-1">
-                <Sparkles size={10} className="text-[#D4AF37]" />
-                {badge}
+            <div className="absolute bottom-3 right-3 z-10 pointer-events-none">
+              <span className="bg-[#163422]/95 dark:bg-[#163422]/95 backdrop-blur-xs text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow-md border border-[#D4AF37] flex items-center gap-1 max-w-[140px] truncate">
+                <Sparkles size={10} className="text-[#D4AF37] shrink-0" />
+                <span className="truncate">{badge}</span>
               </span>
             </div>
           )}
