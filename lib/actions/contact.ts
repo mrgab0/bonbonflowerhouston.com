@@ -1,6 +1,10 @@
 "use server";
 
 import nodemailer from "nodemailer";
+import dbConnect from "@/lib/db";
+import { EmailMessage } from "@/lib/models/EmailMessage";
+import { broadcastEmailAlertToAdmins } from "@/lib/utils/webPush";
+import { revalidatePath } from "next/cache";
 
 function getTransporter() {
   const host = process.env.SMTP_HOST;
@@ -63,6 +67,43 @@ export async function sendContactEmail(formData: {
       subject: `🌸 Consulta de Contacto: ${formData.name}`,
       html: emailContent,
     });
+
+    // 1. Registrar en la bandeja de entrada del Webmail (/admin/correos)
+    try {
+      await dbConnect();
+      const newEmail = await EmailMessage.create({
+        direction: "inbound",
+        type: "contact_form",
+        from: `${formData.name} <${formData.email}>`,
+        to: recipientEmails,
+        subject: `🌸 Consulta de Contacto: ${formData.name}`,
+        bodyHtml: emailContent,
+        bodyText: formData.message,
+        status: "received",
+        isRead: false,
+        mailboxEmail: "contacto@bonbonflowershouston.com",
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone || undefined,
+        createdAt: new Date(),
+      });
+
+      // 2. Disparar notificación Web Push al teléfono de los administradores
+      broadcastEmailAlertToAdmins({
+        senderName: formData.name,
+        senderEmail: formData.email,
+        subject: `🌸 Consulta: ${formData.name}`,
+        previewText: formData.message,
+        mailboxEmail: "contacto@bonbonflowershouston.com",
+        emailId: newEmail._id.toString(),
+      }).catch((err) => {
+        console.error("Error disparando Web Push de contacto a administradores:", err);
+      });
+
+      revalidatePath("/admin/correos");
+    } catch (dbErr) {
+      console.warn("Aviso: No se pudo registrar en EmailMessage:", dbErr);
+    }
 
     return { success: true };
   } catch (error) {

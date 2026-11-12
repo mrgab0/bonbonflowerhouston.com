@@ -247,3 +247,52 @@ export async function broadcastSalesAlertToAdmins(orderData: any) {
     console.error("Error transmitiendo Web Push a administradores:", error);
   }
 }
+
+/**
+ * Transmite la alerta de nuevo correo corporativo entrante a todos los administradores suscritos (iPhone / Android)
+ */
+export async function broadcastEmailAlertToAdmins(emailData: {
+  senderName?: string;
+  senderEmail?: string;
+  subject?: string;
+  previewText?: string;
+  mailboxEmail?: string;
+  emailId?: string;
+}) {
+  try {
+    await dbConnect();
+    const subscriptions = await PushSubscription.find({ role: "admin" }).lean();
+    if (!subscriptions || subscriptions.length === 0) return;
+
+    const sender = emailData.senderName || emailData.senderEmail || "Nuevo Remitente";
+    const mailbox = emailData.mailboxEmail ? ` • [${emailData.mailboxEmail}]` : "";
+    const subject = emailData.subject || "Sin Asunto";
+    const preview = emailData.previewText ? `\n${emailData.previewText.slice(0, 90)}` : "";
+
+    const payload: WebPushPayload = {
+      title: `✉️ Correo: ${sender}`,
+      body: `${subject}${mailbox}${preview}`,
+      url: `/admin/correos`,
+      icon: "https://bonbonflowershouston.com/logo.png",
+      badge: "https://bonbonflowershouston.com/logo.png",
+      tag: `email-${emailData.emailId || Date.now()}`,
+    };
+
+    await Promise.allSettled(
+      subscriptions.map((sub: any) =>
+        sendSingleWebPush(
+          {
+            endpoint: sub.endpoint,
+            keys: {
+              p256dh: sub.keys.p256dh,
+              auth: sub.keys.auth,
+            },
+          },
+          payload
+        )
+      )
+    );
+  } catch (error) {
+    console.error("Error transmitiendo Web Push de correo a administradores:", error);
+  }
+}
