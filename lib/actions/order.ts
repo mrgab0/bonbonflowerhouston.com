@@ -64,6 +64,16 @@ export async function createOrder(orderData: any, existingOrderId?: string) {
     await savedOrder.save();
   }
 
+  // 0. Disparo de Notificaciones Web Push a teléfonos de administradores (iPhone / Android)
+  try {
+    const { broadcastSalesAlertToAdmins } = await import("@/lib/utils/webPush");
+    broadcastSalesAlertToAdmins(savedOrder).catch((err) => {
+      console.error("Error enviando Web Push de orden a administradores:", err);
+    });
+  } catch (err) {
+    console.error("Error importando broadcastSalesAlertToAdmins:", err);
+  }
+
   // Incrementar contador de uso de cupón si aplica
   if (orderData.couponCode) {
     try {

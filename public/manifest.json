@@ -1,11 +1,12 @@
 {
-  "name": "Bonbon Flowers Houston | Boutique Floristería",
+  "name": "Bonbon Flowers Houston",
   "short_name": "Bonbon Flowers",
   "description": "Boutique digital de alta floristería en Houston, TX. Arreglos florales exclusivos y detalles de lujo a domicilio.",
-  "start_url": "/",
+  "start_url": "/admin",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#be185d",
+  "theme_color": "#E6007F",
   "orientation": "portrait",
   "icons": [
     {
@@ -19,6 +20,18 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Panel Administrativo",
+      "url": "/admin",
+      "description": "Acceso al panel de órdenes y gestión de Bonbon Flowers"
+    },
+    {
+      "name": "Catálogo de Flores",
+      "url": "/productos",
+      "description": "Explorar catálogo de arreglos florales"
     }
   ]
 }

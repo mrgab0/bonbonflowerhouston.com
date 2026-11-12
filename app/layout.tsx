@@ -80,6 +80,9 @@ export default async function RootLayout({
     <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${plusJakarta.variable} ${manrope.variable} ${greatVibes.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="https://bonbonflowershouston.com/logo.png" />
+        <link rel="apple-touch-icon" href="https://bonbonflowershouston.com/logo.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="https://bonbonflowershouston.com/logo.png" />
+        <meta name="apple-mobile-web-app-title" content="Bonbon Flowers" />
         <link rel="preconnect" href="https://ik.imagekit.io" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://ik.imagekit.io" />
