@@ -97,7 +97,7 @@ export const HeroImageCouponModal: React.FC<HeroImageCouponModalProps> = ({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative w-full max-w-lg bg-white dark:bg-[#13151b] rounded-3xl overflow-hidden shadow-2xl border border-pink-200/60 dark:border-pink-900/40 flex flex-col max-h-[92vh] animate-in zoom-in-95 duration-200">
+      <div className="relative w-full max-w-lg bg-white dark:bg-[#13151b] rounded-3xl overflow-hidden shadow-2xl border border-pink-200/60 dark:border-pink-900/40 flex flex-col max-h-[90dvh] animate-in zoom-in-95 duration-200">
         {/* Botón de Cierre Circular */}
         <button
           onClick={onClose}
@@ -108,7 +108,7 @@ export const HeroImageCouponModal: React.FC<HeroImageCouponModalProps> = ({
         </button>
 
         {/* 1. SECCIÓN SUPERIOR: LIGHTBOX DE LA IMAGEN */}
-        <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-stone-900 overflow-hidden group">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] max-h-[36dvh] bg-stone-900 overflow-hidden group">
           <img
             src={imageUrl}
             alt={title}

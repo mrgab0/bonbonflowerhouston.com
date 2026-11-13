@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -39,6 +39,14 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
+
+  // Auto-apertura del modal lightbox con cupón al entrar a la página
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsCouponModalOpen(true);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
 
   const isSpanish = locale === "es";
   const phone = siteConfig?.contactPhone || "(346) 739-2730";
@@ -321,7 +329,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
           </div>
 
           {/* Right Photographic Column: Hatbox with Roses (Clickable Lightbox Trigger) */}
-          <div className="w-[42%] sm:w-[40%] relative -mr-2 sm:mr-0 mt-1">
+          <div className="w-[42%] sm:w-[40%] relative z-20 -mr-2 sm:mr-0 mt-1">
             <button
               type="button"
               onClick={() => setIsCouponModalOpen(true)}

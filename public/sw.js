@@ -1,6 +1,5 @@
-const CACHE_NAME = "bonbonflowers-v2";
+const CACHE_NAME = "bonbonflowers-v3";
 const STATIC_ASSETS = [
-  "/",
   "/manifest.json",
   "/logo.png",
   "/logo-brand.png"
@@ -26,7 +25,7 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Cache-first para assets estáticos y network-first para navegación
+// Network-first para navegación HTML y cache-first para assets estáticos
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
@@ -36,6 +35,25 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // 1. Para navegación entre páginas: Siempre Network-First (fresco de Vercel)
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request))
+    );
+    return;
+  }
+
+  // 2. Para assets estáticos: Cache con revalidación
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
