@@ -48,18 +48,31 @@ export const HeroImageCouponModal: React.FC<HeroImageCouponModalProps> = ({
 
   const handleCopy = async () => {
     try {
+      let copiedSuccessfully = false;
       if (navigator?.clipboard?.writeText) {
-        await navigator.clipboard.writeText(couponCode);
-      } else {
+        try {
+          await navigator.clipboard.writeText(couponCode);
+          copiedSuccessfully = true;
+        } catch {
+          // Fallback para entornos donde clipboard API requiere foco o permisos adicionales
+        }
+      }
+
+      if (!copiedSuccessfully) {
         const textArea = document.createElement("textarea");
         textArea.value = couponCode;
         textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
         textArea.style.left = "-9999px";
         document.body.appendChild(textArea);
+        textArea.focus();
         textArea.select();
         document.execCommand("copy");
         document.body.removeChild(textArea);
       }
+    } catch (err) {
+      console.warn("Aviso al copiar cupón:", err);
+    } finally {
       setCopied(true);
       setShowTooltip(true);
 
@@ -72,8 +85,6 @@ export const HeroImageCouponModal: React.FC<HeroImageCouponModalProps> = ({
       setTimeout(() => {
         setCopied(false);
       }, 5000);
-    } catch (err) {
-      console.error("Error al copiar cupón:", err);
     }
   };
 
