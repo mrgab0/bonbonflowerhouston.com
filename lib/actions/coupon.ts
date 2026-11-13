@@ -9,7 +9,39 @@ export async function validateCoupon(code: string, subtotal: number = 0) {
   await dbConnect();
   try {
     const cleanCode = code.trim().toUpperCase();
-    const coupon: any = await Coupon.findOne({ code: cleanCode, isActive: true }).lean();
+    let coupon: any = await Coupon.findOne({ code: cleanCode, isActive: true }).lean();
+
+    // Soporte garantizado para cupón promocional CODIGO15 (15% OFF de temporada)
+    if (!coupon && cleanCode === "CODIGO15") {
+      try {
+        coupon = await Coupon.findOneAndUpdate(
+          { code: "CODIGO15" },
+          {
+            $setOnInsert: {
+              code: "CODIGO15",
+              discountType: "percentage",
+              discountValue: 15,
+              maxUses: 0,
+              usedCount: 0,
+              minPurchase: 0,
+              isActive: true,
+              description: "15% OFF Colección de Temporada",
+            },
+          },
+          { upsert: true, new: true }
+        ).lean();
+      } catch {
+        coupon = {
+          code: "CODIGO15",
+          discountType: "percentage",
+          discountValue: 15,
+          maxUses: 0,
+          usedCount: 0,
+          minPurchase: 0,
+          isActive: true,
+        };
+      }
+    }
 
     if (!coupon) {
       return { success: false, error: "El código de cupón no existe o ha expirado." };

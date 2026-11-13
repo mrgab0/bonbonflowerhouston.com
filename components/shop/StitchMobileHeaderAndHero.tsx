@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shop/ThemeToggle";
 import { LanguageSwitcher } from "@/components/shop/LanguageSwitcher";
+import { HeroImageCouponModal } from "@/components/shop/HeroImageCouponModal";
 
 const CustomerBiometricModal = dynamic(
   () => import("@/components/auth/CustomerBiometricModal").then((m) => m.CustomerBiometricModal),
@@ -37,7 +38,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
 }) => {
   const [isBioModalOpen, setIsBioModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const [isCouponModalOpen, setIsCouponModalOpen] = useState(false);
 
   const isSpanish = locale === "es";
   const phone = siteConfig?.contactPhone || "(346) 739-2730";
@@ -45,11 +46,14 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
 
   const prefix = isSpanish ? "/es" : "";
 
+  // Imagen temporal de alta costura solicitada para el Hero
+  const seasonalHeroImage = "https://ik.imagekit.io/nzjtc1avv/1794587288957.jpg";
+
   // Producto destacado dinámico de Hero
   const fallbackProduct = {
     name: "Pink & Sunshine Bouquet Yellow and Pink Roses",
     slug: "pink-sunshine-bouquet-yellow-and-pink-roses-100",
-    images: ["https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_378_BlXSezTsB.png"],
+    images: [seasonalHeroImage],
   };
 
   const activeProduct =
@@ -61,13 +65,12 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
     ? `${prefix}/productos/${activeProduct.slug}`
     : "#catalogo";
 
-  const featuredProductImage =
-    activeProduct?.images && activeProduct.images.length > 0 && activeProduct.images[0]
-      ? activeProduct.images[0]
-      : "https://ik.imagekit.io/4ub2sqhjx/products/Screenshot_378_BlXSezTsB.png";
+  const featuredProductImage = seasonalHeroImage;
 
   const featuredProductTitle =
-    activeProduct?.name || (isSpanish ? "Colección Destacada Bonbon Flowers Houston" : "Featured Collection Bonbon Flowers Houston");
+    isSpanish
+      ? "Pink & Sunshine Bouquet • Edición Especial 15% OFF"
+      : "Pink & Sunshine Bouquet • Special Edition 15% OFF";
 
   // 5 Categorías circulares con gradientes e imágenes permanentes optimizadas desde ImageKit
   const categories = [
@@ -295,22 +298,35 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
                 : "Same-day haute couture flower delivery in Houston, TX and metropolitan area. Luxury arrangements for unforgettable moments."}
             </p>
 
-            {/* CTA Button */}
-            <a
-              href="#catalogo"
-              className="inline-flex items-center gap-2 bg-[#1b4332] hover:bg-[#143326] text-white text-[10.5px] sm:text-xs font-bold px-4 py-2.5 rounded-full shadow-md transition-all hover:scale-102 active:scale-98"
-            >
-              <span>SHOP COLLECTION</span>
-              <span>→</span>
-            </a>
+            {/* Botones CTA y Cupón 15% OFF */}
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href="#catalogo"
+                className="inline-flex items-center gap-2 bg-[#1b4332] hover:bg-[#143326] text-white text-[10.5px] sm:text-xs font-bold px-4 py-2.5 rounded-full shadow-md transition-all hover:scale-102 active:scale-98"
+              >
+                <span>SHOP COLLECTION</span>
+                <span>→</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => setIsCouponModalOpen(true)}
+                className="inline-flex items-center gap-1.5 bg-[#fff0f3] dark:bg-pink-950/40 hover:bg-[#ffe0e6] dark:hover:bg-pink-950/70 text-[#b8335b] dark:text-pink-300 text-[10px] sm:text-xs font-bold px-3 py-2 rounded-full border border-pink-200 dark:border-pink-800 shadow-xs transition-all hover:scale-102 active:scale-98 cursor-pointer"
+                title={isSpanish ? "Ver cupón de 15% de descuento" : "View 15% OFF coupon"}
+              >
+                <span>🏷️</span>
+                <span>15% OFF</span>
+              </button>
+            </div>
           </div>
 
-          {/* Right Photographic Column: Hatbox with Roses & Teddy Bear */}
+          {/* Right Photographic Column: Hatbox with Roses (Clickable Lightbox Trigger) */}
           <div className="w-[42%] sm:w-[40%] relative -mr-2 sm:mr-0 mt-1">
-            <Link
-              href={featuredProductLink}
-              className="block group"
-              title={featuredProductTitle}
+            <button
+              type="button"
+              onClick={() => setIsCouponModalOpen(true)}
+              className="block group w-full text-left cursor-pointer focus:outline-none"
+              title={isSpanish ? "Toca para ver en alta resolución y obtener cupón 15% OFF" : "Tap to view high-res & get 15% OFF coupon"}
             >
               <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border border-[#f0e4db]/80 dark:border-gray-800 bg-[#fff5f5] dark:bg-stone-900 group-hover:scale-[1.02] transition-transform duration-300">
                 <img
@@ -318,8 +334,20 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   alt={featuredProductTitle}
                 />
+                {/* Badge interactivo superpuesto */}
+                <div className="absolute bottom-2 left-1.5 right-1.5 z-10">
+                  <div className="bg-black/75 backdrop-blur-md text-white text-[8.5px] sm:text-[10px] font-bold py-1 px-2 rounded-xl flex items-center justify-between border border-white/20 shadow-md">
+                    <span className="flex items-center gap-1 text-[#ffccd5]">
+                      <span>🎁</span>
+                      <span>15% OFF</span>
+                    </span>
+                    <span className="text-[7.5px] sm:text-[8.5px] uppercase tracking-wider text-pink-200 underline">
+                      {isSpanish ? "Ver cupón" : "Get code"}
+                    </span>
+                  </div>
+                </div>
               </div>
-            </Link>
+            </button>
             {/* Decorative falling rose petals */}
             <div className="absolute -bottom-2 -left-2 w-5 h-3 bg-[#c71f37] rounded-full rotate-45 shadow-sm opacity-90 pointer-events-none" />
             <div className="absolute bottom-2 -right-1 w-4 h-2.5 bg-[#a01328] rounded-full -rotate-12 shadow-sm opacity-80 pointer-events-none" />
@@ -365,6 +393,17 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
           onClose={() => setIsBioModalOpen(false)}
         />
       )}
+
+      {/* Modal Lightbox de Imagen de Temporada y Cupón Interactivo */}
+      <HeroImageCouponModal
+        isOpen={isCouponModalOpen}
+        onClose={() => setIsCouponModalOpen(false)}
+        imageUrl={featuredProductImage}
+        title={featuredProductTitle}
+        locale={locale}
+        couponCode="CODIGO15"
+        discountPercent={15}
+      />
     </div>
   );
 };
