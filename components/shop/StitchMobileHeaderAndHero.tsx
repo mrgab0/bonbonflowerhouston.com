@@ -54,14 +54,17 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
 
   const prefix = isSpanish ? "/es" : "";
 
-  // Imagen temporal de alta costura solicitada para el Hero
-  const seasonalHeroImage = "https://ik.imagekit.io/nzjtc1avv/1794587288957.jpg";
+  // Imagen fija 1:1 para el Hero en la página principal
+  const heroPageFixedImage = "https://ik.imagekit.io/nzjtc1avv/1794592415782.jpg?updatedAt=1794592473835";
+
+  // Imagen para la ventana modal Lightbox con cupón (primera imagen panorámica)
+  const modalLightboxImage = "https://ik.imagekit.io/nzjtc1avv/1794587288957.jpg";
 
   // Producto destacado dinámico de Hero
   const fallbackProduct = {
     name: "Pink & Sunshine Bouquet Yellow and Pink Roses",
     slug: "pink-sunshine-bouquet-yellow-and-pink-roses-100",
-    images: [seasonalHeroImage],
+    images: [heroPageFixedImage],
   };
 
   const activeProduct =
@@ -73,7 +76,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
     ? `${prefix}/productos/${activeProduct.slug}`
     : "#catalogo";
 
-  const featuredProductImage = seasonalHeroImage;
+  const featuredProductImage = heroPageFixedImage;
 
   const featuredProductTitle =
     isSpanish
@@ -336,7 +339,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
               className="block group w-full text-left cursor-pointer focus:outline-none"
               title={isSpanish ? "Toca para ver en alta resolución y obtener cupón 15% OFF" : "Tap to view high-res & get 15% OFF coupon"}
             >
-              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-lg border border-[#f0e4db]/80 dark:border-gray-800 bg-[#fff5f5] dark:bg-stone-900 group-hover:scale-[1.02] transition-transform duration-300">
+              <div className="relative w-full aspect-square rounded-2xl overflow-hidden shadow-lg border border-[#f0e4db]/80 dark:border-gray-800 bg-[#fff5f5] dark:bg-stone-900 group-hover:scale-[1.02] transition-transform duration-300">
                 <img
                   src={featuredProductImage}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -406,7 +409,7 @@ export const StitchMobileHeaderAndHero: React.FC<StitchMobileHeaderAndHeroProps>
       <HeroImageCouponModal
         isOpen={isCouponModalOpen}
         onClose={() => setIsCouponModalOpen(false)}
-        imageUrl={featuredProductImage}
+        imageUrl={modalLightboxImage}
         title={featuredProductTitle}
         locale={locale}
         couponCode="CODIGO15"
